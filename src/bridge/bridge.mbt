@@ -88,3 +88,9 @@ pub fn inflate_zlib(bytes : Bytes, limit : Int) -> BinaryResult {
 pub fn select_mat(bytes : Bytes, names : Array[String]) -> BinaryResult {
   binary(() => @mat.write_mat(@mat.read_mat(bytes).select(names)))
 }
+
+///|
+#export_name("npy_to_mat")
+pub fn npy_to_mat(bytes : Bytes, name : String) -> BinaryResult {
+  binary(() => @mat.write_mat([@mat.read_npy(bytes, name)]))
+}

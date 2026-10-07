@@ -12,6 +12,8 @@ pub fn mat_to_json(Bytes) -> String
 
 pub fn mat_to_npy(Bytes, String) -> BinaryResult
 
+pub fn npy_to_mat(Bytes, String) -> BinaryResult
+
 pub fn result_bytes(BinaryResult) -> Bytes
 
 pub fn result_status(BinaryResult) -> String

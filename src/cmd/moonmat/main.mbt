@@ -85,6 +85,7 @@ fn usage() -> String {
   "  moonmat pack INPUT.json OUTPUT.mat\n" +
   "  moonmat roundtrip INPUT.mat OUTPUT.mat\n" +
   "  moonmat npy INPUT.mat VARIABLE OUTPUT.npy\n" +
+  "  moonmat from-npy INPUT.npy VARIABLE OUTPUT.mat\n" +
   "  moonmat select INPUT.mat OUTPUT.mat VARIABLE...\n" +
   "  moonmat sample OUTPUT.mat\n" +
   "  moonmat version\n" +
@@ -119,6 +120,8 @@ fn run(args : Array[String]) -> Unit raise @mat.MatError {
     save(args[3], @mat.write_mat(@wire.from_json(text)))
   } else if command == "roundtrip" && args.length() == 4 {
     save(args[3], @mat.write_mat(@mat.read_mat(read(args[2])).arrays))
+  } else if command == "from-npy" && args.length() == 5 {
+    save(args[4], @mat.write_mat([@mat.read_npy(read(args[2]), args[3])]))
   } else if command == "select" && args.length() >= 5 {
     let names = Array::makei(args.length() - 4, fn(i) { args[i + 4] })
     save(args[3], @mat.write_mat(@mat.read_mat(read(args[2])).select(names)))

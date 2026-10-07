@@ -40,7 +40,7 @@ const bytes = api.result_bytes(result); // Uint8Array
 console.log(JSON.parse(api.inspect_mat(bytes)));
 ```
 
-Exports: `select_mat`, `inspect_mat`, `mat_to_json`, `json_to_mat`, `roundtrip_mat`, `mat_to_npy`, `sample_mat`, `inflate_zlib`, `result_status`, `result_bytes`. Functions returning `BinaryResult` require a status check before consuming bytes. Errors never return partial converted data. Host-neutral JS exports use Bytes/strings and have no filesystem or Python dependency; Node tests validate them, but a browser UI has not been shipped or tested in v0.0.1.
+Exports: `npy_to_mat`, `select_mat`, `inspect_mat`, `mat_to_json`, `json_to_mat`, `roundtrip_mat`, `mat_to_npy`, `sample_mat`, `inflate_zlib`, `result_status`, `result_bytes`. Functions returning `BinaryResult` require a status check before consuming bytes. Errors never return partial converted data. Host-neutral JS exports use Bytes/strings and have no filesystem or Python dependency; Node tests validate them, but a browser UI has not been shipped or tested in v0.0.1.
 
 `src/pkg.generated.mbti` and the interfaces under `src/interchange` and `src/bridge` contain the complete compiler-generated signatures. Source consumers can include this local module in a MoonBit workspace; there is no registered Mooncakes package yet.
 

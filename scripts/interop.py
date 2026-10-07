@@ -239,6 +239,42 @@ for host in ("native", "js"):
     assert not bad_out.exists()
     record(f"{host}: variable subset selection", "Order, raw values, missing/duplicate errors and no partial output")
 
+# NumPy supplies independent NPY files, including endian/order/version variants.
+imports = dict(data)
+imports.update({
+    "scalar": np.asarray(9007199254740993, dtype="uint64"),
+    "vector": np.asarray([-9223372036854775808, 9007199254740993, 9223372036854775807], dtype="int64"),
+    "empty_vector": np.empty((0,), dtype="float32"),
+})
+npy_cases = []
+for name, expected in imports.items():
+    for version, order, endian in [((1, 0), "C", "<"), ((2, 0), "F", ">"), ((3, 0), "C", ">")]:
+        incoming = np.array(expected, dtype=expected.dtype.newbyteorder(endian), order=order, copy=True)
+        path = OUT / f"npy-import-{name}-v{version[0]}-{order}.npy"
+        with path.open("wb") as handle:
+            np.lib.format.write_array(handle, incoming, version=version, allow_pickle=False)
+        shape = expected.shape if expected.ndim >= 2 else ((1, 1) if expected.ndim == 0 else (expected.size, 1))
+        npy_cases.append((name, path, expected.reshape(shape, order="F")))
+for host in ("native", "js"):
+    for i, (name, path, expected) in enumerate(npy_cases):
+        converted = fresh(OUT / f"{host}-npy-import-{i}.mat")
+        invoke(host, "from-npy", path, name, converted)
+        actual = loadmat(converted)[name]
+        assert_same(actual, expected)
+    record(f"{host}: NumPy NPY import", f"{len(npy_cases)} NumPy-generated files: versions 1/2/3, C/Fortran, endian, complex, 64-bit, scalar/vector/empty")
+
+object_npy = OUT / "npy-object.npy"
+np.save(object_npy, np.array([{"payload": "pickle-must-not-be-read"}], dtype=object), allow_pickle=True)
+truncated_npy = OUT / "npy-truncated.npy"
+truncated_npy.write_bytes(npy_cases[0][1].read_bytes()[:-1])
+for host in ("native", "js"):
+    for path, expected_code in [(object_npy, "unsupported-npy-dtype"), (truncated_npy, "payload-size")]:
+        output = fresh(OUT / f"{host}-invalid-npy.mat")
+        response = invoke(host, "from-npy", path, "x", output, ok=False)
+        assert response["code"] == expected_code
+        assert not output.exists()
+    record(f"{host}: NPY unsafe/truncated input rejected", "No pickle evaluation, no partial output")
+
 unsupported = {
     "cell": {"x": np.array([[1, "text"]], dtype=object)},
     "struct": {"x": {"field": np.array([[1]])}},
