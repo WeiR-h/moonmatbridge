@@ -169,8 +169,7 @@ fn validate_name(name : String, limits : Limits) -> Unit raise MatError {
 }
 
 ///|
-fn validate_array(array : NumericArray, limits : Limits) -> Int raise MatError {
-  validate_name(array.name, limits)
+fn validate_layout(array : NumericArray, limits : Limits) -> Int raise MatError {
   let count = element_count(array.shape, limits, 0)
   let expected = count * array.dtype.width()
   let planes = if array.is_complex() { 2 } else { 1 }
@@ -194,6 +193,13 @@ fn validate_array(array : NumericArray, limits : Limits) -> Int raise MatError {
       )
     }
   }
+  count
+}
+
+///|
+fn validate_array(array : NumericArray, limits : Limits) -> Int raise MatError {
+  validate_name(array.name, limits)
+  let count = validate_layout(array, limits)
   if array.dtype == Logical {
     for value in array.real {
       if value != b'\x00' && value != b'\x01' {
@@ -287,7 +293,8 @@ pub fn NumericArray::value(
   index : Int,
   imaginary? : Bool = false,
 ) -> Value raise MatError {
-  if index < 0 || index >= self.length() {
+  let count = validate_layout(self, default_limits())
+  if index < 0 || index >= count {
     fail("index-range", index, "Scalar index outside array")
   }
   let bytes = if imaginary {
@@ -300,6 +307,9 @@ pub fn NumericArray::value(
     }
   } else {
     self.real
+  }
+  if self.dtype == Logical && bytes[index] != b'\x00' && bytes[index] != b'\x01' {
+    fail("invalid-logical", index, "Canonical logical value must be 0 or 1")
   }
   scalar_at(bytes, index * self.dtype.width(), self.dtype, true)
 }
