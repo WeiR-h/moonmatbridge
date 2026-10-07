@@ -8,6 +8,7 @@ The core package is `local/moonmatbridge`. The executable, JSON adapter and JS A
 | `write_mat(Array[NumericArray], limits?) -> Bytes raise MatError` | Validate all arrays, then emit deterministic uncompressed little-endian MAT |
 | `numeric_array(name, dtype, shape, values, imaginary?, is_global?, limits?)` | Construct from exact `Value` scalars, preserve column-major order |
 | `raw_array(name, dtype, shape, real, imag?, is_global?, limits?)` | Construct from canonical little-endian raw bytes; preserve IEEE payload bits |
+| `NumericArray::reshape(shape, limits?)` | Preserve exact payload and element count while changing column-major dimensions |
 | `write_npy(NumericArray, limits?) -> Bytes raise MatError` | NPY v1.0 export, 64-byte header alignment, Fortran order, interleaved complex data |
 | `inflate_zlib(Bytes, max_bytes?) -> Bytes raise MatError` | Bounded RFC 1950 stream decoder with checksum validation |
 | `dtype_from_name(String) -> DType raise MatError` | Parse stable dtype names |
