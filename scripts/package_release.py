@@ -75,20 +75,22 @@ Open PowerShell in this folder:
   .\moonmat.exe dump sample.mat sample.json
   .\moonmat.exe pack sample.json from-json.mat
   .\moonmat.exe npy sample.mat temperature temperature.npy
+  .\moonmat.exe from-npy temperature.npy temperature from-numpy.mat
+  .\moonmat.exe select sample.mat subset.mat temperature
   .\moonmat.exe roundtrip sample.mat copy.mat
 
 The executable requires no MoonBit, C compiler, Python or Node installation.
 Only Windows system KERNEL32.dll and msvcrt.dll are imported in this build.
 Output paths must be NEW; existing files are never overwritten.
 Core: MAT Level 5 dense numeric/logical arrays, complex float32/64,
-little/big endian and compressed reading; uncompressed writing; NPY export.
-Unsupported: cell/struct/char/sparse, MAT v4/v7.3, compressed writing, NPY input.
+little/big endian and compressed reading; uncompressed writing; primitive NPY import/export, reshape and axis permutation.
+Unsupported: cell/struct/char/sparse, MAT v4/v7.3, compressed writing, structured/object/string NPY and streaming.
 
 Use examples/sample.json as a fresh pack input, or examples/sample.mat for info.
 JSON values are column-major; int64/uint64 use decimal strings.
 NaN payload bits survive binary conversions but are normalized in JSON.
 See docs, LICENSE, NOTICE, THIRD_PARTY.md and verification for details.
-MATLAB/Octave execution and public/competition submission are unverified.
+MATLAB/Octave execution and competition submission are unverified. Public downloads are verified separately.
 """
 with zipfile.ZipFile(native_zip, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as z:
     add(z, DIST / "moonmat.exe", native_name, "moonmat.exe")
@@ -127,11 +129,16 @@ commands = [
     ["pack", str(consumer / "sample.json"), str(consumer / "packed.mat")],
     ["roundtrip", str(consumer / "sample.mat"), str(consumer / "roundtrip.mat")],
     ["npy", str(consumer / "sample.mat"), "temperature", str(consumer / "temperature.npy")],
+    ["select", str(consumer / "sample.mat"), str(consumer / "subset.mat"), "temperature"],
+    ["from-npy", str(consumer / "temperature.npy"), "temperature", str(consumer / "from-numpy.mat")],
+    ["dump", str(consumer / "from-numpy.mat"), str(consumer / "from-numpy.json")],
 ]
 for args in commands:
     response = json.loads(run([exe] + args, native, clean_env).stdout)
     assert response.get("status", "ok") == "ok", response
 assert (consumer / "sample.mat").read_bytes() == (consumer / "packed.mat").read_bytes() == (consumer / "roundtrip.mat").read_bytes()
+expected_temperature = next(a for a in json.loads((consumer / "sample.json").read_text(encoding="utf-8"))["arrays"] if a["name"] == "temperature")
+assert json.loads((consumer / "from-numpy.json").read_text(encoding="utf-8"))["arrays"] == [expected_temperature]
 original = digest(consumer / "sample.mat")
 repeated = subprocess.run([exe, "sample", str(consumer / "sample.mat")], cwd=native, env=clean_env, capture_output=True, encoding="utf-8", timeout=10)
 assert repeated.returncode == 1 and json.loads(repeated.stderr)["code"] == "output-exists"
@@ -169,7 +176,7 @@ archives = [{"file": path.name, "bytes": path.stat().st_size, "sha256": digest(p
 result = {
     "status": "passed", "version": VERSION, "source_sha256": source_hash,
     "native_sha256": digest(DIST / "moonmat.exe"), "archives": archives,
-    "fresh_consumers": {"native": "version + 6 commands + Unicode/spaces + no overwrite; PATH limited to System32",
+    "fresh_consumers": {"native": "version + 9 commands including NPY import/selection + Unicode/spaces + no overwrite; PATH limited to System32",
                         "source": f"unpacked source check and {test_match.group(2)} JS tests; no local settings/build cache bundled",
                         "js": "unpacked bridge imports and exact JSON round trip"},
     "scope": "Local archives and fresh consumers; no public publishing or organizer acceptance",

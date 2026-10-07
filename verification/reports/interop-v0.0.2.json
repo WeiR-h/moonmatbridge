@@ -197,7 +197,7 @@
     },
     {
       "file": "corrupt-checksum.mat",
-      "sha256": "f3036ead336ca4baea3893bb3dd51b45f7e9ddfa11b2062b49e5495158e76669"
+      "sha256": "26d2ea1cb2350f6519709bf199fc0cd2f0760e66b4c7eb8140af0b5df366198d"
     },
     {
       "file": "js-npy-import-0.mat",
@@ -769,27 +769,27 @@
     },
     {
       "file": "scipy-compressed.mat",
-      "sha256": "73287bf1ee5f5572213e83f5cde336dcc5a6e38e07bde867ef175d5afb3b3f84"
+      "sha256": "7e5111e5c903d3f6120b04571e932f39dde9ff4684a6e087fd4c7b122fed02e8"
     },
     {
       "file": "scipy-uncompressed.mat",
-      "sha256": "edb2eb9423256adbd7e1d829aed4839e0857a1fed470fd9ad36e7e65ff7e77de"
+      "sha256": "cd67d40775d01efd5a512409d90e21f500a162dea7c53364ceaf4822c7cc4be2"
     },
     {
       "file": "unsupported-cell.mat",
-      "sha256": "60a1b2dce26ef758a9aa0122df7807ba470c5d5b27ff55e8445115f13e35e3ad"
+      "sha256": "064e54e079474bddf1958a5cbdcfbe727569bf37b85781da3887f63395f739b5"
     },
     {
       "file": "unsupported-char.mat",
-      "sha256": "3f2adfa706bb686218d1489ee46a56028fb330fe84094e33aaa3370227ca622c"
+      "sha256": "c3678fa7d9f4c51ecaa567ccf257c4c6b9f78f5bdd8b89d6ad85f5bd91a1bb14"
     },
     {
       "file": "unsupported-sparse.mat",
-      "sha256": "de37b3683111c8673f1f9ba966b19d6447119e4968e4bb35b02fa5c88d4a993f"
+      "sha256": "e508a90bfc77f421f073cd78f4d888b7817adccab8df920e28a6d14cbec367b2"
     },
     {
       "file": "unsupported-struct.mat",
-      "sha256": "51e6d733ed384be39848c958b9544819c97894699130345e0e75fa58853ea00d"
+      "sha256": "d2f328ce5105639550de7e362cacf72525866254e2fbd1b30df0ceab98b4af82"
     },
     {
       "file": "unsupported-v73.mat",

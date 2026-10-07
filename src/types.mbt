@@ -229,7 +229,7 @@ fn from_mat_class(class : Int, offset : Int) -> DType raise MatError {
     15 => UInt64
     _ => {
       fail(
-        "unsupported-class", offset, "v0.0.1 supports dense numeric and logical arrays",
+        "unsupported-class", offset, "Only dense numeric and logical arrays are supported",
       )
       Float64
     }

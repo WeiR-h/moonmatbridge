@@ -1,14 +1,16 @@
-# MoonMatBridge v0.0.1
+# MoonMatBridge v0.0.2
 
 **MoonBit 原生 MAT Level 5 数值读写与科研数据互操作库。**
 
 MAT 解析、数值编码、zlib/DEFLATE 解压、JSON 数据约定和 NPY 导出都由 MoonBit 实现。运行核心库和 Windows 命令行程序不需要 MATLAB、Python、SciPy、Node.js 或第三方压缩库。Node.js 仅用于开发脚本与可选 JS 命令行；SciPy/NumPy 仅用作独立兼容性验证。
 
-第一版定位是把科研数组**连同类型、维度、列优先顺序和复数分量一起保留下来**，让 MoonBit 项目直接交换 MATLAB/Python 数据。
+首版 [v0.0.1](https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.0.1) 已公开发布。当前源码版本为 v0.0.2，补充 NumPy 导入、无损整形、维度置换、变量提取及运行环境修复。
+
+项目定位是把科研数组**连同类型、维度、列优先顺序和复数分量一起保留下来**，让 MoonBit 项目直接交换 MATLAB/Python 数据。
 
 ## 支持范围
 
-| 能力 | v0.0.1 |
+| 能力 | v0.0.2 |
 | --- | --- |
 | MAT Level 5 读取 | 小端、大端；标准标签与小数据标签；多变量 |
 | 压缩读取 | `miCOMPRESSED`；MoonBit 解码 stored/fixed/dynamic DEFLATE，验证 Adler-32 |
@@ -18,15 +20,16 @@ MAT 解析、数值编码、zlib/DEFLATE 解压、JSON 数据约定和 NPY 导�
 | 形状 | 标量 `[1,1]`、行/列向量、多维和空数组，保持列优先存储 |
 | 数据保真 | 同存储类型的 MAT 往返保留原始 IEEE 字节、NaN payload、负零和精确 64 位整数 |
 | JSON 互通 | `moonmatbridge/1` 严格字段；64 位整数使用十进制字符串 |
-| NumPy 互通 | 导出 NPY v1.0，`fortran_order=True`，复数交错编码 |
+| NumPy 互通 | 导出 NPY v1.0；读取 NPY 1/2/3，大小端与 C/Fortran 顺序，复数交错编码 |
+| 数组处理 | 保留原始字节的 reshape、任意维度置换；按名称提取 MAT 变量 |
 | 核心编译目标 | JS、wasm-gc、native 已验证 |
 | 命令行 | Windows x64 原生 EXE；可选 Node.js 文件适配器 |
 
-**明确边界：**暂不支持 cell、struct、字符数组、稀疏矩阵、对象/函数句柄、子系统数据、MAT v4、HDF5 MAT v7.3、复数整数、压缩写入、NPY 读取、流式读取。遇到不支持的类别会返回错误，不会静默丢掉变量。变量名限非空 UTF-8，避免 NUL；非 UTF-8 旧名称不在此版支持范围内。MAT 类型与存储类型不同的文件会按声明类型恢复，拒绝无法安全转换的值。
+**明确边界：**暂不支持 cell、struct、字符数组、稀疏矩阵、对象/函数句柄、子系统数据、MAT v4、HDF5 MAT v7.3、复数整数、压缩写入、流式读取；NPY 的 object/pickle、结构化、字符串、float16、datetime、NPZ 和含义不明确的 native-endian 描述符。遇到不支持的类别会返回错误，不会静默丢掉变量。变量名限非空 UTF-8，避免 NUL；非 UTF-8 旧名称不在此版支持范围内。MAT 类型与存储类型不同的文件会按声明类型恢复，拒绝无法安全转换的值。
 
 ## 直接运行 Windows 程序
 
-解压 `dist/MoonMatBridge-v0.0.1-windows-x64.zip`，在解压目录打开 PowerShell：
+从 [GitHub Releases](https://github.com/WeiR-h/moonmatbridge/releases) 下载并解压对应版本的 `windows-x64.zip`，在解压目录打开 PowerShell：
 
 ```powershell
 .\moonmat.exe version
@@ -35,6 +38,8 @@ MAT 解析、数值编码、zlib/DEFLATE 解压、JSON 数据约定和 NPY 导�
 .\moonmat.exe dump sample.mat sample.json
 .\moonmat.exe pack sample.json from-json.mat
 .\moonmat.exe npy sample.mat temperature temperature.npy
+.\moonmat.exe from-npy temperature.npy temperature from-numpy.mat
+.\moonmat.exe select sample.mat subset.mat temperature sample_id
 .\moonmat.exe roundtrip sample.mat copy.mat
 ```
 
@@ -81,6 +86,8 @@ let value = restored.value(position)
 let numpy_bytes = @mat.write_npy(restored)
 ```
 
+`array.reshape([4, 1])` 保持列优先线性顺序；`array.permute_axes([1, 0])` 转置二维数组，也支持更高维置换。`file.select(["signal"])` 按请求顺序提取变量。NPY 输入使用 `read_npy(bytes, "signal")`；标量转为 `[1,1]`、一维向量转为 `[n,1]`，二维及以上形状保持。
+
 `Value` 区分 `Signed(Int64)`、`Unsigned(UInt64)`、`Floating(Double)`、`Boolean(Bool)`。64 位整数不会经由浮点数传递。`raw_array` 接受规范的小端列优先字节，适合批量桥接及保留 NaN 的内部编码。公开数组字段可被调用方构造，写入时会重新校验形状与载荷。
 
 参见 [API 说明](docs/API.md)、[JSON 约定](docs/JSON.md) 和 [格式与资源边界](docs/FORMAT.md)。
@@ -123,14 +130,14 @@ npm run package
 
 本地验证使用 MoonBit `0.1.20260920 (914d7da)`、Node `v24.13.0`、GCC `16.2.0`、Python `3.12.5`、SciPy `1.15.3`、NumPy `2.2.6`。`scripts/verify.mjs` 执行三目标测试、直接示例、构建、压缩差分测试和真实文件互通，并记录源文件指纹。
 
-- 27 项 MoonBit 测试，各在 JS / wasm-gc / native 执行一次。
-- 29 项独立 SciPy/NumPy 验证分组：21 个科研数组夹具、大小端、压缩、JSON、NPY、错误类型和原生中文路径。
+- 36 项 MoonBit 测试，各在 JS / wasm-gc / native 执行一次。
+- 35 项独立 SciPy/NumPy 验证分组：21 个科研数组夹具、每个宿主 72 个 NumPy 生成的 NPY 导入文件、大小端、压缩、JSON、变量提取、错误类型和原生中文路径。
 - 704 个 zlib 对照流、2,072 个截断输入检查，以及 MAT/JSON 异常边界。
 
-报告位于 [verification/reports](verification/reports/)。这些是本地构建与互通证据，未包含公共发布、赛事提交、主办方验收或获奖结论。
+报告位于 [verification/reports](verification/reports/)。这些报告是本地构建与互通证据。[GitHub Actions](https://github.com/WeiR-h/moonmatbridge/actions) 另外执行完整 Linux 科研互通验证并保存报告。公开下载已完成核对；赛事提交、主办方验收及获奖仍需独立确认。报名所需个人材料及本人申报书见 [报名清单](docs/HACKATHON_REGISTRATION.md)。
 
 ## 许可与后续
 
 Apache-2.0，详见 [LICENSE](LICENSE)、[NOTICE](NOTICE)、[第三方与参考来源](THIRD_PARTY.md)。实现由 AI 辅助完成；关键格式逻辑可在 MoonBit 源码中直接审查，使用独立实现做验证。
 
-下一版优先补 sparse CSC 与结构化数据；再评估压缩写入、NPY 双向适配及流式扫描。v0.0.1 的实现范围与验证证据见 [CHANGELOG](CHANGELOG.md)。
+下一版优先补 sparse CSC 与结构化数据；再评估压缩写入与流式扫描。各版本的实现范围与验证证据见 [CHANGELOG](CHANGELOG.md)。

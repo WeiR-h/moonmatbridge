@@ -1,10 +1,10 @@
 {
   "status": "passed",
   "version": "0.0.2",
-  "checked_at": "2026-10-07T10:42:23.107Z",
+  "checked_at": "2026-10-07T10:48:47.389Z",
   "source": {
-    "sha256": "69c2b211739e8b320021315a73001952178b5243b9a248b956d88230ed38eb44",
-    "files": 59
+    "sha256": "ff87ac49a0918993b67f1e8b5c19c459370dcca2e5fecb9e26fb03f4781d162b",
+    "files": 60
   },
   "environment": {
     "moon": "moon 0.1.20260920 (914d7da 2026-09-20)\n\nFeature flags enabled: rr_moon_mod,rr_moon_pkg",
@@ -16,7 +16,7 @@
     {
       "name": "MoonBit JS checks",
       "status": "passed",
-      "output": "Finished. moon: ran 10 tasks, now up to date"
+      "output": "Finished. moon: ran 3 tasks, now up to date"
     },
     {
       "name": "MoonBit JS unit tests",
@@ -51,7 +51,7 @@
     {
       "name": "MoonBit JS bridge build",
       "status": "passed",
-      "output": "Finished. moon: no work to do"
+      "output": "Finished. moon: ran 4 tasks, now up to date"
     },
     {
       "name": "Native release build",
@@ -69,6 +69,6 @@
       "output": "{\"status\": \"passed\", \"checks\": 35, \"report\": \"verification/local/interop-report.json\"}"
     }
   ],
-  "native_sha256": "a44d18c13f490918990ffb498d025c8318767451b82bf01da6c13b0c3427c977",
+  "native_sha256": "a4c1f801a88ce331c1a954ca2da3dad10a76a9a5da1a38f2029a86745ee6bfe1",
   "scope": "Local source/build/runtime and independent SciPy/NumPy verification. MATLAB/Octave execution, public publishing and organizer acceptance are unverified."
 }

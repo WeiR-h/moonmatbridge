@@ -6,7 +6,7 @@ The reader validates every enclosed length before consuming it: flags, dimension
 
 The writer emits standard elements, a fixed description and zero subsystem offset, with exact type-specific payloads. It validates arrays and the final size before assembling the file. Output is uncompressed; input compression is transparently normalized on a MAT round trip. Original file description, byte order and compression layout are not preserved.
 
-The zlib implementation is MoonBit code, independent of Node/Python/C zlib. It handles stored, fixed and dynamic Huffman blocks, bounded overlapping backreferences, header/window constraints, reserved symbols, complete stream end and Adler-32. Preset dictionaries are rejected. This is a v0.0.1 decoder backed by differential tests, not a claim of a formal proof or a comprehensive fuzzing campaign.
+The zlib implementation is MoonBit code, independent of Node/Python/C zlib. It handles stored, fixed and dynamic Huffman blocks, bounded overlapping backreferences, header/window constraints, reserved symbols, complete stream end and Adler-32. Preset dictionaries are rejected. The decoder originated in v0.0.1 backed by differential tests, not a claim of a formal proof or a comprehensive fuzzing campaign.
 
 | Default limit | Value |
 | --- | --- |
@@ -21,8 +21,10 @@ These are bounds, not measured peak memory guarantees. Decoded arrays and expand
 
 Representative error codes: `invalid-header`, `unsupported-version`, `unsupported-v7.3`, `unsupported-subsystem`, `unsupported-class`, `unsupported-flags`, `unsupported-complex`, `truncated-tag`, `truncated-data`, `truncated-padding`, `invalid-small-tag`, `invalid-shape`, `payload-size`, `invalid-name`, `duplicate-name`, `value-type`, `value-range`, `precision-loss`, `file-limit`, `element-limit`, `expanded-limit`, `variable-limit`, `invalid-limits`, `invalid-zlib`, `invalid-json`, `output-exists`.
 
-Duplicate MAT variable names fail rather than replacing data. Unsupported classes fail the entire read; v0.0.1 does not offer a partial metadata scan. UTF-8 names and files with no subsystem metadata are the supported name/metadata profile.
+Duplicate MAT variable names fail rather than replacing data. Unsupported classes fail the entire read; the library does not offer a partial metadata scan. UTF-8 names and files with no subsystem metadata are the supported name/metadata profile.
 
 NPY export contains one array, rank/dtype and `fortran_order=True`; complex data is interleaved. It uses NPY v1.0 with a little-endian 16-bit header length and 64-byte header alignment. Only plain numeric/logical arrays are exported; there is no object pickle or NPZ output.
 
 References: [MathWorks MAT file documentation](https://www.mathworks.com/help/pdf_doc/matlab/matfile_format.pdf), [SciPy's Level 5 I/O implementation](https://github.com/scipy/scipy/tree/v1.15.3/scipy/io/matlab), [NumPy NPY specification](https://numpy.org/doc/stable/reference/generated/numpy.lib.format.html), [RFC 1950](https://www.rfc-editor.org/rfc/rfc1950), [RFC 1951](https://www.rfc-editor.org/rfc/rfc1951).
+
+NPY input accepts primitive numerical/logical versions 1.0, 2.0 and 3.0, with a bounded 64 KiB plain ASCII header. Dictionary order is arbitrary, but its three keys must occur once. C-order and big-endian payloads normalize by exact byte copies; complex components split into two planes. Scalar/vector rank is explicitly promoted to MAT rank two. Input must have the exact payload size; Python expressions, unknown keys, structured/object/pickle descriptors and trailing data fail. Bool bytes normalize to 0/1.
