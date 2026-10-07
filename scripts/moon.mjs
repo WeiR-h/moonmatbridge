@@ -4,13 +4,18 @@ import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
 
 export const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+export const version = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).version;
 export function toolchain() {
   const configPath = join(root, '.local-toolchain.json');
   const config = existsSync(configPath) ? JSON.parse(readFileSync(configPath, 'utf8')) : {};
   const moonHome = process.env.MOON_HOME || config.moonHome;
   const executable = process.env.MOONMAT_MOON || (moonHome ? join(moonHome, 'bin', process.platform === 'win32' ? 'moon.exe' : 'moon') : 'moon');
   const env = {...process.env, ...(moonHome ? {MOON_HOME: moonHome} : {})};
-  if (moonHome) env.PATH = join(moonHome, 'bin') + (process.platform === 'win32' ? ';' : ':') + env.PATH;
+  const pathKey = Object.keys(env).find(key => key.toLowerCase() === 'path');
+  const inheritedPath = pathKey ? env[pathKey] : '';
+  if (pathKey) delete env[pathKey];
+  const separator = process.platform === 'win32' ? ';' : ':';
+  env.PATH = [moonHome ? join(moonHome, 'bin') : '', dirname(process.execPath), inheritedPath].filter(Boolean).join(separator);
   return {executable, env, config};
 }
 export function runMoon(args, extraEnv = {}) {
