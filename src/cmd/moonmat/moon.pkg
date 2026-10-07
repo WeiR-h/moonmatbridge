@@ -1,0 +1,14 @@
+import {
+  "local/moonmatbridge" @mat,
+  "local/moonmatbridge/interchange" @wire,
+  "moonbitlang/core/env",
+  "moonbitlang/core/encoding/utf8",
+}
+
+supported_targets = "native"
+
+pkgtype(kind: "executable")
+
+options(
+  "native-stub": [ "io.c" ],
+)

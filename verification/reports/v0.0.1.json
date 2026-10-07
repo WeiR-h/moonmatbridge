@@ -1,0 +1,74 @@
+{
+  "status": "passed",
+  "version": "0.0.1",
+  "checked_at": "2026-10-07T04:13:11.915Z",
+  "source": {
+    "sha256": "14c4f352d69e425ae84e97bdebe24309c50f27d0cd5b4e1d31af5a61e2a250b6",
+    "files": 48
+  },
+  "environment": {
+    "moon": "moon 0.1.20260920 (914d7da 2026-09-20)\n\nFeature flags enabled: rr_moon_mod,rr_moon_pkg",
+    "node": "v24.13.0",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "checks": [
+    {
+      "name": "MoonBit JS checks",
+      "status": "passed",
+      "output": "Finished. moon: no work to do"
+    },
+    {
+      "name": "MoonBit JS unit tests",
+      "status": "passed",
+      "output": "Total tests: 27, passed: 27, failed: 0."
+    },
+    {
+      "name": "MoonBit wasm-gc unit tests",
+      "status": "passed",
+      "output": "Total tests: 27, passed: 27, failed: 0."
+    },
+    {
+      "name": "MoonBit native unit tests",
+      "status": "passed",
+      "output": "Total tests: 27, passed: 27, failed: 0."
+    },
+    {
+      "name": "MoonBit direct JS example",
+      "status": "passed",
+      "output": "{\n  \"status\": \"ok\",\n  \"version\": \"0.0.1\",\n  \"format\": \"MAT Level 5\",\n  \"source_endian\": \"little\",\n  \"arrays\": [\n    {\n      \"name\": \"temperature\",\n      \"dtype\": \"float64\",\n      \"shape\": [\n        2,\n        3\n      ],\n      \"elements\": 6,\n      \"complex\": false,\n      \"global\": false\n    },\n    {\n      \"name\": \"spectrum\",\n      \"dtype\": \"float64\",\n      \"shape\": [\n        2,\n        1\n      ],\n      \"elements\": 2,\n      \"complex\": true,\n      \"global\": false\n    },\n    {\n      \"name\": \"sample_id\",\n      \"dtype\": \"uint64\",\n      \"shape\": [\n        1,\n        3\n      ],\n      \"elements\": 3,\n      \"complex\": false,\n      \"global\": false\n    },\n    {\n      \"name\": \"valid\",\n      \"dtype\": \"logical\",\n      \"shape\": [\n        2,\n        1\n      ],\n      \"elements\": 2,\n      \"complex\": false,\n      \"global\": false\n    }\n  ]\n}\nSecond spectrum value: Floating(0.5), imaginary Floating(3)"
+    },
+    {
+      "name": "MoonBit direct wasm-gc example",
+      "status": "passed",
+      "output": "{\n  \"status\": \"ok\",\n  \"version\": \"0.0.1\",\n  \"format\": \"MAT Level 5\",\n  \"source_endian\": \"little\",\n  \"arrays\": [\n    {\n      \"name\": \"temperature\",\n      \"dtype\": \"float64\",\n      \"shape\": [\n        2,\n        3\n      ],\n      \"elements\": 6,\n      \"complex\": false,\n      \"global\": false\n    },\n    {\n      \"name\": \"spectrum\",\n      \"dtype\": \"float64\",\n      \"shape\": [\n        2,\n        1\n      ],\n      \"elements\": 2,\n      \"complex\": true,\n      \"global\": false\n    },\n    {\n      \"name\": \"sample_id\",\n      \"dtype\": \"uint64\",\n      \"shape\": [\n        1,\n        3\n      ],\n      \"elements\": 3,\n      \"complex\": false,\n      \"global\": false\n    },\n    {\n      \"name\": \"valid\",\n      \"dtype\": \"logical\",\n      \"shape\": [\n        2,\n        1\n      ],\n      \"elements\": 2,\n      \"complex\": false,\n      \"global\": false\n    }\n  ]\n}\nSecond spectrum value: Floating(0.5), imaginary Floating(3)"
+    },
+    {
+      "name": "MoonBit direct native example",
+      "status": "passed",
+      "output": "{\r\n  \"status\": \"ok\",\r\n  \"version\": \"0.0.1\",\r\n  \"format\": \"MAT Level 5\",\r\n  \"source_endian\": \"little\",\r\n  \"arrays\": [\r\n    {\r\n      \"name\": \"temperature\",\r\n      \"dtype\": \"float64\",\r\n      \"shape\": [\r\n        2,\r\n        3\r\n      ],\r\n      \"elements\": 6,\r\n      \"complex\": false,\r\n      \"global\": false\r\n    },\r\n    {\r\n      \"name\": \"spectrum\",\r\n      \"dtype\": \"float64\",\r\n      \"shape\": [\r\n        2,\r\n        1\r\n      ],\r\n      \"elements\": 2,\r\n      \"complex\": true,\r\n      \"global\": false\r\n    },\r\n    {\r\n      \"name\": \"sample_id\",\r\n      \"dtype\": \"uint64\",\r\n      \"shape\": [\r\n        1,\r\n        3\r\n      ],\r\n      \"elements\": 3,\r\n      \"complex\": false,\r\n      \"global\": false\r\n    },\r\n    {\r\n      \"name\": \"valid\",\r\n      \"dtype\": \"logical\",\r\n      \"shape\": [\r\n        2,\r\n        1\r\n      ],\r\n      \"elements\": 2,\r\n      \"complex\": false,\r\n      \"global\": false\r\n    }\r\n  ]\r\n}\r\nSecond spectrum value: Floating(0.5), imaginary Floating(3)"
+    },
+    {
+      "name": "MoonBit JS bridge build",
+      "status": "passed",
+      "output": "Finished. moon: no work to do"
+    },
+    {
+      "name": "Native release build",
+      "status": "passed",
+      "output": "dist\\moonmat.exe"
+    },
+    {
+      "name": "JS differential and malformed input tests",
+      "status": "passed",
+      "output": "{\"status\":\"passed\",\"checks\":5,\"streams\":704,\"truncations\":2072}"
+    },
+    {
+      "name": "Independent SciPy/NumPy cross-compatibility",
+      "status": "passed",
+      "output": "{\"status\": \"passed\", \"checks\": 29, \"report\": \"verification/local/interop-report.json\"}"
+    }
+  ],
+  "native_sha256": "f3e1e926c773cebad5e065cbcfe0b8c1db17a5573a6933d9c6560e6925a3d16c",
+  "scope": "Local source/build/runtime and independent SciPy/NumPy verification. MATLAB/Octave execution, public publishing and organizer acceptance are unverified."
+}

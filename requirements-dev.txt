@@ -1,0 +1,3 @@
+# Independent compatibility oracle only. Runtime parsing is implemented in MoonBit.
+numpy==2.2.6
+scipy==1.15.3

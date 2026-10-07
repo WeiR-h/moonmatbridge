@@ -1,0 +1,10 @@
+_build/
+.moon/
+.local-tools/
+.local-toolchain.json
+.venv/
+verification/local/
+dist/
+node_modules/
+__pycache__/
+*.pyc

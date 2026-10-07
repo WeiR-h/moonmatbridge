@@ -1,0 +1,6 @@
+import {
+  "local/moonmatbridge" @mat,
+  "local/moonmatbridge/interchange" @wire,
+}
+
+pkgtype(kind: "executable")

@@ -1,0 +1,13 @@
+MoonMatBridge
+Copyright 2026 MoonMatBridge contributors
+
+Licensed under the Apache License, Version 2.0.
+
+The compiled native executable includes MoonBit runtime/core components
+licensed under Apache-2.0. See THIRD_PARTY.md and LICENSE.
+MoonBit runtime: Copyright 2026 International Digital Economy Academy.
+MoonBit core: Copyright MoonBit contributors.
+
+The Windows compiler launcher is adapted from the user's Apache-2.0
+MoonMMDB development tooling. No MAT parser or compression implementation
+was copied from MoonMMDB, SciPy, matio, mat4js or moon-npy.

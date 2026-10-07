@@ -1,0 +1,209 @@
+{
+  "status": "passed",
+  "version": "0.0.1",
+  "scope": "Local independent SciPy/NumPy verification; MATLAB/Octave not executed",
+  "environment": {
+    "python": "3.12.5",
+    "numpy": "2.2.6",
+    "scipy": "1.15.3",
+    "platform": "Windows-11-10.0.22000-SP0"
+  },
+  "checks": [
+    {
+      "name": "native: scipy-uncompressed MAT read/write",
+      "status": "passed",
+      "detail": "21 arrays; shape, dtype, exact canonical bytes"
+    },
+    {
+      "name": "native: scipy-uncompressed JSON to SciPy",
+      "status": "passed",
+      "detail": "64-bit decimal strings, complex components, nonfinite markers"
+    },
+    {
+      "name": "js: scipy-uncompressed MAT read/write",
+      "status": "passed",
+      "detail": "21 arrays; shape, dtype, exact canonical bytes"
+    },
+    {
+      "name": "js: scipy-uncompressed JSON to SciPy",
+      "status": "passed",
+      "detail": "64-bit decimal strings, complex components, nonfinite markers"
+    },
+    {
+      "name": "native: scipy-compressed MAT read/write",
+      "status": "passed",
+      "detail": "21 arrays; shape, dtype, exact canonical bytes"
+    },
+    {
+      "name": "native: scipy-compressed JSON to SciPy",
+      "status": "passed",
+      "detail": "64-bit decimal strings, complex components, nonfinite markers"
+    },
+    {
+      "name": "js: scipy-compressed MAT read/write",
+      "status": "passed",
+      "detail": "21 arrays; shape, dtype, exact canonical bytes"
+    },
+    {
+      "name": "js: scipy-compressed JSON to SciPy",
+      "status": "passed",
+      "detail": "64-bit decimal strings, complex components, nonfinite markers"
+    },
+    {
+      "name": "independent big-endian fixture validated by SciPy",
+      "status": "passed",
+      "detail": "small tags, 64-bit extremes, compact numeric storage"
+    },
+    {
+      "name": "native: big-endian MAT read/write",
+      "status": "passed",
+      "detail": "5 arrays; shape, dtype, exact canonical bytes"
+    },
+    {
+      "name": "native: big-endian JSON to SciPy",
+      "status": "passed",
+      "detail": "64-bit decimal strings, complex components, nonfinite markers"
+    },
+    {
+      "name": "js: big-endian MAT read/write",
+      "status": "passed",
+      "detail": "5 arrays; shape, dtype, exact canonical bytes"
+    },
+    {
+      "name": "js: big-endian JSON to SciPy",
+      "status": "passed",
+      "detail": "64-bit decimal strings, complex components, nonfinite markers"
+    },
+    {
+      "name": "native: big-endian-compressed MAT read/write",
+      "status": "passed",
+      "detail": "5 arrays; shape, dtype, exact canonical bytes"
+    },
+    {
+      "name": "native: big-endian-compressed JSON to SciPy",
+      "status": "passed",
+      "detail": "64-bit decimal strings, complex components, nonfinite markers"
+    },
+    {
+      "name": "js: big-endian-compressed MAT read/write",
+      "status": "passed",
+      "detail": "5 arrays; shape, dtype, exact canonical bytes"
+    },
+    {
+      "name": "js: big-endian-compressed JSON to SciPy",
+      "status": "passed",
+      "detail": "64-bit decimal strings, complex components, nonfinite markers"
+    },
+    {
+      "name": "native: generated sample and Unicode paths",
+      "status": "passed",
+      "detail": "SciPy consumer; boolean MAT class; exact uint64 values"
+    },
+    {
+      "name": "native: existing output rejected",
+      "status": "passed",
+      "detail": "Exclusive create; original sample still loads correctly"
+    },
+    {
+      "name": "native: NumPy NPY export",
+      "status": "passed",
+      "detail": "21 dtype/shape fixtures, complex interleaving, exact IEEE bytes"
+    },
+    {
+      "name": "js: generated sample and Unicode paths",
+      "status": "passed",
+      "detail": "SciPy consumer; boolean MAT class; exact uint64 values"
+    },
+    {
+      "name": "js: existing output rejected",
+      "status": "passed",
+      "detail": "Exclusive create; original sample still loads correctly"
+    },
+    {
+      "name": "js: NumPy NPY export",
+      "status": "passed",
+      "detail": "21 dtype/shape fixtures, complex interleaving, exact IEEE bytes"
+    },
+    {
+      "name": "unsupported cell fails explicitly",
+      "status": "passed",
+      "detail": "Both hosts return structured error, never skip or flatten data"
+    },
+    {
+      "name": "unsupported struct fails explicitly",
+      "status": "passed",
+      "detail": "Both hosts return structured error, never skip or flatten data"
+    },
+    {
+      "name": "unsupported char fails explicitly",
+      "status": "passed",
+      "detail": "Both hosts return structured error, never skip or flatten data"
+    },
+    {
+      "name": "unsupported sparse fails explicitly",
+      "status": "passed",
+      "detail": "Both hosts return structured error, never skip or flatten data"
+    },
+    {
+      "name": "MAT v7.3 rejected explicitly",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "corrupt compressed checksum rejected by both hosts",
+      "status": "passed",
+      "detail": ""
+    }
+  ],
+  "passed": 29,
+  "fixtures": [
+    {
+      "file": "big-endian-compressed.mat",
+      "sha256": "3f105d9cf0b5c25297627e82e8623b9bb2c43f2e2d19b38dd37ae81f6dd90eb4"
+    },
+    {
+      "file": "big-endian.mat",
+      "sha256": "e1522e9795563ab734e47e9e55b168db38490630ac646c0770e1b78cf10b6f9e"
+    },
+    {
+      "file": "corrupt-checksum.mat",
+      "sha256": "246e6dc6e90f9dfdd10a384084ef644000443e4b8779f48eab76f6d7c68dc266"
+    },
+    {
+      "file": "js-科研样例 with spaces.mat",
+      "sha256": "afb1ceafbc3e6afb7fb9b903d44bff9a58c29d37cd249ec87e5929a0ab2ad52c"
+    },
+    {
+      "file": "native-科研样例 with spaces.mat",
+      "sha256": "afb1ceafbc3e6afb7fb9b903d44bff9a58c29d37cd249ec87e5929a0ab2ad52c"
+    },
+    {
+      "file": "scipy-compressed.mat",
+      "sha256": "9e027b062cb242cf9c22c3ecd0ce54530968ef2b60caa0ef279418c37888990e"
+    },
+    {
+      "file": "scipy-uncompressed.mat",
+      "sha256": "4a7032fd29c806cd4cd2aa86c02007a98c463d2b41b086f7eea635c3ac6e9935"
+    },
+    {
+      "file": "unsupported-cell.mat",
+      "sha256": "6ea348347be7bf139fa93baf26e558593b2151a41f071643668a0685444e307a"
+    },
+    {
+      "file": "unsupported-char.mat",
+      "sha256": "2b7213650d7a5e60a254a3c9bbac9cdefc5888eea9067c35ced7cd505e730084"
+    },
+    {
+      "file": "unsupported-sparse.mat",
+      "sha256": "40de5fbfb2fef6a662bc0ec601c086f7aafbdc1e53fd5df280d85514a3e64002"
+    },
+    {
+      "file": "unsupported-struct.mat",
+      "sha256": "43630b3a11e6f9f614fb7063f410b58cd9dc9b4a1985da4193b630bdd3061792"
+    },
+    {
+      "file": "unsupported-v73.mat",
+      "sha256": "ed87ba92a62ff4a63a5e09e3b1196a7d6207d3a89e220ef6ffc368f49a557790"
+    }
+  ]
+}

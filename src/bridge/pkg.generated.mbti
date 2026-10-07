@@ -1,0 +1,32 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "local/moonmatbridge/bridge"
+
+// Values
+pub fn inflate_zlib(Bytes, Int) -> BinaryResult
+
+pub fn inspect_mat(Bytes) -> String
+
+pub fn json_to_mat(String) -> BinaryResult
+
+pub fn mat_to_json(Bytes) -> String
+
+pub fn mat_to_npy(Bytes, String) -> BinaryResult
+
+pub fn result_bytes(BinaryResult) -> Bytes
+
+pub fn result_status(BinaryResult) -> String
+
+pub fn roundtrip_mat(Bytes) -> BinaryResult
+
+pub fn sample_mat() -> BinaryResult
+
+// Errors
+
+// Types and methods
+pub struct BinaryResult {
+  // private fields
+}
+
+// Type aliases
+
+// Traits

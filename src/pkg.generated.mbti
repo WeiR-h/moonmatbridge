@@ -1,0 +1,100 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "local/moonmatbridge"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn default_limits() -> Limits
+
+pub fn dtype_from_name(String) -> DType raise MatError
+
+pub fn inflate_zlib(Bytes, max_bytes? : Int) -> Bytes raise MatError
+
+pub fn numeric_array(String, DType, Array[Int], Array[Value], imaginary? : Array[Value], is_global? : Bool, limits? : Limits) -> NumericArray raise MatError
+
+pub fn raw_array(String, DType, Array[Int], Bytes, imag? : Bytes, is_global? : Bool, limits? : Limits) -> NumericArray raise MatError
+
+pub fn read_mat(Bytes, limits? : Limits) -> MatFile raise MatError
+
+pub fn write_mat(Array[NumericArray], limits? : Limits) -> Bytes raise MatError
+
+pub fn write_npy(NumericArray, limits? : Limits) -> Bytes raise MatError
+
+// Errors
+pub(all) suberror MatError {
+  MatError(String, Int, String)
+} derive(Eq, @debug.Debug)
+pub fn MatError::code(Self) -> String
+pub fn MatError::equal(Self, Self) -> Bool
+pub fn MatError::message(Self) -> String
+pub fn MatError::not_equal(Self, Self) -> Bool
+pub fn MatError::offset(Self) -> Int
+pub fn MatError::to_repr(Self) -> @debug.Repr
+
+// Types and methods
+pub(all) enum DType {
+  Float64
+  Float32
+  Int8
+  UInt8
+  Int16
+  UInt16
+  Int32
+  UInt32
+  Int64
+  UInt64
+  Logical
+} derive(Eq, @debug.Debug)
+pub fn DType::equal(Self, Self) -> Bool
+pub fn DType::name(Self) -> String
+pub fn DType::not_equal(Self, Self) -> Bool
+pub fn DType::to_repr(Self) -> @debug.Repr
+pub fn DType::width(Self) -> Int
+
+pub(all) struct Limits {
+  max_file_bytes : Int
+  max_expanded_bytes : Int
+  max_elements : Int
+  max_variables : Int
+  max_dimensions : Int
+  max_name_bytes : Int
+} derive(Eq, @debug.Debug)
+pub fn Limits::equal(Self, Self) -> Bool
+pub fn Limits::not_equal(Self, Self) -> Bool
+pub fn Limits::to_repr(Self) -> @debug.Repr
+
+pub(all) struct MatFile {
+  description : String
+  little_endian : Bool
+  arrays : Array[NumericArray]
+} derive(@debug.Debug)
+pub fn MatFile::get(Self, String) -> NumericArray?
+pub fn MatFile::to_repr(Self) -> @debug.Repr
+
+pub(all) struct NumericArray {
+  name : String
+  dtype : DType
+  shape : Array[Int]
+  real : Bytes
+  imag : Bytes?
+  is_global : Bool
+} derive(@debug.Debug)
+pub fn NumericArray::index(Self, Array[Int]) -> Int raise MatError
+pub fn NumericArray::is_complex(Self) -> Bool
+pub fn NumericArray::length(Self) -> Int
+pub fn NumericArray::to_repr(Self) -> @debug.Repr
+pub fn NumericArray::value(Self, Int, imaginary? : Bool) -> Value raise MatError
+
+pub(all) enum Value {
+  Signed(Int64)
+  Unsigned(UInt64)
+  Floating(Double)
+  Boolean(Bool)
+} derive(@debug.Debug)
+pub fn Value::to_repr(Self) -> @debug.Repr
+
+// Type aliases
+
+// Traits

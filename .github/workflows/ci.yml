@@ -1,0 +1,25 @@
+name: source-checks
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  moonbit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install MoonBit
+        run: curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+      - name: Check and test portable targets
+        run: |
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+          export PATH="$HOME/.moon/bin:$PATH"
+          moon check --target js --deny-warn
+          moon test --target js --deny-warn
+          moon test --target wasm-gc --deny-warn
+          moon build src/bridge --target js --release --deny-warn
+          node scripts/js-checks.mjs
+      - name: Test native core
+        run: moon test --target native --deny-warn
+# This workflow is supplied for a future public repository. It has not run on GitHub yet.
+# The pinned, independent Windows/SciPy release verification is scripts/verify.mjs.

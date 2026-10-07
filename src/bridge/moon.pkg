@@ -1,0 +1,12 @@
+import {
+  "local/moonmatbridge" @mat,
+  "local/moonmatbridge/interchange" @wire,
+}
+
+supported_targets = "js"
+
+pkgtype(kind: "foreign_library")
+
+options(
+  link: { "js": { "format": "esm" } },
+)

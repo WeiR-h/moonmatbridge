@@ -1,0 +1,25 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "local/moonmatbridge/interchange"
+
+import {
+  "local/moonmatbridge",
+}
+
+// Values
+pub fn error_json(@moonmatbridge.MatError) -> Json
+
+pub fn from_json(String, limits? : @moonmatbridge.Limits) -> Array[@moonmatbridge.NumericArray] raise @moonmatbridge.MatError
+
+pub fn info(@moonmatbridge.MatFile) -> Json
+
+pub fn sample() -> Array[@moonmatbridge.NumericArray] raise @moonmatbridge.MatError
+
+pub fn to_json(Array[@moonmatbridge.NumericArray]) -> Json raise @moonmatbridge.MatError
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
