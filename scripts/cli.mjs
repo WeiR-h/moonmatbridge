@@ -35,8 +35,9 @@ try {
   else if (command === 'pack' && args.length === 2) save(args[1], bytes(api.json_to_mat(new TextDecoder('utf-8', {fatal: true}).decode(read(args[0])))));
   else if (command === 'roundtrip' && args.length === 2) save(args[1], bytes(api.roundtrip_mat(read(args[0]))));
   else if (command === 'npy' && args.length === 3) save(args[2], bytes(api.mat_to_npy(read(args[0]), args[1])));
+  else if (command === 'select' && args.length >= 3) save(args[1], bytes(api.select_mat(read(args[0]), args.slice(2))));
   else if (command === 'sample' && args.length === 1) save(args[0], bytes(api.sample_mat()));
-  else if (command === 'help' || command === '--help') console.log(`MoonMatBridge v${version}\ninfo INPUT.mat\ndump INPUT.mat OUTPUT.json\npack INPUT.json OUTPUT.mat\nroundtrip INPUT.mat OUTPUT.mat\nnpy INPUT.mat VARIABLE OUTPUT.npy\nsample OUTPUT.mat\nversion\nOutput files must be new.`);
+  else if (command === 'help' || command === '--help') console.log(`MoonMatBridge v${version}\ninfo INPUT.mat\ndump INPUT.mat OUTPUT.json\npack INPUT.json OUTPUT.mat\nroundtrip INPUT.mat OUTPUT.mat\nnpy INPUT.mat VARIABLE OUTPUT.npy\nselect INPUT.mat OUTPUT.mat VARIABLE...\nsample OUTPUT.mat\nversion\nOutput files must be new.`);
   else throw new Error('Invalid command or arguments. Run help.');
 } catch (error) {
   console.error(JSON.stringify(error.diagnostic || {status: 'error', code: error.code === 'EEXIST' ? 'output-exists' : 'host-error', message: error.message}));

@@ -73,6 +73,7 @@ pub(all) struct MatFile {
   arrays : Array[NumericArray]
 } derive(@debug.Debug)
 pub fn MatFile::get(Self, String) -> NumericArray?
+pub fn MatFile::select(Self, Array[String], limits? : Limits) -> Array[NumericArray] raise MatError
 pub fn MatFile::to_repr(Self) -> @debug.Repr
 
 pub(all) struct NumericArray {

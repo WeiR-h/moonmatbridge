@@ -82,3 +82,9 @@ pub fn sample_mat() -> BinaryResult {
 pub fn inflate_zlib(bytes : Bytes, limit : Int) -> BinaryResult {
   binary(() => @mat.inflate_zlib(bytes, max_bytes=limit))
 }
+
+///|
+#export_name("select_mat")
+pub fn select_mat(bytes : Bytes, names : Array[String]) -> BinaryResult {
+  binary(() => @mat.write_mat(@mat.read_mat(bytes).select(names)))
+}

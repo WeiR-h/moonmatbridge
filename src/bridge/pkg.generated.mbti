@@ -20,6 +20,8 @@ pub fn roundtrip_mat(Bytes) -> BinaryResult
 
 pub fn sample_mat() -> BinaryResult
 
+pub fn select_mat(Bytes, Array[String]) -> BinaryResult
+
 // Errors
 
 // Types and methods

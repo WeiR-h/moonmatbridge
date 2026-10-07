@@ -8,6 +8,7 @@ The core package is `local/moonmatbridge`. The executable, JSON adapter and JS A
 | `write_mat(Array[NumericArray], limits?) -> Bytes raise MatError` | Validate all arrays, then emit deterministic uncompressed little-endian MAT |
 | `numeric_array(name, dtype, shape, values, imaginary?, is_global?, limits?)` | Construct from exact `Value` scalars, preserve column-major order |
 | `raw_array(name, dtype, shape, real, imag?, is_global?, limits?)` | Construct from canonical little-endian raw bytes; preserve IEEE payload bits |
+| `MatFile::select(names, limits?)` | Exact variable subset in requested order; missing/duplicate names fail |
 | `NumericArray::permute_axes(axes, limits?)` | Reorder dimensions and both raw payload planes; axes must form a full permutation |
 | `NumericArray::reshape(shape, limits?)` | Preserve exact payload and element count while changing column-major dimensions |
 | `write_npy(NumericArray, limits?) -> Bytes raise MatError` | NPY v1.0 export, 64-byte header alignment, Fortran order, interleaved complex data |
@@ -38,6 +39,6 @@ const bytes = api.result_bytes(result); // Uint8Array
 console.log(JSON.parse(api.inspect_mat(bytes)));
 ```
 
-Exports: `inspect_mat`, `mat_to_json`, `json_to_mat`, `roundtrip_mat`, `mat_to_npy`, `sample_mat`, `inflate_zlib`, `result_status`, `result_bytes`. Functions returning `BinaryResult` require a status check before consuming bytes. Errors never return partial converted data. Host-neutral JS exports use Bytes/strings and have no filesystem or Python dependency; Node tests validate them, but a browser UI has not been shipped or tested in v0.0.1.
+Exports: `select_mat`, `inspect_mat`, `mat_to_json`, `json_to_mat`, `roundtrip_mat`, `mat_to_npy`, `sample_mat`, `inflate_zlib`, `result_status`, `result_bytes`. Functions returning `BinaryResult` require a status check before consuming bytes. Errors never return partial converted data. Host-neutral JS exports use Bytes/strings and have no filesystem or Python dependency; Node tests validate them, but a browser UI has not been shipped or tested in v0.0.1.
 
 `src/pkg.generated.mbti` and the interfaces under `src/interchange` and `src/bridge` contain the complete compiler-generated signatures. Source consumers can include this local module in a MoonBit workspace; there is no registered Mooncakes package yet.

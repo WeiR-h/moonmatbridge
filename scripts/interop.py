@@ -223,6 +223,22 @@ for host in ("native", "js"):
         assert actual.flags.f_contiguous
     record(f"{host}: NumPy NPY export", f"{len(data)} dtype/shape fixtures, complex interleaving, exact IEEE bytes")
 
+# Selection must preserve only the requested variables and their exact values.
+for host in ("native", "js"):
+    names = [list(data)[-1], list(data)[0]]
+    selected = fresh(OUT / f"{host}-selected.mat")
+    invoke(host, "select", OUT / "scipy-compressed.mat", selected, *names)
+    actual = loadmat(selected)
+    assert [k for k in actual if not k.startswith("__")] == names
+    for name in names:
+        assert_same(actual[name], data[name])
+    bad_out = fresh(OUT / f"{host}-invalid-selection.mat")
+    assert invoke(host, "select", selected, bad_out, names[0], names[0], ok=False)["code"] == "duplicate-name"
+    assert not bad_out.exists()
+    assert invoke(host, "select", selected, bad_out, "absent", ok=False)["code"] == "missing-variable"
+    assert not bad_out.exists()
+    record(f"{host}: variable subset selection", "Order, raw values, missing/duplicate errors and no partial output")
+
 unsupported = {
     "cell": {"x": np.array([[1, "text"]], dtype=object)},
     "struct": {"x": {"field": np.array([[1]])}},
