@@ -86,6 +86,7 @@ pub(all) struct NumericArray {
 pub fn NumericArray::index(Self, Array[Int]) -> Int raise MatError
 pub fn NumericArray::is_complex(Self) -> Bool
 pub fn NumericArray::length(Self) -> Int
+pub fn NumericArray::permute_axes(Self, Array[Int], limits? : Limits) -> Self raise MatError
 pub fn NumericArray::reshape(Self, Array[Int], limits? : Limits) -> Self raise MatError
 pub fn NumericArray::to_repr(Self) -> @debug.Repr
 pub fn NumericArray::value(Self, Int, imaginary? : Bool) -> Value raise MatError
