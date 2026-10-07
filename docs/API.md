@@ -11,6 +11,7 @@ The core package is `local/moonmatbridge`. The executable, JSON adapter and JS A
 | `MatFile::select(names, limits?)` | Exact variable subset in requested order; missing/duplicate names fail |
 | `NumericArray::permute_axes(axes, limits?)` | Reorder dimensions and both raw payload planes; axes must form a full permutation |
 | `NumericArray::reshape(shape, limits?)` | Preserve exact payload and element count while changing column-major dimensions |
+| `read_npy(bytes, name, limits?) -> NumericArray raise MatError` | Primitive numerical NPY v1/v2/v3; endian and C/Fortran normalization; no pickle evaluation |
 | `write_npy(NumericArray, limits?) -> Bytes raise MatError` | NPY v1.0 export, 64-byte header alignment, Fortran order, interleaved complex data |
 | `inflate_zlib(Bytes, max_bytes?) -> Bytes raise MatError` | Bounded RFC 1950 stream decoder with checksum validation |
 | `dtype_from_name(String) -> DType raise MatError` | Parse stable dtype names |
@@ -42,3 +43,5 @@ console.log(JSON.parse(api.inspect_mat(bytes)));
 Exports: `select_mat`, `inspect_mat`, `mat_to_json`, `json_to_mat`, `roundtrip_mat`, `mat_to_npy`, `sample_mat`, `inflate_zlib`, `result_status`, `result_bytes`. Functions returning `BinaryResult` require a status check before consuming bytes. Errors never return partial converted data. Host-neutral JS exports use Bytes/strings and have no filesystem or Python dependency; Node tests validate them, but a browser UI has not been shipped or tested in v0.0.1.
 
 `src/pkg.generated.mbti` and the interfaces under `src/interchange` and `src/bridge` contain the complete compiler-generated signatures. Source consumers can include this local module in a MoonBit workspace; there is no registered Mooncakes package yet.
+
+NPY input supports primitive float32/64, complex64/128, signed/unsigned integers and bool. Header strings must be plain ASCII, the header fits 64 KiB and no duplicate/unknown keys or trailing payload are accepted. Structured, object/pickle, string, datetime, float16 and ambiguous native-endian descriptors are rejected. NPY scalars become `[1,1]` and vectors become `[n,1]`; multidimensional shape is unchanged. Nonzero bool bytes normalize to canonical 1. All numerical bytes, including nonfinite payloads and exact 64-bit integers, are copied without scalar conversion.

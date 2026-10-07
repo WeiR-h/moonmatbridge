@@ -18,6 +18,8 @@ pub fn raw_array(String, DType, Array[Int], Bytes, imag? : Bytes, is_global? : B
 
 pub fn read_mat(Bytes, limits? : Limits) -> MatFile raise MatError
 
+pub fn read_npy(Bytes, String, limits? : Limits) -> NumericArray raise MatError
+
 pub fn version() -> String
 
 pub fn write_mat(Array[NumericArray], limits? : Limits) -> Bytes raise MatError
