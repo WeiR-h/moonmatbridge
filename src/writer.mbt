@@ -82,9 +82,8 @@ pub fn write_mat(
     total = total + matrix_size + 8
   }
   let out = Array::make(128, b' ')
-  let header = @utf8.encode(
-    "MATLAB 5.0 MAT-file, Created by MoonMatBridge v0.0.1 (MoonBit)"[:],
-  )
+  let description = "MATLAB 5.0 MAT-file, Created by MoonMatBridge v" + version() + " (MoonBit)"
+  let header = @utf8.encode(description[:])
   for i = 0; i < header.length(); i = i + 1 {
     out[i] = header[i]
   }

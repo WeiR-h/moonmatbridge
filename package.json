@@ -1,6 +1,6 @@
 {
   "name": "moonmatbridge",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "type": "module",
   "description": "Native MoonBit MAT Level 5 scientific data interoperability library",
@@ -13,5 +13,7 @@
     "verify": "node scripts/verify.mjs",
     "package": "node scripts/package.mjs"
   },
-  "engines": { "node": ">=22" }
+  "engines": {
+    "node": ">=22"
+  }
 }

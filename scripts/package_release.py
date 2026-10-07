@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 import platform
 import subprocess
 import uuid
@@ -13,8 +14,8 @@ ROOT = Path(__file__).resolve().parents[1]
 DIST = ROOT / "dist"
 REPORTS = ROOT / "verification" / "reports"
 LOCAL = ROOT / "verification" / "local"
-VERSION = "0.0.1"
-report = json.loads((REPORTS / "v0.0.1.json").read_text(encoding="utf-8"))
+VERSION = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))["version"]
+report = json.loads((REPORTS / f"v{VERSION}.json").read_text(encoding="utf-8"))
 source_hash = report["source"]["sha256"]
 assert report["status"] == "passed" and platform.system() == "Windows"
 DIST.mkdir(exist_ok=True)
@@ -95,7 +96,7 @@ with zipfile.ZipFile(native_zip, "w", compression=zipfile.ZIP_DEFLATED, compress
         add(z, ROOT / name, native_name)
     for path in sorted(REPORTS.glob("*.json")):
         add(z, path, native_name, "verification/" + path.name)
-    z.writestr(f"{native_name}/README.txt", portable_readme)
+    z.writestr(f"{native_name}/README.txt", portable_readme.replace("v0.0.1", f"v{VERSION}"))
     z.writestr(f"{native_name}/SOURCE_SHA256.txt", source_hash + "\n")
 
 js_name = f"MoonMatBridge-v{VERSION}-js"
@@ -104,7 +105,7 @@ with zipfile.ZipFile(js_zip, "w", compression=zipfile.ZIP_DEFLATED, compressleve
     add(z, ROOT / "_build/js/release/build/bridge/bridge.js", js_name, "bridge.mjs")
     for name in ["LICENSE", "NOTICE", "THIRD_PARTY.md", "docs/API.md", "docs/JSON.md", "examples/sample.json"]:
         add(z, ROOT / name, js_name)
-    z.writestr(f"{js_name}/README.txt", "MoonMatBridge v0.0.1 JS exports. Import bridge.mjs; see docs/API.md. Host-neutral MoonBit build, no Python/zlib dependency. Browser UI is not shipped/tested.\n")
+    z.writestr(f"{js_name}/README.txt", f"MoonMatBridge v{VERSION} JS exports. Import bridge.mjs; see docs/API.md. Host-neutral MoonBit build, no Python/zlib dependency. Browser UI is not shipped/tested.\n")
     z.writestr(f"{js_name}/SOURCE_SHA256.txt", source_hash + "\n")
 
 # Verify unpacked consumers in fresh directories, with no development runtime on PATH for the native CLI.
@@ -116,7 +117,7 @@ for name in list(clean_env):
         clean_env.pop(name, None)
 clean_env["PATH"] = str(Path(os.environ["SystemRoot"]) / "System32")
 exe = str(native / "moonmat.exe")
-assert run([exe, "version"], native, clean_env).stdout.strip() == "MoonMatBridge v0.0.1"
+assert run([exe, "version"], native, clean_env).stdout.strip() == f"MoonMatBridge v{VERSION}"
 consumer = native / "中文测试 data"
 consumer.mkdir()
 commands = [
@@ -144,7 +145,8 @@ if config.get("moonHome"):
 assert not (source / ".local-toolchain.json").exists() and not (source / "_build").exists()
 run(["node", "scripts/moon.mjs", "check", "--target", "js", "--deny-warn"], source, source_env)
 clean_tests = run(["node", "scripts/moon.mjs", "test", "--target", "js", "--deny-warn"], source, source_env)
-assert "passed: 27" in clean_tests.stdout
+test_match = re.search(r"Total tests: (\d+), passed: (\d+), failed: 0", clean_tests.stdout)
+assert test_match and test_match.group(1) == test_match.group(2)
 fingerprint_probe = run(["node", "--input-type=module", "-e", "import {sourceFingerprint} from './scripts/verify.mjs'; console.log(sourceFingerprint().sha256);"], source, source_env)
 assert fingerprint_probe.stdout.strip() == source_hash
 
@@ -168,10 +170,10 @@ result = {
     "status": "passed", "version": VERSION, "source_sha256": source_hash,
     "native_sha256": digest(DIST / "moonmat.exe"), "archives": archives,
     "fresh_consumers": {"native": "version + 6 commands + Unicode/spaces + no overwrite; PATH limited to System32",
-                        "source": "unpacked source check and 27 JS tests; no local settings/build cache bundled",
+                        "source": f"unpacked source check and {test_match.group(2)} JS tests; no local settings/build cache bundled",
                         "js": "unpacked bridge imports and exact JSON round trip"},
     "scope": "Local archives and fresh consumers; no public publishing or organizer acceptance",
 }
-(DIST / "release-v0.0.1.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+(DIST / f"release-v{VERSION}.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 (DIST / "SHA256SUMS.txt").write_text("".join(f'{entry["sha256"]}  {entry["file"]}\n' for entry in archives), encoding="utf-8")
 print(json.dumps({"status": "passed", "archives": archives, "fresh_consumers": 3}, ensure_ascii=False))

@@ -254,7 +254,7 @@ for host in ("native", "js"):
 record("corrupt compressed checksum rejected by both hosts")
 
 report = {
-    "status": "passed", "version": "0.0.1", "scope": "Local independent SciPy/NumPy verification; MATLAB/Octave not executed",
+    "status": "passed", "version": json.loads((ROOT / "package.json").read_text(encoding="utf-8"))["version"], "scope": "Local independent SciPy/NumPy verification; MATLAB/Octave not executed",
     "environment": {"python": platform.python_version(), "numpy": np.__version__, "scipy": scipy.__version__, "platform": platform.platform()},
     "checks": checks, "passed": len(checks),
     "fixtures": [{"file": path.name, "sha256": hashlib.sha256(path.read_bytes()).hexdigest()} for path in sorted(OUT.glob("*.mat")) if not "roundtrip" in path.name and not "from-json" in path.name],

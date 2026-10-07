@@ -328,7 +328,7 @@ pub fn info(file : @mat.MatFile) -> Json {
   })
   {
     "status": "ok",
-    "version": "0.0.1",
+    "version": @mat.version(),
     "format": "MAT Level 5",
     "source_endian": if file.little_endian {
       "little"

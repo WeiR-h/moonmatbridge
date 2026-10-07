@@ -19,7 +19,7 @@ pub fn result_status(result : BinaryResult) -> String {
     Some(error) => error
     None =>
       (
-        { "status": "ok", "bytes": result.data.length(), "version": "0.0.1" } :
+        { "status": "ok", "bytes": result.data.length(), "version": @mat.version() } :
         Json).stringify()
   }
 }

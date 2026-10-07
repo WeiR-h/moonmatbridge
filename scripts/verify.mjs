@@ -3,14 +3,14 @@ import {readFileSync, writeFileSync, mkdirSync, readdirSync} from 'node:fs';
 import {join, relative, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
-import {root, runMoon} from './moon.mjs';
+import {root, runMoon, version} from './moon.mjs';
 import {nativeEnv, buildNative} from './build-native.mjs';
 
 export function sourceFingerprint() {
   const files = [];
   function walk(path) {
     for (const entry of readdirSync(path, {withFileTypes: true})) {
-      if (['_build', '.git', '.moon', '.venv', '.local-tools', 'dist', 'node_modules'].includes(entry.name)) continue;
+      if (['_build', '.git', '.moon', '.venv', '.local-tools', 'dist', 'node_modules', '__pycache__', '.pytest_cache'].includes(entry.name)) continue;
       const full = join(path, entry.name);
       const name = relative(root, full).replaceAll('\\', '/');
       if (name.startsWith('verification/local') || name.startsWith('verification/reports') || ['.local-toolchain.json', 'SOURCE_SHA256.txt'].includes(entry.name)) continue;
@@ -32,7 +32,8 @@ function command(executable, args) {
   return (result.stdout + result.stderr).trim();
 }
 try {
-  const version = runMoon(['version']);
+  const sdkVersion = runMoon(['version']);
+  if (!readFileSync(join(root, 'moon.mod'), 'utf8').includes(`version = "${version}"`)) throw new Error('Manifest versions differ');
   record('MoonBit JS checks', runMoon(['check', '--target', 'js', '--deny-warn']));
   record('MoonBit JS unit tests', runMoon(['test', '--target', 'js', '--deny-warn']));
   record('MoonBit wasm-gc unit tests', runMoon(['test', '--target', 'wasm-gc', '--deny-warn']));
@@ -49,13 +50,13 @@ try {
   record('Independent SciPy/NumPy cross-compatibility', command(python, ['scripts/interop.py']));
   const fingerprint = sourceFingerprint();
   const report = {
-    status: 'passed', version: '0.0.1', checked_at: new Date().toISOString(), source: fingerprint,
-    environment: {moon: version, node: process.version, platform: process.platform, arch: process.arch}, checks,
+    status: 'passed', version, checked_at: new Date().toISOString(), source: fingerprint,
+    environment: {moon: sdkVersion, node: process.version, platform: process.platform, arch: process.arch}, checks,
     native_sha256: createHash('sha256').update(readFileSync(executable)).digest('hex'),
     scope: 'Local source/build/runtime and independent SciPy/NumPy verification. MATLAB/Octave execution, public publishing and organizer acceptance are unverified.',
   };
   mkdirSync(join(root, 'verification/reports'), {recursive: true});
-  for (const [name, data] of [['v0.0.1.json', report], ['interop-v0.0.1.json', JSON.parse(readFileSync(join(root, 'verification/local/interop-report.json'), 'utf8'))], ['js-v0.0.1.json', JSON.parse(readFileSync(join(root, 'verification/local/js-report.json'), 'utf8'))]]) {
+  for (const [name, data] of [[`v${version}.json`, report], [ `interop-v${version}.json`, JSON.parse(readFileSync(join(root, 'verification/local/interop-report.json'), 'utf8'))], [ `js-v${version}.json`, JSON.parse(readFileSync(join(root, 'verification/local/js-report.json'), 'utf8'))]]) {
     writeFileSync(join(root, 'verification/reports', name), JSON.stringify(data, null, 2) + '\n');
   }
   console.log(JSON.stringify({status: 'passed', groups: checks.length, source: fingerprint}));

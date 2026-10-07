@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.0.2 — Unreleased
+
+Next source iteration. Verification and packaging derive the version from the manifest, preserving v0.0.1 artifacts and reports.
+
 ## v0.0.1 — 2026-10-07
 
 首个可运行版本：MoonBit 实现 MAT Level 5 dense numeric/logical 读写、大小端及小数据标签读取、zlib/DEFLATE 解压、复数与 N 维形状保留、精确 64 位整数、结构化错误和资源限制。

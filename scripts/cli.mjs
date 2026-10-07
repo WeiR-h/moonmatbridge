@@ -3,7 +3,7 @@
 import {readFileSync, writeFileSync, statSync} from 'node:fs';
 import {join} from 'node:path';
 import {pathToFileURL} from 'node:url';
-import {root} from './moon.mjs';
+import {root, version} from './moon.mjs';
 
 const api = await import(pathToFileURL(join(root, '_build/js/release/build/bridge/bridge.js')));
 const limit = 64 * 1024 * 1024;
@@ -25,18 +25,18 @@ function bytes(result) {
 }
 function save(path, data) {
   writeFileSync(path, data, {flag: 'wx'});
-  console.log(JSON.stringify({status: 'ok', output: path, bytes: Buffer.byteLength(data), version: '0.0.1'}));
+  console.log(JSON.stringify({status: 'ok', output: path, bytes: Buffer.byteLength(data), version}));
 }
 const [command = 'help', ...args] = process.argv.slice(2);
 try {
-  if (command === 'version' && args.length === 0) console.log('MoonMatBridge v0.0.1');
+  if (command === 'version' && args.length === 0) console.log(`MoonMatBridge v${version}`);
   else if (command === 'info' && args.length === 1) console.log(checkedJSON(api.inspect_mat(read(args[0]))));
   else if (command === 'dump' && args.length === 2) save(args[1], checkedJSON(api.mat_to_json(read(args[0]))) + '\n');
   else if (command === 'pack' && args.length === 2) save(args[1], bytes(api.json_to_mat(new TextDecoder('utf-8', {fatal: true}).decode(read(args[0])))));
   else if (command === 'roundtrip' && args.length === 2) save(args[1], bytes(api.roundtrip_mat(read(args[0]))));
   else if (command === 'npy' && args.length === 3) save(args[2], bytes(api.mat_to_npy(read(args[0]), args[1])));
   else if (command === 'sample' && args.length === 1) save(args[0], bytes(api.sample_mat()));
-  else if (command === 'help' || command === '--help') console.log('MoonMatBridge v0.0.1\ninfo INPUT.mat\ndump INPUT.mat OUTPUT.json\npack INPUT.json OUTPUT.mat\nroundtrip INPUT.mat OUTPUT.mat\nnpy INPUT.mat VARIABLE OUTPUT.npy\nsample OUTPUT.mat\nversion\nOutput files must be new.');
+  else if (command === 'help' || command === '--help') console.log(`MoonMatBridge v${version}\ninfo INPUT.mat\ndump INPUT.mat OUTPUT.json\npack INPUT.json OUTPUT.mat\nroundtrip INPUT.mat OUTPUT.mat\nnpy INPUT.mat VARIABLE OUTPUT.npy\nsample OUTPUT.mat\nversion\nOutput files must be new.`);
   else throw new Error('Invalid command or arguments. Run help.');
 } catch (error) {
   console.error(JSON.stringify(error.diagnostic || {status: 'error', code: error.code === 'EEXIST' ? 'output-exists' : 'host-error', message: error.message}));

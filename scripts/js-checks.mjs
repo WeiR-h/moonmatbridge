@@ -4,7 +4,7 @@ import {createHash} from 'node:crypto';
 import {mkdirSync, writeFileSync} from 'node:fs';
 import {join} from 'node:path';
 import {pathToFileURL} from 'node:url';
-import {root} from './moon.mjs';
+import {root, version} from './moon.mjs';
 
 const api = await import(pathToFileURL(join(root, '_build/js/release/build/bridge/bridge.js')));
 const checks = [];
@@ -86,6 +86,6 @@ assert.equal(status(api.mat_to_npy(sample, 'absent')).code, 'missing-variable');
 record('strict JSON schema and absent variable diagnostics', {invalid_documents: malformed.length});
 
 mkdirSync(join(root, 'verification/local'), {recursive: true});
-const report = {status: 'passed', version: '0.0.1', node: process.version, platform: process.platform, checks, passed: checks.length};
+const report = {status: 'passed', version, node: process.version, platform: process.platform, checks, passed: checks.length};
 writeFileSync(join(root, 'verification/local/js-report.json'), JSON.stringify(report, null, 2) + '\n');
 console.log(JSON.stringify({status: 'passed', checks: checks.length, streams, truncations}));

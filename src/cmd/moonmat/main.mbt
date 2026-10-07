@@ -72,14 +72,14 @@ fn save(path : String, bytes : Bytes) -> Unit raise @mat.MatError {
         "status": "ok",
         "output": path,
         "bytes": bytes.length(),
-        "version": "0.0.1",
+        "version": @mat.version(),
       } : Json).stringify(),
   )
 }
 
 ///|
 fn usage() -> String {
-  "MoonMatBridge v0.0.1\n" +
+  "MoonMatBridge v" + @mat.version() + "\n" +
   "  moonmat info INPUT.mat\n" +
   "  moonmat dump INPUT.mat OUTPUT.json\n" +
   "  moonmat pack INPUT.json OUTPUT.mat\n" +
@@ -99,7 +99,7 @@ fn run(args : Array[String]) -> Unit raise @mat.MatError {
   }
   let command = args[1]
   if command == "version" && args.length() == 2 {
-    println("MoonMatBridge v0.0.1")
+    println("MoonMatBridge v" + @mat.version())
   } else if command == "sample" && args.length() == 3 {
     save(args[2], @mat.write_mat(@wire.sample()))
   } else if command == "info" && args.length() == 3 {
