@@ -25,7 +25,7 @@ def record(name: str, detail: str = "") -> None:
 
 
 def invoke(host: str, *args: str | Path, ok: bool = True) -> dict:
-    command = [str(ROOT / "dist" / "moonmat.exe")] if host == "native" else ["node", str(ROOT / "scripts" / "cli.mjs")]
+    command = [str(ROOT / "dist" / ("moonmat.exe" if platform.system() == "Windows" else "moonmat"))] if host == "native" else ["node", str(ROOT / "scripts" / "cli.mjs")]
     result = subprocess.run(command + [str(a) for a in args], cwd=ROOT, capture_output=True,
                             encoding="utf-8", errors="strict", timeout=30)
     text = (result.stdout if result.stdout.strip() else result.stderr).strip()

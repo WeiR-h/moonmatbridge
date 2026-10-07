@@ -1,0 +1,59 @@
+{
+  "status": "passed",
+  "version": "0.0.2",
+  "node": "v24.13.0",
+  "platform": "win32",
+  "checks": [
+    {
+      "name": "RFC 1950/1951 differential corpus",
+      "status": "passed",
+      "detail": {
+        "streams": 704,
+        "strategies": 4,
+        "levels": 4,
+        "first_block_types": [
+          0,
+          1,
+          2
+        ],
+        "truncations": 2072,
+        "oracle": "Node built-in zlib"
+      }
+    },
+    {
+      "name": "preset dictionaries rejected explicitly",
+      "status": "passed"
+    },
+    {
+      "name": "browser-compatible JS exports",
+      "status": "passed",
+      "detail": {
+        "sample_sha256": "fcde5855740da0905c2bb078845ca1cb5c01a88b01325e99b7deb29d72008b27",
+        "deterministic_roundtrip": true,
+        "data_schema": "moonmatbridge/1"
+      }
+    },
+    {
+      "name": "malformed MAT boundaries and resource limits",
+      "status": "passed",
+      "detail": [
+        "negative dimensions",
+        "oversized dimensions",
+        "oversized tag length",
+        "flags length",
+        "MAT version",
+        "subsystem metadata",
+        "unknown matrix class",
+        "missing imaginary data"
+      ]
+    },
+    {
+      "name": "strict JSON schema and absent variable diagnostics",
+      "status": "passed",
+      "detail": {
+        "invalid_documents": 6
+      }
+    }
+  ],
+  "passed": 5
+}

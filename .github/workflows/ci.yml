@@ -1,25 +1,37 @@
-name: source-checks
+name: scientific-interop
 on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
-  moonbit:
+  linux-interop:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      MOONMAT_PYTHON: python
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
       - name: Install MoonBit
-        run: curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
-      - name: Check and test portable targets
         run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
-          export PATH="$HOME/.moon/bin:$PATH"
-          moon check --target js --deny-warn
-          moon test --target js --deny-warn
-          moon test --target wasm-gc --deny-warn
-          moon build src/bridge --target js --release --deny-warn
-          node scripts/js-checks.mjs
-      - name: Test native core
-        run: moon test --target native --deny-warn
-# This workflow is supplied for a future public repository. It has not run on GitHub yet.
-# The pinned, independent Windows/SciPy release verification is scripts/verify.mjs.
+      - name: Install independent scientific readers
+        run: python -m pip install -r requirements-dev.txt
+      - name: Verify three MoonBit targets and both command line hosts
+        run: npm run verify
+      - name: Preserve verification reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-interop-${{ github.sha }}
+          path: verification/reports/
+          if-no-files-found: error

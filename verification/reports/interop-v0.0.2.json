@@ -1,0 +1,799 @@
+{
+  "status": "passed",
+  "version": "0.0.2",
+  "scope": "Local independent SciPy/NumPy verification; MATLAB/Octave not executed",
+  "environment": {
+    "python": "3.12.5",
+    "numpy": "2.2.6",
+    "scipy": "1.15.3",
+    "platform": "Windows-11-10.0.22000-SP0"
+  },
+  "checks": [
+    {
+      "name": "native: scipy-uncompressed MAT read/write",
+      "status": "passed",
+      "detail": "21 arrays; shape, dtype, exact canonical bytes"
+    },
+    {
+      "name": "native: scipy-uncompressed JSON to SciPy",
+      "status": "passed",
+      "detail": "64-bit decimal strings, complex components, nonfinite markers"
+    },
+    {
+      "name": "js: scipy-uncompressed MAT read/write",
+      "status": "passed",
+      "detail": "21 arrays; shape, dtype, exact canonical bytes"
+    },
+    {
+      "name": "js: scipy-uncompressed JSON to SciPy",
+      "status": "passed",
+      "detail": "64-bit decimal strings, complex components, nonfinite markers"
+    },
+    {
+      "name": "native: scipy-compressed MAT read/write",
+      "status": "passed",
+      "detail": "21 arrays; shape, dtype, exact canonical bytes"
+    },
+    {
+      "name": "native: scipy-compressed JSON to SciPy",
+      "status": "passed",
+      "detail": "64-bit decimal strings, complex components, nonfinite markers"
+    },
+    {
+      "name": "js: scipy-compressed MAT read/write",
+      "status": "passed",
+      "detail": "21 arrays; shape, dtype, exact canonical bytes"
+    },
+    {
+      "name": "js: scipy-compressed JSON to SciPy",
+      "status": "passed",
+      "detail": "64-bit decimal strings, complex components, nonfinite markers"
+    },
+    {
+      "name": "independent big-endian fixture validated by SciPy",
+      "status": "passed",
+      "detail": "small tags, 64-bit extremes, compact numeric storage"
+    },
+    {
+      "name": "native: big-endian MAT read/write",
+      "status": "passed",
+      "detail": "5 arrays; shape, dtype, exact canonical bytes"
+    },
+    {
+      "name": "native: big-endian JSON to SciPy",
+      "status": "passed",
+      "detail": "64-bit decimal strings, complex components, nonfinite markers"
+    },
+    {
+      "name": "js: big-endian MAT read/write",
+      "status": "passed",
+      "detail": "5 arrays; shape, dtype, exact canonical bytes"
+    },
+    {
+      "name": "js: big-endian JSON to SciPy",
+      "status": "passed",
+      "detail": "64-bit decimal strings, complex components, nonfinite markers"
+    },
+    {
+      "name": "native: big-endian-compressed MAT read/write",
+      "status": "passed",
+      "detail": "5 arrays; shape, dtype, exact canonical bytes"
+    },
+    {
+      "name": "native: big-endian-compressed JSON to SciPy",
+      "status": "passed",
+      "detail": "64-bit decimal strings, complex components, nonfinite markers"
+    },
+    {
+      "name": "js: big-endian-compressed MAT read/write",
+      "status": "passed",
+      "detail": "5 arrays; shape, dtype, exact canonical bytes"
+    },
+    {
+      "name": "js: big-endian-compressed JSON to SciPy",
+      "status": "passed",
+      "detail": "64-bit decimal strings, complex components, nonfinite markers"
+    },
+    {
+      "name": "native: generated sample and Unicode paths",
+      "status": "passed",
+      "detail": "SciPy consumer; boolean MAT class; exact uint64 values"
+    },
+    {
+      "name": "native: existing output rejected",
+      "status": "passed",
+      "detail": "Exclusive create; original sample still loads correctly"
+    },
+    {
+      "name": "native: NumPy NPY export",
+      "status": "passed",
+      "detail": "21 dtype/shape fixtures, complex interleaving, exact IEEE bytes"
+    },
+    {
+      "name": "js: generated sample and Unicode paths",
+      "status": "passed",
+      "detail": "SciPy consumer; boolean MAT class; exact uint64 values"
+    },
+    {
+      "name": "js: existing output rejected",
+      "status": "passed",
+      "detail": "Exclusive create; original sample still loads correctly"
+    },
+    {
+      "name": "js: NumPy NPY export",
+      "status": "passed",
+      "detail": "21 dtype/shape fixtures, complex interleaving, exact IEEE bytes"
+    },
+    {
+      "name": "native: variable subset selection",
+      "status": "passed",
+      "detail": "Order, raw values, missing/duplicate errors and no partial output"
+    },
+    {
+      "name": "js: variable subset selection",
+      "status": "passed",
+      "detail": "Order, raw values, missing/duplicate errors and no partial output"
+    },
+    {
+      "name": "native: NumPy NPY import",
+      "status": "passed",
+      "detail": "69 NumPy-generated files: versions 1/2/3, C/Fortran, endian, complex, 64-bit, scalar/vector/empty"
+    },
+    {
+      "name": "js: NumPy NPY import",
+      "status": "passed",
+      "detail": "69 NumPy-generated files: versions 1/2/3, C/Fortran, endian, complex, 64-bit, scalar/vector/empty"
+    },
+    {
+      "name": "native: NPY unsafe/truncated input rejected",
+      "status": "passed",
+      "detail": "No pickle evaluation, no partial output"
+    },
+    {
+      "name": "js: NPY unsafe/truncated input rejected",
+      "status": "passed",
+      "detail": "No pickle evaluation, no partial output"
+    },
+    {
+      "name": "unsupported cell fails explicitly",
+      "status": "passed",
+      "detail": "Both hosts return structured error, never skip or flatten data"
+    },
+    {
+      "name": "unsupported struct fails explicitly",
+      "status": "passed",
+      "detail": "Both hosts return structured error, never skip or flatten data"
+    },
+    {
+      "name": "unsupported char fails explicitly",
+      "status": "passed",
+      "detail": "Both hosts return structured error, never skip or flatten data"
+    },
+    {
+      "name": "unsupported sparse fails explicitly",
+      "status": "passed",
+      "detail": "Both hosts return structured error, never skip or flatten data"
+    },
+    {
+      "name": "MAT v7.3 rejected explicitly",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "name": "corrupt compressed checksum rejected by both hosts",
+      "status": "passed",
+      "detail": ""
+    }
+  ],
+  "passed": 35,
+  "fixtures": [
+    {
+      "file": "big-endian-compressed.mat",
+      "sha256": "3f105d9cf0b5c25297627e82e8623b9bb2c43f2e2d19b38dd37ae81f6dd90eb4"
+    },
+    {
+      "file": "big-endian.mat",
+      "sha256": "e1522e9795563ab734e47e9e55b168db38490630ac646c0770e1b78cf10b6f9e"
+    },
+    {
+      "file": "corrupt-checksum.mat",
+      "sha256": "f3036ead336ca4baea3893bb3dd51b45f7e9ddfa11b2062b49e5495158e76669"
+    },
+    {
+      "file": "js-npy-import-0.mat",
+      "sha256": "54969e83d549b1174c1983d3b0c7e10d9c9cea9ab1cb26a6d28b96eb4336c522"
+    },
+    {
+      "file": "js-npy-import-1.mat",
+      "sha256": "54969e83d549b1174c1983d3b0c7e10d9c9cea9ab1cb26a6d28b96eb4336c522"
+    },
+    {
+      "file": "js-npy-import-10.mat",
+      "sha256": "a6ececdba771aaa8313a8ce5457c8f6ca9048f9e5ae2c865062b98dba4ee18c3"
+    },
+    {
+      "file": "js-npy-import-11.mat",
+      "sha256": "a6ececdba771aaa8313a8ce5457c8f6ca9048f9e5ae2c865062b98dba4ee18c3"
+    },
+    {
+      "file": "js-npy-import-12.mat",
+      "sha256": "0a0fcfc4799694a34cfcaec0c1222e389c50c6d64dfcb821465686ed36bf6deb"
+    },
+    {
+      "file": "js-npy-import-13.mat",
+      "sha256": "0a0fcfc4799694a34cfcaec0c1222e389c50c6d64dfcb821465686ed36bf6deb"
+    },
+    {
+      "file": "js-npy-import-14.mat",
+      "sha256": "0a0fcfc4799694a34cfcaec0c1222e389c50c6d64dfcb821465686ed36bf6deb"
+    },
+    {
+      "file": "js-npy-import-15.mat",
+      "sha256": "0f7ef5dc42c6fbfc1c8966bef8de3c8de7accf236f71464e874fe819fe9b443a"
+    },
+    {
+      "file": "js-npy-import-16.mat",
+      "sha256": "0f7ef5dc42c6fbfc1c8966bef8de3c8de7accf236f71464e874fe819fe9b443a"
+    },
+    {
+      "file": "js-npy-import-17.mat",
+      "sha256": "0f7ef5dc42c6fbfc1c8966bef8de3c8de7accf236f71464e874fe819fe9b443a"
+    },
+    {
+      "file": "js-npy-import-18.mat",
+      "sha256": "1758fca18476dac5bc440b9d61300ff62cdbb454b0d1e9cdab5b1b6555e1df10"
+    },
+    {
+      "file": "js-npy-import-19.mat",
+      "sha256": "1758fca18476dac5bc440b9d61300ff62cdbb454b0d1e9cdab5b1b6555e1df10"
+    },
+    {
+      "file": "js-npy-import-2.mat",
+      "sha256": "54969e83d549b1174c1983d3b0c7e10d9c9cea9ab1cb26a6d28b96eb4336c522"
+    },
+    {
+      "file": "js-npy-import-20.mat",
+      "sha256": "1758fca18476dac5bc440b9d61300ff62cdbb454b0d1e9cdab5b1b6555e1df10"
+    },
+    {
+      "file": "js-npy-import-21.mat",
+      "sha256": "bc272b6ebc82765bd92de6fc197f3dea6fbe5ab9b8247469b9023c59d02ce768"
+    },
+    {
+      "file": "js-npy-import-22.mat",
+      "sha256": "bc272b6ebc82765bd92de6fc197f3dea6fbe5ab9b8247469b9023c59d02ce768"
+    },
+    {
+      "file": "js-npy-import-23.mat",
+      "sha256": "bc272b6ebc82765bd92de6fc197f3dea6fbe5ab9b8247469b9023c59d02ce768"
+    },
+    {
+      "file": "js-npy-import-24.mat",
+      "sha256": "035d87a88d676140fc8849e72428df7f462667c6587228850a1aedc4b572084c"
+    },
+    {
+      "file": "js-npy-import-25.mat",
+      "sha256": "035d87a88d676140fc8849e72428df7f462667c6587228850a1aedc4b572084c"
+    },
+    {
+      "file": "js-npy-import-26.mat",
+      "sha256": "035d87a88d676140fc8849e72428df7f462667c6587228850a1aedc4b572084c"
+    },
+    {
+      "file": "js-npy-import-27.mat",
+      "sha256": "a721c66ff93f7e75041acfc769aee46452453573ec9cf9fa5e3035b47a018e08"
+    },
+    {
+      "file": "js-npy-import-28.mat",
+      "sha256": "a721c66ff93f7e75041acfc769aee46452453573ec9cf9fa5e3035b47a018e08"
+    },
+    {
+      "file": "js-npy-import-29.mat",
+      "sha256": "a721c66ff93f7e75041acfc769aee46452453573ec9cf9fa5e3035b47a018e08"
+    },
+    {
+      "file": "js-npy-import-3.mat",
+      "sha256": "ef51f79f4d54fb17a1291f48ccdc3e200392ff4d7b8acb10b8b1af06b3d0973a"
+    },
+    {
+      "file": "js-npy-import-30.mat",
+      "sha256": "342bf106d5507eb81151304f94ea1e58c11db94f4afc94a221211dd66fe6f520"
+    },
+    {
+      "file": "js-npy-import-31.mat",
+      "sha256": "342bf106d5507eb81151304f94ea1e58c11db94f4afc94a221211dd66fe6f520"
+    },
+    {
+      "file": "js-npy-import-32.mat",
+      "sha256": "342bf106d5507eb81151304f94ea1e58c11db94f4afc94a221211dd66fe6f520"
+    },
+    {
+      "file": "js-npy-import-33.mat",
+      "sha256": "32eb986bf467107507c0cc45ace87a6a6bd1e0007856de6ede6e34b31828a26d"
+    },
+    {
+      "file": "js-npy-import-34.mat",
+      "sha256": "32eb986bf467107507c0cc45ace87a6a6bd1e0007856de6ede6e34b31828a26d"
+    },
+    {
+      "file": "js-npy-import-35.mat",
+      "sha256": "32eb986bf467107507c0cc45ace87a6a6bd1e0007856de6ede6e34b31828a26d"
+    },
+    {
+      "file": "js-npy-import-36.mat",
+      "sha256": "b35f1f477e54f7da432c2b850c948340cacdd0b5830bba831b0d765a23a329cd"
+    },
+    {
+      "file": "js-npy-import-37.mat",
+      "sha256": "b35f1f477e54f7da432c2b850c948340cacdd0b5830bba831b0d765a23a329cd"
+    },
+    {
+      "file": "js-npy-import-38.mat",
+      "sha256": "b35f1f477e54f7da432c2b850c948340cacdd0b5830bba831b0d765a23a329cd"
+    },
+    {
+      "file": "js-npy-import-39.mat",
+      "sha256": "0a55ec6794adf130341bee84946246f90ab3fa6a9ed4725c3d58444f668323a3"
+    },
+    {
+      "file": "js-npy-import-4.mat",
+      "sha256": "ef51f79f4d54fb17a1291f48ccdc3e200392ff4d7b8acb10b8b1af06b3d0973a"
+    },
+    {
+      "file": "js-npy-import-40.mat",
+      "sha256": "0a55ec6794adf130341bee84946246f90ab3fa6a9ed4725c3d58444f668323a3"
+    },
+    {
+      "file": "js-npy-import-41.mat",
+      "sha256": "0a55ec6794adf130341bee84946246f90ab3fa6a9ed4725c3d58444f668323a3"
+    },
+    {
+      "file": "js-npy-import-42.mat",
+      "sha256": "582cb3dd97d4dbb56887687c751007adfc53cde77e09b904dac1f3dc8233e63f"
+    },
+    {
+      "file": "js-npy-import-43.mat",
+      "sha256": "582cb3dd97d4dbb56887687c751007adfc53cde77e09b904dac1f3dc8233e63f"
+    },
+    {
+      "file": "js-npy-import-44.mat",
+      "sha256": "582cb3dd97d4dbb56887687c751007adfc53cde77e09b904dac1f3dc8233e63f"
+    },
+    {
+      "file": "js-npy-import-45.mat",
+      "sha256": "9f026c82622a52fff3aefc236a221936a64bc4ac67d3c11b8a2b9b56afd37aac"
+    },
+    {
+      "file": "js-npy-import-46.mat",
+      "sha256": "9f026c82622a52fff3aefc236a221936a64bc4ac67d3c11b8a2b9b56afd37aac"
+    },
+    {
+      "file": "js-npy-import-47.mat",
+      "sha256": "9f026c82622a52fff3aefc236a221936a64bc4ac67d3c11b8a2b9b56afd37aac"
+    },
+    {
+      "file": "js-npy-import-48.mat",
+      "sha256": "96df26879220afee16b315187556cb2da1670c071812faa4e0456ca62e28985a"
+    },
+    {
+      "file": "js-npy-import-49.mat",
+      "sha256": "96df26879220afee16b315187556cb2da1670c071812faa4e0456ca62e28985a"
+    },
+    {
+      "file": "js-npy-import-5.mat",
+      "sha256": "ef51f79f4d54fb17a1291f48ccdc3e200392ff4d7b8acb10b8b1af06b3d0973a"
+    },
+    {
+      "file": "js-npy-import-50.mat",
+      "sha256": "96df26879220afee16b315187556cb2da1670c071812faa4e0456ca62e28985a"
+    },
+    {
+      "file": "js-npy-import-51.mat",
+      "sha256": "94999cb5f418b45f62fc8f04eb9e10d0716868a3c051d33e8806653414347c64"
+    },
+    {
+      "file": "js-npy-import-52.mat",
+      "sha256": "94999cb5f418b45f62fc8f04eb9e10d0716868a3c051d33e8806653414347c64"
+    },
+    {
+      "file": "js-npy-import-53.mat",
+      "sha256": "94999cb5f418b45f62fc8f04eb9e10d0716868a3c051d33e8806653414347c64"
+    },
+    {
+      "file": "js-npy-import-54.mat",
+      "sha256": "29ca24eace4eb03971cb01559b2241b92080b989ad0554392ee6a3395bcc16aa"
+    },
+    {
+      "file": "js-npy-import-55.mat",
+      "sha256": "29ca24eace4eb03971cb01559b2241b92080b989ad0554392ee6a3395bcc16aa"
+    },
+    {
+      "file": "js-npy-import-56.mat",
+      "sha256": "29ca24eace4eb03971cb01559b2241b92080b989ad0554392ee6a3395bcc16aa"
+    },
+    {
+      "file": "js-npy-import-57.mat",
+      "sha256": "1ab09020d294e567804ec02cdc04245b430522a95816df19ff4407e6201ea09c"
+    },
+    {
+      "file": "js-npy-import-58.mat",
+      "sha256": "1ab09020d294e567804ec02cdc04245b430522a95816df19ff4407e6201ea09c"
+    },
+    {
+      "file": "js-npy-import-59.mat",
+      "sha256": "1ab09020d294e567804ec02cdc04245b430522a95816df19ff4407e6201ea09c"
+    },
+    {
+      "file": "js-npy-import-6.mat",
+      "sha256": "d534f4f2ab2e9c9f1e9a7d4a3420a1803ef7ae219ce5289ac4bec7c9e4d52346"
+    },
+    {
+      "file": "js-npy-import-60.mat",
+      "sha256": "04b27dc831614cb31b921bb1896a103f04c518ffc2eb843b37fc3281856ece91"
+    },
+    {
+      "file": "js-npy-import-61.mat",
+      "sha256": "04b27dc831614cb31b921bb1896a103f04c518ffc2eb843b37fc3281856ece91"
+    },
+    {
+      "file": "js-npy-import-62.mat",
+      "sha256": "04b27dc831614cb31b921bb1896a103f04c518ffc2eb843b37fc3281856ece91"
+    },
+    {
+      "file": "js-npy-import-63.mat",
+      "sha256": "9862ca3fd649ed46dccac633580a0fd70f45d33c4ff1822c013df9c453579e4b"
+    },
+    {
+      "file": "js-npy-import-64.mat",
+      "sha256": "9862ca3fd649ed46dccac633580a0fd70f45d33c4ff1822c013df9c453579e4b"
+    },
+    {
+      "file": "js-npy-import-65.mat",
+      "sha256": "9862ca3fd649ed46dccac633580a0fd70f45d33c4ff1822c013df9c453579e4b"
+    },
+    {
+      "file": "js-npy-import-66.mat",
+      "sha256": "e9e326e0b51a9aea29e245d7ff079d966006ac07df4453df378ca7db903f8fcb"
+    },
+    {
+      "file": "js-npy-import-67.mat",
+      "sha256": "e9e326e0b51a9aea29e245d7ff079d966006ac07df4453df378ca7db903f8fcb"
+    },
+    {
+      "file": "js-npy-import-68.mat",
+      "sha256": "e9e326e0b51a9aea29e245d7ff079d966006ac07df4453df378ca7db903f8fcb"
+    },
+    {
+      "file": "js-npy-import-7.mat",
+      "sha256": "d534f4f2ab2e9c9f1e9a7d4a3420a1803ef7ae219ce5289ac4bec7c9e4d52346"
+    },
+    {
+      "file": "js-npy-import-8.mat",
+      "sha256": "d534f4f2ab2e9c9f1e9a7d4a3420a1803ef7ae219ce5289ac4bec7c9e4d52346"
+    },
+    {
+      "file": "js-npy-import-9.mat",
+      "sha256": "a6ececdba771aaa8313a8ce5457c8f6ca9048f9e5ae2c865062b98dba4ee18c3"
+    },
+    {
+      "file": "js-selected.mat",
+      "sha256": "9a6b45b56a0d28c5f3943caf7c97ddd4f7875e6450a7424179add8dc0b379d7a"
+    },
+    {
+      "file": "js-科研样例 with spaces.mat",
+      "sha256": "fcde5855740da0905c2bb078845ca1cb5c01a88b01325e99b7deb29d72008b27"
+    },
+    {
+      "file": "native-npy-import-0.mat",
+      "sha256": "54969e83d549b1174c1983d3b0c7e10d9c9cea9ab1cb26a6d28b96eb4336c522"
+    },
+    {
+      "file": "native-npy-import-1.mat",
+      "sha256": "54969e83d549b1174c1983d3b0c7e10d9c9cea9ab1cb26a6d28b96eb4336c522"
+    },
+    {
+      "file": "native-npy-import-10.mat",
+      "sha256": "a6ececdba771aaa8313a8ce5457c8f6ca9048f9e5ae2c865062b98dba4ee18c3"
+    },
+    {
+      "file": "native-npy-import-11.mat",
+      "sha256": "a6ececdba771aaa8313a8ce5457c8f6ca9048f9e5ae2c865062b98dba4ee18c3"
+    },
+    {
+      "file": "native-npy-import-12.mat",
+      "sha256": "0a0fcfc4799694a34cfcaec0c1222e389c50c6d64dfcb821465686ed36bf6deb"
+    },
+    {
+      "file": "native-npy-import-13.mat",
+      "sha256": "0a0fcfc4799694a34cfcaec0c1222e389c50c6d64dfcb821465686ed36bf6deb"
+    },
+    {
+      "file": "native-npy-import-14.mat",
+      "sha256": "0a0fcfc4799694a34cfcaec0c1222e389c50c6d64dfcb821465686ed36bf6deb"
+    },
+    {
+      "file": "native-npy-import-15.mat",
+      "sha256": "0f7ef5dc42c6fbfc1c8966bef8de3c8de7accf236f71464e874fe819fe9b443a"
+    },
+    {
+      "file": "native-npy-import-16.mat",
+      "sha256": "0f7ef5dc42c6fbfc1c8966bef8de3c8de7accf236f71464e874fe819fe9b443a"
+    },
+    {
+      "file": "native-npy-import-17.mat",
+      "sha256": "0f7ef5dc42c6fbfc1c8966bef8de3c8de7accf236f71464e874fe819fe9b443a"
+    },
+    {
+      "file": "native-npy-import-18.mat",
+      "sha256": "1758fca18476dac5bc440b9d61300ff62cdbb454b0d1e9cdab5b1b6555e1df10"
+    },
+    {
+      "file": "native-npy-import-19.mat",
+      "sha256": "1758fca18476dac5bc440b9d61300ff62cdbb454b0d1e9cdab5b1b6555e1df10"
+    },
+    {
+      "file": "native-npy-import-2.mat",
+      "sha256": "54969e83d549b1174c1983d3b0c7e10d9c9cea9ab1cb26a6d28b96eb4336c522"
+    },
+    {
+      "file": "native-npy-import-20.mat",
+      "sha256": "1758fca18476dac5bc440b9d61300ff62cdbb454b0d1e9cdab5b1b6555e1df10"
+    },
+    {
+      "file": "native-npy-import-21.mat",
+      "sha256": "bc272b6ebc82765bd92de6fc197f3dea6fbe5ab9b8247469b9023c59d02ce768"
+    },
+    {
+      "file": "native-npy-import-22.mat",
+      "sha256": "bc272b6ebc82765bd92de6fc197f3dea6fbe5ab9b8247469b9023c59d02ce768"
+    },
+    {
+      "file": "native-npy-import-23.mat",
+      "sha256": "bc272b6ebc82765bd92de6fc197f3dea6fbe5ab9b8247469b9023c59d02ce768"
+    },
+    {
+      "file": "native-npy-import-24.mat",
+      "sha256": "035d87a88d676140fc8849e72428df7f462667c6587228850a1aedc4b572084c"
+    },
+    {
+      "file": "native-npy-import-25.mat",
+      "sha256": "035d87a88d676140fc8849e72428df7f462667c6587228850a1aedc4b572084c"
+    },
+    {
+      "file": "native-npy-import-26.mat",
+      "sha256": "035d87a88d676140fc8849e72428df7f462667c6587228850a1aedc4b572084c"
+    },
+    {
+      "file": "native-npy-import-27.mat",
+      "sha256": "a721c66ff93f7e75041acfc769aee46452453573ec9cf9fa5e3035b47a018e08"
+    },
+    {
+      "file": "native-npy-import-28.mat",
+      "sha256": "a721c66ff93f7e75041acfc769aee46452453573ec9cf9fa5e3035b47a018e08"
+    },
+    {
+      "file": "native-npy-import-29.mat",
+      "sha256": "a721c66ff93f7e75041acfc769aee46452453573ec9cf9fa5e3035b47a018e08"
+    },
+    {
+      "file": "native-npy-import-3.mat",
+      "sha256": "ef51f79f4d54fb17a1291f48ccdc3e200392ff4d7b8acb10b8b1af06b3d0973a"
+    },
+    {
+      "file": "native-npy-import-30.mat",
+      "sha256": "342bf106d5507eb81151304f94ea1e58c11db94f4afc94a221211dd66fe6f520"
+    },
+    {
+      "file": "native-npy-import-31.mat",
+      "sha256": "342bf106d5507eb81151304f94ea1e58c11db94f4afc94a221211dd66fe6f520"
+    },
+    {
+      "file": "native-npy-import-32.mat",
+      "sha256": "342bf106d5507eb81151304f94ea1e58c11db94f4afc94a221211dd66fe6f520"
+    },
+    {
+      "file": "native-npy-import-33.mat",
+      "sha256": "32eb986bf467107507c0cc45ace87a6a6bd1e0007856de6ede6e34b31828a26d"
+    },
+    {
+      "file": "native-npy-import-34.mat",
+      "sha256": "32eb986bf467107507c0cc45ace87a6a6bd1e0007856de6ede6e34b31828a26d"
+    },
+    {
+      "file": "native-npy-import-35.mat",
+      "sha256": "32eb986bf467107507c0cc45ace87a6a6bd1e0007856de6ede6e34b31828a26d"
+    },
+    {
+      "file": "native-npy-import-36.mat",
+      "sha256": "b35f1f477e54f7da432c2b850c948340cacdd0b5830bba831b0d765a23a329cd"
+    },
+    {
+      "file": "native-npy-import-37.mat",
+      "sha256": "b35f1f477e54f7da432c2b850c948340cacdd0b5830bba831b0d765a23a329cd"
+    },
+    {
+      "file": "native-npy-import-38.mat",
+      "sha256": "b35f1f477e54f7da432c2b850c948340cacdd0b5830bba831b0d765a23a329cd"
+    },
+    {
+      "file": "native-npy-import-39.mat",
+      "sha256": "0a55ec6794adf130341bee84946246f90ab3fa6a9ed4725c3d58444f668323a3"
+    },
+    {
+      "file": "native-npy-import-4.mat",
+      "sha256": "ef51f79f4d54fb17a1291f48ccdc3e200392ff4d7b8acb10b8b1af06b3d0973a"
+    },
+    {
+      "file": "native-npy-import-40.mat",
+      "sha256": "0a55ec6794adf130341bee84946246f90ab3fa6a9ed4725c3d58444f668323a3"
+    },
+    {
+      "file": "native-npy-import-41.mat",
+      "sha256": "0a55ec6794adf130341bee84946246f90ab3fa6a9ed4725c3d58444f668323a3"
+    },
+    {
+      "file": "native-npy-import-42.mat",
+      "sha256": "582cb3dd97d4dbb56887687c751007adfc53cde77e09b904dac1f3dc8233e63f"
+    },
+    {
+      "file": "native-npy-import-43.mat",
+      "sha256": "582cb3dd97d4dbb56887687c751007adfc53cde77e09b904dac1f3dc8233e63f"
+    },
+    {
+      "file": "native-npy-import-44.mat",
+      "sha256": "582cb3dd97d4dbb56887687c751007adfc53cde77e09b904dac1f3dc8233e63f"
+    },
+    {
+      "file": "native-npy-import-45.mat",
+      "sha256": "9f026c82622a52fff3aefc236a221936a64bc4ac67d3c11b8a2b9b56afd37aac"
+    },
+    {
+      "file": "native-npy-import-46.mat",
+      "sha256": "9f026c82622a52fff3aefc236a221936a64bc4ac67d3c11b8a2b9b56afd37aac"
+    },
+    {
+      "file": "native-npy-import-47.mat",
+      "sha256": "9f026c82622a52fff3aefc236a221936a64bc4ac67d3c11b8a2b9b56afd37aac"
+    },
+    {
+      "file": "native-npy-import-48.mat",
+      "sha256": "96df26879220afee16b315187556cb2da1670c071812faa4e0456ca62e28985a"
+    },
+    {
+      "file": "native-npy-import-49.mat",
+      "sha256": "96df26879220afee16b315187556cb2da1670c071812faa4e0456ca62e28985a"
+    },
+    {
+      "file": "native-npy-import-5.mat",
+      "sha256": "ef51f79f4d54fb17a1291f48ccdc3e200392ff4d7b8acb10b8b1af06b3d0973a"
+    },
+    {
+      "file": "native-npy-import-50.mat",
+      "sha256": "96df26879220afee16b315187556cb2da1670c071812faa4e0456ca62e28985a"
+    },
+    {
+      "file": "native-npy-import-51.mat",
+      "sha256": "94999cb5f418b45f62fc8f04eb9e10d0716868a3c051d33e8806653414347c64"
+    },
+    {
+      "file": "native-npy-import-52.mat",
+      "sha256": "94999cb5f418b45f62fc8f04eb9e10d0716868a3c051d33e8806653414347c64"
+    },
+    {
+      "file": "native-npy-import-53.mat",
+      "sha256": "94999cb5f418b45f62fc8f04eb9e10d0716868a3c051d33e8806653414347c64"
+    },
+    {
+      "file": "native-npy-import-54.mat",
+      "sha256": "29ca24eace4eb03971cb01559b2241b92080b989ad0554392ee6a3395bcc16aa"
+    },
+    {
+      "file": "native-npy-import-55.mat",
+      "sha256": "29ca24eace4eb03971cb01559b2241b92080b989ad0554392ee6a3395bcc16aa"
+    },
+    {
+      "file": "native-npy-import-56.mat",
+      "sha256": "29ca24eace4eb03971cb01559b2241b92080b989ad0554392ee6a3395bcc16aa"
+    },
+    {
+      "file": "native-npy-import-57.mat",
+      "sha256": "1ab09020d294e567804ec02cdc04245b430522a95816df19ff4407e6201ea09c"
+    },
+    {
+      "file": "native-npy-import-58.mat",
+      "sha256": "1ab09020d294e567804ec02cdc04245b430522a95816df19ff4407e6201ea09c"
+    },
+    {
+      "file": "native-npy-import-59.mat",
+      "sha256": "1ab09020d294e567804ec02cdc04245b430522a95816df19ff4407e6201ea09c"
+    },
+    {
+      "file": "native-npy-import-6.mat",
+      "sha256": "d534f4f2ab2e9c9f1e9a7d4a3420a1803ef7ae219ce5289ac4bec7c9e4d52346"
+    },
+    {
+      "file": "native-npy-import-60.mat",
+      "sha256": "04b27dc831614cb31b921bb1896a103f04c518ffc2eb843b37fc3281856ece91"
+    },
+    {
+      "file": "native-npy-import-61.mat",
+      "sha256": "04b27dc831614cb31b921bb1896a103f04c518ffc2eb843b37fc3281856ece91"
+    },
+    {
+      "file": "native-npy-import-62.mat",
+      "sha256": "04b27dc831614cb31b921bb1896a103f04c518ffc2eb843b37fc3281856ece91"
+    },
+    {
+      "file": "native-npy-import-63.mat",
+      "sha256": "9862ca3fd649ed46dccac633580a0fd70f45d33c4ff1822c013df9c453579e4b"
+    },
+    {
+      "file": "native-npy-import-64.mat",
+      "sha256": "9862ca3fd649ed46dccac633580a0fd70f45d33c4ff1822c013df9c453579e4b"
+    },
+    {
+      "file": "native-npy-import-65.mat",
+      "sha256": "9862ca3fd649ed46dccac633580a0fd70f45d33c4ff1822c013df9c453579e4b"
+    },
+    {
+      "file": "native-npy-import-66.mat",
+      "sha256": "e9e326e0b51a9aea29e245d7ff079d966006ac07df4453df378ca7db903f8fcb"
+    },
+    {
+      "file": "native-npy-import-67.mat",
+      "sha256": "e9e326e0b51a9aea29e245d7ff079d966006ac07df4453df378ca7db903f8fcb"
+    },
+    {
+      "file": "native-npy-import-68.mat",
+      "sha256": "e9e326e0b51a9aea29e245d7ff079d966006ac07df4453df378ca7db903f8fcb"
+    },
+    {
+      "file": "native-npy-import-7.mat",
+      "sha256": "d534f4f2ab2e9c9f1e9a7d4a3420a1803ef7ae219ce5289ac4bec7c9e4d52346"
+    },
+    {
+      "file": "native-npy-import-8.mat",
+      "sha256": "d534f4f2ab2e9c9f1e9a7d4a3420a1803ef7ae219ce5289ac4bec7c9e4d52346"
+    },
+    {
+      "file": "native-npy-import-9.mat",
+      "sha256": "a6ececdba771aaa8313a8ce5457c8f6ca9048f9e5ae2c865062b98dba4ee18c3"
+    },
+    {
+      "file": "native-selected.mat",
+      "sha256": "9a6b45b56a0d28c5f3943caf7c97ddd4f7875e6450a7424179add8dc0b379d7a"
+    },
+    {
+      "file": "native-科研样例 with spaces.mat",
+      "sha256": "fcde5855740da0905c2bb078845ca1cb5c01a88b01325e99b7deb29d72008b27"
+    },
+    {
+      "file": "scipy-compressed.mat",
+      "sha256": "73287bf1ee5f5572213e83f5cde336dcc5a6e38e07bde867ef175d5afb3b3f84"
+    },
+    {
+      "file": "scipy-uncompressed.mat",
+      "sha256": "edb2eb9423256adbd7e1d829aed4839e0857a1fed470fd9ad36e7e65ff7e77de"
+    },
+    {
+      "file": "unsupported-cell.mat",
+      "sha256": "60a1b2dce26ef758a9aa0122df7807ba470c5d5b27ff55e8445115f13e35e3ad"
+    },
+    {
+      "file": "unsupported-char.mat",
+      "sha256": "3f2adfa706bb686218d1489ee46a56028fb330fe84094e33aaa3370227ca622c"
+    },
+    {
+      "file": "unsupported-sparse.mat",
+      "sha256": "de37b3683111c8673f1f9ba966b19d6447119e4968e4bb35b02fa5c88d4a993f"
+    },
+    {
+      "file": "unsupported-struct.mat",
+      "sha256": "51e6d733ed384be39848c958b9544819c97894699130345e0e75fa58853ea00d"
+    },
+    {
+      "file": "unsupported-v73.mat",
+      "sha256": "ed87ba92a62ff4a63a5e09e3b1196a7d6207d3a89e220ef6ffc368f49a557790"
+    }
+  ]
+}
