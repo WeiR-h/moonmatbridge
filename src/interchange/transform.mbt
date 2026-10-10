@@ -78,6 +78,6 @@ pub fn transform(
     }
   }
   // Revalidate the aggregate, not only each transformed variable.
-  ignore(@mat.write_mat(out, limits~))
+  @mat.validate_document(out.map(fn(a) { @mat.Dense(a) }), limits~)
   out
 }

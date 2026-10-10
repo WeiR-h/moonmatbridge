@@ -119,3 +119,17 @@ pub fn deflate_zlib(bytes : Bytes, limit : Int) -> BinaryResult {
 pub fn convert_storage(bytes : Bytes, name : String, sparse : Bool) -> BinaryResult {
   binary(() => @mat.write_document(@mat.read_document(bytes).convert_storage(name, sparse)))
 }
+
+///|
+#export_name("mat_to_snapshot")
+pub fn mat_to_snapshot(bytes : Bytes) -> String {
+  @wire.to_snapshot(@mat.read_document(bytes).variables) catch {
+    error => @wire.error_json(error).stringify()
+  }
+}
+
+///|
+#export_name("snapshot_to_mat")
+pub fn snapshot_to_mat(text : String) -> BinaryResult {
+  binary(() => @mat.write_document(@wire.from_snapshot(text)))
+}

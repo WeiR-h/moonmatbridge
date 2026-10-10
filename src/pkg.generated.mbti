@@ -28,6 +28,8 @@ pub fn read_mat(Bytes, limits? : Limits) -> MatFile raise MatError
 
 pub fn read_npy(Bytes, String, limits? : Limits) -> NumericArray raise MatError
 
+pub fn validate_document(Array[MatVariable], limits? : Limits) -> Unit raise MatError
+
 pub fn version() -> String
 
 pub fn write_document(Array[MatVariable], compressed? : Bool, limits? : Limits) -> Bytes raise MatError

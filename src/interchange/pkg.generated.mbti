@@ -12,11 +12,15 @@ pub fn error_json(@moonmatbridge.MatError) -> Json
 
 pub fn from_json(String, limits? : @moonmatbridge.Limits) -> Array[@moonmatbridge.NumericArray] raise @moonmatbridge.MatError
 
+pub fn from_snapshot(String, limits? : @moonmatbridge.Limits) -> Array[@moonmatbridge.MatVariable] raise @moonmatbridge.MatError
+
 pub fn info(@moonmatbridge.MatFile) -> Json
 
 pub fn sample() -> Array[@moonmatbridge.NumericArray] raise @moonmatbridge.MatError
 
 pub fn to_json(Array[@moonmatbridge.NumericArray]) -> Json raise @moonmatbridge.MatError
+
+pub fn to_snapshot(Array[@moonmatbridge.MatVariable], limits? : @moonmatbridge.Limits) -> String raise @moonmatbridge.MatError
 
 pub fn transform(Array[@moonmatbridge.NumericArray], String, limits? : @moonmatbridge.Limits) -> Array[@moonmatbridge.NumericArray] raise @moonmatbridge.MatError
 

@@ -18,6 +18,8 @@ pub fn mat_to_json(Bytes) -> String
 
 pub fn mat_to_npy(Bytes, String) -> BinaryResult
 
+pub fn mat_to_snapshot(Bytes) -> String
+
 pub fn npy_to_mat(Bytes, String) -> BinaryResult
 
 pub fn result_bytes(BinaryResult) -> Bytes
@@ -29,6 +31,8 @@ pub fn roundtrip_mat(Bytes) -> BinaryResult
 pub fn sample_mat() -> BinaryResult
 
 pub fn select_mat(Bytes, Array[String]) -> BinaryResult
+
+pub fn snapshot_to_mat(String) -> BinaryResult
 
 pub fn transform_mat(Bytes, String) -> BinaryResult
 

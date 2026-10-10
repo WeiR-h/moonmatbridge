@@ -91,6 +91,8 @@ fn usage() -> String {
   "  moonmat compress INPUT.mat OUTPUT.mat\n" +
   "  moonmat sparsify INPUT.mat VARIABLE OUTPUT.mat\n" +
   "  moonmat densify INPUT.mat VARIABLE OUTPUT.mat\n" +
+  "  moonmat snapshot INPUT.mat OUTPUT.json\n" +
+  "  moonmat restore SNAPSHOT.json OUTPUT.mat\n" +
   "  moonmat sample OUTPUT.mat\n" +
   "  moonmat version\n" +
   "Output files must be new. MAT/NPY data remains column-major."
@@ -122,6 +124,12 @@ fn run(args : Array[String]) -> Unit raise @mat.MatError {
         raise @mat.MatError("invalid-utf8", 0, "JSON input must be valid UTF-8")
     }
     save(args[3], @mat.write_mat(@wire.from_json(text)))
+  } else if command == "snapshot" && args.length() == 4 {
+    let text = @wire.to_snapshot(@mat.read_document(read(args[2])).variables) + "\n"
+    save(args[3], @utf8.encode(text[:]))
+  } else if command == "restore" && args.length() == 4 {
+    let text = @utf8.decode(read(args[2])[:]) catch { _ => raise @mat.MatError("invalid-utf8", 0, "Snapshot must be UTF-8") }
+    save(args[3], @mat.write_document(@wire.from_snapshot(text)))
   } else if command == "roundtrip" && args.length() == 4 {
     save(args[3], @mat.write_document(@mat.read_document(read(args[2])).variables))
   } else if command == "compress" && args.length() == 4 {
