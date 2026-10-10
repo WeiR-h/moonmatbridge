@@ -94,3 +94,9 @@ pub fn select_mat(bytes : Bytes, names : Array[String]) -> BinaryResult {
 pub fn npy_to_mat(bytes : Bytes, name : String) -> BinaryResult {
   binary(() => @mat.write_mat([@mat.read_npy(bytes, name)]))
 }
+
+///|
+#export_name("transform_mat")
+pub fn transform_mat(bytes : Bytes, plan : String) -> BinaryResult {
+  binary(() => @mat.write_mat(@wire.transform(@mat.read_mat(bytes).arrays, plan)))
+}

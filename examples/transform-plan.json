@@ -1,0 +1,9 @@
+{
+  "schema": "moonmatbridge/transform/1",
+  "operations": [
+    {"op": "slice", "name": "temperature", "starts": [0, 0], "counts": [2, 2], "steps": [1, 2]},
+    {"op": "permute", "name": "temperature", "axes": [1, 0]},
+    {"op": "gather", "name": "sample_id", "axis": 1, "indices": [2, 0, 2]},
+    {"op": "concat", "name": "paired_spectrum", "inputs": ["spectrum", "spectrum"], "axis": 1}
+  ]
+}

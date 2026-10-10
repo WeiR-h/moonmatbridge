@@ -37,6 +37,7 @@ try {
   else if (command === 'npy' && args.length === 3) save(args[2], bytes(api.mat_to_npy(read(args[0]), args[1])));
   else if (command === 'from-npy' && args.length === 3) save(args[2], bytes(api.npy_to_mat(read(args[0]), args[1])));
   else if (command === 'select' && args.length >= 3) save(args[1], bytes(api.select_mat(read(args[0]), args.slice(2))));
+  else if (command === 'transform' && args.length === 3) save(args[2], bytes(api.transform_mat(read(args[0]), new TextDecoder('utf-8', {fatal: true}).decode(read(args[1])))));
   else if (command === 'sample' && args.length === 1) save(args[0], bytes(api.sample_mat()));
   else if (command === 'help' || command === '--help') console.log(`MoonMatBridge v${version}\ninfo INPUT.mat\ndump INPUT.mat OUTPUT.json\npack INPUT.json OUTPUT.mat\nroundtrip INPUT.mat OUTPUT.mat\nnpy INPUT.mat VARIABLE OUTPUT.npy\nfrom-npy INPUT.npy VARIABLE OUTPUT.mat\nselect INPUT.mat OUTPUT.mat VARIABLE...\nsample OUTPUT.mat\nversion\nOutput files must be new.`);
   else throw new Error('Invalid command or arguments. Run help.');

@@ -16,6 +16,8 @@ pub fn sample() -> Array[@moonmatbridge.NumericArray] raise @moonmatbridge.MatEr
 
 pub fn to_json(Array[@moonmatbridge.NumericArray]) -> Json raise @moonmatbridge.MatError
 
+pub fn transform(Array[@moonmatbridge.NumericArray], String, limits? : @moonmatbridge.Limits) -> Array[@moonmatbridge.NumericArray] raise @moonmatbridge.MatError
+
 // Errors
 
 // Types and methods

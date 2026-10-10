@@ -24,6 +24,8 @@ pub fn sample_mat() -> BinaryResult
 
 pub fn select_mat(Bytes, Array[String]) -> BinaryResult
 
+pub fn transform_mat(Bytes, String) -> BinaryResult
+
 // Errors
 
 // Types and methods
