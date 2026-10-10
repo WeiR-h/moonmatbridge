@@ -20,7 +20,14 @@ pub fn NumericArray::permute_axes(
   }
   let shape = axes.map(fn(axis) { self.shape[axis] })
   if count == 0 {
-    return { name: self.name, dtype: self.dtype, shape, real: self.real, imag: self.imag, is_global: self.is_global }
+    return {
+      name: self.name,
+      dtype: self.dtype,
+      shape,
+      real: self.real,
+      imag: self.imag,
+      is_global: self.is_global,
+    }
   }
   let strides = Array::make(rank, 1)
   for k = 1; k < rank; k = k + 1 {
@@ -33,7 +40,7 @@ pub fn NumericArray::permute_axes(
       let mut remainder = index
       let mut source = 0
       for k = 0; k < rank; k = k + 1 {
-        source = source + (remainder % shape[k]) * strides[axes[k]]
+        source = source + remainder % shape[k] * strides[axes[k]]
         remainder = remainder / shape[k]
       }
       for j = 0; j < width; j = j + 1 {
@@ -42,5 +49,12 @@ pub fn NumericArray::permute_axes(
     }
     Bytes::from_array(out)
   }
-  { name: self.name, dtype: self.dtype, shape, real: remap(self.real), imag: self.imag.map(remap), is_global: self.is_global }
+  {
+    name: self.name,
+    dtype: self.dtype,
+    shape,
+    real: remap(self.real),
+    imag: self.imag.map(remap),
+    is_global: self.is_global,
+  }
 }

@@ -258,25 +258,46 @@ pub fn read_document(
     arrays.push(array)
     offset = outer.next
   }
-  { description, little_endian: little, variables: arrays }
+  { description, little_endian: little, variables: arrays, }
 }
 
 ///|
-fn read_variable(bytes : Bytes, outer : Element, little : Bool, limits : Limits) -> MatVariable raise MatError {
+fn read_variable(
+  bytes : Bytes,
+  outer : Element,
+  little : Bool,
+  limits : Limits,
+) -> MatVariable raise MatError {
   let flags = tag(bytes, outer.start, outer.start + outer.size, little)
-  if flags.kind != 6 || flags.size != 8 { fail("invalid-flags", outer.start, "Expected array flags") }
+  if flags.kind != 6 || flags.size != 8 {
+    fail("invalid-flags", outer.start, "Expected array flags")
+  }
   if (bits_at(bytes, flags.start, 4, little).to_uint() & 255U) == 5U {
     Sparse(sparse_matrix(bytes, outer, little, limits))
-  } else { Dense(matrix(bytes, outer, little, limits)) }
+  } else {
+    Dense(matrix(bytes, outer, little, limits))
+  }
 }
 
 ///|
 /// Compatibility API for dense-only consumers. Sparse variables fail explicitly; use read_document for mixed files.
-pub fn read_mat(bytes : Bytes, limits? : Limits = default_limits()) -> MatFile raise MatError {
+pub fn read_mat(
+  bytes : Bytes,
+  limits? : Limits = default_limits(),
+) -> MatFile raise MatError {
   let document = read_document(bytes, limits~)
-  let arrays = document.variables.map(item => match item {
-    Dense(a) => a
-    Sparse(_) => { fail("unsupported-class", 0, "Sparse variable requires read_document"); abort("unreachable") }
+  let arrays = document.variables.map(item => {
+    match item {
+      Dense(a) => a
+      Sparse(_) => {
+        fail("unsupported-class", 0, "Sparse variable requires read_document")
+        abort("unreachable")
+      }
+    }
   })
-  { description: document.description, little_endian: document.little_endian, arrays }
+  {
+    description: document.description,
+    little_endian: document.little_endian,
+    arrays,
+  }
 }

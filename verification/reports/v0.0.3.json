@@ -1,0 +1,74 @@
+{
+  "status": "passed",
+  "version": "0.0.3",
+  "checked_at": "2026-10-10T10:32:10.125Z",
+  "source": {
+    "sha256": "2d78c37c4494e690c10775e2baee37c6267ffab2faa38c79a74640175fd5ff7c",
+    "files": 80
+  },
+  "environment": {
+    "moon": "moon 0.1.20260920 (914d7da 2026-09-20)\n\nFeature flags enabled: rr_moon_mod,rr_moon_pkg",
+    "node": "v24.13.0",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "checks": [
+    {
+      "name": "MoonBit JS checks",
+      "status": "passed",
+      "output": "Finished. moon: ran 6 tasks, now up to date"
+    },
+    {
+      "name": "MoonBit JS unit tests",
+      "status": "passed",
+      "output": "Total tests: 52, passed: 52, failed: 0."
+    },
+    {
+      "name": "MoonBit wasm-gc unit tests",
+      "status": "passed",
+      "output": "Total tests: 52, passed: 52, failed: 0."
+    },
+    {
+      "name": "MoonBit native unit tests",
+      "status": "passed",
+      "output": "Total tests: 52, passed: 52, failed: 0."
+    },
+    {
+      "name": "MoonBit direct JS example",
+      "status": "passed",
+      "output": "{\n  \"status\": \"ok\",\n  \"version\": \"0.0.3\",\n  \"format\": \"MAT Level 5\",\n  \"source_endian\": \"little\",\n  \"arrays\": [\n    {\n      \"name\": \"temperature\",\n      \"dtype\": \"float64\",\n      \"shape\": [\n        2,\n        3\n      ],\n      \"elements\": 6,\n      \"complex\": false,\n      \"global\": false\n    },\n    {\n      \"name\": \"spectrum\",\n      \"dtype\": \"float64\",\n      \"shape\": [\n        2,\n        1\n      ],\n      \"elements\": 2,\n      \"complex\": true,\n      \"global\": false\n    },\n    {\n      \"name\": \"sample_id\",\n      \"dtype\": \"uint64\",\n      \"shape\": [\n        1,\n        3\n      ],\n      \"elements\": 3,\n      \"complex\": false,\n      \"global\": false\n    },\n    {\n      \"name\": \"valid\",\n      \"dtype\": \"logical\",\n      \"shape\": [\n        2,\n        1\n      ],\n      \"elements\": 2,\n      \"complex\": false,\n      \"global\": false\n    }\n  ]\n}\nSecond spectrum value: Floating(0.5), imaginary Floating(3)"
+    },
+    {
+      "name": "MoonBit direct wasm-gc example",
+      "status": "passed",
+      "output": "{\n  \"status\": \"ok\",\n  \"version\": \"0.0.3\",\n  \"format\": \"MAT Level 5\",\n  \"source_endian\": \"little\",\n  \"arrays\": [\n    {\n      \"name\": \"temperature\",\n      \"dtype\": \"float64\",\n      \"shape\": [\n        2,\n        3\n      ],\n      \"elements\": 6,\n      \"complex\": false,\n      \"global\": false\n    },\n    {\n      \"name\": \"spectrum\",\n      \"dtype\": \"float64\",\n      \"shape\": [\n        2,\n        1\n      ],\n      \"elements\": 2,\n      \"complex\": true,\n      \"global\": false\n    },\n    {\n      \"name\": \"sample_id\",\n      \"dtype\": \"uint64\",\n      \"shape\": [\n        1,\n        3\n      ],\n      \"elements\": 3,\n      \"complex\": false,\n      \"global\": false\n    },\n    {\n      \"name\": \"valid\",\n      \"dtype\": \"logical\",\n      \"shape\": [\n        2,\n        1\n      ],\n      \"elements\": 2,\n      \"complex\": false,\n      \"global\": false\n    }\n  ]\n}\nSecond spectrum value: Floating(0.5), imaginary Floating(3)"
+    },
+    {
+      "name": "MoonBit direct native example",
+      "status": "passed",
+      "output": "{\r\n  \"status\": \"ok\",\r\n  \"version\": \"0.0.3\",\r\n  \"format\": \"MAT Level 5\",\r\n  \"source_endian\": \"little\",\r\n  \"arrays\": [\r\n    {\r\n      \"name\": \"temperature\",\r\n      \"dtype\": \"float64\",\r\n      \"shape\": [\r\n        2,\r\n        3\r\n      ],\r\n      \"elements\": 6,\r\n      \"complex\": false,\r\n      \"global\": false\r\n    },\r\n    {\r\n      \"name\": \"spectrum\",\r\n      \"dtype\": \"float64\",\r\n      \"shape\": [\r\n        2,\r\n        1\r\n      ],\r\n      \"elements\": 2,\r\n      \"complex\": true,\r\n      \"global\": false\r\n    },\r\n    {\r\n      \"name\": \"sample_id\",\r\n      \"dtype\": \"uint64\",\r\n      \"shape\": [\r\n        1,\r\n        3\r\n      ],\r\n      \"elements\": 3,\r\n      \"complex\": false,\r\n      \"global\": false\r\n    },\r\n    {\r\n      \"name\": \"valid\",\r\n      \"dtype\": \"logical\",\r\n      \"shape\": [\r\n        2,\r\n        1\r\n      ],\r\n      \"elements\": 2,\r\n      \"complex\": false,\r\n      \"global\": false\r\n    }\r\n  ]\r\n}\r\nSecond spectrum value: Floating(0.5), imaginary Floating(3)"
+    },
+    {
+      "name": "MoonBit JS bridge build",
+      "status": "passed",
+      "output": "Finished. moon: no work to do"
+    },
+    {
+      "name": "Native release build",
+      "status": "passed",
+      "output": "dist\\moonmat.exe"
+    },
+    {
+      "name": "JS differential and malformed input tests",
+      "status": "passed",
+      "output": "{\"status\":\"passed\",\"checks\":6,\"streams\":704,\"truncations\":2072}"
+    },
+    {
+      "name": "Independent SciPy/NumPy cross-compatibility",
+      "status": "passed",
+      "output": "native: scipy-uncompressed MAT read/write: passed\r\nnative: scipy-uncompressed JSON to SciPy: passed\r\njs: scipy-uncompressed MAT read/write: passed\r\njs: scipy-uncompressed JSON to SciPy: passed\r\nnative: scipy-compressed MAT read/write: passed\r\nnative: scipy-compressed JSON to SciPy: passed\r\njs: scipy-compressed MAT read/write: passed\r\njs: scipy-compressed JSON to SciPy: passed\r\nindependent big-endian fixture validated by SciPy: passed\r\nnative: big-endian MAT read/write: passed\r\nnative: big-endian JSON to SciPy: passed\r\njs: big-endian MAT read/write: passed\r\njs: big-endian JSON to SciPy: passed\r\nnative: big-endian-compressed MAT read/write: passed\r\nnative: big-endian-compressed JSON to SciPy: passed\r\njs: big-endian-compressed MAT read/write: passed\r\njs: big-endian-compressed JSON to SciPy: passed\r\nnative: generated sample and Unicode paths: passed\r\nnative: existing output rejected: passed\r\nnative: NumPy NPY export: passed\r\njs: generated sample and Unicode paths: passed\r\njs: existing output rejected: passed\r\njs: NumPy NPY export: passed\r\nnative: variable subset selection: passed\r\njs: variable subset selection: passed\r\nnative: NumPy NPY import: passed\r\njs: NumPy NPY import: passed\r\nnative: NPY unsafe/truncated input rejected: passed\r\njs: NPY unsafe/truncated input rejected: passed\r\nnative: mixed dense/CSC sparse file compressed=False: passed\r\njs: mixed dense/CSC sparse file compressed=False: passed\r\nnative: mixed dense/CSC sparse file compressed=True: passed\r\njs: mixed dense/CSC sparse file compressed=True: passed\r\nnative: explicit sparse/dense conversion: passed\r\njs: explicit sparse/dense conversion: passed\r\nnative: independent big-endian sparse/capacity fixture: passed\r\nnative: invalid CSC pointers rows and ordering rejected: passed\r\njs: independent big-endian sparse/capacity fixture: passed\r\njs: invalid CSC pointers rows and ordering rejected: passed\r\nnative: NumPy-oracle scientific transform pipeline: passed\r\nnative: invalid transform plans reject atomically: passed\r\njs: NumPy-oracle scientific transform pipeline: passed\r\njs: invalid transform plans reject atomically: passed\r\nnative: exact snapshot restore: passed\r\nnative: malformed snapshot rejects without partial output: passed\r\njs: exact snapshot restore: passed\r\njs: malformed snapshot rejects without partial output: passed\r\nnative: exact diff CI codes and reports: passed\r\njs: exact diff CI codes and reports: passed\r\nunsupported cell fails explicitly: passed\r\nunsupported struct fails explicitly: passed\r\nunsupported char fails explicitly: passed\r\nMAT v7.3 rejected explicitly: passed\r\ncorrupt compressed checksum rejected by both hosts: passed\r\n{\"status\": \"passed\", \"checks\": 54, \"report\": \"verification/local/interop-report.json\"}"
+    }
+  ],
+  "native_sha256": "8d56ab8ecac2a1e52fe4f1815126426b74ad8e9e542fe7bcd157218324c915c3",
+  "scope": "Local source/build/runtime and independent SciPy/NumPy verification. MATLAB/Octave execution, public publishing and organizer acceptance are unverified."
+}

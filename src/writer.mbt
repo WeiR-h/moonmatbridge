@@ -50,7 +50,10 @@ fn document_size(
   let mut total = 128
   // Validate and calculate every matrix size before allocating output.
   for variable in arrays {
-    let count = match variable { Dense(a) => validate_array(a, limits); Sparse(a) => validate_sparse(a, limits) }
+    let count = match variable {
+      Dense(a) => validate_array(a, limits)
+      Sparse(a) => validate_sparse(a, limits)
+    }
     if count > limits.max_elements - elements {
       fail("element-limit", 0, "Total file elements exceed max_elements")
     }
@@ -65,7 +68,12 @@ fn document_size(
       Sparse(a) => {
         let rows = a.row_indices.length() * 4
         let cols = a.col_ptrs.length() * 4
-        (2, a.real.length(), a.imag is Some(_), 16 + rows + (8 - rows % 8) % 8 + cols + (8 - cols % 8) % 8)
+        (
+          2,
+          a.real.length(),
+          a.imag is Some(_),
+          16 + rows + (8 - rows % 8) % 8 + cols + (8 - cols % 8) % 8,
+        )
       }
     }
     let matrix_size = 16 +
@@ -94,7 +102,10 @@ fn document_size(
 
 ///|
 /// Validate public variable fields, duplicate names and aggregate resource limits without output allocation.
-pub fn validate_document(arrays : Array[MatVariable], limits? : Limits = default_limits()) -> Unit raise MatError {
+pub fn validate_document(
+  arrays : Array[MatVariable],
+  limits? : Limits = default_limits(),
+) -> Unit raise MatError {
   ignore(document_size(arrays, limits))
 }
 
@@ -107,7 +118,9 @@ pub fn write_document(
 ) -> Bytes raise MatError {
   validate_document(arrays, limits~)
   let out = Array::make(128, b' ')
-  let description = "MATLAB 5.0 MAT-file, Created by MoonMatBridge v" + version() + " (MoonBit)"
+  let description = "MATLAB 5.0 MAT-file, Created by MoonMatBridge v" +
+    version() +
+    " (MoonBit)"
   let header = @utf8.encode(description[:])
   for i = 0; i < header.length(); i = i + 1 {
     out[i] = header[i]
@@ -120,7 +133,10 @@ pub fn write_document(
   out[127] = b'M'
   let mut expanded = 0
   for variable in arrays {
-    let encoded = match variable { Dense(a) => encoded_matrix(a); Sparse(a) => encoded_sparse(a) }
+    let encoded = match variable {
+      Dense(a) => encoded_matrix(a)
+      Sparse(a) => encoded_sparse(a)
+    }
     if compressed {
       let matrix : Array[Byte] = []
       append_element(matrix, 14, encoded)
@@ -129,7 +145,9 @@ pub fn write_document(
       }
       expanded = expanded + matrix.length()
       let available = limits.max_file_bytes - out.length() - 8
-      if available < 6 { fail("file-limit", 0, "No room for compressed matrix") }
+      if available < 6 {
+        fail("file-limit", 0, "No room for compressed matrix")
+      }
       let encoded = deflate_zlib(Bytes::from_array(matrix), max_bytes=available)
       append_element(out, 15, encoded)
     } else {

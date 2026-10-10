@@ -19,8 +19,11 @@ pub fn result_status(result : BinaryResult) -> String {
     Some(error) => error
     None =>
       (
-        { "status": "ok", "bytes": result.data.length(), "version": @mat.version() } :
-        Json).stringify()
+        {
+          "status": "ok",
+          "bytes": result.data.length(),
+          "version": @mat.version(),
+        } : Json).stringify()
   }
 }
 
@@ -65,7 +68,10 @@ pub fn mat_to_npy(bytes : Bytes, name : String) -> BinaryResult {
     let file = @mat.read_document(bytes)
     match file.get(name) {
       Some(Dense(array)) => @mat.write_npy(array)
-      Some(Sparse(_)) => raise @mat.MatError("explicit-densification-required", 0, "Use densify before exporting sparse data to NPY")
+      Some(Sparse(_)) =>
+        raise @mat.MatError(
+          "explicit-densification-required", 0, "Use densify before exporting sparse data to NPY",
+        )
       None =>
         raise @mat.MatError("missing-variable", 0, "No variable named: " + name)
     }
@@ -99,13 +105,19 @@ pub fn npy_to_mat(bytes : Bytes, name : String) -> BinaryResult {
 ///|
 #export_name("transform_mat")
 pub fn transform_mat(bytes : Bytes, plan : String) -> BinaryResult {
-  binary(() => @mat.write_document(@wire.transform_document(@mat.read_document(bytes).variables, plan)))
+  binary(() => {
+    @mat.write_document(
+      @wire.transform_document(@mat.read_document(bytes).variables, plan),
+    )
+  })
 }
 
 ///|
 #export_name("compress_mat")
 pub fn compress_mat(bytes : Bytes) -> BinaryResult {
-  binary(() => @mat.write_document(@mat.read_document(bytes).variables, compressed=true))
+  binary(() => {
+    @mat.write_document(@mat.read_document(bytes).variables, compressed=true)
+  })
 }
 
 ///|
@@ -116,8 +128,14 @@ pub fn deflate_zlib(bytes : Bytes, limit : Int) -> BinaryResult {
 
 ///|
 #export_name("convert_storage")
-pub fn convert_storage(bytes : Bytes, name : String, sparse : Bool) -> BinaryResult {
-  binary(() => @mat.write_document(@mat.read_document(bytes).convert_storage(name, sparse)))
+pub fn convert_storage(
+  bytes : Bytes,
+  name : String,
+  sparse : Bool,
+) -> BinaryResult {
+  binary(() => {
+    @mat.write_document(@mat.read_document(bytes).convert_storage(name, sparse))
+  })
 }
 
 ///|
@@ -137,7 +155,9 @@ pub fn snapshot_to_mat(text : String) -> BinaryResult {
 ///|
 #export_name("compare_mat")
 pub fn compare_mat(left : Bytes, right : Bytes) -> String {
-  @wire.diff_json(@mat.compare_documents(@mat.read_document(left), @mat.read_document(right))).stringify() catch {
+  @wire.diff_json(
+    @mat.compare_documents(@mat.read_document(left), @mat.read_document(right)),
+  ).stringify() catch {
     error => @wire.error_json(error).stringify()
   }
 }

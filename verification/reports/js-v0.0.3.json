@@ -1,0 +1,72 @@
+{
+  "status": "passed",
+  "version": "0.0.3",
+  "node": "v24.13.0",
+  "platform": "win32",
+  "checks": [
+    {
+      "name": "RFC 1950/1951 differential corpus",
+      "status": "passed",
+      "detail": {
+        "streams": 704,
+        "strategies": 4,
+        "levels": 4,
+        "first_block_types": [
+          0,
+          1,
+          2
+        ],
+        "truncations": 2072,
+        "oracle": "Node built-in zlib"
+      }
+    },
+    {
+      "name": "Original deterministic zlib encoder against Node decoder",
+      "status": "passed",
+      "detail": {
+        "streams": 44,
+        "block_types": [
+          0,
+          1
+        ],
+        "repetitive_bytes": 120000,
+        "compressed_bytes": 766
+      }
+    },
+    {
+      "name": "preset dictionaries rejected explicitly",
+      "status": "passed"
+    },
+    {
+      "name": "browser-compatible JS exports",
+      "status": "passed",
+      "detail": {
+        "sample_sha256": "45f45983c81b17359868244c523c14b92cb03f3a7c193ddddb2269f5bb9d8fae",
+        "deterministic_roundtrip": true,
+        "data_schema": "moonmatbridge/1"
+      }
+    },
+    {
+      "name": "malformed MAT boundaries and resource limits",
+      "status": "passed",
+      "detail": [
+        "negative dimensions",
+        "oversized dimensions",
+        "oversized tag length",
+        "flags length",
+        "MAT version",
+        "subsystem metadata",
+        "unknown matrix class",
+        "missing imaginary data"
+      ]
+    },
+    {
+      "name": "strict JSON schema and absent variable diagnostics",
+      "status": "passed",
+      "detail": {
+        "invalid_documents": 6
+      }
+    }
+  ],
+  "passed": 6
+}

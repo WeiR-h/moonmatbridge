@@ -39,3 +39,39 @@ Dtypes are `float32`, `float64`, `int8`, `uint8`, `int16`, `uint16`, `int32`, `u
 MAT->MAT and MAT->NPY preserve IEEE payload bytes. JSON preserves numeric meaning, dtype, dimensions, complex components and negative zero. **JSON normalizes NaN payload/sign encoding** and Float32 text is rounded back to binary32 on import; use binary output for bit-level scientific archives.
 
 The parser uses a 64-level JSON depth limit and bounded file size. It does not parse arbitrary NumPy pickles or execute Python expressions.
+
+## Lossless archive: moonmatbridge/snapshot/1
+
+`snapshot` / `restore` use a separate strict schema. Existing `dump` / `pack` keep the readable dense-only `moonmatbridge/1` contract.
+
+```json
+{
+  "schema": "moonmatbridge/snapshot/1",
+  "order": "column-major",
+  "byte_order": "little",
+  "variables": [
+    {"storage": "dense", "name": "bits", "dtype": "float64", "shape": [1, 1], "global": false, "real_hex": "420000000000f87f", "imag_hex": null},
+    {"storage": "csc", "name": "s", "dtype": "float64", "shape": [1000000, 2], "global": false, "real_hex": "000000000000f03f", "imag_hex": null, "row_indices": [999999], "col_ptrs": [0, 0, 1], "nzmax": 1}
+  ]
+}
+```
+
+All fields shown are required; CSC additionally requires row indices, column pointers and nzmax. Unknown fields/order/storage, malformed hex, duplicate variable names and invalid layouts fail. Hex pairs represent canonical little-endian planes in column-major order and preserve all bits. Snapshot text uses compact JSON, a conservative preallocation bound and the configured file-byte limit; hex may use more than twice the binary payload. Input depth is bounded at 64. Array contents/global flags/CSC capacity survive; source header description, endian marker and original compression bytes do not.
+
+## Transform plan: moonmatbridge/transform/1
+
+See [the executable example](../examples/transform-plan.json). Root fields are exactly `schema`, `operations`, at most 256 operations. Every operation requires `op`, `name` and its matching parameters:
+
+| op | Additional fields |
+| --- | --- |
+| slice | starts, counts, optional steps |
+| gather | axis, indices |
+| reshape | shape |
+| permute | axes |
+| concat | inputs, axis; name is a new output variable |
+
+Indices/axes/starts are zero-based; counts are output dimensions, steps are positive. Gather permits repetition. Operations run in sequence on dense variables, preserving exact payloads and unprocessed CSC variables. Unknown fields, missing names, incompatible arrays and aggregate limits fail before any CLI output file is created.
+
+## Difference report: moonmatbridge/diff/1
+
+`comparison=by-name-bit-exact`, `content_equal`, `variable_order_changed` and `changed_variables` summarize the result. Each variable has `equal/changed/added/removed` status, metadata reasons, real/imaginary differing-slot counts, `truncated` and samples. Samples contain plane, zero-based index, coordinates and before/after hex bytes. The default global sample limit is 16 (core API permits 0–256); counts cover all comparable values. Metadata changes that prevent positional correspondence are reported without misleading scalar counts. See [RECIPES.md](RECIPES.md) for the CLI 0/2/1 exit codes.

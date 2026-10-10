@@ -22,6 +22,7 @@ checks: list[dict] = []
 
 def record(name: str, detail: str = "") -> None:
     checks.append({"name": name, "status": "passed", "detail": detail})
+    print(name + ": passed", flush=True)
 
 
 def invoke(host: str, *args: str | Path, ok: bool = True) -> dict:
@@ -355,6 +356,125 @@ for host in ("native", "js"):
         invalid_file.write_bytes(independent_sparse(rows, cols, np.zeros(len(rows)), (3, 2)))
         assert invoke(host, "info", invalid_file, ok=False)["code"] == expected_code
     record(f"{host}: invalid CSC pointers rows and ordering rejected")
+
+transform_source = OUT / "scientific-transform-source.mat"
+transform_inputs = {
+    "tensor": np.arange(24, dtype="float64").reshape((2, 3, 4), order="F"),
+    "ids": np.array([0, 18446744073709551615, 9007199254740993, 3, 4, 5], dtype="uint64").reshape((2, 3), order="F"),
+    "bits": np.array([0x7fc00042, 0x80000000, 0xffc0007f], dtype="uint32").view("float32").reshape(1, 3),
+    "z": np.array([[1 + 2j, -3 + 4j, 5 - 6j], [7 + 8j, -9 - 10j, 11 + 12j]], dtype="complex64"),
+    "logical": np.array([[True, False, True], [False, True, False]]),
+    "keep_sparse": sparse_cases["sparse_huge"],
+}
+savemat(transform_source, transform_inputs)
+operations = [
+    {"op": "slice", "name": "tensor", "starts": [0, 0, 1], "counts": [2, 2, 2], "steps": [1, 2, 1]},
+    {"op": "gather", "name": "tensor", "axis": 2, "indices": [1, 0, 1]},
+    {"op": "permute", "name": "tensor", "axes": [2, 0, 1]},
+    {"op": "reshape", "name": "tensor", "shape": [3, 4]},
+    {"op": "gather", "name": "ids", "axis": 0, "indices": [1, 0, 1]},
+    {"op": "gather", "name": "bits", "axis": 1, "indices": [2, 0, 2, 1]},
+    {"op": "slice", "name": "z", "starts": [0, 1], "counts": [2, 2]},
+    {"op": "concat", "name": "paired_z", "inputs": ["z", "z"], "axis": 1},
+    {"op": "gather", "name": "logical", "axis": 1, "indices": [2, 0, 2]},
+]
+plan_path = OUT / "scientific-transform-plan.json"
+plan_path.write_text(json.dumps({"schema": "moonmatbridge/transform/1", "operations": operations}), encoding="utf-8")
+expected_transforms = {
+    "tensor": np.take(transform_inputs["tensor"][:, ::2, 1:3], [1, 0, 1], axis=2).transpose(2, 0, 1).reshape((3, 4), order="F"),
+    "ids": np.take(transform_inputs["ids"], [1, 0, 1], axis=0),
+    "bits": np.take(transform_inputs["bits"], [2, 0, 2, 1], axis=1),
+    "z": transform_inputs["z"][:, 1:3],
+    "paired_z": np.concatenate([transform_inputs["z"][:, 1:3]] * 2, axis=1),
+    "logical": np.take(transform_inputs["logical"], [2, 0, 2], axis=1),
+}
+for host in ("native", "js"):
+    transformed = fresh(OUT / f"{host}-scientific-transformed.mat")
+    invoke(host, "transform", transform_source, plan_path, transformed)
+    actual = loadmat(transformed)
+    for name, expected in expected_transforms.items():
+        assert_same(actual[name], expected)
+    assert issparse(actual["keep_sparse"]) and actual["keep_sparse"].shape == sparse_cases["sparse_huge"].shape
+    record(f"{host}: NumPy-oracle scientific transform pipeline", "Nine operations: slice/gather/permute/reshape/concat; float32 NaN payloads, uint64, complex, bool and untouched huge CSC")
+    for label, invalid_ops, code in [
+        ("axis", [{"op": "gather", "name": "ids", "axis": 2, "indices": [0]}], "invalid-axis"),
+        ("steps", [{"op": "slice", "name": "ids", "starts": [0, 0], "counts": [1, 1], "steps": [1, 0]}], "invalid-slice"),
+        ("target", [{"op": "concat", "name": "keep_sparse", "inputs": ["z", "z"], "axis": 1}], "duplicate-name"),
+        ("typo", [{"op": "reshape", "name": "ids", "shape": [6, 1], "shpae": [1, 6]}], "invalid-json"),
+    ]:
+        bad_plan = OUT / f"bad-transform-{label}.json"
+        bad_plan.write_text(json.dumps({"schema": "moonmatbridge/transform/1", "operations": invalid_ops}), encoding="utf-8")
+        denied = fresh(OUT / f"{host}-bad-transform-{label}.mat")
+        assert invoke(host, "transform", transform_source, bad_plan, denied, ok=False)["code"] == code
+        assert not denied.exists()
+    record(f"{host}: invalid transform plans reject atomically", "Invalid axes/steps, duplicate sparse target and typos produce no file")
+
+snapshot_sources = [OUT / "scipy-uncompressed.mat", OUT / "scipy-sparse-True.mat", be_sparse]
+for host in ("native", "js"):
+    for i, source in enumerate(snapshot_sources):
+        snapshot = fresh(OUT / f"{host}-snapshot-{i}.json")
+        restored = fresh(OUT / f"{host}-snapshot-restored-{i}.mat")
+        invoke(host, "snapshot", source, snapshot)
+        document = json.loads(snapshot.read_text(encoding="utf-8"))
+        assert document["schema"] == "moonmatbridge/snapshot/1" and document["byte_order"] == "little"
+        assert all(len(a["real_hex"]) % 2 == 0 for a in document["variables"])
+        invoke(host, "restore", snapshot, restored)
+        command = [str(ROOT / "dist" / ("moonmat.exe" if platform.system() == "Windows" else "moonmat"))] if host == "native" else ["node", str(ROOT / "scripts" / "cli.mjs")]
+        diff = subprocess.run(command + ["diff", str(source), str(restored)], capture_output=True, encoding="utf-8", timeout=30)
+        assert diff.returncode == 0 and json.loads(diff.stdout)["content_equal"], (host, diff.stdout, diff.stderr)
+        # Check dense and sparse payload bytes in the archive against the independent fixture producer.
+        if i == 0:
+            for a in document["variables"]:
+                expected = data[a["name"]]
+                target = expected.real if np.iscomplexobj(expected) else expected
+                assert bytes.fromhex(a["real_hex"]) == target.astype(target.dtype.newbyteorder("<")).tobytes(order="F")
+                if np.iscomplexobj(expected):
+                    target = expected.imag
+                    assert bytes.fromhex(a["imag_hex"]) == target.astype(target.dtype.newbyteorder("<")).tobytes(order="F")
+        if i == 2:
+            a = document["variables"][0]
+            assert a["row_indices"] == [0, 2, 123] and a["col_ptrs"] == [0, 1, 2] and a["nzmax"] == 5
+            assert bytes.fromhex(a["real_hex"]) == np.array([1.25, -0., 9.], dtype="<f8").tobytes()
+    record(f"{host}: exact snapshot restore", "Dense NaN/complex/integer bytes, compressed mixed CSC, big-endian inactive capacity; exact content diff after restore")
+    snapshot = OUT / f"{host}-snapshot-0.json"
+    bad_snapshot = OUT / "snapshot-invalid-hex.json"
+    document = json.loads(snapshot.read_text(encoding="utf-8"))
+    document["variables"][0]["real_hex"] = "invalid hex"
+    bad_snapshot.write_text(json.dumps(document), encoding="utf-8")
+    denied = fresh(OUT / f"{host}-bad-snapshot.mat")
+    assert invoke(host, "restore", bad_snapshot, denied, ok=False)["code"] == "invalid-json"
+    assert not denied.exists()
+    record(f"{host}: malformed snapshot rejects without partial output")
+
+diff_a = OUT / "diff-original.mat"
+diff_b = OUT / "diff-changed.mat"
+diff_compressed = OUT / "diff-compressed.mat"
+diff_values = {
+    "bits": np.array([0x7ff8000000000042, 0x8000000000000000], dtype="uint64").view("float64").reshape(2, 1),
+    "ids": np.array([[18446744073709551615]], dtype="uint64"),
+    "s": sparse_cases["sparse_huge"],
+}
+savemat(diff_a, diff_values)
+changed_values = {**diff_values, "bits": np.array([0x7ff8000000000043, 0], dtype="uint64").view("float64").reshape(2, 1), "ids": np.array([[18446744073709551614]], dtype="uint64")}
+savemat(diff_b, changed_values)
+savemat(diff_compressed, dict(reversed(list(diff_values.items()))), do_compression=True)
+for host in ("native", "js"):
+    command = [str(ROOT / "dist" / ("moonmat.exe" if platform.system() == "Windows" else "moonmat"))] if host == "native" else ["node", str(ROOT / "scripts" / "cli.mjs")]
+    equal = subprocess.run(command + ["diff", str(diff_a), str(diff_compressed)], capture_output=True, encoding="utf-8", timeout=30)
+    value = json.loads(equal.stdout)
+    assert equal.returncode == 0 and value["content_equal"] and value["variable_order_changed"]
+    different = subprocess.run(command + ["diff", str(diff_a), str(diff_b)], capture_output=True, encoding="utf-8", timeout=30)
+    value = json.loads(different.stdout)
+    assert different.returncode == 2 and not value["content_equal"] and value["changed_variables"] == 2
+    assert value["variables"][0]["real_differences"] == 2 and value["variables"][0]["samples"][1]["coordinates"] == [1, 0]
+    assert value["variables"][0]["samples"][0]["before_hex"] == "420000000000f87f"
+    assert value["variables"][1]["real_differences"] == 1
+    report_path = fresh(OUT / f"{host}-diff-report.json")
+    saved = subprocess.run(command + ["diff", str(diff_a), str(diff_b), str(report_path)], capture_output=True, encoding="utf-8", timeout=30)
+    assert saved.returncode == 2 and json.loads(report_path.read_text(encoding="utf-8"))["changed_variables"] == 2
+    repeated = subprocess.run(command + ["diff", str(diff_a), str(diff_b), str(report_path)], capture_output=True, encoding="utf-8", timeout=30)
+    assert repeated.returncode == 1 and json.loads(repeated.stderr)["code"] == "output-exists"
+    record(f"{host}: exact diff CI codes and reports", "0 equal across encoding/order, 2 NaN payload/signed zero/uint64 changes, 1 existing output; exact coordinates and bytes")
 
 unsupported = {
     "cell": {"x": np.array([[1, "text"]], dtype=object)},

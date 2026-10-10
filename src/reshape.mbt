@@ -10,5 +10,12 @@ pub fn NumericArray::reshape(
   if element_count(shape, limits, 0) != count {
     fail("shape-mismatch", 0, "Reshape must preserve element count")
   }
-  { name: self.name, dtype: self.dtype, shape: shape.copy(), real: self.real, imag: self.imag, is_global: self.is_global }
+  {
+    name: self.name,
+    dtype: self.dtype,
+    shape: shape.copy(),
+    real: self.real,
+    imag: self.imag,
+    is_global: self.is_global,
+  }
 }

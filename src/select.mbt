@@ -6,7 +6,8 @@ pub fn MatFile::select(
   limits? : Limits = default_limits(),
 ) -> Array[NumericArray] raise MatError {
   validate_limits(limits)
-  if self.arrays.length() > limits.max_variables || names.length() > limits.max_variables {
+  if self.arrays.length() > limits.max_variables ||
+    names.length() > limits.max_variables {
     fail("variable-limit", 0, "Too many variables")
   }
   let available : Map[String, NumericArray] = Map([])

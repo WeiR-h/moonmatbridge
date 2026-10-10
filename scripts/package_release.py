@@ -78,23 +78,33 @@ Open PowerShell in this folder:
   .\moonmat.exe from-npy temperature.npy temperature from-numpy.mat
   .\moonmat.exe select sample.mat subset.mat temperature
   .\moonmat.exe roundtrip sample.mat copy.mat
+  .\moonmat.exe transform sample.mat examples\transform-plan.json transformed.mat
+  .\moonmat.exe compress transformed.mat compressed.mat
+  .\moonmat.exe snapshot compressed.mat archive.json
+  .\moonmat.exe restore archive.json restored.mat
+  .\moonmat.exe diff compressed.mat restored.mat equality-report.json
+  .\moonmat.exe sparsify sample.mat temperature sparse.mat
+  .\moonmat.exe densify sparse.mat temperature dense.mat
 
 The executable requires no MoonBit, C compiler, Python or Node installation.
 Only Windows system KERNEL32.dll and msvcrt.dll are imported in this build.
 Output paths must be NEW; existing files are never overwritten.
 Core: MAT Level 5 dense numeric/logical arrays, complex float32/64,
-little/big endian and compressed reading; uncompressed writing; primitive NPY import/export, reshape and axis permutation.
-Unsupported: cell/struct/char/sparse, MAT v4/v7.3, compressed writing, structured/object/string NPY and streaming.
+CSC double/logical/complex double, little/big endian, deterministic compressed/uncompressed writing,
+primitive NPY, raw-byte slice/gather/concat/reshape/permutation, exact snapshot/restore and diff.
+Unsupported: cell/struct/char, MAT v4/v7.3, noncanonical or non-double numerical CSC,
+structured/object/string NPY, NPZ, floating tolerance and file streaming.
 
 Use examples/sample.json as a fresh pack input, or examples/sample.mat for info.
 JSON values are column-major; int64/uint64 use decimal strings.
-NaN payload bits survive binary conversions but are normalized in JSON.
+NaN payload bits survive binary and snapshot conversions but are normalized in readable dump/pack JSON.
+diff exits: 0 equal, 2 changed, 1 format/usage/IO error. Sparse arrays never expand implicitly.
 See docs, LICENSE, NOTICE, THIRD_PARTY.md and verification for details.
 MATLAB/Octave execution and competition submission are unverified. Public downloads are verified separately.
 """
 with zipfile.ZipFile(native_zip, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as z:
     add(z, DIST / "moonmat.exe", native_name, "moonmat.exe")
-    for name in ["LICENSE", "NOTICE", "THIRD_PARTY.md", "CHANGELOG.md", "docs/API.md", "docs/JSON.md", "docs/FORMAT.md", "examples/sample.json", "examples/sample.mat", "examples/python/interop_example.py", "examples/matlab/interop_example.m"]:
+    for name in ["LICENSE", "NOTICE", "THIRD_PARTY.md", "CHANGELOG.md", "docs/API.md", "docs/JSON.md", "docs/FORMAT.md", "docs/RECIPES.md", "docs/DIFFERENTIATION.md", "docs/ITERATIONS-v0.0.3.md", "examples/transform-plan.json", "examples/sample.json", "examples/sample.mat", "examples/python/interop_example.py", "examples/matlab/interop_example.m"]:
         add(z, ROOT / name, native_name)
     for path in sorted(REPORTS.glob("*.json")):
         add(z, path, native_name, "verification/" + path.name)
@@ -105,7 +115,7 @@ js_name = f"MoonMatBridge-v{VERSION}-js"
 js_zip = DIST / f"{js_name}.zip"
 with zipfile.ZipFile(js_zip, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as z:
     add(z, ROOT / "_build/js/release/build/bridge/bridge.js", js_name, "bridge.mjs")
-    for name in ["LICENSE", "NOTICE", "THIRD_PARTY.md", "docs/API.md", "docs/JSON.md", "examples/sample.json"]:
+    for name in ["LICENSE", "NOTICE", "THIRD_PARTY.md", "docs/API.md", "docs/JSON.md", "docs/FORMAT.md", "docs/RECIPES.md", "examples/transform-plan.json", "examples/sample.json"]:
         add(z, ROOT / name, js_name)
     z.writestr(f"{js_name}/README.txt", f"MoonMatBridge v{VERSION} JS exports. Import bridge.mjs; see docs/API.md. Host-neutral MoonBit build, no Python/zlib dependency. Browser UI is not shipped/tested.\n")
     z.writestr(f"{js_name}/SOURCE_SHA256.txt", source_hash + "\n")
@@ -132,6 +142,14 @@ commands = [
     ["select", str(consumer / "sample.mat"), str(consumer / "subset.mat"), "temperature"],
     ["from-npy", str(consumer / "temperature.npy"), "temperature", str(consumer / "from-numpy.mat")],
     ["dump", str(consumer / "from-numpy.mat"), str(consumer / "from-numpy.json")],
+    ["transform", str(consumer / "sample.mat"), str(native / "examples/transform-plan.json"), str(consumer / "transformed.mat")],
+    ["compress", str(consumer / "transformed.mat"), str(consumer / "compressed.mat")],
+    ["snapshot", str(consumer / "compressed.mat"), str(consumer / "snapshot.json")],
+    ["restore", str(consumer / "snapshot.json"), str(consumer / "restored.mat")],
+    ["diff", str(consumer / "compressed.mat"), str(consumer / "restored.mat"), str(consumer / "equal-report.json")],
+    ["sparsify", str(consumer / "sample.mat"), "temperature", str(consumer / "sparse.mat")],
+    ["densify", str(consumer / "sparse.mat"), "temperature", str(consumer / "dense.mat")],
+    ["diff", str(consumer / "sample.mat"), str(consumer / "dense.mat")],
 ]
 for args in commands:
     response = json.loads(run([exe] + args, native, clean_env).stdout)
@@ -139,6 +157,9 @@ for args in commands:
 assert (consumer / "sample.mat").read_bytes() == (consumer / "packed.mat").read_bytes() == (consumer / "roundtrip.mat").read_bytes()
 expected_temperature = next(a for a in json.loads((consumer / "sample.json").read_text(encoding="utf-8"))["arrays"] if a["name"] == "temperature")
 assert json.loads((consumer / "from-numpy.json").read_text(encoding="utf-8"))["arrays"] == [expected_temperature]
+assert json.loads((consumer / "equal-report.json").read_text(encoding="utf-8"))["content_equal"]
+different = subprocess.run([exe, "diff", str(consumer / "sample.mat"), str(consumer / "transformed.mat")], cwd=native, env=clean_env, capture_output=True, encoding="utf-8", timeout=10)
+assert different.returncode == 2 and not json.loads(different.stdout)["content_equal"]
 original = digest(consumer / "sample.mat")
 repeated = subprocess.run([exe, "sample", str(consumer / "sample.mat")], cwd=native, env=clean_env, capture_output=True, encoding="utf-8", timeout=10)
 assert repeated.returncode == 1 and json.loads(repeated.stderr)["code"] == "output-exists"
@@ -168,6 +189,22 @@ assert.equal(JSON.parse(api.inspect_mat(bytes)).arrays.length,4);
 const rebuilt=api.json_to_mat(api.mat_to_json(bytes));
 assert.equal(JSON.parse(api.result_status(rebuilt)).status,'ok');
 assert.deepEqual(api.result_bytes(rebuilt),bytes);
+const compressed=api.compress_mat(bytes);
+assert.equal(JSON.parse(api.result_status(compressed)).status,'ok');
+const compressedBytes=api.result_bytes(compressed);
+const snapshot=api.mat_to_snapshot(compressedBytes);
+const restored=api.snapshot_to_mat(snapshot);
+assert.equal(JSON.parse(api.result_status(restored)).status,'ok');
+assert.equal(JSON.parse(api.compare_mat(bytes,api.result_bytes(restored))).content_equal,true);
+const sparse=api.convert_storage(bytes,'temperature',true);
+assert.equal(JSON.parse(api.result_status(sparse)).status,'ok');
+assert.equal(JSON.parse(api.inspect_mat(api.result_bytes(sparse))).arrays[0].storage,'csc');
+const plan=JSON.stringify({schema:'moonmatbridge/transform/1',operations:[{op:'gather',name:'temperature',axis:1,indices:[2,0]}]});
+const transformed=api.transform_mat(api.result_bytes(sparse),JSON.stringify({schema:'moonmatbridge/transform/1',operations:[]}));
+assert.equal(JSON.parse(api.result_status(transformed)).status,'ok');
+const selected=api.transform_mat(bytes,plan);
+assert.equal(JSON.parse(api.result_status(selected)).status,'ok');
+assert.equal(JSON.parse(api.compare_mat(bytes,api.result_bytes(selected))).content_equal,false);
 console.log('Fresh JS consumer: passed');
 """, encoding="utf-8")
 run(["node", str(probe)], js)
@@ -176,9 +213,9 @@ archives = [{"file": path.name, "bytes": path.stat().st_size, "sha256": digest(p
 result = {
     "status": "passed", "version": VERSION, "source_sha256": source_hash,
     "native_sha256": digest(DIST / "moonmat.exe"), "archives": archives,
-    "fresh_consumers": {"native": "version + 9 commands including NPY import/selection + Unicode/spaces + no overwrite; PATH limited to System32",
+    "fresh_consumers": {"native": f"version + {len(commands)} commands + sparse/transform/compress/snapshot/diff + Unicode/spaces + no overwrite; PATH limited to System32; diff-change exit 2 verified",
                         "source": f"unpacked source check and {test_match.group(2)} JS tests; no local settings/build cache bundled",
-                        "js": "unpacked bridge imports and exact JSON round trip"},
+                        "js": "unpacked exports: JSON, compression, sparse, mixed transform, snapshot restore and exact diff"},
     "scope": "Local archives and fresh consumers; no public publishing or organizer acceptance",
 }
 (DIST / f"release-v{VERSION}.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

@@ -1,0 +1,29 @@
+{
+  "status": "passed",
+  "version": "0.0.3",
+  "source_sha256": "2d78c37c4494e690c10775e2baee37c6267ffab2faa38c79a74640175fd5ff7c",
+  "native_sha256": "8d56ab8ecac2a1e52fe4f1815126426b74ad8e9e542fe7bcd157218324c915c3",
+  "archives": [
+    {
+      "file": "MoonMatBridge-v0.0.3-source.zip",
+      "bytes": 137415,
+      "sha256": "a50697d615cb0d4ea11118455a32db287cf944b7d1511335bdcb994c9255262f"
+    },
+    {
+      "file": "MoonMatBridge-v0.0.3-windows-x64.zip",
+      "bytes": 332319,
+      "sha256": "4b41f5767db3fff3617e4e2abc6d90c5beb61e5870b439274ab7aab817993c82"
+    },
+    {
+      "file": "MoonMatBridge-v0.0.3-js.zip",
+      "bytes": 110958,
+      "sha256": "2a3a943a24cf9c9fc6abeab6157ad8a831fd90545a57fbf104b7be8861b5f4b6"
+    }
+  ],
+  "fresh_consumers": {
+    "native": "version + 17 commands + sparse/transform/compress/snapshot/diff + Unicode/spaces + no overwrite; PATH limited to System32; diff-change exit 2 verified",
+    "source": "unpacked source check and 52 JS tests; no local settings/build cache bundled",
+    "js": "unpacked exports: JSON, compression, sparse, mixed transform, snapshot restore and exact diff"
+  },
+  "scope": "Local archives and fresh consumers; no public publishing or organizer acceptance"
+}

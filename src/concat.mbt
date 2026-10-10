@@ -20,8 +20,13 @@ pub fn concat_arrays(
   shape[axis] = 0
   for item in arrays {
     ignore(validate_array(item, limits))
-    if item.dtype != first.dtype || item.is_complex() != first.is_complex() || item.is_global != first.is_global || item.shape.length() != shape.length() {
-      fail("incompatible-array", 0, "Concat inputs need identical type, rank, complex and global flags")
+    if item.dtype != first.dtype ||
+      item.is_complex() != first.is_complex() ||
+      item.is_global != first.is_global ||
+      item.shape.length() != shape.length() {
+      fail(
+        "incompatible-array", 0, "Concat inputs need identical type, rank, complex and global flags",
+      )
     }
     for k = 0; k < shape.length(); k = k + 1 {
       if k != axis && item.shape[k] != shape[k] {
@@ -35,7 +40,8 @@ pub fn concat_arrays(
   }
   let count = element_count(shape, limits, 0)
   let width = first.dtype.width()
-  if count * width > limits.max_file_bytes / (if first.is_complex() { 2 } else { 1 }) {
+  if count * width >
+    limits.max_file_bytes / (if first.is_complex() { 2 } else { 1 }) {
     fail("file-limit", 0, "Concatenated payload exceeds byte limit")
   }
   let copy_plane = fn(imaginary : Bool) {
@@ -60,5 +66,16 @@ pub fn concat_arrays(
     }
     Bytes::from_array(out)
   }
-  { name, dtype: first.dtype, shape, real: copy_plane(false), imag: if first.is_complex() { Some(copy_plane(true)) } else { None }, is_global: first.is_global }
+  {
+    name,
+    dtype: first.dtype,
+    shape,
+    real: copy_plane(false),
+    imag: if first.is_complex() {
+      Some(copy_plane(true))
+    } else {
+      None
+    },
+    is_global: first.is_global,
+  }
 }

@@ -7,7 +7,11 @@ priv struct NpyHeaderCursor {
 
 ///|
 fn NpyHeaderCursor::peek(self : NpyHeaderCursor) -> Byte {
-  if self.position < self.end { self.bytes[self.position] } else { b'\x00' }
+  if self.position < self.end {
+    self.bytes[self.position]
+  } else {
+    b'\x00'
+  }
 }
 
 ///|
@@ -21,7 +25,10 @@ fn NpyHeaderCursor::space(self : NpyHeaderCursor) -> Unit {
 }
 
 ///|
-fn NpyHeaderCursor::expect(self : NpyHeaderCursor, byte : Byte) -> Unit raise MatError {
+fn NpyHeaderCursor::expect(
+  self : NpyHeaderCursor,
+  byte : Byte,
+) -> Unit raise MatError {
   if self.position >= self.end || self.peek() != byte {
     fail("invalid-npy", self.position, "Malformed NPY header literal")
   }
@@ -29,8 +36,13 @@ fn NpyHeaderCursor::expect(self : NpyHeaderCursor, byte : Byte) -> Unit raise Ma
 }
 
 ///|
-fn NpyHeaderCursor::literal(self : NpyHeaderCursor, text : Bytes) -> Unit raise MatError {
-  for byte in text { self.expect(byte) }
+fn NpyHeaderCursor::literal(
+  self : NpyHeaderCursor,
+  text : Bytes,
+) -> Unit raise MatError {
+  for byte in text {
+    self.expect(byte)
+  }
 }
 
 ///|
@@ -44,19 +56,29 @@ fn NpyHeaderCursor::string(self : NpyHeaderCursor) -> String raise MatError {
   while self.position < self.end && self.peek() != quote {
     let byte = self.peek().to_int()
     if byte < 32 || byte > 126 || byte == 92 {
-      fail("invalid-npy", self.position, "Only plain ASCII header strings are supported")
+      fail(
+        "invalid-npy",
+        self.position,
+        "Only plain ASCII header strings are supported",
+      )
     }
     self.position = self.position + 1
   }
   let finish = self.position
   self.expect(quote)
   @utf8.decode(self.bytes[start:finish]) catch {
-    _ => { fail("invalid-npy", start, "Invalid header string"); "" }
+    _ => {
+      fail("invalid-npy", start, "Invalid header string")
+      ""
+    }
   }
 }
 
 ///|
-fn NpyHeaderCursor::dimensions(self : NpyHeaderCursor, max_rank : Int) -> Array[Int] raise MatError {
+fn NpyHeaderCursor::dimensions(
+  self : NpyHeaderCursor,
+  max_rank : Int,
+) -> Array[Int] raise MatError {
   self.expect(b'(')
   self.space()
   let shape = []
@@ -73,7 +95,11 @@ fn NpyHeaderCursor::dimensions(self : NpyHeaderCursor, max_rank : Int) -> Array[
     while self.peek() >= b'0' && self.peek() <= b'9' {
       let digit = self.peek().to_int() - 48
       if dimension > (2147483647 - digit) / 10 {
-        fail("invalid-shape", self.position, "NPY dimension exceeds signed 32-bit range")
+        fail(
+          "invalid-shape",
+          self.position,
+          "NPY dimension exceeds signed 32-bit range",
+        )
       }
       dimension = dimension * 10 + digit
       self.position = self.position + 1
@@ -85,7 +111,11 @@ fn NpyHeaderCursor::dimensions(self : NpyHeaderCursor, max_rank : Int) -> Array[
     self.space()
     if self.peek() == b')' {
       if shape.length() == 1 {
-        fail("invalid-npy", self.position, "One-dimensional shape requires a tuple comma")
+        fail(
+          "invalid-npy",
+          self.position,
+          "One-dimensional shape requires a tuple comma",
+        )
       }
       self.expect(b')')
       break
@@ -119,7 +149,9 @@ pub fn read_npy(
   }
   let major = bytes[6].to_int()
   if (major != 1 && major != 2 && major != 3) || bytes[7] != b'\x00' {
-    fail("unsupported-npy-version", 6, "Supported NPY versions are 1.0, 2.0 and 3.0")
+    fail(
+      "unsupported-npy-version", 6, "Supported NPY versions are 1.0, 2.0 and 3.0",
+    )
   }
   let prefix = if major == 1 { 10 } else { 12 }
   if bytes.length() < prefix {
@@ -131,9 +163,11 @@ pub fn read_npy(
   }
   let end = prefix + header_size.to_int()
   if end > bytes.length() || end % 16 != 0 || bytes[end - 1] != b'\n' {
-    fail("invalid-npy", prefix, "Truncated, unaligned or unterminated NPY header")
+    fail(
+      "invalid-npy", prefix, "Truncated, unaligned or unterminated NPY header",
+    )
   }
-  let cursor : NpyHeaderCursor = { bytes, end, position: prefix }
+  let cursor : NpyHeaderCursor = { bytes, end, position: prefix, }
   cursor.space()
   cursor.expect(b'{')
   let seen : Map[String, Bool] = Map([])
@@ -152,7 +186,7 @@ pub fn read_npy(
     cursor.space()
     match key {
       "descr" => descriptor = Some(cursor.string())
-      "fortran_order" => {
+      "fortran_order" =>
         if cursor.peek() == b'T' {
           cursor.literal(b"True")
           fortran = Some(true)
@@ -160,19 +194,24 @@ pub fn read_npy(
           cursor.literal(b"False")
           fortran = Some(false)
         }
-      }
       "shape" => dimensions = Some(cursor.dimensions(limits.max_dimensions))
       _ => fail("invalid-npy", cursor.position, "Unknown NPY header key")
     }
     cursor.space()
-    if cursor.peek() == b'}' { break }
+    if cursor.peek() == b'}' {
+      break
+    }
     cursor.expect(b',')
     cursor.space()
   }
   cursor.expect(b'}')
   cursor.space()
   if cursor.position != end || seen.length() != 3 {
-    fail("invalid-npy", cursor.position, "Header must contain exactly descr, fortran_order and shape")
+    fail(
+      "invalid-npy",
+      cursor.position,
+      "Header must contain exactly descr, fortran_order and shape",
+    )
   }
   let descriptor = descriptor.unwrap_or("")
   let dtype = match descriptor {
@@ -187,9 +226,17 @@ pub fn read_npy(
     "<i8" | ">i8" => Int64
     "<u8" | ">u8" => UInt64
     "|b1" | "<b1" | ">b1" => Logical
-    _ => { fail("unsupported-npy-dtype", prefix, "Only primitive numerical/logical dtypes are supported"); Float64 }
+    _ => {
+      fail(
+        "unsupported-npy-dtype", prefix, "Only primitive numerical/logical dtypes are supported",
+      )
+      Float64
+    }
   }
-  let complex = descriptor == "<c8" || descriptor == ">c8" || descriptor == "<c16" || descriptor == ">c16"
+  let complex = descriptor == "<c8" ||
+    descriptor == ">c8" ||
+    descriptor == "<c16" ||
+    descriptor == ">c16"
   let encoded_descriptor = @utf8.encode(descriptor[:])
   let little = encoded_descriptor[0] != b'>'
   let original_shape = dimensions.unwrap_or([])
@@ -205,7 +252,9 @@ pub fn read_npy(
     fail("file-limit", end, "NPY payload exceeds configured byte limit")
   }
   if bytes.length() - end != count * item_width {
-    fail("payload-size", end, "NPY payload must exactly match dtype and dimensions")
+    fail(
+      "payload-size", end, "NPY payload must exactly match dtype and dimensions",
+    )
   }
   let real = Array::make(count * width, b'\x00')
   let imag = if complex { Array::make(count * width, b'\x00') } else { [] }
@@ -222,16 +271,31 @@ pub fn read_npy(
       let mut remainder = index
       source = 0
       for k = 0; k < shape.length(); k = k + 1 {
-        source = source + (remainder % shape[k]) * c_strides[k]
+        source = source + remainder % shape[k] * c_strides[k]
         remainder = remainder / shape[k]
       }
     }
     for j = 0; j < width; j = j + 1 {
-      let offset = end + source * item_width + (if little { j } else { width - 1 - j })
+      let offset = end +
+        source * item_width +
+        (if little { j } else { width - 1 - j })
       let byte = bytes[offset]
-      real[index * width + j] = if dtype == Logical && byte != b'\x00' { b'\x01' } else { byte }
-      if complex { imag[index * width + j] = bytes[offset + width] }
+      real[index * width + j] = if dtype == Logical && byte != b'\x00' {
+        b'\x01'
+      } else {
+        byte
+      }
+      if complex {
+        imag[index * width + j] = bytes[offset + width]
+      }
     }
   }
-  raw_array(name, dtype, shape, Bytes::from_array(real), imag?=if complex { Some(Bytes::from_array(imag)) } else { None }, limits~)
+  raw_array(
+    name,
+    dtype,
+    shape,
+    Bytes::from_array(real),
+    imag?=if complex { Some(Bytes::from_array(imag)) } else { None },
+    limits~,
+  )
 }

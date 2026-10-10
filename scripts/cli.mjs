@@ -48,7 +48,7 @@ try {
   else if (command === 'select' && args.length >= 3) save(args[1], bytes(api.select_mat(read(args[0]), args.slice(2))));
   else if (command === 'transform' && args.length === 3) save(args[2], bytes(api.transform_mat(read(args[0]), new TextDecoder('utf-8', {fatal: true}).decode(read(args[1])))));
   else if (command === 'sample' && args.length === 1) save(args[0], bytes(api.sample_mat()));
-  else if (command === 'help' || command === '--help') console.log(`MoonMatBridge v${version}\ninfo INPUT.mat\ndump INPUT.mat OUTPUT.json\npack INPUT.json OUTPUT.mat\nroundtrip INPUT.mat OUTPUT.mat\nnpy INPUT.mat VARIABLE OUTPUT.npy\nfrom-npy INPUT.npy VARIABLE OUTPUT.mat\nselect INPUT.mat OUTPUT.mat VARIABLE...\nsample OUTPUT.mat\nversion\nOutput files must be new.`);
+  else if (command === 'help' || command === '--help') console.log(`MoonMatBridge v${version}\ninfo INPUT.mat\ndump INPUT.mat OUTPUT.json\npack INPUT.json OUTPUT.mat\nroundtrip INPUT.mat OUTPUT.mat\ncompress INPUT.mat OUTPUT.mat\nnpy INPUT.mat VARIABLE OUTPUT.npy\nfrom-npy INPUT.npy VARIABLE OUTPUT.mat\nselect INPUT.mat OUTPUT.mat VARIABLE...\ntransform INPUT.mat PLAN.json OUTPUT.mat\nsparsify INPUT.mat VARIABLE OUTPUT.mat\ndensify INPUT.mat VARIABLE OUTPUT.mat\nsnapshot INPUT.mat OUTPUT.json\nrestore SNAPSHOT.json OUTPUT.mat\ndiff LEFT.mat RIGHT.mat [REPORT.json]\nsample OUTPUT.mat\nversion\nOutput files must be new. Diff exits: 0 equal, 2 changed, 1 error.`);
   else throw new Error('Invalid command or arguments. Run help.');
 } catch (error) {
   console.error(JSON.stringify(error.diagnostic || {status: 'error', code: error.code === 'EEXIST' ? 'output-exists' : 'host-error', message: error.message}));

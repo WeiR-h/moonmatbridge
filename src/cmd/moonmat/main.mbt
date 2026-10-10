@@ -79,7 +79,9 @@ fn save(path : String, bytes : Bytes) -> Unit raise @mat.MatError {
 
 ///|
 fn usage() -> String {
-  "MoonMatBridge v" + @mat.version() + "\n" +
+  "MoonMatBridge v" +
+  @mat.version() +
+  "\n" +
   "  moonmat info INPUT.mat\n" +
   "  moonmat dump INPUT.mat OUTPUT.json\n" +
   "  moonmat pack INPUT.json OUTPUT.mat\n" +
@@ -112,7 +114,9 @@ fn run(args : Array[String]) -> Unit raise @mat.MatError {
   } else if command == "sample" && args.length() == 3 {
     save(args[2], @mat.write_mat(@wire.sample()))
   } else if command == "info" && args.length() == 3 {
-    println(@wire.document_info(@mat.read_document(read(args[2]))).stringify(indent=2))
+    println(
+      @wire.document_info(@mat.read_document(read(args[2]))).stringify(indent=2),
+    )
   } else if command == "dump" && args.length() == 4 {
     let document = @wire.to_json(@mat.read_mat(read(args[2])).arrays).stringify(
         indent=2,
@@ -126,37 +130,82 @@ fn run(args : Array[String]) -> Unit raise @mat.MatError {
     }
     save(args[3], @mat.write_mat(@wire.from_json(text)))
   } else if command == "snapshot" && args.length() == 4 {
-    let text = @wire.to_snapshot(@mat.read_document(read(args[2])).variables) + "\n"
+    let text = @wire.to_snapshot(@mat.read_document(read(args[2])).variables) +
+      "\n"
     save(args[3], @utf8.encode(text[:]))
   } else if command == "restore" && args.length() == 4 {
-    let text = @utf8.decode(read(args[2])[:]) catch { _ => raise @mat.MatError("invalid-utf8", 0, "Snapshot must be UTF-8") }
+    let text = @utf8.decode(read(args[2])[:]) catch {
+      _ => raise @mat.MatError("invalid-utf8", 0, "Snapshot must be UTF-8")
+    }
     save(args[3], @mat.write_document(@wire.from_snapshot(text)))
   } else if command == "diff" && (args.length() == 4 || args.length() == 5) {
-    let report = @mat.compare_documents(@mat.read_document(read(args[2])), @mat.read_document(read(args[3])))
+    let report = @mat.compare_documents(
+      @mat.read_document(read(args[2])),
+      @mat.read_document(read(args[3])),
+    )
     let text = @wire.diff_json(report).stringify() + "\n"
-    if args.length() == 5 { save(args[4], @utf8.encode(text[:])) } else { println(text.trim().to_owned()) }
-    if !report.content_equal { exit_process(2) }
+    if args.length() == 5 {
+      save(args[4], @utf8.encode(text[:]))
+    } else {
+      println(text.trim().to_owned())
+    }
+    if !report.content_equal {
+      exit_process(2)
+    }
   } else if command == "roundtrip" && args.length() == 4 {
-    save(args[3], @mat.write_document(@mat.read_document(read(args[2])).variables))
+    save(
+      args[3],
+      @mat.write_document(@mat.read_document(read(args[2])).variables),
+    )
   } else if command == "compress" && args.length() == 4 {
-    save(args[3], @mat.write_document(@mat.read_document(read(args[2])).variables, compressed=true))
-  } else if (command == "sparsify" || command == "densify") && args.length() == 5 {
-    save(args[4], @mat.write_document(@mat.read_document(read(args[2])).convert_storage(args[3], command == "sparsify")))
+    save(
+      args[3],
+      @mat.write_document(
+        @mat.read_document(read(args[2])).variables,
+        compressed=true,
+      ),
+    )
+  } else if (command == "sparsify" || command == "densify") &&
+    args.length() == 5 {
+    save(
+      args[4],
+      @mat.write_document(
+        @mat.read_document(read(args[2])).convert_storage(
+          args[3],
+          command == "sparsify",
+        ),
+      ),
+    )
   } else if command == "from-npy" && args.length() == 5 {
     save(args[4], @mat.write_mat([@mat.read_npy(read(args[2]), args[3])]))
   } else if command == "transform" && args.length() == 5 {
     let plan = @utf8.decode(read(args[3])[:]) catch {
-      _ => raise @mat.MatError("invalid-utf8", 0, "Transform plan must be UTF-8")
+      _ =>
+        raise @mat.MatError("invalid-utf8", 0, "Transform plan must be UTF-8")
     }
-    save(args[4], @mat.write_document(@wire.transform_document(@mat.read_document(read(args[2])).variables, plan)))
+    save(
+      args[4],
+      @mat.write_document(
+        @wire.transform_document(
+          @mat.read_document(read(args[2])).variables,
+          plan,
+        ),
+      ),
+    )
   } else if command == "select" && args.length() >= 5 {
     let names = Array::makei(args.length() - 4, fn(i) { args[i + 4] })
-    save(args[3], @mat.write_document(@mat.read_document(read(args[2])).select(names)))
+    save(
+      args[3],
+      @mat.write_document(@mat.read_document(read(args[2])).select(names)),
+    )
   } else if command == "npy" && args.length() == 5 {
     let file = @mat.read_document(read(args[2]))
     match file.get(args[3]) {
       Some(Dense(array)) => save(args[4], @mat.write_npy(array))
-      Some(Sparse(_)) => raise @mat.MatError("explicit-densification-required", 0, "Use densify before exporting sparse data to NPY")
+      Some(Sparse(_)) =>
+        raise @mat.MatError(
+          "explicit-densification-required", 0, "Use densify before exporting sparse data to NPY",
+        )
       None =>
         raise @mat.MatError(
           "missing-variable",
