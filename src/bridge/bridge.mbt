@@ -33,7 +33,7 @@ pub fn result_bytes(result : BinaryResult) -> Bytes {
 ///|
 #export_name("inspect_mat")
 pub fn inspect_mat(bytes : Bytes) -> String {
-  @wire.info(@mat.read_mat(bytes)).stringify() catch {
+  @wire.document_info(@mat.read_document(bytes)).stringify() catch {
     error => @wire.error_json(error).stringify()
   }
 }
@@ -55,16 +55,17 @@ pub fn json_to_mat(text : String) -> BinaryResult {
 ///|
 #export_name("roundtrip_mat")
 pub fn roundtrip_mat(bytes : Bytes) -> BinaryResult {
-  binary(() => @mat.write_mat(@mat.read_mat(bytes).arrays))
+  binary(() => @mat.write_document(@mat.read_document(bytes).variables))
 }
 
 ///|
 #export_name("mat_to_npy")
 pub fn mat_to_npy(bytes : Bytes, name : String) -> BinaryResult {
   binary(() => {
-    let file = @mat.read_mat(bytes)
+    let file = @mat.read_document(bytes)
     match file.get(name) {
-      Some(array) => @mat.write_npy(array)
+      Some(Dense(array)) => @mat.write_npy(array)
+      Some(Sparse(_)) => raise @mat.MatError("explicit-densification-required", 0, "Use densify before exporting sparse data to NPY")
       None =>
         raise @mat.MatError("missing-variable", 0, "No variable named: " + name)
     }
@@ -86,7 +87,7 @@ pub fn inflate_zlib(bytes : Bytes, limit : Int) -> BinaryResult {
 ///|
 #export_name("select_mat")
 pub fn select_mat(bytes : Bytes, names : Array[String]) -> BinaryResult {
-  binary(() => @mat.write_mat(@mat.read_mat(bytes).select(names)))
+  binary(() => @mat.write_document(@mat.read_document(bytes).select(names)))
 }
 
 ///|
@@ -104,11 +105,17 @@ pub fn transform_mat(bytes : Bytes, plan : String) -> BinaryResult {
 ///|
 #export_name("compress_mat")
 pub fn compress_mat(bytes : Bytes) -> BinaryResult {
-  binary(() => @mat.write_mat(@mat.read_mat(bytes).arrays, compressed=true))
+  binary(() => @mat.write_document(@mat.read_document(bytes).variables, compressed=true))
 }
 
 ///|
 #export_name("deflate_zlib")
 pub fn deflate_zlib(bytes : Bytes, limit : Int) -> BinaryResult {
   binary(() => @mat.deflate_zlib(bytes, max_bytes=limit))
+}
+
+///|
+#export_name("convert_storage")
+pub fn convert_storage(bytes : Bytes, name : String, sparse : Bool) -> BinaryResult {
+  binary(() => @mat.write_document(@mat.read_document(bytes).convert_storage(name, sparse)))
 }

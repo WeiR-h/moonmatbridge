@@ -275,13 +275,92 @@ for host in ("native", "js"):
         assert not output.exists()
     record(f"{host}: NPY unsafe/truncated input rejected", "No pickle evaluation, no partial output")
 
+from scipy.sparse import csc_matrix, issparse
+
+sparse_cases = {
+    "sparse_double": csc_matrix(np.array([[1.25, 0, 0], [0, -2.5, 0]])),
+    "sparse_complex": csc_matrix(np.array([[1 + 2j, 0, 0], [0, -2 - 3j, 0]])),
+    "sparse_logical": csc_matrix(np.array([[True, False, False], [False, True, False]])),
+    "sparse_empty": csc_matrix((0, 3)),
+    "sparse_zero_columns": csc_matrix((3, 0)),
+    "sparse_explicit_bits": csc_matrix((np.array([0x7ff8000000000042, 0x8000000000000000], dtype="uint64").view("float64"), np.array([0, 2]), np.array([0, 1, 2])), shape=(3, 2)),
+    "sparse_huge": csc_matrix((np.array([1.25]), np.array([999999]), np.array([0, 1] + [1] * 999)), shape=(1000000, 1000)),
+}
+
+for compressed in (False, True):
+    path = OUT / f"scipy-sparse-{compressed}.mat"
+    savemat(path, {**sparse_cases, "dense_id": np.array([[9007199254740993]], dtype="uint64")}, do_compression=compressed)
+    for host in ("native", "js"):
+        metadata = invoke(host, "info", path)
+        assert sum(item["storage"] == "csc" for item in metadata["arrays"]) == len(sparse_cases)
+        for operation in ("roundtrip", "compress"):
+            converted = fresh(OUT / f"{host}-sparse-{compressed}-{operation}.mat")
+            invoke(host, operation, path, converted)
+            actual = loadmat(converted)
+            assert_same(actual["dense_id"], np.array([[9007199254740993]], dtype="uint64"))
+            for name, expected in sparse_cases.items():
+                value = actual[name]
+                assert issparse(value) and value.shape == expected.shape
+                value = value.tocsc()
+                np.testing.assert_array_equal(value.indices, expected.indices)
+                np.testing.assert_array_equal(value.indptr, expected.indptr)
+                assert_same(value.data.reshape(1, -1), expected.data.reshape(1, -1))
+        record(f"{host}: mixed dense/CSC sparse file compressed={compressed}", "SciPy reads exact sparse shapes, pointers, values, explicit NaN/signed zero and uint64; no densification of billion-element shape")
+        denied = fresh(OUT / f"{host}-huge-dense.mat")
+        assert invoke(host, "densify", path, "sparse_huge", denied, ok=False)["code"] == "element-limit"
+        assert not denied.exists()
+        npy_denied = fresh(OUT / f"{host}-sparse-denied.npy")
+        assert invoke(host, "npy", path, "sparse_double", npy_denied, ok=False)["code"] == "explicit-densification-required"
+        assert not npy_denied.exists()
+
+for host in ("native", "js"):
+    dense_source = OUT / "sparse-expansion-source.mat"
+    negative_zero = np.array([0, 0x8000000000000000, 0x7ff8000000000042, 0], dtype="uint64").view("float64").reshape(2, 2, order="F")
+    savemat(dense_source, {"bits": negative_zero, "keep": np.array([[7]], dtype="int8")})
+    sparse_file = fresh(OUT / f"{host}-sparsify.mat")
+    dense_file = fresh(OUT / f"{host}-densify.mat")
+    invoke(host, "sparsify", dense_source, "bits", sparse_file)
+    assert loadmat(sparse_file)["bits"].nnz == 2
+    invoke(host, "densify", sparse_file, "bits", dense_file)
+    assert_same(loadmat(dense_file)["bits"], negative_zero)
+    assert_same(loadmat(dense_file)["keep"], np.array([[7]], dtype="int8"))
+    record(f"{host}: explicit sparse/dense conversion", "Signed zero and NaN payloads are retained as explicit entries; other variables survive")
+
+def independent_sparse(rows: list[int], cols: list[int], values: np.ndarray, shape: tuple[int, int], *, endian: str = ">", nzmax: int | None = None) -> bytes:
+    header = b"MATLAB 5.0 MAT-file, independent CSC fixture".ljust(116, b" ") + b"\0" * 8 + struct.pack(endian + "H", 256) + (b"MI" if endian == ">" else b"IM")
+    capacity = max(1, len(rows)) if nzmax is None else nzmax
+    payload = element(6, struct.pack(endian + "II", 5, capacity), endian)
+    payload += element(5, struct.pack(endian + "ii", *shape), endian)
+    payload += element(1, b"s", endian, small=True)
+    payload += element(5, np.asarray(rows, dtype=endian + "i4").tobytes(), endian)
+    payload += element(5, np.asarray(cols, dtype=endian + "i4").tobytes(), endian)
+    payload += element(9, values.astype(endian + "f8").tobytes(), endian)
+    return header + element(14, payload, endian)
+
+be_sparse = OUT / "independent-sparse-big-endian.mat"
+be_sparse.write_bytes(independent_sparse([0, 2, 123], [0, 1, 2], np.array([1.25, -0., 9.]), (3, 2), nzmax=5))
+for host in ("native", "js"):
+    metadata = invoke(host, "info", be_sparse)
+    assert metadata["source_endian"] == "big" and metadata["arrays"][0]["nzmax"] == 5 and metadata["arrays"][0]["stored_slots"] == 3
+    converted = fresh(OUT / f"{host}-sparse-big-endian.mat")
+    invoke(host, "roundtrip", be_sparse, converted)
+    expected = csc_matrix((np.array([1.25, -0.]), np.array([0, 2]), np.array([0, 1, 2])), shape=(3, 2))
+    actual = loadmat(converted)["s"].tocsc()
+    assert_same(actual.data.reshape(1, -1), expected.data.reshape(1, -1))
+    np.testing.assert_array_equal(actual.indices, expected.indices)
+    np.testing.assert_array_equal(actual.indptr, expected.indptr)
+    record(f"{host}: independent big-endian sparse/capacity fixture", "Python struct-built fixture; small name tag, nzmax and inactive slots retained")
+    for label, rows, cols, expected_code in [("pointers", [0], [0, 2, 1], "invalid-sparse"), ("row-range", [3], [0, 1, 1], "invalid-sparse"), ("row-order", [1, 0], [0, 2, 2], "noncanonical-sparse")]:
+        invalid_file = OUT / f"invalid-sparse-{label}.mat"
+        invalid_file.write_bytes(independent_sparse(rows, cols, np.zeros(len(rows)), (3, 2)))
+        assert invoke(host, "info", invalid_file, ok=False)["code"] == expected_code
+    record(f"{host}: invalid CSC pointers rows and ordering rejected")
+
 unsupported = {
     "cell": {"x": np.array([[1, "text"]], dtype=object)},
     "struct": {"x": {"field": np.array([[1]])}},
     "char": {"x": "hello"},
 }
-from scipy.sparse import csc_matrix
-unsupported["sparse"] = {"x": csc_matrix(np.eye(3))}
 for kind, value in unsupported.items():
     path = OUT / f"unsupported-{kind}.mat"
     savemat(path, value)

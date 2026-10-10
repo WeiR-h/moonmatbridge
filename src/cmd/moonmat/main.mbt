@@ -89,6 +89,8 @@ fn usage() -> String {
   "  moonmat select INPUT.mat OUTPUT.mat VARIABLE...\n" +
   "  moonmat transform INPUT.mat PLAN.json OUTPUT.mat\n" +
   "  moonmat compress INPUT.mat OUTPUT.mat\n" +
+  "  moonmat sparsify INPUT.mat VARIABLE OUTPUT.mat\n" +
+  "  moonmat densify INPUT.mat VARIABLE OUTPUT.mat\n" +
   "  moonmat sample OUTPUT.mat\n" +
   "  moonmat version\n" +
   "Output files must be new. MAT/NPY data remains column-major."
@@ -107,7 +109,7 @@ fn run(args : Array[String]) -> Unit raise @mat.MatError {
   } else if command == "sample" && args.length() == 3 {
     save(args[2], @mat.write_mat(@wire.sample()))
   } else if command == "info" && args.length() == 3 {
-    println(@wire.info(@mat.read_mat(read(args[2]))).stringify(indent=2))
+    println(@wire.document_info(@mat.read_document(read(args[2]))).stringify(indent=2))
   } else if command == "dump" && args.length() == 4 {
     let document = @wire.to_json(@mat.read_mat(read(args[2])).arrays).stringify(
         indent=2,
@@ -121,9 +123,11 @@ fn run(args : Array[String]) -> Unit raise @mat.MatError {
     }
     save(args[3], @mat.write_mat(@wire.from_json(text)))
   } else if command == "roundtrip" && args.length() == 4 {
-    save(args[3], @mat.write_mat(@mat.read_mat(read(args[2])).arrays))
+    save(args[3], @mat.write_document(@mat.read_document(read(args[2])).variables))
   } else if command == "compress" && args.length() == 4 {
-    save(args[3], @mat.write_mat(@mat.read_mat(read(args[2])).arrays, compressed=true))
+    save(args[3], @mat.write_document(@mat.read_document(read(args[2])).variables, compressed=true))
+  } else if (command == "sparsify" || command == "densify") && args.length() == 5 {
+    save(args[4], @mat.write_document(@mat.read_document(read(args[2])).convert_storage(args[3], command == "sparsify")))
   } else if command == "from-npy" && args.length() == 5 {
     save(args[4], @mat.write_mat([@mat.read_npy(read(args[2]), args[3])]))
   } else if command == "transform" && args.length() == 5 {
@@ -133,11 +137,12 @@ fn run(args : Array[String]) -> Unit raise @mat.MatError {
     save(args[4], @mat.write_mat(@wire.transform(@mat.read_mat(read(args[2])).arrays, plan)))
   } else if command == "select" && args.length() >= 5 {
     let names = Array::makei(args.length() - 4, fn(i) { args[i + 4] })
-    save(args[3], @mat.write_mat(@mat.read_mat(read(args[2])).select(names)))
+    save(args[3], @mat.write_document(@mat.read_document(read(args[2])).select(names)))
   } else if command == "npy" && args.length() == 5 {
-    let file = @mat.read_mat(read(args[2]))
+    let file = @mat.read_document(read(args[2]))
     match file.get(args[3]) {
-      Some(array) => save(args[4], @mat.write_npy(array))
+      Some(Dense(array)) => save(args[4], @mat.write_npy(array))
+      Some(Sparse(_)) => raise @mat.MatError("explicit-densification-required", 0, "Use densify before exporting sparse data to NPY")
       None =>
         raise @mat.MatError(
           "missing-variable",

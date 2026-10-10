@@ -184,11 +184,11 @@ fn matrix(
 }
 
 ///|
-/// Read dense MAT Level 5 arrays. Unknown classes fail explicitly; no variables are silently skipped.
-pub fn read_mat(
+/// Read dense and CSC sparse MAT Level 5. Unknown classes fail; nothing is silently skipped.
+pub fn read_document(
   bytes : Bytes,
   limits? : Limits = default_limits(),
-) -> MatFile raise MatError {
+) -> MatDocument raise MatError {
   validate_limits(limits)
   if bytes.length() > limits.max_file_bytes {
     fail("file-limit", 0, "File exceeds max_file_bytes")
@@ -216,7 +216,7 @@ pub fn read_mat(
     fail("unsupported-subsystem", 116, "Subsystem data is unsupported")
   }
   let description = @utf8.decode_lossy(bytes[0:116]).trim().to_owned()
-  let arrays : Array[NumericArray] = []
+  let arrays : Array[MatVariable] = []
   let names : Map[String, Bool] = Map([])
   let mut offset = 128
   let mut expanded = 0
@@ -227,7 +227,7 @@ pub fn read_mat(
     }
     let outer = tag(bytes, offset, bytes.length(), little)
     let array = if outer.kind == 14 {
-      matrix(bytes, outer, little, limits)
+      read_variable(bytes, outer, little, limits)
     } else if outer.kind == 15 {
       let unpacked = inflate_zlib(
         payload(bytes, outer),
@@ -240,23 +240,43 @@ pub fn read_mat(
           "invalid-compressed", offset, "Compressed element must contain exactly one miMATRIX",
         )
       }
-      matrix(unpacked, inner, little, limits)
+      read_variable(unpacked, inner, little, limits)
     } else {
       fail(
         "unsupported-element", offset, "Expected miMATRIX or miCOMPRESSED at file level",
       )
-      matrix(bytes, outer, little, limits)
+      read_variable(bytes, outer, little, limits)
     }
-    if names.contains(array.name) {
-      fail("duplicate-name", offset, "Duplicate variable name: " + array.name)
+    if names.contains(array.name()) {
+      fail("duplicate-name", offset, "Duplicate variable name: " + array.name())
     }
-    names[array.name] = true
-    if array.length() > limits.max_elements - elements {
+    names[array.name()] = true
+    if array.stored_elements() > limits.max_elements - elements {
       fail("element-limit", offset, "Total file elements exceed max_elements")
     }
-    elements = elements + array.length()
+    elements = elements + array.stored_elements()
     arrays.push(array)
     offset = outer.next
   }
-  { description, little_endian: little, arrays, }
+  { description, little_endian: little, variables: arrays }
+}
+
+///|
+fn read_variable(bytes : Bytes, outer : Element, little : Bool, limits : Limits) -> MatVariable raise MatError {
+  let flags = tag(bytes, outer.start, outer.start + outer.size, little)
+  if flags.kind != 6 || flags.size != 8 { fail("invalid-flags", outer.start, "Expected array flags") }
+  if (bits_at(bytes, flags.start, 4, little).to_uint() & 255U) == 5U {
+    Sparse(sparse_matrix(bytes, outer, little, limits))
+  } else { Dense(matrix(bytes, outer, little, limits)) }
+}
+
+///|
+/// Compatibility API for dense-only consumers. Sparse variables fail explicitly; use read_document for mixed files.
+pub fn read_mat(bytes : Bytes, limits? : Limits = default_limits()) -> MatFile raise MatError {
+  let document = read_document(bytes, limits~)
+  let arrays = document.variables.map(item => match item {
+    Dense(a) => a
+    Sparse(_) => { fail("unsupported-class", 0, "Sparse variable requires read_document"); abort("unreachable") }
+  })
+  { description: document.description, little_endian: document.little_endian, arrays }
 }

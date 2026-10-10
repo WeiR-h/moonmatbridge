@@ -6,6 +6,8 @@ import {
 }
 
 // Values
+pub fn document_info(@moonmatbridge.MatDocument) -> Json
+
 pub fn error_json(@moonmatbridge.MatError) -> Json
 
 pub fn from_json(String, limits? : @moonmatbridge.Limits) -> Array[@moonmatbridge.NumericArray] raise @moonmatbridge.MatError

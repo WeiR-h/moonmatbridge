@@ -20,11 +20,17 @@ pub fn numeric_array(String, DType, Array[Int], Array[Value], imaginary? : Array
 
 pub fn raw_array(String, DType, Array[Int], Bytes, imag? : Bytes, is_global? : Bool, limits? : Limits) -> NumericArray raise MatError
 
+pub fn raw_sparse_array(String, DType, Array[Int], Array[Int], Array[Int], Bytes, imag? : Bytes, nzmax? : Int, is_global? : Bool, limits? : Limits) -> SparseArray raise MatError
+
+pub fn read_document(Bytes, limits? : Limits) -> MatDocument raise MatError
+
 pub fn read_mat(Bytes, limits? : Limits) -> MatFile raise MatError
 
 pub fn read_npy(Bytes, String, limits? : Limits) -> NumericArray raise MatError
 
 pub fn version() -> String
+
+pub fn write_document(Array[MatVariable], compressed? : Bool, limits? : Limits) -> Bytes raise MatError
 
 pub fn write_mat(Array[NumericArray], compressed? : Bool, limits? : Limits) -> Bytes raise MatError
 
@@ -73,6 +79,16 @@ pub fn Limits::equal(Self, Self) -> Bool
 pub fn Limits::not_equal(Self, Self) -> Bool
 pub fn Limits::to_repr(Self) -> @debug.Repr
 
+pub(all) struct MatDocument {
+  description : String
+  little_endian : Bool
+  variables : Array[MatVariable]
+} derive(@debug.Debug)
+pub fn MatDocument::convert_storage(Self, String, Bool, limits? : Limits) -> Array[MatVariable] raise MatError
+pub fn MatDocument::get(Self, String) -> MatVariable?
+pub fn MatDocument::select(Self, Array[String]) -> Array[MatVariable] raise MatError
+pub fn MatDocument::to_repr(Self) -> @debug.Repr
+
 pub(all) struct MatFile {
   description : String
   little_endian : Bool
@@ -81,6 +97,14 @@ pub(all) struct MatFile {
 pub fn MatFile::get(Self, String) -> NumericArray?
 pub fn MatFile::select(Self, Array[String], limits? : Limits) -> Array[NumericArray] raise MatError
 pub fn MatFile::to_repr(Self) -> @debug.Repr
+
+pub(all) enum MatVariable {
+  Dense(NumericArray)
+  Sparse(SparseArray)
+} derive(@debug.Debug)
+pub fn MatVariable::name(Self) -> String
+pub fn MatVariable::stored_elements(Self) -> Int
+pub fn MatVariable::to_repr(Self) -> @debug.Repr
 
 pub(all) struct NumericArray {
   name : String
@@ -98,7 +122,23 @@ pub fn NumericArray::permute_axes(Self, Array[Int], limits? : Limits) -> Self ra
 pub fn NumericArray::reshape(Self, Array[Int], limits? : Limits) -> Self raise MatError
 pub fn NumericArray::slice(Self, Array[Int], Array[Int], steps? : Array[Int], limits? : Limits) -> Self raise MatError
 pub fn NumericArray::to_repr(Self) -> @debug.Repr
+pub fn NumericArray::to_sparse(Self, limits? : Limits) -> SparseArray raise MatError
 pub fn NumericArray::value(Self, Int, imaginary? : Bool) -> Value raise MatError
+
+pub(all) struct SparseArray {
+  name : String
+  dtype : DType
+  shape : Array[Int]
+  row_indices : Array[Int]
+  col_ptrs : Array[Int]
+  real : Bytes
+  imag : Bytes?
+  nzmax : Int
+  is_global : Bool
+} derive(@debug.Debug)
+pub fn SparseArray::nnz(Self) -> Int
+pub fn SparseArray::to_dense(Self, limits? : Limits) -> NumericArray raise MatError
+pub fn SparseArray::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Value {
   Signed(Int64)
