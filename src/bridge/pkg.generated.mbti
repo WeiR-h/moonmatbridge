@@ -2,6 +2,10 @@
 package "local/moonmatbridge/bridge"
 
 // Values
+pub fn compress_mat(Bytes) -> BinaryResult
+
+pub fn deflate_zlib(Bytes, Int) -> BinaryResult
+
 pub fn inflate_zlib(Bytes, Int) -> BinaryResult
 
 pub fn inspect_mat(Bytes) -> String

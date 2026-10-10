@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {deflateSync, constants} from 'node:zlib';
+import {deflateSync, inflateSync, constants} from 'node:zlib';
 import {createHash} from 'node:crypto';
 import {mkdirSync, writeFileSync} from 'node:fs';
 import {join} from 'node:path';
@@ -48,6 +48,17 @@ for (const input of corpus) {
 }
 assert.deepEqual([...blockTypes].sort(), [0, 1, 2]);
 record('RFC 1950/1951 differential corpus', {streams, strategies: 4, levels: 4, first_block_types: [...blockTypes].sort(), truncations, oracle: 'Node built-in zlib'});
+const encodedTypes = new Set();
+for (const input of corpus) {
+  const compressed = checked(api.deflate_zlib(input, 1024 * 1024));
+  encodedTypes.add((compressed[2] >>> 1) & 3);
+  assert.deepEqual(inflateSync(compressed), input);
+  assert.deepEqual(checked(api.deflate_zlib(input, 1024 * 1024)), compressed);
+}
+assert.deepEqual([...encodedTypes].sort(), [0, 1]);
+const zerosCompressed = checked(api.deflate_zlib(Buffer.alloc(120000), 120000));
+assert.ok(zerosCompressed.length < 1200);
+record('Original deterministic zlib encoder against Node decoder', {streams: corpus.length, block_types: [...encodedTypes].sort(), repetitive_bytes: 120000, compressed_bytes: zerosCompressed.length});
 const dictionary = Buffer.from('scientific dictionary');
 assert.equal(status(api.inflate_zlib(deflateSync(Buffer.from('dictionary data'), {dictionary}), 1024)).code, 'unsupported-zlib');
 record('preset dictionaries rejected explicitly');

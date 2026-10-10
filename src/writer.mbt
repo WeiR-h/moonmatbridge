@@ -5,7 +5,7 @@ fn append_element(out : Array[Byte], kind : Int, data : Bytes) -> Unit {
   for byte in data {
     out.push(byte)
   }
-  let padding = (8 - data.length() % 8) % 8
+  let padding = if kind == 15 { 0 } else { (8 - data.length() % 8) % 8 }
   for i = 0; i < padding; i = i + 1 {
     out.push(b'\x00')
   }
@@ -36,9 +36,10 @@ fn encoded_matrix(array : NumericArray) -> Bytes {
 }
 
 ///|
-/// Write deterministic, uncompressed, little-endian MAT Level 5. No timestamps or lossy numeric casts.
+/// Write deterministic little-endian MAT Level 5, optionally compressed. No timestamps or lossy casts.
 pub fn write_mat(
   arrays : Array[NumericArray],
+  compressed? : Bool = false,
   limits? : Limits = default_limits(),
 ) -> Bytes raise MatError {
   validate_limits(limits)
@@ -93,8 +94,22 @@ pub fn write_mat(
   out[125] = b'\x01'
   out[126] = b'I'
   out[127] = b'M'
+  let mut expanded = 0
   for array in arrays {
-    append_element(out, 14, encoded_matrix(array))
+    if compressed {
+      let matrix : Array[Byte] = []
+      append_element(matrix, 14, encoded_matrix(array))
+      if matrix.length() > limits.max_expanded_bytes - expanded {
+        fail("expanded-limit", 0, "Matrix exceeds expanded byte limit")
+      }
+      expanded = expanded + matrix.length()
+      let available = limits.max_file_bytes - out.length() - 8
+      if available < 6 { fail("file-limit", 0, "No room for compressed matrix") }
+      let encoded = deflate_zlib(Bytes::from_array(matrix), max_bytes=available)
+      append_element(out, 15, encoded)
+    } else {
+      append_element(out, 14, encoded_matrix(array))
+    }
   }
   Bytes::from_array(out)
 }

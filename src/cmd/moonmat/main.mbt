@@ -88,6 +88,7 @@ fn usage() -> String {
   "  moonmat from-npy INPUT.npy VARIABLE OUTPUT.mat\n" +
   "  moonmat select INPUT.mat OUTPUT.mat VARIABLE...\n" +
   "  moonmat transform INPUT.mat PLAN.json OUTPUT.mat\n" +
+  "  moonmat compress INPUT.mat OUTPUT.mat\n" +
   "  moonmat sample OUTPUT.mat\n" +
   "  moonmat version\n" +
   "Output files must be new. MAT/NPY data remains column-major."
@@ -121,6 +122,8 @@ fn run(args : Array[String]) -> Unit raise @mat.MatError {
     save(args[3], @mat.write_mat(@wire.from_json(text)))
   } else if command == "roundtrip" && args.length() == 4 {
     save(args[3], @mat.write_mat(@mat.read_mat(read(args[2])).arrays))
+  } else if command == "compress" && args.length() == 4 {
+    save(args[3], @mat.write_mat(@mat.read_mat(read(args[2])).arrays, compressed=true))
   } else if command == "from-npy" && args.length() == 5 {
     save(args[4], @mat.write_mat([@mat.read_npy(read(args[2]), args[3])]))
   } else if command == "transform" && args.length() == 5 {

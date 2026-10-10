@@ -34,6 +34,7 @@ try {
   else if (command === 'dump' && args.length === 2) save(args[1], checkedJSON(api.mat_to_json(read(args[0]))) + '\n');
   else if (command === 'pack' && args.length === 2) save(args[1], bytes(api.json_to_mat(new TextDecoder('utf-8', {fatal: true}).decode(read(args[0])))));
   else if (command === 'roundtrip' && args.length === 2) save(args[1], bytes(api.roundtrip_mat(read(args[0]))));
+  else if (command === 'compress' && args.length === 2) save(args[1], bytes(api.compress_mat(read(args[0]))));
   else if (command === 'npy' && args.length === 3) save(args[2], bytes(api.mat_to_npy(read(args[0]), args[1])));
   else if (command === 'from-npy' && args.length === 3) save(args[2], bytes(api.npy_to_mat(read(args[0]), args[1])));
   else if (command === 'select' && args.length >= 3) save(args[1], bytes(api.select_mat(read(args[0]), args.slice(2))));

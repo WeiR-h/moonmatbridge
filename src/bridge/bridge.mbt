@@ -100,3 +100,15 @@ pub fn npy_to_mat(bytes : Bytes, name : String) -> BinaryResult {
 pub fn transform_mat(bytes : Bytes, plan : String) -> BinaryResult {
   binary(() => @mat.write_mat(@wire.transform(@mat.read_mat(bytes).arrays, plan)))
 }
+
+///|
+#export_name("compress_mat")
+pub fn compress_mat(bytes : Bytes) -> BinaryResult {
+  binary(() => @mat.write_mat(@mat.read_mat(bytes).arrays, compressed=true))
+}
+
+///|
+#export_name("deflate_zlib")
+pub fn deflate_zlib(bytes : Bytes, limit : Int) -> BinaryResult {
+  binary(() => @mat.deflate_zlib(bytes, max_bytes=limit))
+}

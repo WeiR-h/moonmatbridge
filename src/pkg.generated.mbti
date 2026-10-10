@@ -10,6 +10,8 @@ pub fn concat_arrays(String, Array[NumericArray], Int, limits? : Limits) -> Nume
 
 pub fn default_limits() -> Limits
 
+pub fn deflate_zlib(Bytes, max_bytes? : Int) -> Bytes raise MatError
+
 pub fn dtype_from_name(String) -> DType raise MatError
 
 pub fn inflate_zlib(Bytes, max_bytes? : Int) -> Bytes raise MatError
@@ -24,7 +26,7 @@ pub fn read_npy(Bytes, String, limits? : Limits) -> NumericArray raise MatError
 
 pub fn version() -> String
 
-pub fn write_mat(Array[NumericArray], limits? : Limits) -> Bytes raise MatError
+pub fn write_mat(Array[NumericArray], compressed? : Bool, limits? : Limits) -> Bytes raise MatError
 
 pub fn write_npy(NumericArray, limits? : Limits) -> Bytes raise MatError
 
