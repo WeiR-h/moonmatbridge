@@ -76,8 +76,32 @@ pub fn transform(
       }
       out[index] = changed
     }
+    @mat.validate_document(out.map(fn(a) { @mat.Dense(a) }), limits~)
   }
   // Revalidate the aggregate, not only each transformed variable.
   @mat.validate_document(out.map(fn(a) { @mat.Dense(a) }), limits~)
+  out
+}
+
+///|
+/// Transform dense variables in a mixed document while preserving all CSC variables and original order.
+pub fn transform_document(
+  variables : Array[@mat.MatVariable],
+  plan : String,
+  limits? : @mat.Limits = @mat.default_limits(),
+) -> Array[@mat.MatVariable] raise @mat.MatError {
+  @mat.validate_document(variables, limits~)
+  let dense = []
+  for item in variables { if item is Dense(a) { dense.push(a) } }
+  let changed = transform(dense, plan, limits~)
+  let by_name : Map[String, @mat.NumericArray] = Map([])
+  for item in changed { by_name[item.name] = item }
+  let seen : Map[String, Bool] = Map([])
+  let out = variables.map(fn(item) {
+    seen[item.name()] = true
+    match item { Dense(a) => @mat.Dense(by_name[a.name]); Sparse(_) => item }
+  })
+  for item in changed { if !seen.contains(item.name) { out.push(@mat.Dense(item)) } }
+  @mat.validate_document(out, limits~)
   out
 }

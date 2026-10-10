@@ -35,6 +35,11 @@ try {
   else if (command === 'pack' && args.length === 2) save(args[1], bytes(api.json_to_mat(new TextDecoder('utf-8', {fatal: true}).decode(read(args[0])))));
   else if (command === 'snapshot' && args.length === 2) save(args[1], checkedJSON(api.mat_to_snapshot(read(args[0]))) + '\n');
   else if (command === 'restore' && args.length === 2) save(args[1], bytes(api.snapshot_to_mat(new TextDecoder('utf-8', {fatal: true}).decode(read(args[0])))));
+  else if (command === 'diff' && (args.length === 2 || args.length === 3)) {
+    const report = checkedJSON(api.compare_mat(read(args[0]), read(args[1])));
+    if (args.length === 3) save(args[2], report + '\n'); else console.log(report);
+    process.exitCode = JSON.parse(report).content_equal ? 0 : 2;
+  }
   else if (command === 'roundtrip' && args.length === 2) save(args[1], bytes(api.roundtrip_mat(read(args[0]))));
   else if (command === 'compress' && args.length === 2) save(args[1], bytes(api.compress_mat(read(args[0]))));
   else if (['sparsify', 'densify'].includes(command) && args.length === 3) save(args[2], bytes(api.convert_storage(read(args[0]), args[1], command === 'sparsify')));

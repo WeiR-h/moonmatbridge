@@ -2,6 +2,8 @@
 package "local/moonmatbridge/bridge"
 
 // Values
+pub fn compare_mat(Bytes, Bytes) -> String
+
 pub fn compress_mat(Bytes) -> BinaryResult
 
 pub fn convert_storage(Bytes, String, Bool) -> BinaryResult

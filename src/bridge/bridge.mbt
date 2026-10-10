@@ -99,7 +99,7 @@ pub fn npy_to_mat(bytes : Bytes, name : String) -> BinaryResult {
 ///|
 #export_name("transform_mat")
 pub fn transform_mat(bytes : Bytes, plan : String) -> BinaryResult {
-  binary(() => @mat.write_mat(@wire.transform(@mat.read_mat(bytes).arrays, plan)))
+  binary(() => @mat.write_document(@wire.transform_document(@mat.read_document(bytes).variables, plan)))
 }
 
 ///|
@@ -132,4 +132,12 @@ pub fn mat_to_snapshot(bytes : Bytes) -> String {
 #export_name("snapshot_to_mat")
 pub fn snapshot_to_mat(text : String) -> BinaryResult {
   binary(() => @mat.write_document(@wire.from_snapshot(text)))
+}
+
+///|
+#export_name("compare_mat")
+pub fn compare_mat(left : Bytes, right : Bytes) -> String {
+  @wire.diff_json(@mat.compare_documents(@mat.read_document(left), @mat.read_document(right))).stringify() catch {
+    error => @wire.error_json(error).stringify()
+  }
 }

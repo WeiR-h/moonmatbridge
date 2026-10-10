@@ -6,6 +6,8 @@ import {
 }
 
 // Values
+pub fn diff_json(@moonmatbridge.DocumentDifference) -> Json
+
 pub fn document_info(@moonmatbridge.MatDocument) -> Json
 
 pub fn error_json(@moonmatbridge.MatError) -> Json
@@ -23,6 +25,8 @@ pub fn to_json(Array[@moonmatbridge.NumericArray]) -> Json raise @moonmatbridge.
 pub fn to_snapshot(Array[@moonmatbridge.MatVariable], limits? : @moonmatbridge.Limits) -> String raise @moonmatbridge.MatError
 
 pub fn transform(Array[@moonmatbridge.NumericArray], String, limits? : @moonmatbridge.Limits) -> Array[@moonmatbridge.NumericArray] raise @moonmatbridge.MatError
+
+pub fn transform_document(Array[@moonmatbridge.MatVariable], String, limits? : @moonmatbridge.Limits) -> Array[@moonmatbridge.MatVariable] raise @moonmatbridge.MatError
 
 // Errors
 

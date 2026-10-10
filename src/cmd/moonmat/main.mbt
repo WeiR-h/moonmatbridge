@@ -93,6 +93,7 @@ fn usage() -> String {
   "  moonmat densify INPUT.mat VARIABLE OUTPUT.mat\n" +
   "  moonmat snapshot INPUT.mat OUTPUT.json\n" +
   "  moonmat restore SNAPSHOT.json OUTPUT.mat\n" +
+  "  moonmat diff LEFT.mat RIGHT.mat [REPORT.json]\n" +
   "  moonmat sample OUTPUT.mat\n" +
   "  moonmat version\n" +
   "Output files must be new. MAT/NPY data remains column-major."
@@ -130,6 +131,11 @@ fn run(args : Array[String]) -> Unit raise @mat.MatError {
   } else if command == "restore" && args.length() == 4 {
     let text = @utf8.decode(read(args[2])[:]) catch { _ => raise @mat.MatError("invalid-utf8", 0, "Snapshot must be UTF-8") }
     save(args[3], @mat.write_document(@wire.from_snapshot(text)))
+  } else if command == "diff" && (args.length() == 4 || args.length() == 5) {
+    let report = @mat.compare_documents(@mat.read_document(read(args[2])), @mat.read_document(read(args[3])))
+    let text = @wire.diff_json(report).stringify() + "\n"
+    if args.length() == 5 { save(args[4], @utf8.encode(text[:])) } else { println(text.trim().to_owned()) }
+    if !report.content_equal { exit_process(2) }
   } else if command == "roundtrip" && args.length() == 4 {
     save(args[3], @mat.write_document(@mat.read_document(read(args[2])).variables))
   } else if command == "compress" && args.length() == 4 {
@@ -142,7 +148,7 @@ fn run(args : Array[String]) -> Unit raise @mat.MatError {
     let plan = @utf8.decode(read(args[3])[:]) catch {
       _ => raise @mat.MatError("invalid-utf8", 0, "Transform plan must be UTF-8")
     }
-    save(args[4], @mat.write_mat(@wire.transform(@mat.read_mat(read(args[2])).arrays, plan)))
+    save(args[4], @mat.write_document(@wire.transform_document(@mat.read_document(read(args[2])).variables, plan)))
   } else if command == "select" && args.length() >= 5 {
     let names = Array::makei(args.length() - 4, fn(i) { args[i + 4] })
     save(args[3], @mat.write_document(@mat.read_document(read(args[2])).select(names)))

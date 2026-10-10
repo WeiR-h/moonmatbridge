@@ -6,6 +6,8 @@ import {
 }
 
 // Values
+pub fn compare_documents(MatDocument, MatDocument, max_samples? : Int, limits? : Limits) -> DocumentDifference raise MatError
+
 pub fn concat_arrays(String, Array[NumericArray], Int, limits? : Limits) -> NumericArray raise MatError
 
 pub fn default_limits() -> Limits
@@ -68,6 +70,23 @@ pub fn DType::name(Self) -> String
 pub fn DType::not_equal(Self, Self) -> Bool
 pub fn DType::to_repr(Self) -> @debug.Repr
 pub fn DType::width(Self) -> Int
+
+pub(all) struct DifferenceSample {
+  plane : String
+  index : Int
+  coordinates : Array[Int]
+  before : Bytes
+  after : Bytes
+} derive(@debug.Debug)
+pub fn DifferenceSample::to_repr(Self) -> @debug.Repr
+
+pub(all) struct DocumentDifference {
+  content_equal : Bool
+  variable_order_changed : Bool
+  changed_variables : Int
+  variables : Array[VariableDifference]
+} derive(@debug.Debug)
+pub fn DocumentDifference::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Limits {
   max_file_bytes : Int
@@ -149,6 +168,17 @@ pub(all) enum Value {
   Boolean(Bool)
 } derive(@debug.Debug)
 pub fn Value::to_repr(Self) -> @debug.Repr
+
+pub(all) struct VariableDifference {
+  name : String
+  status : String
+  metadata : Array[String]
+  real_differences : Int
+  imag_differences : Int
+  samples : Array[DifferenceSample]
+  truncated : Bool
+} derive(@debug.Debug)
+pub fn VariableDifference::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 
