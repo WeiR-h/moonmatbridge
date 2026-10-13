@@ -1,6 +1,6 @@
 import {
-  "local/moonmatbridge" @mat,
-  "local/moonmatbridge/interchange" @wire,
+  "WeiR-h/moonmatbridge" @mat,
+  "WeiR-h/moonmatbridge/interchange" @wire,
   "moonbitlang/core/env",
   "moonbitlang/core/encoding/utf8",
 }

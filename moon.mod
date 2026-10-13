@@ -1,12 +1,14 @@
-name = "local/moonmatbridge"
+name = "WeiR-h/moonmatbridge"
 
-version = "0.0.3"
+version = "0.0.4"
 
 source = "src"
 
 readme = "README.md"
 
 license = "Apache-2.0"
+
+repository = "https://github.com/WeiR-h/moonmatbridge"
 
 keywords = [ "matlab", "mat", "scientific-data", "interop" ]
 

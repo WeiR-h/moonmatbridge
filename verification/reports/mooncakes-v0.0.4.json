@@ -1,0 +1,20 @@
+{
+  "status": "passed",
+  "module": "WeiR-h/moonmatbridge",
+  "version": "0.0.4",
+  "url": "https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.0.4",
+  "public_manifest_url": "https://mooncakes.io/api/v0/manifest/WeiR-h/moonmatbridge",
+  "created_at": "2026-10-13T11:28:36.035912+00:00",
+  "build_status": "success",
+  "archive_sha256": "23188b2c7b75f19d51560dd4b6961ce4d990c75d080d53522f23597b78c7f3b7",
+  "packaged_files": 69,
+  "installed_source_files": 48,
+  "targets": [
+    "js",
+    "wasm-gc",
+    "native"
+  ],
+  "consumer_tests_per_target": 5,
+  "public_manifest_authenticated": false,
+  "scope": "Public Mooncakes package and successful fresh consumer installation; organizer acceptance is separate."
+}

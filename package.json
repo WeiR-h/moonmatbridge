@@ -1,6 +1,6 @@
 {
   "name": "moonmatbridge",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "private": true,
   "type": "module",
   "description": "Native MoonBit MAT Level 5 scientific data interoperability library",
@@ -11,6 +11,7 @@
     "build": "node scripts/moon.mjs build src/bridge --target js --release --deny-warn",
     "build:native": "node scripts/build-native.mjs",
     "verify": "node scripts/verify.mjs",
+    "verify:registry": "node scripts/registry-verify.mjs",
     "package": "node scripts/package.mjs"
   },
   "engines": {

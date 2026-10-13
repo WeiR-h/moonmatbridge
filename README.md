@@ -1,10 +1,10 @@
-# MoonMatBridge v0.0.3
+# MoonMatBridge v0.0.4
 
 **MoonBit 原生 MAT Level 5 数值读写与科研数据互操作库。**
 
 MAT 密集/CSC 稀疏读写、数值编码、zlib/DEFLATE 解压与压缩、JSON/无损快照、NPY 互通和精确差异检查都由 MoonBit 实现。运行核心库和 Windows 命令行程序不需要 MATLAB、Python、SciPy、Node.js 或第三方压缩库。Node.js 仅用于开发脚本与可选 JS 命令行；SciPy/NumPy 仅用作独立兼容性验证。
 
-首版 [v0.0.1](https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.0.1) 和 [v0.0.2](https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.0.2) 已公开发布。当前源码版本为 v0.0.3，完成五轮核心迭代，详见 [迭代记录](docs/ITERATIONS-v0.0.3.md)。
+当前源码版本为 v0.0.4，发布模块名为 `WeiR-h/moonmatbridge`。[v0.0.3](https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.0.3) 完成的五轮核心迭代继续保留，详见 [迭代记录](docs/ITERATIONS-v0.0.3.md)。本版新增 Mooncakes 发布配置与独立安装验证。
 
 项目定位是把科研数组**连同类型、维度、列优先顺序和复数分量一起保留下来**，让 MoonBit 项目直接交换 MATLAB/Python 数据。
 
@@ -17,7 +17,7 @@ MAT 密集/CSC 稀疏读写、数值编码、zlib/DEFLATE 解压与压缩、JSON
 
 ## 支持范围
 
-| 能力 | v0.0.3 |
+| 能力 | v0.0.4 |
 | --- | --- |
 | MAT Level 5 读取 | 小端、大端；标准标签与小数据标签；多变量 |
 | 压缩读取 | `miCOMPRESSED`；MoonBit 解码 stored/fixed/dynamic DEFLATE，验证 Adler-32 |
@@ -72,7 +72,13 @@ JS 适配器只读写文件；格式处理使用编译后的 MoonBit。
 
 ## MoonBit API
 
-当前模块名为 `local/moonmatbridge`，用于本地开发；尚未发布到 Mooncakes。核心代码在 `src/`，公开接口在 `src/pkg.generated.mbti`。包内示例可直接运行：
+发布模块名为 [`WeiR-h/moonmatbridge`](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.0.4)。在已有 MoonBit 项目中安装：
+
+```powershell
+moon add WeiR-h/moonmatbridge@0.0.4
+```
+
+核心代码在 `src/`，公开接口在 `src/pkg.generated.mbti`。包内示例可直接运行：
 
 ```powershell
 moon run src/examples/main --target js
@@ -84,7 +90,7 @@ moon run src/examples/main --target native
 
 ```moonbit
 import {
-  "local/moonmatbridge" @mat,
+  "WeiR-h/moonmatbridge" @mat,
 }
 ```
 
@@ -143,9 +149,12 @@ npm run build
 npm run build:native
 npm run verify
 npm run package
+ npm run verify:registry
 ```
 
 开发脚本优先使用 `MOON_HOME` / `MOONMAT_MOON`，也能读取忽略提交的 `.local-toolchain.json`，字段为 `moonHome`、`gcc`。Windows C 编译器可以通过 `MOONMAT_GCC` 指定；独立验证 Python 可以通过 `MOONMAT_PYTHON` 指定。不会修改系统 PATH、用户配置或已有项目。
+
+`npm run verify:registry` 创建独立项目，使用固定版本的 `moon add` 下载依赖；禁止本地 workspace/path 替代，核对已下载源码，并在 JS、wasm-gc、native 上验证五个完整消费者场景。示例位于 [examples/registry_consumer](examples/registry_consumer/)。发布时使用 `.moonignore` 的明确文件范围，并通过 `moon package --list` 核对；开发工具、构建输出、个人报名材料及验证工作目录不进入 Mooncakes 包。
 
 本地验证使用 MoonBit `0.1.20260920 (914d7da)`、Node `v24.13.0`、GCC `16.2.0`、Python `3.12.5`、SciPy `1.15.3`、NumPy `2.2.6`。`scripts/verify.mjs` 执行三目标测试、直接示例、构建、压缩差分测试和真实文件互通，并记录源文件指纹。
 

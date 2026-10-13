@@ -1,6 +1,6 @@
-# MoonBit API v0.0.3
+# MoonBit API v0.0.4
 
-The core package is `local/moonmatbridge`. The executable, JSON adapter and JS ABI are separate packages; core parsing performs no host I/O.
+The core package is `WeiR-h/moonmatbridge`. The executable, JSON adapter and JS ABI are separate packages; core parsing performs no host I/O.
 
 | API | Behavior |
 | --- | --- |
@@ -38,7 +38,7 @@ Array methods: `length()`, `is_complex()`, `index(coordinates)`, `value(linear_i
 
 `MatError(code, offset, message)` has `code()`, `offset()`, `message()`. Offsets are relative to the current input stream; inside a compressed element, offsets may refer to expanded matrix bytes or the zlib stream. Constructor/writer validation uses offset zero. Do not interpret a compressed error offset as an absolute file position.
 
-The `local/moonmatbridge/interchange` package exports `from_json`, `to_json`, `info`, `document_info`, `error_json`, `sample`, `transform`, `transform_document`, `to_snapshot`, `from_snapshot` and `diff_json`. Wire contracts are documented in [JSON.md](JSON.md). `to_snapshot` returns compact JSON text; `from_snapshot` returns mixed `MatVariable` values.
+The `WeiR-h/moonmatbridge/interchange` package exports `from_json`, `to_json`, `info`, `document_info`, `error_json`, `sample`, `transform`, `transform_document`, `to_snapshot`, `from_snapshot` and `diff_json`. Wire contracts are documented in [JSON.md](JSON.md). `to_snapshot` returns compact JSON text; `from_snapshot` returns mixed `MatVariable` values.
 
 The JS foreign library exposes:
 
@@ -57,6 +57,6 @@ Exports: `npy_to_mat`, `select_mat`, `inspect_mat`, `mat_to_json`, `json_to_mat`
 
 `DocumentDifference` reports `content_equal`, `variable_order_changed`, `changed_variables`, `variables`. Metadata differences list dtype, shape, global/complex, storage or CSC pointers/rows/capacity. Comparable value changes are counted separately per real/imaginary plane; samples contain a zero-based linear/CSC-slot index, coordinates and exact before/after bytes. Inactive CSC slots have empty coordinates. Shape/type/storage/index-mapping changes are metadata differences, not fabricated element-by-element matches. File descriptions/endian/compression are excluded, while CSC storage metadata is included. No floating tolerance is applied.
 
-`src/pkg.generated.mbti` and the interfaces under `src/interchange` and `src/bridge` contain the complete compiler-generated signatures. Source consumers can include this local module in a MoonBit workspace; there is no registered Mooncakes package yet.
+`src/pkg.generated.mbti` and the interfaces under `src/interchange` and `src/bridge` contain the complete compiler-generated signatures. Install the exact registry version with `moon add WeiR-h/moonmatbridge@0.0.4`, then import the core and/or interchange package. `examples/registry_consumer` contains a consumer that uses only these public interfaces; the registry verification script resolves a fresh copy and checks its source bytes before running all three targets.
 
 NPY input supports primitive float32/64, complex64/128, signed/unsigned integers and bool. Header strings must be plain ASCII, the header fits 64 KiB and no duplicate/unknown keys or trailing payload are accepted. Structured, object/pickle, string, datetime, float16 and ambiguous native-endian descriptors are rejected. NPY scalars become `[1,1]` and vectors become `[n,1]`; multidimensional shape is unchanged. Nonzero bool bytes normalize to canonical 1. All numerical bytes, including nonfinite payloads and exact 64-bit integers, are copied without scalar conversion.

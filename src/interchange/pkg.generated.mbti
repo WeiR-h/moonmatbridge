@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "local/moonmatbridge/interchange"
+package "WeiR-h/moonmatbridge/interchange"
 
 import {
-  "local/moonmatbridge",
+  "WeiR-h/moonmatbridge",
 }
 
 // Values

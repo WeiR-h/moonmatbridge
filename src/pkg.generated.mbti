@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "local/moonmatbridge"
+package "WeiR-h/moonmatbridge"
 
 import {
   "moonbitlang/core/debug",

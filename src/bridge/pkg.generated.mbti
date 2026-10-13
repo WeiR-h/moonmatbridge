@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "local/moonmatbridge/bridge"
+package "WeiR-h/moonmatbridge/bridge"
 
 // Values
 pub fn compare_mat(Bytes, Bytes) -> String
