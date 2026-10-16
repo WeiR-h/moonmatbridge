@@ -18,6 +18,8 @@ powershell -ExecutionPolicy Bypass -File examples/workflows/demo.ps1
 
 输入 `examples/mixed/research-mixed.mat` 有 13 个根变量，组合实验记录 struct、分组 cell、中文和非 BMP char、legacy 类名与字段、精确 uint64、复数、logical、CSC、空数组与多维数组。执行根目录检查、压缩和写回。
 
+另附 `examples/workflows/all-base-classes.mat`，将全部 15 个公开基本类、数值多维/空多维和交叉嵌套集中到一个可下载文件中。根目录检查确认类集合 1—15，再由两宿主写回并接受独立核对；原件同时作为发行页单独附件提供。
+
 SciPy 独立读入原件与两份输出，递归比较字段顺序、形状、字符、数值类型和小端原始数值字节。MAT 头部说明和压缩布局可以变化。完整混合树 diff/快照不属于本轮，归档验收采用独立深比较。
 
 ## 场景二：大型稀疏仿真交换

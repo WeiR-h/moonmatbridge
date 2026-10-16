@@ -14,6 +14,8 @@ powershell -ExecutionPolicy Bypass -File examples/workflows/demo.ps1
 
 输入由 `examples/python/workflow_inputs.py` 用 NumPy/SciPy 独立生成；固定 NaN 原始位、负零、CSC 行索引和列指针。`manifest.json` 给出输入哈希。混合归档输入见相邻的 `examples/mixed`。
 
+`all-base-classes.mat` 另将全部 15 个公开基本类集中到一个文件，包含各数值类型的多维、空多维和交叉嵌套。演示检查类集合并写回，独立验证递归核对其数据。
+
 开发者运行 `npm run verify`，其中 `scripts/scientific-workflows.py` 在 native 和 JS 上执行这三个流程，并由 NumPy/SciPy 逐项核对原始字节、维度、字段、CSC 容量和指针。此独立核对需要 Python 开发依赖，便携演示运行不需要。
 
 完整混合树的快照和 diff 尚未实现，归档流程由独立 SciPy 深比较验收；快照/diff 的演示使用数值或 CSC 文件。这里的案例是可复现示例，不代表外部采用或主办方验收通过。

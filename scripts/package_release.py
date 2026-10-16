@@ -52,13 +52,13 @@ def extract(archive: Path, destination: Path) -> Path:
 
 source_name = f"MoonMatBridge-v{VERSION}-source"
 source_zip = DIST / f"{source_name}.zip"
-excluded = {".git", "_build", ".moon", ".venv", ".local-tools", "dist", "node_modules", "__pycache__"}
+excluded = {".git", "_build", ".moon", ".venv", ".local-tools", "dist", "node_modules", "__pycache__", ".pytest_cache"}
 with zipfile.ZipFile(source_zip, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as z:
     for directory, directories, files in os.walk(ROOT):
         directory = Path(directory)
         directories[:] = [name for name in directories if name not in excluded and (directory / name) != LOCAL]
         for name in sorted(files):
-            if name == ".local-toolchain.json" or name.endswith(".pyc"):
+            if name in {".git", ".local-toolchain.json", "SOURCE_SHA256.txt"} or name.endswith(".pyc"):
                 continue
             add(z, directory / name, source_name)
     z.writestr(f"{source_name}/SOURCE_SHA256.txt", source_hash + "\n")
