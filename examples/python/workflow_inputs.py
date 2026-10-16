@@ -46,7 +46,7 @@ def generate(directory):
     manifest = {"producer": "NumPy/SciPy; deterministic header and exact binary input bits",
                 "files": [{"file": name, "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()}
                           for name, data in files.items()]}
-    (directory / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    (directory / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8", newline="\n")
 
 
 if __name__ == "__main__":
