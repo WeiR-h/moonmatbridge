@@ -1,4 +1,17 @@
 ///|
+fn append_element(out : Array[Byte], kind : Int, data : Bytes) -> Unit {
+  push_bits(out, kind.to_uint64(), 4)
+  push_bits(out, data.length().to_uint64(), 4)
+  for byte in data {
+    out.push(byte)
+  }
+  let padding = if kind == 15 { 0 } else { (8 - data.length() % 8) % 8 }
+  for i = 0; i < padding; i = i + 1 {
+    out.push(b'\x00')
+  }
+}
+
+///|
 fn mixed_tree() -> Array[MatNode] raise MatError {
   let number = numeric_array("temporary", UInt64, [1, 1], [
     Unsigned(18446744073709551615UL),
@@ -246,7 +259,7 @@ test "root anonymous names fail while zero-size nested matrix canonicalizes empt
     values: [Numeric(number)],
     is_global: false,
   }
-  let body = encoded_node(Cell(a)).to_array()
+  let body = write_tree([Cell(a)])[136:].to_owned().to_array()
   let dims = tag(Bytes::from_array(body), 16, body.length(), true)
   let name = tag(Bytes::from_array(body), dims.next, body.length(), true)
   let short = body[0:name.next].to_owned()

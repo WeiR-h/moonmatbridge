@@ -1,10 +1,10 @@
-# MoonMatBridge v0.0.6
+# MoonMatBridge v0.0.7
 
 **MoonBit 原生 MAT Level 5 读写与科研数据互操作库。**
 
 MAT 递归 cell/struct/char/legacy object、密集/CSC 稀疏读写、数值编码、zlib/DEFLATE 解压与压缩、JSON/无损快照、NPY 互通和精确差异检查都由 MoonBit 实现。运行核心库和 Windows 命令行程序不需要 MATLAB、Python、SciPy、Node.js 或第三方压缩库。Node.js 仅用于开发脚本与可选 JS 命令行；SciPy/NumPy 仅用作独立兼容性验证。
 
-当前源码版本为 v0.0.6，发布模块名为 `WeiR-h/moonmatbridge`。[v0.0.3](https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.0.3) 完成的五轮核心迭代继续保留，详见 [迭代记录](docs/ITERATIONS-v0.0.3.md)。本版补齐 cell、struct、char 和 legacy object 的递归读写，提供可下载混合文件与独立验证；[最终读写范围与验收终点](docs/COMPATIBILITY.md) 明确全部公开基本类 1–15 的交付目标。
+当前源码版本为 v0.0.7，发布模块名为 `WeiR-h/moonmatbridge`。[v0.0.3](https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.0.3) 完成的五轮核心迭代继续保留，详见 [迭代记录](docs/ITERATIONS-v0.0.3.md)。本版补齐 cell、struct、char 和 legacy object 的递归读写，提供可下载混合文件与独立验证；[最终读写范围与验收终点](docs/COMPATIBILITY.md) 明确全部公开基本类 1–15 的交付目标。
 
 项目定位是把科研数组**连同类型、维度、列优先顺序和复数分量一起保留下来**，让 MoonBit 项目直接交换 MATLAB/Python 数据。
 
@@ -15,13 +15,15 @@ MAT 递归 cell/struct/char/legacy object、密集/CSC 稀疏读写、数值编�
 
 这些能力共同服务于可复现的科研文件交换；范围比较与已有项目的交集见 [独特性说明](docs/DIFFERENTIATION.md)。
 
-后续开发安排见 [v0.0.6—v0.0.9 更新计划](docs/NEXT_RELEASES.md)：优先完成兼容证据、建立性能基准，再优化读写与按需读取。文中的性能数字是待验证目标。
+后续开发安排见 [v0.0.7—v0.0.9 更新计划](docs/NEXT_RELEASES.md)：优先完成兼容证据、建立性能基准，再优化读写与按需读取。文中的性能数字是待验证目标。
 
 v0.0.6 新增 [15 个基本类的独立读写矩阵](docs/COMPATIBILITY_MATRIX.md)、真实 GNU Octave v6/v7 双向验证入口，以及 [同机性能对照方法](docs/PERFORMANCE.md)。运行报告分别记录已经验证的行为和未关闭的兼容缺口。
 
+v0.0.7 将密集、CSC 与混合树写入统一到预检尺寸的固定缓冲，避免逐层复制；完整输入验证后才分配主要输出。性能结果按宿主与场景分别记录。
+
 ## 支持范围
 
-| 能力 | v0.0.6 |
+| 能力 | v0.0.7 |
 | --- | --- |
 | MAT Level 5 读取 | 小端、大端；标准标签与小数据标签；多变量 |
 | 压缩读取 | `miCOMPRESSED`；MoonBit 解码 stored/fixed/dynamic DEFLATE，验证 Adler-32 |
@@ -80,10 +82,10 @@ JS 适配器只读写文件；格式处理使用编译后的 MoonBit。
 
 ## MoonBit API
 
-发布模块名为 [`WeiR-h/moonmatbridge`](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.0.6)。在已有 MoonBit 项目中安装：
+发布模块名为 [`WeiR-h/moonmatbridge`](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.0.7)。在已有 MoonBit 项目中安装：
 
 ```powershell
-moon add WeiR-h/moonmatbridge@0.0.6
+moon add WeiR-h/moonmatbridge@0.0.7
 ```
 
 核心代码在 `src/`，公开接口在 `src/pkg.generated.mbti`。包内示例可直接运行：
