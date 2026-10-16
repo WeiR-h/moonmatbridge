@@ -1,4 +1,23 @@
 ///|
+/// CSC has fixed-width int32 units. Decode a word directly rather than running
+/// the generic variable-width scalar loop for every stored row and pointer.
+fn csc_index_at(bytes : Bytes, offset : Int, little : Bool) -> Int {
+  let word = bytes[offset].to_uint() |
+    (bytes[offset + 1].to_uint() << 8) |
+    (bytes[offset + 2].to_uint() << 16) |
+    (bytes[offset + 3].to_uint() << 24)
+  let word = if little {
+    word
+  } else {
+    (word >> 24) |
+      ((word >> 8) & 0xff00U) |
+      ((word << 8) & 0xff0000U) |
+      (word << 24)
+  }
+  word.reinterpret_as_int()
+}
+
+///|
 fn sparse_matrix_read(
   bytes : Bytes,
   outer : Element,
@@ -99,7 +118,7 @@ fn sparse_matrix_read(
       fail("element-limit", 0, "Sparse capacity is smaller than stored slots")
     }
     let pointer = fn(i : Int) {
-      bits_at(bytes, jc.start + i * 4, 4, little).to_uint().reinterpret_as_int()
+      csc_index_at(bytes, jc.start + i * 4, little)
     }
     if pointer(0) != 0 || pointer(shape[1]) > slots {
       fail(
@@ -123,9 +142,7 @@ fn sparse_matrix_read(
       }
       let mut previous = -1
       for i = start; i < end; i = i + 1 {
-        let row = bits_at(bytes, ir.start + i * 4, 4, little)
-          .to_uint()
-          .reinterpret_as_int()
+        let row = csc_index_at(bytes, ir.start + i * 4, little)
         if row < 0 || row >= shape[0] {
           fail("invalid-sparse", i, "Sparse row is outside dimensions")
         }
@@ -140,10 +157,10 @@ fn sparse_matrix_read(
     return (None, slots)
   }
   let rows = Array::makei(slots, i => {
-    bits_at(bytes, ir.start + i * 4, 4, little).to_uint().reinterpret_as_int()
+    csc_index_at(bytes, ir.start + i * 4, little)
   })
   let cols = Array::makei(jc.size / 4, i => {
-    bits_at(bytes, jc.start + i * 4, 4, little).to_uint().reinterpret_as_int()
+    csc_index_at(bytes, jc.start + i * 4, little)
   })
   let result : SparseArray = {
     name: text,
