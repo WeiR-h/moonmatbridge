@@ -79,7 +79,7 @@ invalid.push(['oversized tag length', mutate(132, [255, 255, 255, 255]), 'trunca
 invalid.push(['flags length', mutate(140, [7, 0, 0, 0]), 'invalid-flags']);
 invalid.push(['MAT version', mutate(125, [2]), 'unsupported-version']);
 invalid.push(['subsystem metadata', mutate(116, [1]), 'unsupported-subsystem']);
-invalid.push(['unknown matrix class', mutate(144, [2]), 'unsupported-class']);
+invalid.push(['unknown matrix class', mutate(144, [255]), 'unsupported-class']);
 invalid.push(['missing imaginary data', mutate(145, [8]), 'truncated-tag']);
 for (const [name, bytes, expected] of invalid) {
   const response = JSON.parse(api.inspect_mat(bytes));

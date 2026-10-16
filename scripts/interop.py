@@ -476,18 +476,67 @@ for host in ("native", "js"):
     assert repeated.returncode == 1 and json.loads(repeated.stderr)["code"] == "output-exists"
     record(f"{host}: exact diff CI codes and reports", "0 equal across encoding/order, 2 NaN payload/signed zero/uint64 changes, 1 existing output; exact coordinates and bytes")
 
-unsupported = {
-    "cell": {"x": np.array([[1, "text"]], dtype=object)},
-    "struct": {"x": {"field": np.array([[1]])}},
-    "char": {"x": "hello"},
-}
-for kind, value in unsupported.items():
-    path = OUT / f"unsupported-{kind}.mat"
-    savemat(path, value)
+# Independent recursive mixed-file producer/oracle; Python does not implement product parsing.
+sys.path.insert(0, str(ROOT / "examples" / "python"))
+from mixed_types import generate, assert_file_equal, assert_tree_equal
+generate(OUT / "mixed-reproduced")
+for path in sorted((ROOT / "examples" / "mixed").glob("*.mat")):
+    assert path.read_bytes() == (OUT / "mixed-reproduced" / path.name).read_bytes(), path
     for host in ("native", "js"):
-        response = invoke(host, "info", path, ok=False)
-        assert response["code"] == "unsupported-class", response
-    record(f"unsupported {kind} fails explicitly", "Both hosts return structured error, never skip or flatten data")
+        metadata = invoke(host, "info", path)
+        assert len(metadata["arrays"]) == 13
+        assert {a["storage"] for a in metadata["arrays"]} == {"dense", "csc", "char", "cell", "struct", "object"}
+        for operation in ("roundtrip", "compress"):
+            target = fresh(OUT / f"{host}-{operation}-{path.name}")
+            invoke(host, operation, path, target)
+            assert_file_equal(target, path)
+        selected = fresh(OUT / f"{host}-selected-{path.name}")
+        invoke(host, "select", path, selected, "measurements", "experiments", "title")
+        selected_data = loadmat(selected, chars_as_strings=False, spmatrix=False)
+        source_data = loadmat(path, chars_as_strings=False, spmatrix=False)
+        assert [k for k in selected_data if not k.startswith("__")] == ["measurements", "experiments", "title"]
+        for name in ("measurements", "experiments", "title"):
+            assert_tree_equal(selected_data[name], source_data[name])
+        record(f"{host}: recursive mixed {path.name}", "13 roots; cell/struct array/char/legacy object, exact uint64/complex/logical/CSC, Chinese/nonBMP, empty and 3D; SciPy checks roundtrip/compress/select recursively")
+
+def full_element(kind, data, endian="<"):
+    return struct.pack(endian + "II", kind, len(data)) + data + b"\0" * ((-len(data)) % 8)
+
+def character_file(kind, data, endian="<", shape=(1, 2)):
+    header = bytearray((ROOT / "examples/mixed/research-mixed.mat").read_bytes()[:128])
+    header[124:128] = b"\x00\x01IM" if endian == "<" else b"\x01\x00MI"
+    body = full_element(6, struct.pack(endian + "II", 4, 0), endian)
+    body += full_element(5, struct.pack(endian + "ii", *shape), endian)
+    body += full_element(1, b"x", endian) + full_element(kind, data, endian)
+    return bytes(header) + full_element(14, body, endian)
+
+for endian in ("<", ">"):
+    for kind, text, codec in [(1, "Ab", "ascii"), (2, "Ab", "ascii"), (4, "A中", "utf-16"),
+                               (16, "中🌙", "utf-8"), (17, "A中", "utf-16"), (18, "中🌙", "utf-32")]:
+        codec = codec + ("-le" if endian == "<" else "-be") if codec in ("utf-16", "utf-32") else codec
+        path = OUT / f"char-{kind}-{'le' if endian == '<' else 'be'}.mat"
+        path.write_bytes(character_file(kind, text.encode(codec), endian))
+        expected = loadmat(path, chars_as_strings=False, uint16_codec=codec)["x"]
+        for host in ("native", "js"):
+            target = fresh(OUT / f"{host}-char-{path.name}")
+            invoke(host, "roundtrip", path, target)
+            actual = loadmat(target, chars_as_strings=False, uint16_codec="utf-16-le" if kind == 4 else codec)["x"]
+            np.testing.assert_array_equal(actual, expected)
+    record(f"character encodings {'LE' if endian == '<' else 'BE'}", "Both hosts: miINT8/UINT8/UINT16/UTF8/UTF16/UTF32; independent SciPy reads canonical output")
+
+for label, body, code in [
+    ("utf8", character_file(16, b"\xff", shape=(1, 1)), "invalid-char"),
+    ("utf32-surrogate", character_file(18, struct.pack("<I", 0xd800), shape=(1, 1)), "invalid-char"),
+    ("char-shape", character_file(16, b"a"), "payload-size"),
+]:
+    path = OUT / f"invalid-tree-{label}.mat"
+    path.write_bytes(body)
+    for host in ("native", "js"):
+        assert invoke(host, "info", path, ok=False)["code"] == code
+        target = fresh(OUT / f"{host}-denied-{label}.mat")
+        assert invoke(host, "roundtrip", path, target, ok=False)["code"] == code
+        assert not target.exists()
+    record(f"malformed recursive {label} rejects atomically")
 
 v73 = OUT / "unsupported-v73.mat"
 v73.write_bytes(b"MATLAB 7.3 MAT-file".ljust(128, b"\0"))

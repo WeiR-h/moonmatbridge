@@ -1,0 +1,29 @@
+{
+  "status": "passed",
+  "version": "0.0.5",
+  "source_sha256": "11b99d8037fada2c4e1a07db0f83c3734f2d03360db7d7aec57e2a2d8be9e7b4",
+  "native_sha256": "6633342b34954986fde3779fa3c69ca45a99eb178dcff9763cf7401db15cc03e",
+  "archives": [
+    {
+      "file": "MoonMatBridge-v0.0.5-source.zip",
+      "bytes": 199819,
+      "sha256": "e0d8aa00fe7f5e9946f9dfb93a82df1027dd18fdbf66e1d97626f721e5b058c2"
+    },
+    {
+      "file": "MoonMatBridge-v0.0.5-windows-x64.zip",
+      "bytes": 390106,
+      "sha256": "41020c21f10ff8a5503dbde881e179f2eaf093dd1bfc0002ddcc07537c14fa41"
+    },
+    {
+      "file": "MoonMatBridge-v0.0.5-js.zip",
+      "bytes": 130118,
+      "sha256": "e67d8b11034be9ab161ddeee6f989d4b4d09761da38653e75a99a142c997d91b"
+    }
+  ],
+  "fresh_consumers": {
+    "native": "version + 21 commands + sparse/transform/compress/snapshot/diff + Unicode/spaces + no overwrite; PATH limited to System32; diff-change exit 2 verified",
+    "source": "unpacked source check and 59 JS tests; no local settings/build cache bundled",
+    "js": "unpacked exports: recursive mixed cell/struct/char/object fixture, JSON, compression, sparse, mixed transform, snapshot restore and exact diff"
+  },
+  "scope": "Local archives and fresh consumers; no public publishing or organizer acceptance"
+}

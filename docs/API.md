@@ -1,9 +1,13 @@
-# MoonBit API v0.0.4
+# MoonBit API v0.0.5
 
 The core package is `WeiR-h/moonmatbridge`. The executable, JSON adapter and JS ABI are separate packages; core parsing performs no host I/O.
 
 | API | Behavior |
 | --- | --- |
+| `read_tree(Bytes, limits?, tree_limits?) -> MatTree raise MatError` | All documented base classes including recursive cell/struct/char/legacy object |
+| `write_tree(Array[MatNode], compressed?, limits?, tree_limits?) -> Bytes raise MatError` | Preflight the entire tree, then write deterministic little-endian Level 5 |
+| `utf8_char_array(name, shape, text, is_global?, limits?) -> CharArray` | Validated UTF8 scalar-count dimensions; anonymous names allowed for container children |
+| `default_tree_limits() -> TreeLimits` | Depth 64, nodes 65,536, fields per struct 4,096 |
 | `read_mat(Bytes, limits?) -> MatFile raise MatError` | Dense numeric/logical Level 5 input, endian normalization, bounded compressed input |
 | `write_mat(Array[NumericArray], compressed?, limits?) -> Bytes raise MatError` | Validate dense arrays, then emit deterministic little-endian MAT |
 | `read_document(Bytes, limits?) -> MatDocument raise MatError` | Dense/CSC mixed input; no automatic densification |
@@ -38,7 +42,7 @@ Array methods: `length()`, `is_complex()`, `index(coordinates)`, `value(linear_i
 
 `MatError(code, offset, message)` has `code()`, `offset()`, `message()`. Offsets are relative to the current input stream; inside a compressed element, offsets may refer to expanded matrix bytes or the zlib stream. Constructor/writer validation uses offset zero. Do not interpret a compressed error offset as an absolute file position.
 
-The `WeiR-h/moonmatbridge/interchange` package exports `from_json`, `to_json`, `info`, `document_info`, `error_json`, `sample`, `transform`, `transform_document`, `to_snapshot`, `from_snapshot` and `diff_json`. Wire contracts are documented in [JSON.md](JSON.md). `to_snapshot` returns compact JSON text; `from_snapshot` returns mixed `MatVariable` values.
+The `WeiR-h/moonmatbridge/interchange` package exports `from_json`, `to_json`, `info`, `document_info`, `tree_info`, `error_json`, `sample`, `transform`, `transform_document`, `to_snapshot`, `from_snapshot` and `diff_json`. Wire contracts are documented in [JSON.md](JSON.md). `to_snapshot` returns compact JSON text; `from_snapshot` returns mixed `MatVariable` values.
 
 The JS foreign library exposes:
 
@@ -57,6 +61,18 @@ Exports: `npy_to_mat`, `select_mat`, `inspect_mat`, `mat_to_json`, `json_to_mat`
 
 `DocumentDifference` reports `content_equal`, `variable_order_changed`, `changed_variables`, `variables`. Metadata differences list dtype, shape, global/complex, storage or CSC pointers/rows/capacity. Comparable value changes are counted separately per real/imaginary plane; samples contain a zero-based linear/CSC-slot index, coordinates and exact before/after bytes. Inactive CSC slots have empty coordinates. Shape/type/storage/index-mapping changes are metadata differences, not fabricated element-by-element matches. File descriptions/endian/compression are excluded, while CSC storage metadata is included. No floating tolerance is applied.
 
-`src/pkg.generated.mbti` and the interfaces under `src/interchange` and `src/bridge` contain the complete compiler-generated signatures. Install the exact registry version with `moon add WeiR-h/moonmatbridge@0.0.4`, then import the core and/or interchange package. `examples/registry_consumer` contains a consumer that uses only these public interfaces; the registry verification script resolves a fresh copy and checks its source bytes before running all three targets.
+`src/pkg.generated.mbti` and the interfaces under `src/interchange` and `src/bridge` contain the complete compiler-generated signatures. Install the exact registry version with `moon add WeiR-h/moonmatbridge@0.0.5`, then import the core and/or interchange package. `examples/registry_consumer` contains a consumer that uses only these public interfaces; the registry verification script resolves a fresh copy and checks its source bytes before running all three targets.
 
 NPY input supports primitive float32/64, complex64/128, signed/unsigned integers and bool. Header strings must be plain ASCII, the header fits 64 KiB and no duplicate/unknown keys or trailing payload are accepted. Structured, object/pickle, string, datetime, float16 and ambiguous native-endian descriptors are rejected. NPY scalars become `[1,1]` and vectors become `[n,1]`; multidimensional shape is unchanged. Nonzero bool bytes normalize to canonical 1. All numerical bytes, including nonfinite payloads and exact 64-bit integers, are copied without scalar conversion.
+
+## Recursive mixed values
+
+`MatNode` is `Numeric(NumericArray)`, `Csc(SparseArray)`, `Character(CharArray)`, `Cell(CellArray)` or `Structure(StructArray)`. `MatTree` reports description, original little_endian and variables; `get(name)` and `select(names)` support all nodes.
+
+`CharArray` has name, shape, encoding, data, is_global. `CharEncoding` includes Int8Text, UInt8Text, UInt16Text, Utf8, Utf16, Utf32. Multi-byte data units are canonical little-endian. UTF8 dimensions count Unicode scalars; UTF16/UINT16 dimensions count 16-bit units, preserving surrogate units without lossy decoding. UTF32 requires valid Unicode scalars. See [compatibility plan](COMPATIBILITY.md) for cross-tool Unicode verification limits.
+
+`CellArray` has name, shape, values, is_global; values are column-major. `StructArray` adds fields and class_name; values are element-major then field order (`element * fields.length() + field`). None class_name means struct; Some(name) means the documented legacy mxOBJECT data class. No constructors or MATLAB code execute. Empty fields and empty shapes are supported.
+
+Public structures may be constructed directly. Nested node names may be empty; root names must be nonempty. Writers revalidate public fields and enforce recursive limits before encoding. Defaults add max_depth=64, max_nodes=65536, max_fields=4096; custom hard bounds are depth<=128, nodes<=1048576, fields<=65536. max_elements charges container positions plus leaf elements/stored CSC slots across the whole tree. The same budget applies to compressed roots.
+
+CLI info/roundtrip/compress/select and corresponding JS exports use this API. Older read_mat/read_document and numeric JSON/NPY/transforms/snapshot/diff retain their documented domains and reject containers explicitly; they never silently skip mixed values. `tree_info` returns recursive metadata with children in the same order as values, fields and class_name for structs/objects, encoding/byte count for characters. It does not serialize character payload as JSON text.

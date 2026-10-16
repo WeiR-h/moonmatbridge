@@ -95,6 +95,7 @@ fn matrix(
   outer : Element,
   little : Bool,
   limits : Limits,
+  nested? : Bool = false,
 ) -> NumericArray raise MatError {
   let end = outer.start + outer.size
   let flags = tag(bytes, outer.start, end, little)
@@ -141,7 +142,9 @@ fn matrix(
   })
   let count = element_count(shape, limits, dims.start)
   let name = tag(bytes, dims.next, end, little)
-  if name.kind != 1 || name.size == 0 || name.size > limits.max_name_bytes {
+  if name.kind != 1 ||
+    (!nested && name.size == 0) ||
+    name.size > limits.max_name_bytes {
     fail(
       "invalid-name",
       dims.next,
@@ -154,7 +157,7 @@ fn matrix(
       ""
     }
   }
-  validate_name(name_text, limits)
+  validate_name(name_text, limits, allow_empty=nested)
   let real_tag = tag(bytes, name.next, end, little)
   let real = numeric_payload(bytes, real_tag, dtype, count, little)
   let (imag, next) = if complex {
@@ -179,7 +182,7 @@ fn matrix(
     imag,
     is_global: (bits & 1024U) != 0,
   }
-  ignore(validate_array(result, limits))
+  ignore(validate_array(result, limits, allow_empty=nested))
   result
 }
 

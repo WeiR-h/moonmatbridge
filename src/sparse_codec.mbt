@@ -4,6 +4,7 @@ fn sparse_matrix(
   outer : Element,
   little : Bool,
   limits : Limits,
+  nested? : Bool = false,
 ) -> SparseArray raise MatError {
   let end = outer.start + outer.size
   let flags = tag(bytes, outer.start, end, little)
@@ -38,7 +39,9 @@ fn sparse_matrix(
     )
   }
   let name = tag(bytes, dims.next, end, little)
-  if name.kind != 1 || name.size == 0 || name.size > limits.max_name_bytes {
+  if name.kind != 1 ||
+    (!nested && name.size == 0) ||
+    name.size > limits.max_name_bytes {
     fail("invalid-name", name.start, "Expected bounded sparse variable name")
   }
   let text = @utf8.decode(bytes[name.start:name.start + name.size]) catch {
@@ -94,18 +97,19 @@ fn sparse_matrix(
   if next != end {
     fail("trailing-matrix-data", next, "Unexpected sparse matrix data")
   }
-  raw_sparse_array(
-    text,
+  let result : SparseArray = {
+    name: text,
     dtype,
     shape,
-    rows,
-    cols,
+    row_indices: rows,
+    col_ptrs: cols,
     real,
-    imag?,
-    nzmax=capacity.to_int(),
-    is_global=(bits & 1024U) != 0U,
-    limits~,
-  )
+    imag,
+    nzmax: capacity.to_int(),
+    is_global: (bits & 1024U) != 0U,
+  }
+  ignore(validate_sparse(result, limits, allow_empty=nested))
+  result
 }
 
 ///|

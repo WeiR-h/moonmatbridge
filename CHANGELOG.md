@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.0.5 — 2026-10-16
+
+- 新增递归 `MatNode` / `read_tree` / `write_tree`：cell、struct 数组、char 与 legacy object，保留字段顺序、嵌套关系、全局标记及匿名子矩阵。
+- 字符支持 miINT8/UINT8/UINT16/UTF8/UTF16/UTF32，原始多字节单位规范化为小端；UTF8 校验 Unicode scalar 数，UTF32 拒绝非法 scalar。
+- `info` / `roundtrip` / `compress` / `select` 及对应 JS 接口可处理完整混合树；旧数值/CSC 互操作接口保持原输入域，避免隐式丢失容器。
+- 提供 13 根变量的大小端/压缩混合案例、独立 SciPy 生成器和递归比较；增加深度、节点、字段数与累计元素预算及畸形输入用例。
+- 明确公开 Level 5 基本类 1–15 的最终读写范围与 v1.0 验收条件，纠正 v0.0.2 申报范围；实际 MATLAB/Octave 回执仍未完成。
+
 ## v0.0.4 — 2026-10-13
 
 - 将本地模块名 `local/moonmatbridge` 迁移为可发布的 `WeiR-h/moonmatbridge`，同步导入路径、公开接口、安装文档与仓库元数据。

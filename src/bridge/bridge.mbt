@@ -36,7 +36,7 @@ pub fn result_bytes(result : BinaryResult) -> Bytes {
 ///|
 #export_name("inspect_mat")
 pub fn inspect_mat(bytes : Bytes) -> String {
-  @wire.document_info(@mat.read_document(bytes)).stringify() catch {
+  @wire.tree_info(@mat.read_tree(bytes)).stringify() catch {
     error => @wire.error_json(error).stringify()
   }
 }
@@ -58,7 +58,7 @@ pub fn json_to_mat(text : String) -> BinaryResult {
 ///|
 #export_name("roundtrip_mat")
 pub fn roundtrip_mat(bytes : Bytes) -> BinaryResult {
-  binary(() => @mat.write_document(@mat.read_document(bytes).variables))
+  binary(() => @mat.write_tree(@mat.read_tree(bytes).variables))
 }
 
 ///|
@@ -93,7 +93,7 @@ pub fn inflate_zlib(bytes : Bytes, limit : Int) -> BinaryResult {
 ///|
 #export_name("select_mat")
 pub fn select_mat(bytes : Bytes, names : Array[String]) -> BinaryResult {
-  binary(() => @mat.write_document(@mat.read_document(bytes).select(names)))
+  binary(() => @mat.write_tree(@mat.read_tree(bytes).select(names)))
 }
 
 ///|
@@ -115,9 +115,7 @@ pub fn transform_mat(bytes : Bytes, plan : String) -> BinaryResult {
 ///|
 #export_name("compress_mat")
 pub fn compress_mat(bytes : Bytes) -> BinaryResult {
-  binary(() => {
-    @mat.write_document(@mat.read_document(bytes).variables, compressed=true)
-  })
+  binary(() => @mat.write_tree(@mat.read_tree(bytes).variables, compressed=true))
 }
 
 ///|

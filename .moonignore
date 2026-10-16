@@ -12,6 +12,7 @@
 !/docs/
 /docs/*
 !/docs/API.md
+!/docs/COMPATIBILITY.md
 !/docs/FORMAT.md
 !/docs/JSON.md
 !/docs/RECIPES.md
@@ -28,3 +29,7 @@
 !/examples/matlab/**
 !/examples/registry_consumer/
 !/examples/registry_consumer/**
+!/examples/mixed/
+!/examples/mixed/**
+
+/examples/python/__pycache__/

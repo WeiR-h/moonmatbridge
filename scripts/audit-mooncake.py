@@ -10,10 +10,10 @@ version = json.loads((ROOT / 'package.json').read_text(encoding='utf-8'))['versi
 archive = ROOT / '_build/publish' / f'WeiR-h-moonmatbridge-{version}.zip'
 allowed = {'.moonignore', 'moon.mod', 'README.md', 'CHANGELOG.md', 'LICENSE', 'NOTICE', 'THIRD_PARTY.md'}
 allowed.update('docs/' + name for name in ['API.md', 'FORMAT.md', 'JSON.md', 'RECIPES.md',
-                                         'DIFFERENTIATION.md', 'ITERATIONS-v0.0.3.md'])
+                                         'DIFFERENTIATION.md', 'ITERATIONS-v0.0.3.md', 'COMPATIBILITY.md'])
 allowed.update('examples/' + name for name in ['sample.mat', 'sample.json', 'transform-plan.json'])
-for directory in ['src', 'examples/python', 'examples/matlab', 'examples/registry_consumer']:
-    allowed.update(path.relative_to(ROOT).as_posix() for path in (ROOT / directory).rglob('*') if path.is_file())
+for directory in ['src', 'examples/python', 'examples/matlab', 'examples/registry_consumer', 'examples/mixed']:
+    allowed.update(path.relative_to(ROOT).as_posix() for path in (ROOT / directory).rglob('*') if path.is_file() and '__pycache__' not in path.parts)
 entries = []
 seen = set()
 with zipfile.ZipFile(archive) as package:

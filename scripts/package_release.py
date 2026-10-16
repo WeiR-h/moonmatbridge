@@ -89,10 +89,10 @@ Open PowerShell in this folder:
 The executable requires no MoonBit, C compiler, Python or Node installation.
 Only Windows system KERNEL32.dll and msvcrt.dll are imported in this build.
 Output paths must be NEW; existing files are never overwritten.
-Core: MAT Level 5 dense numeric/logical arrays, complex float32/64,
+Core: MAT Level 5 recursive cell/struct/char/legacy object, dense numeric/logical arrays, complex float32/64,
 CSC double/logical/complex double, little/big endian, deterministic compressed/uncompressed writing,
 primitive NPY, raw-byte slice/gather/concat/reshape/permutation, exact snapshot/restore and diff.
-Unsupported: cell/struct/char, MAT v4/v7.3, noncanonical or non-double numerical CSC,
+Unsupported: private MCOS/opaque/function workspace, MAT v4/v7.3, noncanonical or non-double numerical CSC,
 structured/object/string NPY, NPZ, floating tolerance and file streaming.
 
 Use examples/sample.json as a fresh pack input, or examples/sample.mat for info.
@@ -104,8 +104,10 @@ MATLAB/Octave execution and competition submission are unverified. Public downlo
 """
 with zipfile.ZipFile(native_zip, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as z:
     add(z, DIST / "moonmat.exe", native_name, "moonmat.exe")
-    for name in ["LICENSE", "NOTICE", "THIRD_PARTY.md", "CHANGELOG.md", "docs/API.md", "docs/JSON.md", "docs/FORMAT.md", "docs/RECIPES.md", "docs/DIFFERENTIATION.md", "docs/ITERATIONS-v0.0.3.md", "examples/transform-plan.json", "examples/sample.json", "examples/sample.mat", "examples/python/interop_example.py", "examples/matlab/interop_example.m"]:
+    for name in ["LICENSE", "NOTICE", "THIRD_PARTY.md", "CHANGELOG.md", "docs/API.md", "docs/COMPATIBILITY.md", "docs/JSON.md", "docs/FORMAT.md", "docs/RECIPES.md", "docs/DIFFERENTIATION.md", "docs/ITERATIONS-v0.0.3.md", "examples/transform-plan.json", "examples/sample.json", "examples/sample.mat", "examples/python/interop_example.py", "examples/matlab/interop_example.m"]:
         add(z, ROOT / name, native_name)
+    for path in sorted((ROOT / "examples/mixed").glob("*")):
+        add(z, path, native_name)
     for path in sorted(REPORTS.glob("*.json")):
         add(z, path, native_name, "verification/" + path.name)
     z.writestr(f"{native_name}/README.txt", portable_readme.replace("v0.0.1", f"v{VERSION}"))
@@ -115,8 +117,10 @@ js_name = f"MoonMatBridge-v{VERSION}-js"
 js_zip = DIST / f"{js_name}.zip"
 with zipfile.ZipFile(js_zip, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as z:
     add(z, ROOT / "_build/js/release/build/bridge/bridge.js", js_name, "bridge.mjs")
-    for name in ["LICENSE", "NOTICE", "THIRD_PARTY.md", "docs/API.md", "docs/JSON.md", "docs/FORMAT.md", "docs/RECIPES.md", "examples/transform-plan.json", "examples/sample.json"]:
+    for name in ["LICENSE", "NOTICE", "THIRD_PARTY.md", "docs/API.md", "docs/COMPATIBILITY.md", "docs/JSON.md", "docs/FORMAT.md", "docs/RECIPES.md", "examples/transform-plan.json", "examples/sample.json"]:
         add(z, ROOT / name, js_name)
+    for path in sorted((ROOT / "examples/mixed").glob("*")):
+        add(z, path, js_name)
     z.writestr(f"{js_name}/README.txt", f"MoonMatBridge v{VERSION} JS exports. Import bridge.mjs; see docs/API.md. Host-neutral MoonBit build, no Python/zlib dependency. Browser UI is not shipped/tested.\n")
     z.writestr(f"{js_name}/SOURCE_SHA256.txt", source_hash + "\n")
 
@@ -151,6 +155,12 @@ commands = [
     ["densify", str(consumer / "sparse.mat"), "temperature", str(consumer / "dense.mat")],
     ["diff", str(consumer / "sample.mat"), str(consumer / "dense.mat")],
 ]
+commands.extend([
+    ["info", str(native / "examples/mixed/research-mixed.mat")],
+    ["roundtrip", str(native / "examples/mixed/research-mixed-big-endian.mat"), str(consumer / "mixed.mat")],
+    ["compress", str(consumer / "mixed.mat"), str(consumer / "mixed-compressed.mat")],
+    ["select", str(consumer / "mixed-compressed.mat"), str(consumer / "mixed-selected.mat"), "measurements", "experiments", "title"],
+])
 for args in commands:
     response = json.loads(run([exe] + args, native, clean_env).stdout)
     assert response.get("status", "ok") == "ok", response
@@ -182,6 +192,7 @@ js = extract(js_zip, fresh_root / "js")
 probe = js / "consumer.mjs"
 probe.write_text("""import assert from 'node:assert/strict';
 import * as api from './bridge.mjs';
+import {readFileSync} from 'node:fs';
 const result=api.sample_mat();
 assert.equal(JSON.parse(api.result_status(result)).status,'ok');
 const bytes=api.result_bytes(result);
@@ -205,6 +216,12 @@ assert.equal(JSON.parse(api.result_status(transformed)).status,'ok');
 const selected=api.transform_mat(bytes,plan);
 assert.equal(JSON.parse(api.result_status(selected)).status,'ok');
 assert.equal(JSON.parse(api.compare_mat(bytes,api.result_bytes(selected))).content_equal,false);
+const mixed=readFileSync('./examples/mixed/research-mixed-compressed.mat');
+assert.equal(JSON.parse(api.inspect_mat(mixed)).arrays.length,13);
+const mixedCopy=api.roundtrip_mat(mixed);
+assert.equal(JSON.parse(api.result_status(mixedCopy)).status,'ok');
+const tree=JSON.parse(api.inspect_mat(api.result_bytes(mixedCopy)));
+assert.deepEqual(new Set(tree.arrays.map(x=>x.storage)),new Set(['dense','csc','char','cell','struct','object']));
 console.log('Fresh JS consumer: passed');
 """, encoding="utf-8")
 run(["node", str(probe)], js)
@@ -215,7 +232,7 @@ result = {
     "native_sha256": digest(DIST / "moonmat.exe"), "archives": archives,
     "fresh_consumers": {"native": f"version + {len(commands)} commands + sparse/transform/compress/snapshot/diff + Unicode/spaces + no overwrite; PATH limited to System32; diff-change exit 2 verified",
                         "source": f"unpacked source check and {test_match.group(2)} JS tests; no local settings/build cache bundled",
-                        "js": "unpacked exports: JSON, compression, sparse, mixed transform, snapshot restore and exact diff"},
+                        "js": "unpacked exports: recursive mixed cell/struct/char/object fixture, JSON, compression, sparse, mixed transform, snapshot restore and exact diff"},
     "scope": "Local archives and fresh consumers; no public publishing or organizer acceptance",
 }
 (DIST / f"release-v{VERSION}.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

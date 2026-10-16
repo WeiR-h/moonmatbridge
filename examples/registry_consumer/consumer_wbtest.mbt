@@ -1,6 +1,6 @@
 ///|
 test "published compressed dense data preserves complex and uint64" {
-  assert_eq(@mat.version(), "0.0.4")
+  assert_eq(@mat.version(), "0.0.5")
   let id = @mat.numeric_array("id", @mat.UInt64, [1, 2], [
     Unsigned(9007199254740993UL),
     Unsigned(18446744073709551615UL),
@@ -17,6 +17,21 @@ test "published compressed dense data preserves complex and uint64" {
   }
   assert_true(restored.get("wave").unwrap().imag == wave.imag)
   assert_true(bytes == @mat.write_mat([id, wave], compressed=true))
+}
+
+///|
+test "published recursive tree preserves cell struct and UTF8 text" {
+  let label = @mat.Character(@mat.utf8_char_array("", [1, 3], "科研🌙"))
+  let record : @mat.StructArray = {
+    name: "record", shape: [1, 1], fields: ["samples"],
+    values: [@mat.Cell({ name: "", shape: [1, 1], values: [label], is_global: false })],
+    class_name: None, is_global: true,
+  }
+  let bytes = @mat.write_tree([@mat.Structure(record)], compressed=true)
+  let file = @mat.read_tree(bytes)
+  assert_true(bytes == @mat.write_tree(file.variables, compressed=true))
+  let info = @wire.tree_info(file).stringify()
+  assert_true(info.contains("struct") && info.contains("cell") && info.contains("miUTF8"))
 }
 
 ///|

@@ -1,0 +1,44 @@
+{
+  "producer": "SciPy 1.15.3 / NumPy 2.2.6",
+  "scope": "Documented Level 5 base classes; actual MATLAB/Octave execution not performed",
+  "variables": [
+    "uint64_ids",
+    "wave",
+    "logical_mask",
+    "sparse_signal",
+    "title",
+    "char_matrix",
+    "measurements",
+    "experiments",
+    "legacy_record",
+    "empty_cell",
+    "empty_struct",
+    "empty_char",
+    "tensor"
+  ],
+  "cases": [
+    "nested cell with char/struct/sparse/uint64",
+    "2x2 struct array field order",
+    "UTF8 Chinese and nonBMP",
+    "legacy mxOBJECT class and fields",
+    "logical/complex/3D/empty containers",
+    "LE/BE/compressed"
+  ],
+  "files": [
+    {
+      "file": "research-mixed.mat",
+      "bytes": 3608,
+      "sha256": "e25902d8cbed12604b7aba7ae64d9a4f31a01d25d163ea378587e3b6a5f83ef2"
+    },
+    {
+      "file": "research-mixed-compressed.mat",
+      "bytes": 1570,
+      "sha256": "7439e4fe2b599d94744a491cc3c43d242f26c65850c7acc67d1e059a7304a573"
+    },
+    {
+      "file": "research-mixed-big-endian.mat",
+      "bytes": 3736,
+      "sha256": "85b42cb7fc511d87df425b67c79d7306cd9911b7db4567a6d29fce794d125afb"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # 2026 MoonBit 10 月黑客松报名清单
 
-报名要求核对日期：2026-10-07；技术资料更新日期：2026-10-10。此文件记录报名要求和可核验技术事实，不是项目申报书。当前尚未提交报名，未取得官方提交成功回执。
+报名要求核对日期：2026-10-07；技术资料更新日期：2026-10-16。此文件记录报名要求和可核验技术事实，不是项目申报书。根据参赛者提供的通知，使用本地 v0.0.2 申报书的报名已被初审驳回，原因是排除标准类型且未明确最终兼容终点。可在 2026-10-31 前更新材料申请复审；当前尚未重新提交。技术修订见 [COMPATIBILITY.md](COMPATIBILITY.md) 和 [混合案例](../examples/mixed/README.md)。
 
 ## 项目资料
 
@@ -29,10 +29,10 @@
 以下是便于本人核对的技术事实：
 
 - 核心格式逻辑、解压、JSON 和 NPY 互通在 MoonBit 中实现，C/JS 宿主只承担文件和参数传输。科学库仅用于独立验证。
-- v0.0.3 支持 MAT Level 5 dense numeric/logical 和 CSC double/logical/complex double；确定性压缩/未压缩写入；保留类型、形状、复数、精确整数与稀疏存储元数据。
+- v0.0.5 的递归 API 已支持 cell、struct、char 与 legacy object，CLI info/roundtrip/compress/select 可处理含这些类型的混合文件。基础数值 API 支持 MAT Level 5 dense numeric/logical 和 CSC double/logical/complex double；确定性压缩/未压缩写入；保留类型、形状、复数、精确整数与稀疏存储元数据。
 - 支持 NPY 导入/导出、切片、按轴取样、拼接、整形、轴置换和变量选择；新增混合文件转换、无损快照与按名称匹配的精确差异报告。NPY scalar/vector 明确提升为 MAT 二维。
-- 52 项三目标测试、54 组 SciPy/NumPy 验证、每宿主 72 个 NPY 文件；704 个解压对照流、2,072 个截断检查和 44 个压缩输出。具体环境与实际结果见 verification/reports，发布/下载另行核实。
-- 不支持 cell/struct/char、MAT v4/v7.3、非规范 CSC、浮点容差比较和流式处理；NPY 不执行 pickle，也不支持结构化、对象、字符串等数据。
+- 59 项三目标测试、62 组 SciPy/NumPy 验证、每宿主 72 个 NPY 文件；704 个解压对照流、2,072 个截断检查和 44 个压缩输出。具体环境与实际结果见 verification/reports，发布/下载另行核实。
+- 不支持 MATLAB 私有 MCOS/opaque/函数 workspace、MAT v4/v7.3、非规范 CSC、浮点容差比较和流式处理；NPY 不执行 pickle，也不支持结构化、对象、字符串等数据。
 - 实现由 AI 辅助完成，格式依据来自公开规范，没有复制 mat4js/matio/moon-npy 的实现。参加答辩前需本人理解和能解释源码。MATLAB/Octave 的实际执行尚未验证。
 
 ## 提交和回执

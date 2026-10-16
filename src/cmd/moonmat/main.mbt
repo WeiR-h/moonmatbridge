@@ -114,9 +114,7 @@ fn run(args : Array[String]) -> Unit raise @mat.MatError {
   } else if command == "sample" && args.length() == 3 {
     save(args[2], @mat.write_mat(@wire.sample()))
   } else if command == "info" && args.length() == 3 {
-    println(
-      @wire.document_info(@mat.read_document(read(args[2]))).stringify(indent=2),
-    )
+    println(@wire.tree_info(@mat.read_tree(read(args[2]))).stringify(indent=2))
   } else if command == "dump" && args.length() == 4 {
     let document = @wire.to_json(@mat.read_mat(read(args[2])).arrays).stringify(
         indent=2,
@@ -153,17 +151,11 @@ fn run(args : Array[String]) -> Unit raise @mat.MatError {
       exit_process(2)
     }
   } else if command == "roundtrip" && args.length() == 4 {
-    save(
-      args[3],
-      @mat.write_document(@mat.read_document(read(args[2])).variables),
-    )
+    save(args[3], @mat.write_tree(@mat.read_tree(read(args[2])).variables))
   } else if command == "compress" && args.length() == 4 {
     save(
       args[3],
-      @mat.write_document(
-        @mat.read_document(read(args[2])).variables,
-        compressed=true,
-      ),
+      @mat.write_tree(@mat.read_tree(read(args[2])).variables, compressed=true),
     )
   } else if (command == "sparsify" || command == "densify") &&
     args.length() == 5 {
@@ -194,10 +186,7 @@ fn run(args : Array[String]) -> Unit raise @mat.MatError {
     )
   } else if command == "select" && args.length() >= 5 {
     let names = Array::makei(args.length() - 4, fn(i) { args[i + 4] })
-    save(
-      args[3],
-      @mat.write_document(@mat.read_document(read(args[2])).select(names)),
-    )
+    save(args[3], @mat.write_tree(@mat.read_tree(read(args[2])).select(names)))
   } else if command == "npy" && args.length() == 5 {
     let file = @mat.read_document(read(args[2]))
     match file.get(args[3]) {

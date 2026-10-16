@@ -109,8 +109,12 @@ pub fn MatDocument::convert_storage(
 }
 
 ///|
-fn validate_sparse(a : SparseArray, limits : Limits) -> Int raise MatError {
-  validate_name(a.name, limits)
+fn validate_sparse(
+  a : SparseArray,
+  limits : Limits,
+  allow_empty? : Bool = false,
+) -> Int raise MatError {
+  validate_name(a.name, limits, allow_empty~)
   if a.dtype != Float64 && a.dtype != Logical {
     fail(
       "unsupported-sparse-dtype", 0, "Sparse MAT supports float64 and logical",

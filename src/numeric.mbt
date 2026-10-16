@@ -157,9 +157,13 @@ fn append_value(
 }
 
 ///|
-fn validate_name(name : String, limits : Limits) -> Unit raise MatError {
+fn validate_name(
+  name : String,
+  limits : Limits,
+  allow_empty? : Bool = false,
+) -> Unit raise MatError {
   let bytes = @utf8.encode(name[:])
-  if bytes.length() == 0 ||
+  if (!allow_empty && bytes.length() == 0) ||
     bytes.length() > limits.max_name_bytes ||
     name.contains("\u{0000}") {
     fail(
@@ -197,8 +201,12 @@ fn validate_layout(array : NumericArray, limits : Limits) -> Int raise MatError 
 }
 
 ///|
-fn validate_array(array : NumericArray, limits : Limits) -> Int raise MatError {
-  validate_name(array.name, limits)
+fn validate_array(
+  array : NumericArray,
+  limits : Limits,
+  allow_empty? : Bool = false,
+) -> Int raise MatError {
+  validate_name(array.name, limits, allow_empty~)
   let count = validate_layout(array, limits)
   if array.dtype == Logical {
     for value in array.real {
@@ -324,7 +332,7 @@ pub fn NumericArray::index(
     fail("index-range", 0, "Coordinate rank differs from shape")
   }
   // Revalidate shape, because public fields may have been constructed by callers.
-  if validate_array(self, default_limits()) == 0 {
+  if validate_array(self, default_limits(), allow_empty=true) == 0 {
     fail("index-range", 0, "Empty array has no coordinates")
   }
   let mut stride = 1

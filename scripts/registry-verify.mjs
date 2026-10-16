@@ -68,7 +68,7 @@ try {
   for (const target of ['js', 'wasm-gc', 'native']) {
     const extra = target === 'native' ? nativeEnv() : {};
     const output = run(['test', '--target', target, '--deny-warn'], extra);
-    if (!/Total tests: 5, passed: 5, failed: 0/.test(output)) throw new Error('Five consumer tests did not execute for ' + target);
+    if (!/Total tests: 6, passed: 6, failed: 0/.test(output)) throw new Error('Six consumer tests did not execute for ' + target);
   }
   report.status = 'passed';
 } catch (error) {
