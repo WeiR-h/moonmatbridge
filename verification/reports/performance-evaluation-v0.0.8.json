@@ -1,0 +1,56 @@
+{
+  "status": "engineering-target-incomplete",
+  "version": "0.0.8",
+  "correctness": "passed",
+  "required_targets": [
+    {
+      "case": "dense-16m",
+      "host": "native",
+      "goal": "write time -30%, peak memory -25%",
+      "passed": true
+    },
+    {
+      "case": "dense-16m",
+      "host": "js",
+      "goal": "write time -30%, peak memory -25%",
+      "passed": true
+    },
+    {
+      "case": "nested-4m",
+      "host": "native",
+      "goal": "write time -30%, peak memory -25%",
+      "passed": true
+    },
+    {
+      "case": "nested-4m",
+      "host": "js",
+      "goal": "write time -30%, peak memory -25%",
+      "passed": true
+    },
+    {
+      "case": "select-1-of-16",
+      "host": "native",
+      "goal": "select speed 2x, peak memory -40%",
+      "passed": false
+    },
+    {
+      "case": "select-1-of-16",
+      "host": "js",
+      "goal": "select speed 2x, peak memory -40%",
+      "passed": true
+    }
+  ],
+  "unmet_targets": [
+    {
+      "case": "select-1-of-16",
+      "host": "native",
+      "goal": "select speed 2x, peak memory -40%",
+      "passed": false
+    }
+  ],
+  "regressions_over_10_percent": [],
+  "initial_attempt": "performance-attempt-17c4f0d-v0.0.8.json",
+  "encoding_equivalence": "encoding-v0.0.8.json",
+  "measured_commit": "0131e941d8369a6a007512aa3483fcb515f1d847",
+  "scope": "All fixed cases and original samples retained. Native selection speed passes, but peak reduction is below 40%; do not claim that engineering goal completed. Functional compatibility and publishing checks are separate."
+}

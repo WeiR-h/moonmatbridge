@@ -1,0 +1,60 @@
+{
+  "status": "passed",
+  "version": "0.0.8",
+  "reference_version": "0.0.6",
+  "candidate_commit": "0131e941d8369a6a007512aa3483fcb515f1d847",
+  "reference_ci": "https://github.com/WeiR-h/moonmatbridge/actions/runs/38950940678",
+  "candidate_ci": "https://github.com/WeiR-h/moonmatbridge/actions/runs/38963909841",
+  "ignored_description_bytes": 116,
+  "checks": [
+    {
+      "file": "native-v6-roundtrip.mat",
+      "bytes": 7056,
+      "canonical_bytes_sha256": "72d850df3068f8503b9518ddfe34ca4ea613dd42bd875519cd72b32eb7feaecf",
+      "status": "passed"
+    },
+    {
+      "file": "native-v6-compress.mat",
+      "bytes": 3049,
+      "canonical_bytes_sha256": "50234e645c60a29ef6a18184ad7ff9dff307d72e3499d281d9355b3573871fb3",
+      "status": "passed"
+    },
+    {
+      "file": "native-v7-roundtrip.mat",
+      "bytes": 7056,
+      "canonical_bytes_sha256": "72d850df3068f8503b9518ddfe34ca4ea613dd42bd875519cd72b32eb7feaecf",
+      "status": "passed"
+    },
+    {
+      "file": "native-v7-compress.mat",
+      "bytes": 3049,
+      "canonical_bytes_sha256": "50234e645c60a29ef6a18184ad7ff9dff307d72e3499d281d9355b3573871fb3",
+      "status": "passed"
+    },
+    {
+      "file": "js-v6-roundtrip.mat",
+      "bytes": 7056,
+      "canonical_bytes_sha256": "72d850df3068f8503b9518ddfe34ca4ea613dd42bd875519cd72b32eb7feaecf",
+      "status": "passed"
+    },
+    {
+      "file": "js-v6-compress.mat",
+      "bytes": 3049,
+      "canonical_bytes_sha256": "50234e645c60a29ef6a18184ad7ff9dff307d72e3499d281d9355b3573871fb3",
+      "status": "passed"
+    },
+    {
+      "file": "js-v7-roundtrip.mat",
+      "bytes": 7056,
+      "canonical_bytes_sha256": "72d850df3068f8503b9518ddfe34ca4ea613dd42bd875519cd72b32eb7feaecf",
+      "status": "passed"
+    },
+    {
+      "file": "js-v7-compress.mat",
+      "bytes": 3049,
+      "canonical_bytes_sha256": "50234e645c60a29ef6a18184ad7ff9dff307d72e3499d281d9355b3573871fb3",
+      "status": "passed"
+    }
+  ],
+  "scope": "Exact bytes after the description field match the pre-optimization canonical writer; subsystem/version/endian header tail and all typed matrix data are included. Actual Octave production/consumption is in the separate reports."
+}
