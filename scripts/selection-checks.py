@@ -44,7 +44,7 @@ def tag(data, offset):
 
 def main():
     for source in sorted((ROOT / "verification/local/compatibility").glob("all-classes-*.mat")):
-        expected = loadmat(source, chars_as_strings=False)
+        expected = loadmat(source, chars_as_strings=False, spmatrix=False)
         names = [name for name in expected if not name.startswith("__")]
         selected = ["cross_nested", "legacy_record", "uint64_ids", "title"]
         for host in ("native", "js"):
@@ -56,7 +56,7 @@ def main():
             assert next(r for r in roots if r["name"] == "logical_mask")["logical"]
             output = fresh(f"{host}-{source.name}")
             invoke(host, "select", source, output, *selected)
-            actual = loadmat(output, chars_as_strings=False)
+            actual = loadmat(output, chars_as_strings=False, spmatrix=False)
             assert [name for name in actual if not name.startswith("__")] == selected
             for name in selected: mixed.assert_tree_equal(actual[name], expected[name])
             checks.append({"host": host, "case": source.name, "status": "passed", "sha256": hashlib.sha256(source.read_bytes()).hexdigest()})
