@@ -215,7 +215,9 @@ pub fn read_document(
     fail("unsupported-version", 124, "Expected MAT Level 5 version 0x0100")
   }
   // Subsystem data may encode object/function metadata that v0.0.1 cannot preserve.
-  if bits_at(bytes, 116, 8, little) != 0UL {
+  let subsystem = bits_at(bytes, 116, 8, little)
+  // Both zero and eight spaces mean an unused subsystem field (GNU Octave).
+  if subsystem != 0UL && subsystem != 0x2020202020202020UL {
     fail("unsupported-subsystem", 116, "Subsystem data is unsupported")
   }
   let description = @utf8.decode_lossy(bytes[0:116]).trim().to_owned()

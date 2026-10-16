@@ -13,6 +13,9 @@
 /docs/*
 !/docs/API.md
 !/docs/COMPATIBILITY.md
+!/docs/COMPATIBILITY_MATRIX.md
+!/docs/NEXT_RELEASES.md
+!/docs/PERFORMANCE.md
 !/docs/FORMAT.md
 !/docs/JSON.md
 !/docs/RECIPES.md
@@ -27,6 +30,8 @@
 !/examples/python/**
 !/examples/matlab/
 !/examples/matlab/**
+!/examples/octave/
+!/examples/octave/**
 !/examples/registry_consumer/
 !/examples/registry_consumer/**
 !/examples/mixed/

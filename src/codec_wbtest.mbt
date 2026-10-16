@@ -21,6 +21,24 @@ fn changed(bytes : Bytes, offset : Int, value : Byte) -> Bytes {
 }
 
 ///|
+test "Octave blank subsystem header remains valid without accepting real offsets" {
+  let original = tiny()
+  let raw = original.to_array()
+  for i = 116; i < 124; i = i + 1 {
+    raw[i] = b' '
+  }
+  let blank = Bytes::from_array(raw)
+  assert_true(
+    read_mat(blank).arrays[0].real == read_mat(original).arrays[0].real,
+  )
+  assert_eq(read_tree(blank).variables.length(), 1)
+  assert_eq(
+    error_code(() => ignore(read_tree(changed(blank, 116, b'\x01')))),
+    "unsupported-subsystem",
+  )
+}
+
+///|
 test "deterministic MAT writer and column-major coordinates" {
   let array = numeric_array("matrix", Float64, [2, 3], [
     Floating(1.0),

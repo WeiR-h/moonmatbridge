@@ -525,7 +525,8 @@ pub fn read_tree(
   if bits_at(bytes, 124, 2, little) != 256UL {
     fail("unsupported-version", 124, "Expected Level 5 version 0x0100")
   }
-  if bits_at(bytes, 116, 8, little) != 0UL {
+  let subsystem = bits_at(bytes, 116, 8, little)
+  if subsystem != 0UL && subsystem != 0x2020202020202020UL {
     fail(
       "unsupported-subsystem", 116, "Subsystem/object workspace metadata is unsupported",
     )

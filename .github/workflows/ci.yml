@@ -38,5 +38,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: linux-interop-${{ github.sha }}
-          path: verification/reports/
+          path: |
+            verification/reports/
+            verification/local/octave/*.mat
           if-no-files-found: error
