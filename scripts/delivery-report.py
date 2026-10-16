@@ -31,6 +31,7 @@ def main():
     performance = read(f"performance-summary-v{VERSION}.json", "summarized")
     assert compatibility["base_classes"] == list(range(1, 16))
     assert len(octave["checks"]) == 8 and workflows["passed"] == public_workflows["passed"] == 6
+    assert public_workflows["released_output_hashes_match"]
     fingerprint = version["source"]["sha256"]
     assert fingerprint == registry["source"]["sha256"] == mooncakes["source_sha256"] == release["source_sha256"]
     assert audit["archive_sha256"] == mooncakes["archive_sha256"]
