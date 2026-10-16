@@ -1,0 +1,33 @@
+{
+  "status": "passed",
+  "version": "0.0.7",
+  "stage": "write optimization",
+  "required_targets": [
+    {
+      "case": "dense-16m",
+      "host": "native",
+      "goal": "write time -30%, peak memory -25%",
+      "passed": true
+    },
+    {
+      "case": "dense-16m",
+      "host": "js",
+      "goal": "write time -30%, peak memory -25%",
+      "passed": true
+    },
+    {
+      "case": "nested-4m",
+      "host": "native",
+      "goal": "write time -30%, peak memory -25%",
+      "passed": true
+    },
+    {
+      "case": "nested-4m",
+      "host": "js",
+      "goal": "write time -30%, peak memory -25%",
+      "passed": true
+    }
+  ],
+  "regressions_over_10_percent": [],
+  "next_stage": "Selection memory/speed targets belong to v0.0.8; included measurements are retained as pre-optimization evidence."
+}
