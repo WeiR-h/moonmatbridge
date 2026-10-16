@@ -8,10 +8,10 @@ if (-not $Executable) {
     if (-not (Test-Path -LiteralPath $Executable)) { $Executable = Join-Path $project "dist/moonmat.exe" }
 }
 $Executable = (Resolve-Path -LiteralPath $Executable).Path
-if (-not $OutputDirectory) { $OutputDirectory = Join-Path $project ("workflow-results-" + [Guid]::NewGuid().ToString("N")) }
+if (-not $OutputDirectory) { $OutputDirectory = Join-Path $project ("verification/local/workflow-demo-" + [Guid]::NewGuid().ToString("N")) }
 if (Test-Path -LiteralPath $OutputDirectory) { throw "Output directory must be new: $OutputDirectory" }
 $output = [IO.Path]::GetFullPath($OutputDirectory)
-$null = New-Item -ItemType Directory -Path $output
+$null = [IO.Directory]::CreateDirectory($output)
 $receipts = [Collections.Generic.List[object]]::new()
 
 function Invoke-Moon([string[]]$Arguments, [int]$ExpectedExit = 0) {
