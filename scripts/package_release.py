@@ -117,8 +117,8 @@ with zipfile.ZipFile(native_zip, "w", compression=zipfile.ZIP_DEFLATED, compress
         add(z, ROOT / name, native_name)
     for name in ["docs/COMPATIBILITY_MATRIX.md", "docs/PERFORMANCE.md", "benchmarks/manifest.json"]:
         add(z, ROOT / name, native_name)
-    for path in sorted((ROOT / "examples/octave").glob("*.m")):
-        add(z, path, native_name)
+    for path in sorted((ROOT / "examples/octave").rglob("*")):
+        if path.is_file(): add(z, path, native_name)
     for path in sorted(REPORTS.glob("*.json")):
         add(z, path, native_name, "verification/" + path.name)
     z.writestr(f"{native_name}/README.txt", portable_readme.replace("v0.0.1", f"v{VERSION}"))
