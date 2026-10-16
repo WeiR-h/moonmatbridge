@@ -12,6 +12,8 @@ powershell -ExecutionPolicy Bypass -File examples/workflows/demo.ps1
 
 脚本新建唯一目录，记录命令的预期/实际退出码、返回值、程序哈希和结果哈希。相同输入结果可由 `diff` 检查；输出路径始终要求新文件。实际执行回执位于结果目录 `demo-receipt.json`，便携包验证的日志由打包脚本保存。
 
+发行页另附 `MoonMatBridge-v0.0.9-workflows.zip`，包含本版 native/JS 的实际输出、原始输入、独立核对报告及逐文件哈希。解压后可用 `examples/workflows/demo.ps1 -Executable 原生程序绝对路径` 在新目录复现。该证据包没有自带 EXE，使用同版 Windows 包中的程序。
+
 ## 场景一：混合实验归档
 
 输入 `examples/mixed/research-mixed.mat` 有 13 个根变量，组合实验记录 struct、分组 cell、中文和非 BMP char、legacy 类名与字段、精确 uint64、复数、logical、CSC、空数组与多维数组。执行根目录检查、压缩和写回。
