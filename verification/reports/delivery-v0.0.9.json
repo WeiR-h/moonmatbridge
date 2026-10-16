@@ -1,0 +1,131 @@
+{
+  "status": "public_delivery_verified",
+  "version": "0.0.9",
+  "source": {
+    "sha256": "167a0426a6348c93751c592ade6e009ca280851d23092118bb935610ff36fd58",
+    "files": 149
+  },
+  "publication_history": [
+    {
+      "version": "0.0.6",
+      "commit": "afcbe6144b3d9d3d216abf1a1a89890a5edb26e5",
+      "github": "https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.0.6",
+      "mooncakes": "https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.0.6",
+      "verified_public_assets": 12,
+      "mooncakes_archive_sha256": "cda767779e181a7a468a96897b324e8b5b8cb3c2e4217387c56d7db59f40abe0"
+    },
+    {
+      "version": "0.0.7",
+      "commit": "76e9a057b61b64de401f86e461e15b43a869417d",
+      "github": "https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.0.7",
+      "mooncakes": "https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.0.7",
+      "verified_public_assets": 14,
+      "mooncakes_archive_sha256": "b0d51d6489bec0f73d67b5e6012bb9baf9a608decf9228ff145a2e2cdebbc52b"
+    },
+    {
+      "version": "0.0.8",
+      "commit": "8d8947a79279dbc6092f2af2f558ed47942b3e15",
+      "github": "https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.0.8",
+      "mooncakes": "https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.0.8",
+      "verified_public_assets": 16,
+      "mooncakes_archive_sha256": "7bd4155feebb22a6e0f406ef745f016438d01dc54eb49466fb37b1c85b1f6462"
+    },
+    {
+      "version": "0.0.9",
+      "commit": "4d1e261bd6189260575b191ca786018b0906ec0d",
+      "github": "https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.0.9",
+      "mooncakes": "https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.0.9",
+      "verified_public_assets": 18,
+      "mooncakes_archive_sha256": "3d04135e4db45e2e55ed9af626904fa8c4bee1c9d8dc0ad39b4c0b60c54c635b"
+    }
+  ],
+  "verification": {
+    "local_groups": 14,
+    "mixed_class_host_cases": 16,
+    "selected_host_cases": 22,
+    "actual_octave_workflows": 8,
+    "scientific_host_workflows": 6,
+    "public_scientific_host_workflows": 6
+  },
+  "performance": {
+    "measured_versions": [
+      "0.0.7",
+      "0.0.8"
+    ],
+    "runtime_source_sha256": "811f16134941c49eae8d168b2d64d61e4517001c7bf8bf5d0b1d2e8104f33a8c",
+    "unmet_engineering_targets": [
+      {
+        "case": "select-1-of-16",
+        "host": "native",
+        "goal": "select speed 2x, peak memory -40%",
+        "passed": false
+      }
+    ],
+    "regressions_over_10_percent": [],
+    "scope": "Historical measurements are identified; delivery runtime equivalence is checked. No new delivery-version timing is claimed."
+  },
+  "open_compatibility": [
+    "MATLAB runtime execution not claimed",
+    "noncanonical CSC remains rejected",
+    "non-UTF8 legacy names remain rejected",
+    "producer-specific UTF16/nonBMP dimensions require separate receipts",
+    "Octave producer variants remain unresolved; original files and tool disagreements retained",
+    "All public standard variants must pass before v1.0.0"
+  ],
+  "organizer_state": {
+    "registration_update": "not_performed_in_this_delivery",
+    "acceptance": "no_new_organizer_receipt",
+    "award": "not_claimed"
+  },
+  "evidence": [
+    {
+      "file": "compatibility-v0.0.9.json",
+      "sha256": "21c04bbb3c2994f6954728d853b307387fbdfe5aa60a222d2c13984d2ce5ddf1"
+    },
+    {
+      "file": "octave-v0.0.9.json",
+      "sha256": "3e1f31bf79c8c09e1b8286dcf9e6d004f9aea54ba84de1fabfe6fdd5ae9e1279"
+    },
+    {
+      "file": "selection-v0.0.9.json",
+      "sha256": "e72ef191ed92675dffd856c6589718733fea99a7105f5ef30cde6a18f5c69c8e"
+    },
+    {
+      "file": "workflows-v0.0.9.json",
+      "sha256": "3439e06b6a7ff200915f4064179b65019d6070f110fdec094a8e46644dbfe455"
+    },
+    {
+      "file": "registry-v0.0.9.json",
+      "sha256": "732998a0134eebd615710b126519958cd4b95d9d0d807c4cacf5cd2a8578fdc7"
+    },
+    {
+      "file": "mooncake-audit-v0.0.9.json",
+      "sha256": "142ba26e1a48452a102e5b4ba31dd54bd92f61e882dd933eb8f42f4464ee03f0"
+    },
+    {
+      "file": "mooncakes-v0.0.9.json",
+      "sha256": "0481571d2f97fa1c3ae303be6799b0f18dcdc53d362dfe0e283d387b5e3913e7"
+    },
+    {
+      "file": "release-v0.0.9.json",
+      "sha256": "8e1b743ec4cc3660c819c972696fbadc31fd99483444589213eefbd2dfba9237"
+    },
+    {
+      "file": "public-downloads-v0.0.9.json",
+      "sha256": "42eead3b1510cf3cd812d77d07105119432981abcaef59650f10e61c4d0d669a"
+    },
+    {
+      "file": "workflows-public-v0.0.9.json",
+      "sha256": "5501055c3b3a2c434631cec51ff13857002e1df0fa815b35b62b335eee4253a8"
+    },
+    {
+      "file": "performance-summary-v0.0.9.json",
+      "sha256": "2e270a9b0493c02997a52e085e0745973769a9a5bc943683724fccc96bb431e1"
+    },
+    {
+      "file": "v0.0.9.json",
+      "sha256": "c6d4579443e4a3cf1879ef2220755eb177da9d76f9fc83701b936dd8c147db7f"
+    }
+  ],
+  "scope": "Four versions published and downloaded, exact public packages installed, and final scientific workflows reproduced. Publication is separate from full compatibility, engineering targets and organizer decisions."
+}
