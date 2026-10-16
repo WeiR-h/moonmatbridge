@@ -26,6 +26,12 @@ function Invoke-Moon([string[]]$Arguments, [int]$ExpectedExit = 0) {
     return $value
 }
 function Destination([string]$Name) { return Join-Path $output $Name }
+function File-Digest([string]$Path) {
+    $sourceStream = [IO.File]::OpenRead($Path)
+    $hasher = [Security.Cryptography.SHA256]::Create()
+    try { return [BitConverter]::ToString($hasher.ComputeHash($sourceStream)).Replace("-", "").ToLowerInvariant() }
+    finally { $hasher.Dispose(); $sourceStream.Dispose() }
+}
 
 Write-Host "1/3 Mixed experimental archive"
 $mixed = Join-Path $project "examples/mixed/research-mixed.mat"
@@ -62,7 +68,7 @@ if ($changed.content_equal -or $changed.variables[0].samples[0].coordinates[0] -
 $missing = Invoke-Moon @("npy", (Destination "transformed.mat"), "missing", (Destination "missing.npy")) 1
 if ($missing.code -ne "missing-variable" -or (Test-Path -LiteralPath (Destination "missing.npy"))) { throw "Missing export check failed" }
 
-$hashes = @(Get-ChildItem -LiteralPath $output -File | ForEach-Object { [pscustomobject]@{ file = $_.Name; sha256 = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant() } })
-$receipt = [pscustomobject]@{ status = "passed"; executable_sha256 = (Get-FileHash -LiteralPath $Executable -Algorithm SHA256).Hash.ToLowerInvariant(); commands = $receipts; files = $hashes }
+$hashes = @(Get-ChildItem -LiteralPath $output -File | ForEach-Object { [pscustomobject]@{ file = $_.Name; sha256 = (File-Digest $_.FullName) } })
+$receipt = [pscustomobject]@{ status = "passed"; executable_sha256 = (File-Digest $Executable); commands = $receipts; files = $hashes }
 $receipt | ConvertTo-Json -Depth 30 | Set-Content -LiteralPath (Destination "demo-receipt.json") -Encoding UTF8
 Write-Host "All three workflows passed. Results: $output"
