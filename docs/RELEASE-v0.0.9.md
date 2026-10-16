@@ -6,4 +6,6 @@
 
 性能汇总保留 v0.0.7/v0.0.8 的同机固定基线和全部样本，v0.0.9 不以版本描述变化伪造新加速成绩。指标与兼容性分别验收。
 
+16 选 1 的 v0.0.8 实测：native 约 14.2 倍、峰值下降 38.3%；JS 约 10.3 倍、峰值下降 48.1%。native 的 40% 峰值目标仍未达，继续公开跟踪。四组写入目标通过，最终 24 个固定组合没有超过 10% 的退化。发行页另提供包含实际输入、输出及独立报告的 workflows ZIP。
+
 安装：`moon add WeiR-h/moonmatbridge@0.0.9`。便携包解压后运行 `powershell -ExecutionPolicy Bypass -File examples/workflows/demo.ps1`。完整兼容终点及实际 MATLAB 运行仍有未完成项，继续保持 0.x；复审技术附件见 `docs/REVIEW_EVIDENCE-v0.0.9.md`。
