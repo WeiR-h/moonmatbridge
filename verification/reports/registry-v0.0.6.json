@@ -1,0 +1,74 @@
+{
+  "status": "passed",
+  "version": "0.0.6",
+  "module": "WeiR-h/moonmatbridge",
+  "source": {
+    "sha256": "7a50753528a95eda51aea159f32ad3c1c0f2f2c6e9c12c101086f85dd0e63aa2",
+    "files": 117
+  },
+  "platform": "win32",
+  "method": "Exact Mooncakes dependency in a fresh project; no moon.work, no path override; all installed src bytes compared.",
+  "steps": [
+    {
+      "args": [
+        "add",
+        "WeiR-h/moonmatbridge@0.0.6"
+      ],
+      "exit_code": 0,
+      "output": "Registry index updated successfully\nSymbols updated successfully\nDownloading WeiR-h/moonmatbridge@0.0.6"
+    },
+    {
+      "args": [
+        "check",
+        "--target",
+        "js",
+        "--deny-warn",
+        "--jobs",
+        "1"
+      ],
+      "exit_code": 0,
+      "output": "Finished. moon: ran 5 tasks, now up to date"
+    },
+    {
+      "args": [
+        "test",
+        "--target",
+        "js",
+        "--deny-warn",
+        "--jobs",
+        "1",
+        "--no-parallelize"
+      ],
+      "exit_code": 0,
+      "output": "Total tests: 6, passed: 6, failed: 0."
+    },
+    {
+      "args": [
+        "test",
+        "--target",
+        "wasm-gc",
+        "--deny-warn",
+        "--jobs",
+        "1",
+        "--no-parallelize"
+      ],
+      "exit_code": 0,
+      "output": "Total tests: 6, passed: 6, failed: 0."
+    },
+    {
+      "args": [
+        "test",
+        "--target",
+        "native",
+        "--deny-warn",
+        "--jobs",
+        "1",
+        "--no-parallelize"
+      ],
+      "exit_code": 0,
+      "output": "Total tests: 6, passed: 6, failed: 0."
+    }
+  ],
+  "installed_files": 56,
+  "downloaded_manifest_sha256": "b910cbf04c237f2f894483d0df0b65e48dfb39f3bff15e3e6b693030cad0c094"
+}
