@@ -248,13 +248,38 @@ console.log('Fresh JS consumer: passed');
 """, encoding="utf-8")
 run(["node", str(probe)], js)
 
-archives = [{"file": path.name, "bytes": path.stat().st_size, "sha256": digest(path)} for path in [source_zip, native_zip, js_zip]]
+workflow_report = json.loads((REPORTS / f"workflows-v{VERSION}.json").read_text(encoding="utf-8"))
+assert workflow_report["status"] == "passed" and workflow_report["version"] == VERSION and workflow_report["passed"] == 6
+workflow_directory = LOCAL / "workflows"
+for check in workflow_report["checks"]:
+    for output in check["outputs"]:
+        assert digest(workflow_directory / output["file"]) == output["sha256"]
+workflow_name = f"MoonMatBridge-v{VERSION}-workflows"
+workflow_zip = DIST / f"{workflow_name}.zip"
+members = []
+with zipfile.ZipFile(workflow_zip, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as z:
+    paths = [(path, "outputs/" + path.name) for path in sorted(workflow_directory.iterdir()) if path.is_file()]
+    for directory in ("examples/workflows", "examples/mixed"):
+        paths.extend((path, path.relative_to(ROOT).as_posix()) for path in sorted((ROOT / directory).iterdir()) if path.is_file())
+    paths.append((REPORTS / f"workflows-v{VERSION}.json", f"verification/workflows-v{VERSION}.json"))
+    for path, name in paths:
+        add(z, path, workflow_name, name)
+        members.append({"file": name, "bytes": path.stat().st_size, "sha256": digest(path)})
+    z.writestr(f"{workflow_name}/manifest.json", json.dumps({"version": VERSION, "status": "verified_outputs", "files": members}, indent=2) + "\n")
+    z.writestr(f"{workflow_name}/README.txt", f"MoonMatBridge v{VERSION}: actual independently checked native/JS scientific outputs, inputs and receipts. Download the matching Windows CLI, then run examples/workflows/demo.ps1 -Executable ABSOLUTE_PATH_TO_MOONMAT_EXE to reproduce in a new directory. Full independent Python oracles are in the source archive.\n")
+with zipfile.ZipFile(workflow_zip) as z:
+    assert z.testzip() is None
+    for member in members:
+        assert hashlib.sha256(z.read(f'{workflow_name}/{member["file"]}')).hexdigest() == member["sha256"]
+
+archives = [{"file": path.name, "bytes": path.stat().st_size, "sha256": digest(path)} for path in [source_zip, native_zip, js_zip, workflow_zip]]
 result = {
     "status": "passed", "version": VERSION, "source_sha256": source_hash,
     "native_sha256": digest(DIST / "moonmat.exe"), "archives": archives,
     "fresh_consumers": {"native": f"version + {len(commands)} commands + sparse/transform/compress/snapshot/diff + Unicode/spaces + no overwrite; PATH limited to System32; diff-change exit 2 verified; complete three-workflow PowerShell demo passed",
                         "source": f"unpacked source check and {test_match.group(2)} JS tests; no local settings/build cache bundled",
-                        "js": "unpacked exports: recursive mixed cell/struct/char/object fixture, JSON, compression, sparse, mixed transform, snapshot restore and exact diff"},
+                        "js": "unpacked exports: recursive mixed cell/struct/char/object fixture, JSON, compression, sparse, mixed transform, snapshot restore and exact diff",
+                        "workflow_evidence": "actual six-workflow outputs matched their independent report hashes, then every bundled file was checked after ZIP creation"},
     "scope": "Local archives and fresh consumers; no public publishing or organizer acceptance",
 }
 (DIST / f"release-v{VERSION}.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
