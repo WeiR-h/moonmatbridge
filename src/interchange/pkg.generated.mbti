@@ -18,6 +18,8 @@ pub fn from_snapshot(String, limits? : @moonmatbridge.Limits) -> Array[@moonmatb
 
 pub fn info(@moonmatbridge.MatFile) -> Json
 
+pub fn roots_info(Array[@moonmatbridge.MatRootInfo]) -> Json
+
 pub fn sample() -> Array[@moonmatbridge.NumericArray] raise @moonmatbridge.MatError
 
 pub fn to_json(Array[@moonmatbridge.NumericArray]) -> Json raise @moonmatbridge.MatError

@@ -73,7 +73,7 @@ def github():
     assets += [ROOT / "dist/SHA256SUMS.txt", ROOT / f"dist/release-v{VERSION}.json"]
     assets += sorted((ROOT / "examples/mixed").glob("*.mat"))
     assets += [ROOT / "examples/mixed/manifest.json"]
-    assets += [p for p in REPORTS.glob(f"*-v{VERSION}.json") if p.name.startswith(("octave-", "compatibility-", "performance-", "mooncakes-"))]
+    assets += [p for p in REPORTS.glob(f"*-v{VERSION}.json") if p.name.startswith(("octave-", "compatibility-", "performance-", "mooncakes-", "selection-"))]
     existing = run(["gh", "release", "view", tag, "--repo", REPO, "--json", "url"], ok=False)
     if existing.returncode:
         notes = ROOT / "docs" / f"RELEASE-v{VERSION}.md"

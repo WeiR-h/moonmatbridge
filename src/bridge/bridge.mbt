@@ -42,6 +42,14 @@ pub fn inspect_mat(bytes : Bytes) -> String {
 }
 
 ///|
+#export_name("inspect_roots")
+pub fn inspect_roots(bytes : Bytes) -> String {
+  @wire.roots_info(@mat.inspect_roots(bytes)).stringify() catch {
+    error => @wire.error_json(error).stringify()
+  }
+}
+
+///|
 #export_name("mat_to_json")
 pub fn mat_to_json(bytes : Bytes) -> String {
   @wire.to_json(@mat.read_mat(bytes).arrays).stringify() catch {
@@ -93,7 +101,7 @@ pub fn inflate_zlib(bytes : Bytes, limit : Int) -> BinaryResult {
 ///|
 #export_name("select_mat")
 pub fn select_mat(bytes : Bytes, names : Array[String]) -> BinaryResult {
-  binary(() => @mat.write_tree(@mat.read_tree(bytes).select(names)))
+  binary(() => @mat.write_tree(@mat.read_selected(bytes, names).variables))
 }
 
 ///|

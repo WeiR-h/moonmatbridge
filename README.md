@@ -1,10 +1,10 @@
-# MoonMatBridge v0.0.7
+# MoonMatBridge v0.0.8
 
 **MoonBit 原生 MAT Level 5 读写与科研数据互操作库。**
 
 MAT 递归 cell/struct/char/legacy object、密集/CSC 稀疏读写、数值编码、zlib/DEFLATE 解压与压缩、JSON/无损快照、NPY 互通和精确差异检查都由 MoonBit 实现。运行核心库和 Windows 命令行程序不需要 MATLAB、Python、SciPy、Node.js 或第三方压缩库。Node.js 仅用于开发脚本与可选 JS 命令行；SciPy/NumPy 仅用作独立兼容性验证。
 
-当前源码版本为 v0.0.7，发布模块名为 `WeiR-h/moonmatbridge`。[v0.0.3](https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.0.3) 完成的五轮核心迭代继续保留，详见 [迭代记录](docs/ITERATIONS-v0.0.3.md)。本版补齐 cell、struct、char 和 legacy object 的递归读写，提供可下载混合文件与独立验证；[最终读写范围与验收终点](docs/COMPATIBILITY.md) 明确全部公开基本类 1–15 的交付目标。
+当前源码版本为 v0.0.8，发布模块名为 `WeiR-h/moonmatbridge`。[v0.0.3](https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.0.3) 完成的五轮核心迭代继续保留，详见 [迭代记录](docs/ITERATIONS-v0.0.3.md)。本版补齐 cell、struct、char 和 legacy object 的递归读写，提供可下载混合文件与独立验证；[最终读写范围与验收终点](docs/COMPATIBILITY.md) 明确全部公开基本类 1–15 的交付目标。
 
 项目定位是把科研数组**连同类型、维度、列优先顺序和复数分量一起保留下来**，让 MoonBit 项目直接交换 MATLAB/Python 数据。
 
@@ -21,9 +21,11 @@ v0.0.6 新增 [15 个基本类的独立读写矩阵](docs/COMPATIBILITY_MATRIX.m
 
 v0.0.7 将密集、CSC 与混合树写入统一到预检尺寸的固定缓冲，避免逐层复制；完整输入验证后才分配主要输出。性能结果按宿主与场景分别记录。
 
+v0.0.8 新增 `read_selected`、`inspect_roots` 和 `roots` 命令；未选变量仍执行完整验证，减少其数据树和负载分配。空选择也不会跳过校验。输入仍整体驻留内存，压缩根变量仍需有界解压。
+
 ## 支持范围
 
-| 能力 | v0.0.7 |
+| 能力 | v0.0.8 |
 | --- | --- |
 | MAT Level 5 读取 | 小端、大端；标准标签与小数据标签；多变量 |
 | 压缩读取 | `miCOMPRESSED`；MoonBit 解码 stored/fixed/dynamic DEFLATE，验证 Adler-32 |
@@ -38,6 +40,7 @@ v0.0.7 将密集、CSC 与混合树写入统一到预检尺寸的固定缓冲，
 | JSON 互通 | `moonmatbridge/1` 严格字段；64 位整数使用十进制字符串 |
 | NumPy 互通 | 导出 NPY v1.0；读取 NPY 1/2/3，大小端与 C/Fortran 顺序，复数交错编码 |
 | 数组处理 | 保留原始字节的切片、按轴取样、拼接、reshape、轴置换；混合文件按名称提取变量 |
+| 根目录与按需构造 | `roots` / `inspect_roots` 返回根变量元数据；`read_selected` 保持请求顺序并验证未选变量 |
 | 无损快照 | 严格 JSON + 原始十六进制字节；密集/CSC、NaN 编码、负零、容量与全局标记 |
 | 科研差异 | 按变量名比较原始字节与元数据；全局样本额度、坐标、实/虚部计数和 CI 退出码 |
 | 核心编译目标 | JS、wasm-gc、native 已验证 |
@@ -55,6 +58,7 @@ v0.0.7 将密集、CSC 与混合树写入统一到预检尺寸的固定缓冲，
 .\moonmat.exe version
 .\moonmat.exe sample sample.mat
 .\moonmat.exe info sample.mat
+.\moonmat.exe roots sample.mat
 .\moonmat.exe dump sample.mat sample.json
 .\moonmat.exe pack sample.json from-json.mat
 .\moonmat.exe npy sample.mat temperature temperature.npy
@@ -82,10 +86,10 @@ JS 适配器只读写文件；格式处理使用编译后的 MoonBit。
 
 ## MoonBit API
 
-发布模块名为 [`WeiR-h/moonmatbridge`](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.0.7)。在已有 MoonBit 项目中安装：
+发布模块名为 [`WeiR-h/moonmatbridge`](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.0.8)。在已有 MoonBit 项目中安装：
 
 ```powershell
-moon add WeiR-h/moonmatbridge@0.0.7
+moon add WeiR-h/moonmatbridge@0.0.8
 ```
 
 核心代码在 `src/`，公开接口在 `src/pkg.generated.mbti`。包内示例可直接运行：

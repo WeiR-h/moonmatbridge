@@ -14,6 +14,8 @@ pub fn inflate_zlib(Bytes, Int) -> BinaryResult
 
 pub fn inspect_mat(Bytes) -> String
 
+pub fn inspect_roots(Bytes) -> String
+
 pub fn json_to_mat(String) -> BinaryResult
 
 pub fn mat_to_json(Bytes) -> String

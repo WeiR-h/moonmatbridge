@@ -20,6 +20,8 @@ pub fn dtype_from_name(String) -> DType raise MatError
 
 pub fn inflate_zlib(Bytes, max_bytes? : Int) -> Bytes raise MatError
 
+pub fn inspect_roots(Bytes, limits? : Limits, tree_limits? : TreeLimits) -> Array[MatRootInfo] raise MatError
+
 pub fn numeric_array(String, DType, Array[Int], Array[Value], imaginary? : Array[Value], is_global? : Bool, limits? : Limits) -> NumericArray raise MatError
 
 pub fn raw_array(String, DType, Array[Int], Bytes, imag? : Bytes, is_global? : Bool, limits? : Limits) -> NumericArray raise MatError
@@ -31,6 +33,8 @@ pub fn read_document(Bytes, limits? : Limits) -> MatDocument raise MatError
 pub fn read_mat(Bytes, limits? : Limits) -> MatFile raise MatError
 
 pub fn read_npy(Bytes, String, limits? : Limits) -> NumericArray raise MatError
+
+pub fn read_selected(Bytes, Array[String], limits? : Limits, tree_limits? : TreeLimits) -> MatTree raise MatError
 
 pub fn read_tree(Bytes, limits? : Limits, tree_limits? : TreeLimits) -> MatTree raise MatError
 
@@ -167,6 +171,17 @@ pub(all) enum MatNode {
 pub fn MatNode::name(Self) -> String
 pub fn MatNode::shape(Self) -> Array[Int]
 pub fn MatNode::to_repr(Self) -> @debug.Repr
+
+pub(all) struct MatRootInfo {
+  name : String
+  class_id : Int
+  shape : Array[Int]
+  is_global : Bool
+  is_complex : Bool
+  is_logical : Bool
+  compressed : Bool
+} derive(@debug.Debug)
+pub fn MatRootInfo::to_repr(Self) -> @debug.Repr
 
 pub(all) struct MatTree {
   description : String

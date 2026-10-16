@@ -1,11 +1,12 @@
 ///|
-fn sparse_matrix(
+fn sparse_matrix_read(
   bytes : Bytes,
   outer : Element,
   little : Bool,
   limits : Limits,
   nested? : Bool = false,
-) -> SparseArray raise MatError {
+  keep? : Bool = true,
+) -> (SparseArray?, Int) raise MatError {
   let end = outer.start + outer.size
   let flags = tag(bytes, outer.start, end, little)
   if flags.kind != 6 || flags.size != 8 {
@@ -50,6 +51,7 @@ fn sparse_matrix(
       ""
     }
   }
+  validate_name(text, limits, allow_empty=nested)
   let ir = tag(bytes, name.next, end, little)
   let jc = tag(bytes, ir.next, end, little)
   if ir.kind != 5 ||
@@ -63,12 +65,7 @@ fn sparse_matrix(
       "Expected bounded miINT32 CSC row indices and column pointers",
     )
   }
-  let rows = Array::makei(ir.size / 4, i => {
-    bits_at(bytes, ir.start + i * 4, 4, little).to_uint().reinterpret_as_int()
-  })
-  let cols = Array::makei(jc.size / 4, i => {
-    bits_at(bytes, jc.start + i * 4, 4, little).to_uint().reinterpret_as_int()
-  })
+  let slots = ir.size / 4
   let values = tag(bytes, jc.next, end, little)
   if dtype == Float64 && values.kind != 9 {
     fail(
@@ -77,7 +74,7 @@ fn sparse_matrix(
       "Sparse numerical storage must be float64",
     )
   }
-  let real = numeric_payload(bytes, values, dtype, rows.length(), little)
+  let real = numeric_payload(bytes, values, dtype, slots, little, keep~)
   let (imag, next) = if complex {
     let values = tag(bytes, values.next, end, little)
     if values.kind != 9 {
@@ -88,7 +85,7 @@ fn sparse_matrix(
       )
     }
     (
-      Some(numeric_payload(bytes, values, dtype, rows.length(), little)),
+      Some(numeric_payload(bytes, values, dtype, slots, little, keep~)),
       values.next,
     )
   } else {
@@ -97,6 +94,57 @@ fn sparse_matrix(
   if next != end {
     fail("trailing-matrix-data", next, "Unexpected sparse matrix data")
   }
+  if !keep {
+    if capacity < slots.to_uint64() {
+      fail("element-limit", 0, "Sparse capacity is smaller than stored slots")
+    }
+    let pointer = fn(i : Int) {
+      bits_at(bytes, jc.start + i * 4, 4, little).to_uint().reinterpret_as_int()
+    }
+    if pointer(0) != 0 || pointer(shape[1]) > slots {
+      fail(
+        "invalid-sparse", 0, "CSC pointers must start at zero and fit stored slots",
+      )
+    }
+    let index_bytes = ir.size + jc.size
+    let payload_bytes = slots * dtype.width()
+    if index_bytes > limits.max_file_bytes ||
+      payload_bytes >
+      (limits.max_file_bytes - index_bytes) / (if complex { 2 } else { 1 }) {
+      fail("file-limit", 0, "Sparse payload exceeds byte limit")
+    }
+    for col = 0; col < shape[1]; col = col + 1 {
+      let start = pointer(col)
+      let end = pointer(col + 1)
+      if start < 0 || end < start || end > slots {
+        fail(
+          "invalid-sparse", col, "CSC column pointers must be monotone and bounded",
+        )
+      }
+      let mut previous = -1
+      for i = start; i < end; i = i + 1 {
+        let row = bits_at(bytes, ir.start + i * 4, 4, little)
+          .to_uint()
+          .reinterpret_as_int()
+        if row < 0 || row >= shape[0] {
+          fail("invalid-sparse", i, "Sparse row is outside dimensions")
+        }
+        if row <= previous {
+          fail(
+            "noncanonical-sparse", i, "CSC rows must increase strictly within each column",
+          )
+        }
+        previous = row
+      }
+    }
+    return (None, slots)
+  }
+  let rows = Array::makei(slots, i => {
+    bits_at(bytes, ir.start + i * 4, 4, little).to_uint().reinterpret_as_int()
+  })
+  let cols = Array::makei(jc.size / 4, i => {
+    bits_at(bytes, jc.start + i * 4, 4, little).to_uint().reinterpret_as_int()
+  })
   let result : SparseArray = {
     name: text,
     dtype,
@@ -109,5 +157,17 @@ fn sparse_matrix(
     is_global: (bits & 1024U) != 0U,
   }
   ignore(validate_sparse(result, limits, allow_empty=nested))
-  result
+  (Some(result), slots)
+}
+
+///|
+fn sparse_matrix(
+  bytes : Bytes,
+  outer : Element,
+  little : Bool,
+  limits : Limits,
+  nested? : Bool = false,
+) -> SparseArray raise MatError {
+  let (value, _) = sparse_matrix_read(bytes, outer, little, limits, nested~)
+  value.unwrap()
 }

@@ -57,6 +57,7 @@ fn numeric_payload(
   dtype : DType,
   count : Int,
   little : Bool,
+  keep? : Bool = true,
 ) -> Bytes raise MatError {
   let storage = from_mi_type(element.kind, element.start - 8)
   if element.size != count * storage.width() {
@@ -68,6 +69,9 @@ fn numeric_payload(
   }
   // Identical types retain every IEEE bit, including NaN payload and negative zero.
   if storage == dtype {
+    if !keep {
+      return b""
+    }
     if little || storage.width() == 1 {
       return payload(bytes, element)
     }
@@ -75,6 +79,9 @@ fn numeric_payload(
       let width = storage.width()
       bytes[element.start + i / width * width + width - 1 - i % width]
     })
+  }
+  if !keep && dtype == Logical {
+    return b""
   }
   let out : Array[Byte] = []
   for i = 0; i < count; i = i + 1 {
@@ -85,18 +92,22 @@ fn numeric_payload(
       little,
     )
     append_value(out, value, dtype, element.start)
+    if !keep {
+      out.clear()
+    }
   }
   Bytes::from_array(out)
 }
 
 ///|
-fn matrix(
+fn numeric_matrix(
   bytes : Bytes,
   outer : Element,
   little : Bool,
   limits : Limits,
   nested? : Bool = false,
-) -> NumericArray raise MatError {
+  keep? : Bool = true,
+) -> (NumericArray?, Int) raise MatError {
   let end = outer.start + outer.size
   let flags = tag(bytes, outer.start, end, little)
   if flags.kind != 6 || flags.size != 8 {
@@ -159,11 +170,11 @@ fn matrix(
   }
   validate_name(name_text, limits, allow_empty=nested)
   let real_tag = tag(bytes, name.next, end, little)
-  let real = numeric_payload(bytes, real_tag, dtype, count, little)
+  let real = numeric_payload(bytes, real_tag, dtype, count, little, keep~)
   let (imag, next) = if complex {
     let imag_tag = tag(bytes, real_tag.next, end, little)
     (
-      Some(numeric_payload(bytes, imag_tag, dtype, count, little)),
+      Some(numeric_payload(bytes, imag_tag, dtype, count, little, keep~)),
       imag_tag.next,
     )
   } else {
@@ -174,6 +185,13 @@ fn matrix(
       "trailing-matrix-data", next, "Unexpected data after dense numeric payload",
     )
   }
+  if !keep {
+    let expected = count * dtype.width()
+    if expected > limits.max_file_bytes / (if complex { 2 } else { 1 }) {
+      fail("file-limit", 0, "Array payload exceeds configured file byte limit")
+    }
+    return (None, count)
+  }
   let result : NumericArray = {
     name: name_text,
     dtype,
@@ -183,7 +201,19 @@ fn matrix(
     is_global: (bits & 1024U) != 0,
   }
   ignore(validate_array(result, limits, allow_empty=nested))
-  result
+  (Some(result), count)
+}
+
+///|
+fn matrix(
+  bytes : Bytes,
+  outer : Element,
+  little : Bool,
+  limits : Limits,
+  nested? : Bool = false,
+) -> NumericArray raise MatError {
+  let (value, _) = numeric_matrix(bytes, outer, little, limits, nested~)
+  value.unwrap()
 }
 
 ///|

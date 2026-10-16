@@ -10,6 +10,7 @@ Product code is original, AI-assisted MoonBit implementation under Apache-2.0, e
 | [SciPy MATLAB I/O](https://github.com/scipy/scipy/tree/v1.15.3/scipy/io/matlab) | Independent fixture producer and consumer; format behavior reference | BSD-3-Clause; SciPy developers. Installed only in optional verification environment; no source copied. |
 | [NumPy NPY format](https://numpy.org/doc/stable/reference/generated/numpy.lib.format.html) | NPY descriptor/order/header contract; independent producer and consumer | NumPy documentation; verification library BSD-3-Clause. No source copied. |
 | [RFC 1950](https://www.rfc-editor.org/rfc/rfc1950), [RFC 1951](https://www.rfc-editor.org/rfc/rfc1951) | zlib/DEFLATE format and canonical Huffman coding | IETF/RFC authors. Original bounded decoder, no external decompressor dependency. |
+| [RFC 3629](https://www.rfc-editor.org/rfc/rfc3629) | UTF-8 scalar validity and overlong/surrogate bounds | Format reference for original allocation-free scanner; standard decoder used as independent test oracle. |
 | Node.js built-in zlib | Differential oracle for 704 streams | Node.js / zlib notices; development only, not bundled into native executable. |
 
 `matio`, `mat4js` and `moon-npy` were considered during topic/ecosystem research. They are not dependencies, and their implementation code is not incorporated into this project. In particular, no GPL `mat4js` code is used.

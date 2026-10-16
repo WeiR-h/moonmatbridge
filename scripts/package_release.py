@@ -72,6 +72,7 @@ Open PowerShell in this folder:
   .\moonmat.exe version
   .\moonmat.exe sample sample.mat
   .\moonmat.exe info sample.mat
+  .\moonmat.exe roots sample.mat
   .\moonmat.exe dump sample.mat sample.json
   .\moonmat.exe pack sample.json from-json.mat
   .\moonmat.exe npy sample.mat temperature temperature.npy
@@ -144,6 +145,7 @@ consumer.mkdir()
 commands = [
     ["sample", str(consumer / "sample.mat")],
     ["info", str(consumer / "sample.mat")],
+    ["roots", str(consumer / "sample.mat")],
     ["dump", str(consumer / "sample.mat"), str(consumer / "sample.json")],
     ["pack", str(consumer / "sample.json"), str(consumer / "packed.mat")],
     ["roundtrip", str(consumer / "sample.mat"), str(consumer / "roundtrip.mat")],
@@ -162,6 +164,7 @@ commands = [
 ]
 commands.extend([
     ["info", str(native / "examples/mixed/research-mixed.mat")],
+    ["roots", str(native / "examples/mixed/research-mixed.mat")],
     ["roundtrip", str(native / "examples/mixed/research-mixed-big-endian.mat"), str(consumer / "mixed.mat")],
     ["compress", str(consumer / "mixed.mat"), str(consumer / "mixed-compressed.mat")],
     ["select", str(consumer / "mixed-compressed.mat"), str(consumer / "mixed-selected.mat"), "measurements", "experiments", "title"],
@@ -202,6 +205,7 @@ const result=api.sample_mat();
 assert.equal(JSON.parse(api.result_status(result)).status,'ok');
 const bytes=api.result_bytes(result);
 assert.equal(JSON.parse(api.inspect_mat(bytes)).arrays.length,4);
+assert.equal(JSON.parse(api.inspect_roots(bytes)).roots.length,4);
 const rebuilt=api.json_to_mat(api.mat_to_json(bytes));
 assert.equal(JSON.parse(api.result_status(rebuilt)).status,'ok');
 assert.deepEqual(api.result_bytes(rebuilt),bytes);
