@@ -20,7 +20,7 @@ function Invoke-Moon([string[]]$Arguments, [int]$ExpectedExit = 0) {
     $actualExit = $LASTEXITCODE
     $text = ($lines | ForEach-Object { $_.ToString() }) -join "`n"
     if ($actualExit -ne $ExpectedExit) { throw "Command failed ($actualExit): $($Arguments -join ' ')`n$text" }
-    $value = $text | ConvertFrom-Json
+    $value = $text | ConvertFrom-Json -ErrorAction Stop
     $receipts.Add([pscustomobject]@{ arguments = $Arguments; expected_exit = $ExpectedExit; actual_exit = $actualExit; response = $value })
     Write-Host ("PASS exit {0}: {1}" -f $actualExit, $Arguments[0])
     return $value
@@ -30,6 +30,7 @@ function Destination([string]$Name) { return Join-Path $output $Name }
 Write-Host "1/3 Mixed experimental archive"
 $mixed = Join-Path $project "examples/mixed/research-mixed.mat"
 $roots = Invoke-Moon @("roots", $mixed)
+if ($roots.roots.Count -ne 13) { throw "Mixed root directory check failed" }
 $roots.roots | Select-Object name, class_id, shape | Format-Table | Out-Host
 $null = Invoke-Moon @("compress", $mixed, (Destination "archive-compressed.mat"))
 $null = Invoke-Moon @("roundtrip", (Destination "archive-compressed.mat"), (Destination "archive-restored.mat"))
