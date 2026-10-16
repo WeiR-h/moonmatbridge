@@ -30,7 +30,8 @@ def main():
                "inherited_from": REFERENCE, "runtime_source_sha256": new.hexdigest(), "runtime_files": len(files),
                "hash_policy": "All src .mbt/.c and moon.pkg, excluding version.mbt; CRLF normalized to LF. This includes test and benchmark code.",
                "baseline_commit": reports[0]["baseline_commit"],
-               "measurements": [{"version": r["version"], "targets": r["targets"], "regressions_over_10_percent": r["regressions_over_10_percent"],
+               "measurements": [{"version": r["version"], "environment": r["environment"], "protocol": r["protocol"],
+                                 "targets": r["targets"], "regressions_over_10_percent": r["regressions_over_10_percent"],
                                  "report_sha256": hashlib.sha256((REPORTS / f'performance-v{r["version"]}.json').read_bytes()).hexdigest(),
                                  "results": [{k: row[k] for k in ("case", "operation", "host", "median_ms", "p95_ms", "speedup", "memory_reduction", "payload_MiB_per_second", "cli_speedup")} for row in r["results"]]}
                                 for r in reports],
