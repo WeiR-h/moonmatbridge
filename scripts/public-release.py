@@ -90,8 +90,13 @@ def public_workflows(directory, exe):
     print(result.stdout.strip(), flush=True)
     workflow_report = source / f"verification/reports/workflows-v{VERSION}.json"
     receipt = json.loads(workflow_report.read_text(encoding="utf-8"))
+    original = json.loads((directory / f"workflows-v{VERSION}.json").read_text(encoding="utf-8"))
+    expected = {(row["host"], row["workflow"]): row["outputs"] for row in original["checks"]}
+    for row in receipt["checks"]:
+        assert row["outputs"] == expected[row["host"], row["workflow"]], "Public reproduction differs from released workflow outputs"
+    receipt["released_output_hashes_match"] = True
     receipt["public_archives_sha256"] = {kind: hashlib.sha256((directory / f"MoonMatBridge-v{VERSION}-{kind}.zip").read_bytes()).hexdigest() for kind in ("source", "js", "windows-x64")}
-    receipt["scope"] = "All six workflows executed using publicly downloaded inputs, native executable and precompiled JS module, checked by independent NumPy/SciPy. Adapter only points to the downloaded module."
+    receipt["scope"] = "All six workflows executed using publicly downloaded inputs, native executable and precompiled JS module, checked by independent NumPy/SciPy and exact released output hashes. Adapter only points to the downloaded module."
     (directory / f"workflows-public-v{VERSION}.json").write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return receipt["passed"]
 
