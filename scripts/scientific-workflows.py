@@ -56,10 +56,15 @@ def record(host, workflow, assertions, outputs):
 def main():
     reproduced = OUT / "reproduced-inputs"
     generate(reproduced)
-    for name in ("sparse-system.mat", "signal.npy", "changed-signal.npy", "transform-plan.json", "manifest.json"):
+    for name in ("all-base-classes.mat", "sparse-system.mat", "signal.npy", "changed-signal.npy", "transform-plan.json", "manifest.json"):
         assert (INPUTS / name).read_bytes() == (reproduced / name).read_bytes(), name
     for host in ("native", "js"):
         archive = ROOT / "examples/mixed/research-mixed.mat"
+        all_classes = INPUTS / "all-base-classes.mat"
+        classes_copy = fresh(f"{host}-all-base-classes.mat")
+        assert {r["class_id"] for r in invoke(host, "roots", all_classes)["roots"]} == set(range(1, 16))
+        invoke(host, "roundtrip", all_classes, classes_copy)
+        assert_file_equal(classes_copy, all_classes)
         compressed = fresh(f"{host}-archive-compressed.mat")
         restored = fresh(f"{host}-archive-restored.mat")
         roots = invoke(host, "roots", archive)["roots"]
@@ -69,7 +74,7 @@ def main():
         assert_file_equal(compressed, archive)
         assert_file_equal(restored, archive)
         assert all(r["compressed"] for r in invoke(host, "roots", compressed)["roots"])
-        record(host, "mixed experimental archive", ["13 roots and recursive containers", "independent SciPy deep type/shape/field and raw numeric byte equality", "UTF8 labels and exact uint64", "compressed roots decoded then rewritten"], [compressed, restored])
+        record(host, "mixed experimental archive", ["13 roots and recursive containers", "additional downloadable file covers every base class 1 through 15", "independent SciPy deep type/shape/field and raw numeric byte equality", "UTF8 labels and exact uint64", "compressed roots decoded then rewritten"], [compressed, restored, classes_copy])
 
         source = INPUTS / "sparse-system.mat"
         selected = fresh(f"{host}-system-only.mat")

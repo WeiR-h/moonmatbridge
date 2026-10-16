@@ -20,17 +20,7 @@ VERSION = json.loads((ROOT / "package.json").read_text())["version"]
 
 
 def values():
-    result = mixed.mixed_values()
-    for dtype in ("float64", "float32", "int8", "uint8", "int16", "uint16", "int32", "uint32", "int64", "uint64"):
-        result["nd_" + dtype] = np.arange(8, dtype=dtype).reshape((2, 2, 2), order="F")
-        result["empty_" + dtype] = np.empty((0, 2, 3), dtype=dtype)
-    nested = np.empty((1, 2), dtype=object)
-    nested[0, 0] = {"samples": result["measurements"], "records": result["experiments"]}
-    nested[0, 1] = result["sparse_signal"]
-    result["cross_nested"] = nested
-    result["empty_nd_cell"] = np.empty((0, 2, 3), dtype=object)
-    result["empty_nd_struct"] = np.empty((0, 2, 3), dtype=[("signal", object), ("label", object)])
-    return result
+    return mixed.all_base_values()
 
 
 def main():

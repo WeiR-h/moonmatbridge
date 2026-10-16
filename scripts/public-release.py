@@ -118,6 +118,8 @@ def github():
     assets += [ROOT / "dist/SHA256SUMS.txt", ROOT / f"dist/release-v{VERSION}.json"]
     assets += sorted((ROOT / "examples/mixed").glob("*.mat"))
     assets += [ROOT / "examples/mixed/manifest.json"]
+    all_classes = ROOT / "examples/workflows/all-base-classes.mat"
+    if all_classes.exists(): assets.append(all_classes)
     assets += [p for p in REPORTS.glob(f"*-v{VERSION}.json") if p.name.startswith(("octave-", "compatibility-", "performance-", "mooncakes-", "selection-", "workflows-"))]
     review = ROOT / f"docs/REVIEW_EVIDENCE-v{VERSION}.md"
     if review.exists(): assets.append(review)
