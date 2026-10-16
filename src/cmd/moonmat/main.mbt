@@ -83,6 +83,7 @@ fn usage() -> String {
   @mat.version() +
   "\n" +
   "  moonmat info INPUT.mat\n" +
+  "  moonmat roots INPUT.mat\n" +
   "  moonmat dump INPUT.mat OUTPUT.json\n" +
   "  moonmat pack INPUT.json OUTPUT.mat\n" +
   "  moonmat roundtrip INPUT.mat OUTPUT.mat\n" +
@@ -115,6 +116,10 @@ fn run(args : Array[String]) -> Unit raise @mat.MatError {
     save(args[2], @mat.write_mat(@wire.sample()))
   } else if command == "info" && args.length() == 3 {
     println(@wire.tree_info(@mat.read_tree(read(args[2]))).stringify(indent=2))
+  } else if command == "roots" && args.length() == 3 {
+    println(
+      @wire.roots_info(@mat.inspect_roots(read(args[2]))).stringify(indent=2),
+    )
   } else if command == "dump" && args.length() == 4 {
     let document = @wire.to_json(@mat.read_mat(read(args[2])).arrays).stringify(
         indent=2,
@@ -186,7 +191,10 @@ fn run(args : Array[String]) -> Unit raise @mat.MatError {
     )
   } else if command == "select" && args.length() >= 5 {
     let names = Array::makei(args.length() - 4, fn(i) { args[i + 4] })
-    save(args[3], @mat.write_tree(@mat.read_tree(read(args[2])).select(names)))
+    save(
+      args[3],
+      @mat.write_tree(@mat.read_selected(read(args[2]), names).variables),
+    )
   } else if command == "npy" && args.length() == 5 {
     let file = @mat.read_document(read(args[2]))
     match file.get(args[3]) {

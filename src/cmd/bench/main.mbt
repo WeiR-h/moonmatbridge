@@ -31,7 +31,8 @@ fn execute(
     "read" => @mat.read_tree(bytes).variables.length()
     "write" => @mat.write_tree(prepared).length()
     "compress" => @mat.write_tree(prepared, compressed=true).length()
-    "select" => @mat.write_tree(@mat.read_tree(bytes).select(["v00"])).length()
+    "select" =>
+      @mat.write_tree(@mat.read_selected(bytes, ["v00"]).variables).length()
     _ => abort("Unknown benchmark operation")
   }
 }

@@ -237,32 +237,41 @@ fn validate_char(
   if a.data.length() > limits.max_file_bytes {
     fail("file-limit", 0, "Character payload exceeds byte limit")
   }
-  if a.encoding == Utf8 {
-    let text = @utf8.decode(a.data[:]) catch {
-      _ => {
-        fail("invalid-char", 0, "Malformed UTF-8 character payload")
-        ""
-      }
-    }
-    if text.iter().count() != count {
+  validate_char_units(a.data[:], a.encoding, count, true)
+
+  count
+}
+
+///|
+fn validate_char_units(
+  data : BytesView,
+  encoding : CharEncoding,
+  count : Int,
+  little : Bool,
+) -> Unit raise MatError {
+  if encoding == Utf8 {
+    if utf8_scalar_count(data) != count {
       fail(
         "payload-size", 0, "UTF-8 scalar count differs from character dimensions",
       )
     }
   } else {
-    if a.data.length() != count * a.encoding.width() {
+    if data.length() != count * encoding.width() {
       fail("payload-size", 0, "Character storage does not match dimensions")
     }
-    if a.encoding == Utf32 {
+    if encoding == Utf32 {
       for i = 0; i < count; i = i + 1 {
-        let cp = bits_at(a.data, i * 4, 4, true)
+        let mut cp = 0UL
+        for j = 0; j < 4; j = j + 1 {
+          let at = i * 4 + (if little { j } else { 3 - j })
+          cp = cp | (data[at].to_uint64() << (j * 8))
+        }
         if cp > 1114111UL || (cp >= 55296UL && cp <= 57343UL) {
           fail("invalid-char", i * 4, "UTF-32 requires Unicode scalar values")
         }
       }
     }
   }
-  count
 }
 
 ///|
@@ -307,7 +316,7 @@ fn tree_text(
 }
 
 ///|
-fn read_node(
+fn visit_node(
   bytes : Bytes,
   outer : Element,
   little : Bool,
@@ -315,20 +324,26 @@ fn read_node(
   tree : TreeLimits,
   budget : TreeBudget,
   depth : Int,
-) -> MatNode raise MatError {
+  keep : Bool,
+) -> MatNode? raise MatError {
   charge_node(budget, depth, tree)
   if outer.kind != 14 {
     fail("invalid-child", outer.start, "Container child must be miMATRIX")
   }
   if outer.size == 0 && depth > 1 {
-    return Numeric({
-      name: "",
-      dtype: Float64,
-      shape: [0, 0],
-      real: b"",
-      imag: None,
-      is_global: false,
-    })
+    if !keep {
+      return None
+    }
+    return Some(
+      Numeric({
+        name: "",
+        dtype: Float64,
+        shape: [0, 0],
+        real: b"",
+        imag: None,
+        is_global: false,
+      }),
+    )
   }
   let end = outer.start + outer.size
   let flags = tag(bytes, outer.start, end, little)
@@ -338,14 +353,28 @@ fn read_node(
   let bits = bits_at(bytes, flags.start, 4, little).to_uint()
   let class = (bits & 255U).reinterpret_as_int()
   if class >= 6 && class <= 15 {
-    let a = matrix(bytes, outer, little, limits, nested=depth > 1)
-    charge_elements(budget, a.length(), limits)
-    return Numeric(a)
+    let (value, count) = numeric_matrix(
+      bytes,
+      outer,
+      little,
+      limits,
+      nested=depth > 1,
+      keep~,
+    )
+    charge_elements(budget, count, limits)
+    return value.map(fn(a) { Numeric(a) })
   }
   if class == 5 {
-    let a = sparse_matrix(bytes, outer, little, limits, nested=depth > 1)
-    charge_elements(budget, a.row_indices.length(), limits)
-    return Csc(a)
+    let (value, count) = sparse_matrix_read(
+      bytes,
+      outer,
+      little,
+      limits,
+      nested=depth > 1,
+      keep~,
+    )
+    charge_elements(budget, count, limits)
+    return value.map(fn(a) { Csc(a) })
   }
   if class < 1 || class > 4 {
     fail(
@@ -396,24 +425,32 @@ fn read_node(
         Utf8
       }
     }
+    if data.next != end {
+      fail("trailing-matrix-data", data.next, "Unexpected character data")
+    }
+    if data.size > limits.max_file_bytes {
+      fail("file-limit", 0, "Character payload exceeds byte limit")
+    }
+    validate_char_units(
+      bytes[data.start:data.start + data.size],
+      encoding,
+      count,
+      little,
+    )
+    if !keep {
+      return None
+    }
     let width = encoding.width()
     let raw = if little || width == 1 {
       payload(bytes, data)
     } else {
-      if data.size % width != 0 {
-        fail("payload-size", data.start, "Partial character unit")
-      }
       Bytes::makei(data.size, i => {
         bytes[data.start + i / width * width + width - 1 - i % width]
       })
     }
-    if data.next != end {
-      fail("trailing-matrix-data", data.next, "Unexpected character data")
-    }
-    let a : CharArray = { name, shape, encoding, data: raw, is_global, }
-    ignore(validate_char(a, limits, depth > 1))
-    return Character(a)
+    return Some(Character({ name, shape, encoding, data: raw, is_global, }))
   }
+
   let class_name = if class == 3 {
     let item = tag(bytes, pos, end, little)
     pos = item.next
@@ -478,9 +515,19 @@ fn read_node(
   let values : Array[MatNode] = []
   for i = 0; i < count * multiplier; i = i + 1 {
     let child = tag(bytes, pos, end, little)
-    values.push(
-      read_node(bytes, child, little, limits, tree, budget, depth + 1),
+    let value = visit_node(
+      bytes,
+      child,
+      little,
+      limits,
+      tree,
+      budget,
+      depth + 1,
+      keep,
     )
+    if value is Some(node) {
+      values.push(node)
+    }
     pos = child.next
   }
   if pos != end {
@@ -488,89 +535,13 @@ fn read_node(
       "trailing-matrix-data", pos, "Container child count does not match dimensions/fields",
     )
   }
+  if !keep {
+    return None
+  }
   if class == 1 {
-    Cell({ name, shape, values, is_global, })
+    Some(Cell({ name, shape, values, is_global, }))
   } else {
-    Structure({ name, shape, fields, values, class_name, is_global, })
-  }
-}
-
-///|
-/// Read all documented Level 5 base classes, including recursively mixed files.
-pub fn read_tree(
-  bytes : Bytes,
-  limits? : Limits = default_limits(),
-  tree_limits? : TreeLimits = default_tree_limits(),
-) -> MatTree raise MatError {
-  validate_limits(limits)
-  validate_tree_limits(tree_limits)
-  if bytes.length() > limits.max_file_bytes {
-    fail("file-limit", 0, "File exceeds max_file_bytes")
-  }
-  if bytes.length() < 128 {
-    fail("invalid-header", 0, "MAT Level 5 header needs 128 bytes")
-  }
-  if bytes[0:8] == b"\x89HDF\x0d\x0a\x1a\x0a" ||
-    bytes[0:19] == b"MATLAB 7.3 MAT-file" {
-    fail("unsupported-v7.3", 0, "HDF5 MAT v7.3 is outside MAT Level 5")
-  }
-  let little = if bytes[126:128] == b"IM" {
-    true
-  } else if bytes[126:128] == b"MI" {
-    false
-  } else {
-    fail("invalid-header", 126, "Invalid endian marker")
-    true
-  }
-  if bits_at(bytes, 124, 2, little) != 256UL {
-    fail("unsupported-version", 124, "Expected Level 5 version 0x0100")
-  }
-  let subsystem = bits_at(bytes, 116, 8, little)
-  if subsystem != 0UL && subsystem != 0x2020202020202020UL {
-    fail(
-      "unsupported-subsystem", 116, "Subsystem/object workspace metadata is unsupported",
-    )
-  }
-  let budget : TreeBudget = { nodes: 0, elements: 0, }
-  let variables = []
-  let names : Map[String, Bool] = Map([])
-  let mut offset = 128
-  let mut expanded = 0
-  while offset < bytes.length() {
-    if variables.length() >= limits.max_variables {
-      fail("variable-limit", offset, "Too many root variables")
-    }
-    let outer = tag(bytes, offset, bytes.length(), little)
-    let node = if outer.kind == 14 {
-      read_node(bytes, outer, little, limits, tree_limits, budget, 1)
-    } else if outer.kind == 15 {
-      let unpacked = inflate_zlib(
-        payload(bytes, outer),
-        max_bytes=limits.max_expanded_bytes - expanded,
-      )
-      expanded = expanded + unpacked.length()
-      let inner = tag(unpacked, 0, unpacked.length(), little)
-      if inner.kind != 14 || inner.next != unpacked.length() {
-        fail(
-          "invalid-compressed", offset, "Compressed element must contain exactly one matrix",
-        )
-      }
-      read_node(unpacked, inner, little, limits, tree_limits, budget, 1)
-    } else {
-      fail("unsupported-element", offset, "Expected miMATRIX or miCOMPRESSED")
-      abort("unreachable")
-    }
-    if names.contains(node.name()) {
-      fail("duplicate-name", offset, "Duplicate root variable")
-    }
-    names[node.name()] = true
-    variables.push(node)
-    offset = outer.next
-  }
-  {
-    description: @utf8.decode_lossy(bytes[0:116]).trim().to_owned(),
-    little_endian: little,
-    variables,
+    Some(Structure({ name, shape, fields, values, class_name, is_global, }))
   }
 }
 

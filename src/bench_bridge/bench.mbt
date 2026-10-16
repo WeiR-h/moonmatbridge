@@ -39,7 +39,7 @@ pub fn compress(value : Prepared) -> Int {
 ///|
 #export_name("select")
 pub fn select(bytes : Bytes) -> Int {
-  @mat.write_tree(@mat.read_tree(bytes).select(["v00"])).length() catch {
+  @mat.write_tree(@mat.read_selected(bytes, ["v00"]).variables).length() catch {
     _ => abort("Benchmark selection failed")
   }
 }

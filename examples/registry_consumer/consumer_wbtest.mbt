@@ -1,6 +1,6 @@
 ///|
 test "published compressed dense data preserves complex and uint64" {
-  assert_eq(@mat.version(), "0.0.7")
+  assert_eq(@mat.version(), "0.0.8")
   let id = @mat.numeric_array("id", @mat.UInt64, [1, 2], [
     Unsigned(9007199254740993UL),
     Unsigned(18446744073709551615UL),
@@ -32,6 +32,28 @@ test "published recursive tree preserves cell struct and UTF8 text" {
   assert_true(bytes == @mat.write_tree(file.variables, compressed=true))
   let info = @wire.tree_info(file).stringify()
   assert_true(info.contains("struct") && info.contains("cell") && info.contains("miUTF8"))
+}
+
+///|
+test "published strict selection and root metadata preserve order and validate omitted data" {
+  let values = [@mat.Numeric(@mat.numeric_array("a", @mat.Float64, [1, 1], [Floating(1.0)])),
+    @mat.Cell({name: "c", shape: [1, 1], values: [@mat.Character(@mat.utf8_char_array("", [1, 1], "月"))], is_global: true})]
+  for compressed in [false, true] {
+    let bytes = @mat.write_tree(values, compressed~)
+    let roots = @mat.inspect_roots(bytes)
+    assert_eq(roots[0].class_id, 6)
+    assert_true(roots[1].is_global && roots[1].compressed == compressed)
+    let selected = @mat.read_selected(bytes, ["c", "a"])
+    assert_eq(selected.variables[0].name(), "c")
+    assert_eq(selected.variables[1].name(), "a")
+    assert_eq(@mat.read_selected(bytes, []).variables.length(), 0)
+    if compressed {
+      let raw = bytes.to_array()
+      raw[raw.length() - 1] = (raw[raw.length() - 1].to_int() ^ 1).to_byte()
+      let code = try { ignore(@mat.read_selected(Bytes::from_array(raw), ["a"])); "accepted" } catch { e => e.code() }
+      assert_eq(code, "invalid-zlib")
+    }
+  }
 }
 
 ///|

@@ -1,10 +1,12 @@
-# MoonBit API v0.0.7
+# MoonBit API v0.0.8
 
 The core package is `WeiR-h/moonmatbridge`. The executable, JSON adapter and JS ABI are separate packages; core parsing performs no host I/O.
 
 | API | Behavior |
 | --- | --- |
 | `read_tree(Bytes, limits?, tree_limits?) -> MatTree raise MatError` | All documented base classes including recursive cell/struct/char/legacy object |
+| `read_selected(Bytes, names, limits?, tree_limits?) -> MatTree raise MatError` | Validate the whole file but construct only requested roots, in requested order; an empty selection still validates everything |
+| `inspect_roots(Bytes, limits?, tree_limits?) -> Array[MatRootInfo] raise MatError` | Fully validated root names, raw class IDs, shapes, global/complex/logical flags and compression; no cached offsets |
 | `write_tree(Array[MatNode], compressed?, limits?, tree_limits?) -> Bytes raise MatError` | Preflight the entire tree, then write deterministic little-endian Level 5 |
 | `utf8_char_array(name, shape, text, is_global?, limits?) -> CharArray` | Validated UTF8 scalar-count dimensions; anonymous names allowed for container children |
 | `default_tree_limits() -> TreeLimits` | Depth 64, nodes 65,536, fields per struct 4,096 |
@@ -61,7 +63,7 @@ Exports: `npy_to_mat`, `select_mat`, `inspect_mat`, `mat_to_json`, `json_to_mat`
 
 `DocumentDifference` reports `content_equal`, `variable_order_changed`, `changed_variables`, `variables`. Metadata differences list dtype, shape, global/complex, storage or CSC pointers/rows/capacity. Comparable value changes are counted separately per real/imaginary plane; samples contain a zero-based linear/CSC-slot index, coordinates and exact before/after bytes. Inactive CSC slots have empty coordinates. Shape/type/storage/index-mapping changes are metadata differences, not fabricated element-by-element matches. File descriptions/endian/compression are excluded, while CSC storage metadata is included. No floating tolerance is applied.
 
-`src/pkg.generated.mbti` and the interfaces under `src/interchange` and `src/bridge` contain the complete compiler-generated signatures. Install the exact registry version with `moon add WeiR-h/moonmatbridge@0.0.7`, then import the core and/or interchange package. `examples/registry_consumer` contains a consumer that uses only these public interfaces; the registry verification script resolves a fresh copy and checks its source bytes before running all three targets.
+`src/pkg.generated.mbti` and the interfaces under `src/interchange` and `src/bridge` contain the complete compiler-generated signatures. Install the exact registry version with `moon add WeiR-h/moonmatbridge@0.0.8`, then import the core and/or interchange package. `examples/registry_consumer` contains a consumer that uses only these public interfaces; the registry verification script resolves a fresh copy and checks its source bytes before running all three targets.
 
 NPY input supports primitive float32/64, complex64/128, signed/unsigned integers and bool. Header strings must be plain ASCII, the header fits 64 KiB and no duplicate/unknown keys or trailing payload are accepted. Structured, object/pickle, string, datetime, float16 and ambiguous native-endian descriptors are rejected. NPY scalars become `[1,1]` and vectors become `[n,1]`; multidimensional shape is unchanged. Nonzero bool bytes normalize to canonical 1. All numerical bytes, including nonfinite payloads and exact 64-bit integers, are copied without scalar conversion.
 

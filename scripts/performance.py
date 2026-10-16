@@ -80,6 +80,10 @@ def build_baseline():
         shutil.copy2(ROOT / ".local-toolchain.json", BASELINE / ".local-toolchain.json")
         for name in ("src/bench_bridge", "src/cmd/bench"):
             shutil.copytree(ROOT / name, BASELINE / name)
+        # The same adapter uses the legacy public selector on the frozen baseline.
+        for name in ("src/bench_bridge/bench.mbt", "src/cmd/bench/main.mbt"):
+            path = BASELINE / name
+            path.write_text(path.read_text(encoding="utf-8").replace('@mat.read_selected(bytes, ["v00"]).variables', '@mat.read_tree(bytes).select(["v00"])'), encoding="utf-8")
     command(["node", ROOT / "scripts/build-bench.mjs", BASELINE])
     binary = BASELINE / "dist" / ("moonmat.exe" if platform.system() == "Windows" else "moonmat")
     if not binary.exists():
