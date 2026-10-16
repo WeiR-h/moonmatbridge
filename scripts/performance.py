@@ -63,6 +63,8 @@ def fixtures():
         manifest.append({"name": name, "path": str(path), "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest(),
                          "payload_bytes": sum(v.nbytes if isinstance(v, np.ndarray) and v.dtype.kind != "O" else 0 for v in values.values()),
                          "operations": operations})
+        if name == "nested-4m": manifest[-1]["payload_bytes"] = 4 * 1024 * 1024
+        if name == "sparse-100k": manifest[-1]["payload_bytes"] = sparse.data.nbytes + sparse.indices.nbytes + sparse.indptr.nbytes
     (LOCAL / "manifest.json").write_text(json.dumps({"seed": 20261017, "cases": manifest}, indent=2) + "\n")
     return manifest
 
@@ -148,12 +150,14 @@ def main():
     build_baseline()
     if not args.baseline_only: command(["node", ROOT / "scripts/build-bench.mjs", ROOT])
     version = json.loads((ROOT / "package.json").read_text())["version"]
+    config = json.loads((ROOT / ".local-toolchain.json").read_text())
     baseline_file = LOCAL / "baseline-v0.0.5.json"
     baseline = json.loads(baseline_file.read_text()) if baseline_file.exists() else {"version": "0.0.5", "commit": BASE_SHA, "measurements": {}}
     report = {"version": version, "status": "running", "baseline_commit": BASE_SHA,
               "codec_source_sha256": source_hash(),
               "environment": {"platform": platform.platform(), "processor": platform.processor(), "node": command(["node", "--version"]),
-                              "moon": command(["node", ROOT / "scripts/moon.mjs", "version"]), "architecture": platform.machine()},
+                              "moon": command(["node", ROOT / "scripts/moon.mjs", "version"]), "architecture": platform.machine(),
+                              "compiler": command([config.get("gcc", "cc"), "--version"]).splitlines()[0], "build": "MoonBit --release; fixed SDK and compiler for both revisions"},
               "protocol": {"warmup": 5, "samples": 30, "batches": 3, "batch_samples": 10,
                            "timing": "codec only; preloaded input/prepared write tree; JS GC outside samples",
                            "memory": "fresh child, no warmup, one operation; peak process working set/RSS includes input and write preparation"},
@@ -197,6 +201,7 @@ def main():
                        "baseline_samples_ms": base_timing, "baseline_peak_bytes_samples": base_memory,
                        "speedup": baseline_ms / statistics.median(samples), "peak_bytes_samples": memory,
                        "peak_bytes": peak, "baseline_peak_bytes": baseline_peak, "memory_reduction": 1 - peak / baseline_peak}
+                row["payload_MiB_per_second"] = fixture["payload_bytes"] / 1048576 / (row["median_ms"] / 1000)
                 report["results"].append(row)
                 row["cli"] = cli_measure(ROOT, host, fixture, operation)
                 row["baseline_cli"] = base["cli"]
@@ -207,8 +212,19 @@ def main():
         shutil.copy2(baseline_file, ROOT / "verification/reports/performance-baseline-v0.0.5.json")
     else:
         report["status"] = "measured"
+        report["targets"] = []
+        for row in report["results"]:
+            if row["case"] in ("dense-16m", "nested-4m") and row["operation"] == "write":
+                report["targets"].append({"case": row["case"], "host": row["host"], "goal": "write time -30%, peak memory -25%",
+                    "passed": row["speedup"] >= 1 / 0.7 and row["memory_reduction"] >= 0.25})
+            if row["operation"] == "select":
+                report["targets"].append({"case": row["case"], "host": row["host"], "goal": "select speed 2x, peak memory -40%",
+                    "passed": row["speedup"] >= 2 and row["memory_reduction"] >= 0.40})
+        report["regressions_over_10_percent"] = [{"case": row["case"], "operation": row["operation"], "host": row["host"],
+            "speedup": row["speedup"], "memory_reduction": row["memory_reduction"]} for row in report["results"] if row["speedup"] < 1 / 1.1 or row["memory_reduction"] < -0.1]
         report["scope"] = "Same-machine codec measurement; targets must be evaluated per case/host. No organizer or award claim."
-        (ROOT / f"verification/reports/performance-v{version}.json").write_text(json.dumps(report, indent=2) + "\n")
+        target = LOCAL / f"partial-v{version}.json" if args.case else ROOT / f"verification/reports/performance-v{version}.json"
+        target.write_text(json.dumps(report, indent=2) + "\n")
 
 
 if __name__ == "__main__":
