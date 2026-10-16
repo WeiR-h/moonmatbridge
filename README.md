@@ -1,10 +1,10 @@
-# MoonMatBridge v0.0.8
+# MoonMatBridge v0.0.9
 
 **MoonBit 原生 MAT Level 5 读写与科研数据互操作库。**
 
 MAT 递归 cell/struct/char/legacy object、密集/CSC 稀疏读写、数值编码、zlib/DEFLATE 解压与压缩、JSON/无损快照、NPY 互通和精确差异检查都由 MoonBit 实现。运行核心库和 Windows 命令行程序不需要 MATLAB、Python、SciPy、Node.js 或第三方压缩库。Node.js 仅用于开发脚本与可选 JS 命令行；SciPy/NumPy 仅用作独立兼容性验证。
 
-当前源码版本为 v0.0.8，发布模块名为 `WeiR-h/moonmatbridge`。[v0.0.3](https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.0.3) 完成的五轮核心迭代继续保留，详见 [迭代记录](docs/ITERATIONS-v0.0.3.md)。本版补齐 cell、struct、char 和 legacy object 的递归读写，提供可下载混合文件与独立验证；[最终读写范围与验收终点](docs/COMPATIBILITY.md) 明确全部公开基本类 1–15 的交付目标。
+当前源码版本为 v0.0.9，发布模块名为 `WeiR-h/moonmatbridge`。[v0.0.3](https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.0.3) 完成的五轮核心迭代继续保留，详见 [迭代记录](docs/ITERATIONS-v0.0.3.md)。v0.0.5 补齐的 cell、struct、char 和 legacy object 递归读写继续提供混合文件与独立验证；[最终读写范围与验收终点](docs/COMPATIBILITY.md) 明确全部公开基本类 1–15 的交付目标。
 
 项目定位是把科研数组**连同类型、维度、列优先顺序和复数分量一起保留下来**，让 MoonBit 项目直接交换 MATLAB/Python 数据。
 
@@ -15,7 +15,7 @@ MAT 递归 cell/struct/char/legacy object、密集/CSC 稀疏读写、数值编�
 
 这些能力共同服务于可复现的科研文件交换；范围比较与已有项目的交集见 [独特性说明](docs/DIFFERENTIATION.md)。
 
-后续开发安排见 [v0.0.7—v0.0.9 更新计划](docs/NEXT_RELEASES.md)：优先完成兼容证据、建立性能基准，再优化读写与按需读取。文中的性能数字是待验证目标。
+本轮执行记录见 [v0.0.6—v0.0.9 计划与交付索引](docs/NEXT_RELEASES.md)，实测结果见 [性能方法与报告](docs/PERFORMANCE.md)。自定工程目标与官方验收分别记录。
 
 v0.0.6 新增 [15 个基本类的独立读写矩阵](docs/COMPATIBILITY_MATRIX.md)、真实 GNU Octave v6/v7 双向验证入口，以及 [同机性能对照方法](docs/PERFORMANCE.md)。运行报告分别记录已经验证的行为和未关闭的兼容缺口。
 
@@ -23,9 +23,11 @@ v0.0.7 将密集、CSC 与混合树写入统一到预检尺寸的固定缓冲，
 
 v0.0.8 新增 `read_selected`、`inspect_roots` 和 `roots` 命令；未选变量仍执行完整验证，减少其数据树和负载分配。空选择也不会跳过校验。输入仍整体驻留内存，压缩根变量仍需有界解压。
 
+v0.0.9 冻结 API，提供 [三个完整科研流程](docs/SCIENTIFIC_WORKFLOWS.md) 与便携包一键演示，扩大全部基本类的 global 标记交叉验证，并整理 [复审技术附件](docs/REVIEW_EVIDENCE-v0.0.9.md)。完整标准变体和 MATLAB 运行仍有未完成项，保持 0.x。
+
 ## 支持范围
 
-| 能力 | v0.0.8 |
+| 能力 | v0.0.9 |
 | --- | --- |
 | MAT Level 5 读取 | 小端、大端；标准标签与小数据标签；多变量 |
 | 压缩读取 | `miCOMPRESSED`；MoonBit 解码 stored/fixed/dynamic DEFLATE，验证 Adler-32 |
@@ -86,10 +88,10 @@ JS 适配器只读写文件；格式处理使用编译后的 MoonBit。
 
 ## MoonBit API
 
-发布模块名为 [`WeiR-h/moonmatbridge`](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.0.8)。在已有 MoonBit 项目中安装：
+发布模块名为 [`WeiR-h/moonmatbridge`](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.0.9)。在已有 MoonBit 项目中安装：
 
 ```powershell
-moon add WeiR-h/moonmatbridge@0.0.8
+moon add WeiR-h/moonmatbridge@0.0.9
 ```
 
 核心代码在 `src/`，公开接口在 `src/pkg.generated.mbti`。包内示例可直接运行：

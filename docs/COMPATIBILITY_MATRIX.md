@@ -13,7 +13,7 @@
 | 7 | single | 多维、空多维、复数及精确 IEEE 样例 |
 | 8–15 | int/uint 8/16/32/64 | 每个类型的多维和空多维；精确 uint64 上界另含在混合文件中 |
 
-组合：小端 / 大端 × 未压缩 / 压缩 × native / JS，共 8 组混合文件验证。三目标核心测试与编码、异常输入等验证继续由 `npm run verify` 执行。报告保存文件哈希及明确的剩余问题，见 `verification/reports/compatibility-v*.json`。
+v0.0.6—v0.0.8 组合：小端 / 大端 × 未压缩 / 压缩 × native / JS，共 8 组混合文件验证。v0.0.9 加入每个基本类的 global 标记开关，扩展为 16 组；SciPy 生产并检查 `__globals__`，元数据与选择结果也核对标记。三目标核心测试与编码、异常输入等验证继续由 `npm run verify` 执行。报告保存文件哈希及明确的剩余问题，见 `verification/reports/compatibility-v*.json`。
 
 ## 真实 GNU Octave 验证
 

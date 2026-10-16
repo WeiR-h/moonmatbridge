@@ -19,6 +19,8 @@
 !/docs/COMPATIBILITY_MATRIX.md
 !/docs/NEXT_RELEASES.md
 !/docs/PERFORMANCE.md
+!/docs/SCIENTIFIC_WORKFLOWS.md
+!/docs/REVIEW_EVIDENCE-v0.0.9.md
 !/docs/FORMAT.md
 !/docs/JSON.md
 !/docs/RECIPES.md
@@ -39,5 +41,7 @@
 !/examples/registry_consumer/**
 !/examples/mixed/
 !/examples/mixed/**
+!/examples/workflows/
+!/examples/workflows/**
 
 /examples/python/__pycache__/

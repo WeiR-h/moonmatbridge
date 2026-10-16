@@ -72,6 +72,38 @@ def mooncakes():
         "targets": ["js", "wasm-gc", "native"], "scope": "Actual public package, audited checksum and fresh consumers; organizer acceptance is separate."})
 
 
+def public_workflows(directory, exe):
+    extracted = {}
+    for kind in ("source", "js"):
+        archive = directory / f"MoonMatBridge-v{VERSION}-{kind}.zip"
+        target = directory / kind
+        with zipfile.ZipFile(archive) as package:
+            for item in package.infolist():
+                assert (target / item.filename).resolve().is_relative_to(target.resolve())
+            package.extractall(target)
+        extracted[kind] = next(target.iterdir())
+    source, js = extracted["source"], extracted["js"]
+    # Use the downloaded filesystem adapter with the downloaded precompiled module.
+    # Only its two development-location declarations change; no format logic is added.
+    adapter = (source / "scripts/cli.mjs").read_text(encoding="utf-8")
+    import_line = "import {root, version} from './moon.mjs';"
+    api_line = "const api = await import(pathToFileURL(join(root, '_build/js/release/build/bridge/bridge.js')));"
+    assert adapter.count(import_line) == adapter.count(api_line) == 1
+    adapter = adapter.replace(import_line, f"const version = {json.dumps(VERSION)};")
+    adapter = adapter.replace(api_line, f"const api = await import({json.dumps((js / 'bridge.mjs').as_uri())});")
+    cli = directory / "downloaded-cli.mjs"
+    cli.write_text(adapter, encoding="utf-8")
+    python = os.environ.get("MOONMAT_PYTHON") or str(ROOT / ".venv/Scripts/python.exe")
+    result = run([python, source / "scripts/scientific-workflows.py", "--native-executable", exe, "--js-cli", cli])
+    print(result.stdout.strip(), flush=True)
+    workflow_report = source / f"verification/reports/workflows-v{VERSION}.json"
+    receipt = json.loads(workflow_report.read_text(encoding="utf-8"))
+    receipt["public_archives_sha256"] = {kind: hashlib.sha256((directory / f"MoonMatBridge-v{VERSION}-{kind}.zip").read_bytes()).hexdigest() for kind in ("source", "js", "windows-x64")}
+    receipt["scope"] = "All six workflows executed using publicly downloaded inputs, native executable and precompiled JS module, checked by independent NumPy/SciPy. Adapter only points to the downloaded module."
+    (directory / f"workflows-public-v{VERSION}.json").write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return receipt["passed"]
+
+
 def github():
     local = json.loads((REPORTS / f"v{VERSION}.json").read_text())
     release = json.loads((ROOT / f"dist/release-v{VERSION}.json").read_text())
@@ -81,7 +113,9 @@ def github():
     assets += [ROOT / "dist/SHA256SUMS.txt", ROOT / f"dist/release-v{VERSION}.json"]
     assets += sorted((ROOT / "examples/mixed").glob("*.mat"))
     assets += [ROOT / "examples/mixed/manifest.json"]
-    assets += [p for p in REPORTS.glob(f"*-v{VERSION}.json") if p.name.startswith(("octave-", "compatibility-", "performance-", "mooncakes-", "selection-"))]
+    assets += [p for p in REPORTS.glob(f"*-v{VERSION}.json") if p.name.startswith(("octave-", "compatibility-", "performance-", "mooncakes-", "selection-", "workflows-"))]
+    review = ROOT / f"docs/REVIEW_EVIDENCE-v{VERSION}.md"
+    if review.exists(): assets.append(review)
     existing = run(["gh", "release", "view", tag, "--repo", REPO, "--json", "url"], ok=False)
     if existing.returncode:
         notes = ROOT / "docs" / f"RELEASE-v{VERSION}.md"
@@ -109,6 +143,8 @@ def github():
     receipt = {"status": "passed", "version": VERSION, "assets": hashes, "downloaded_native_mixed_roots": 13,
                "github": f"https://github.com/{REPO}/releases/tag/{tag}",
                "scope": "Public assets downloaded and compared byte-for-byte; downloaded executable consumes mixed file. Local archive consumers are in release receipt."}
+    if (ROOT / "scripts/scientific-workflows.py").exists():
+        receipt["public_scientific_workflows_passed"] = public_workflows(directory, exe)
     (directory / "public-downloads.json").write_text(json.dumps(receipt, indent=2) + "\n")
     print(json.dumps({"status": "passed", "public_assets": len(hashes), "receipt": str(directory / "public-downloads.json")}))
 

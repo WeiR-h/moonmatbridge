@@ -1,6 +1,6 @@
 ///|
 test "published compressed dense data preserves complex and uint64" {
-  assert_eq(@mat.version(), "0.0.8")
+  assert_eq(@mat.version(), "0.0.9")
   let id = @mat.numeric_array("id", @mat.UInt64, [1, 2], [
     Unsigned(9007199254740993UL),
     Unsigned(18446744073709551615UL),

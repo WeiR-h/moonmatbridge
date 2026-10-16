@@ -1,0 +1,43 @@
+{
+  "schema": "moonmatbridge/transform/1",
+  "operations": [
+    {
+      "op": "reshape",
+      "name": "signal",
+      "shape": [
+        8,
+        6
+      ]
+    },
+    {
+      "op": "permute",
+      "name": "signal",
+      "axes": [
+        1,
+        0
+      ]
+    },
+    {
+      "op": "slice",
+      "name": "signal",
+      "starts": [
+        0,
+        0
+      ],
+      "counts": [
+        3,
+        4
+      ]
+    },
+    {
+      "op": "gather",
+      "name": "signal",
+      "axis": 0,
+      "indices": [
+        2,
+        0,
+        2
+      ]
+    }
+  ]
+}
