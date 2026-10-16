@@ -2,6 +2,11 @@
   "producer": "NumPy/SciPy; deterministic header and exact binary input bits",
   "files": [
     {
+      "file": "all-base-classes.mat",
+      "bytes": 7728,
+      "sha256": "7bc63d1232b4d25a36c31bd3d879c00f15257ebfb25370c3afcada75528c2e6e"
+    },
+    {
       "file": "sparse-system.mat",
       "bytes": 4568,
       "sha256": "509ddbb8f2829d6589b318d855af2ea97df9aae98333e047c5fd5f0198b40b80"

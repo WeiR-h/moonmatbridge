@@ -32,8 +32,11 @@ $mixed = Join-Path $project "examples/mixed/research-mixed.mat"
 $roots = Invoke-Moon @("roots", $mixed)
 if ($roots.roots.Count -ne 13) { throw "Mixed root directory check failed" }
 $roots.roots | Select-Object name, class_id, shape | Format-Table | Out-Host
+$allClasses = Invoke-Moon @("roots", (Join-Path $PSScriptRoot "all-base-classes.mat"))
+if (@($allClasses.roots.class_id | Sort-Object -Unique).Count -ne 15) { throw "Base class coverage check failed" }
 $null = Invoke-Moon @("compress", $mixed, (Destination "archive-compressed.mat"))
 $null = Invoke-Moon @("roundtrip", (Destination "archive-compressed.mat"), (Destination "archive-restored.mat"))
+$null = Invoke-Moon @("roundtrip", (Join-Path $PSScriptRoot "all-base-classes.mat"), (Destination "all-base-classes.mat"))
 
 Write-Host "2/3 Large sparse simulation exchange"
 $sparse = Join-Path $PSScriptRoot "sparse-system.mat"

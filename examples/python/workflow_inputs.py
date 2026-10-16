@@ -5,7 +5,7 @@ import hashlib
 import json
 import numpy as np
 from scipy.sparse import csc_matrix
-from mixed_types import deterministic_mat
+from mixed_types import deterministic_mat, all_base_values
 
 
 def inputs():
@@ -33,7 +33,8 @@ def inputs():
     expected[0, 0] += 0.25
     changed = BytesIO()
     np.save(changed, expected, allow_pickle=False)
-    return {"sparse-system.mat": sparse, "signal.npy": stream.getvalue(), "changed-signal.npy": changed.getvalue(),
+    return {"all-base-classes.mat": deterministic_mat(all_base_values()),
+            "sparse-system.mat": sparse, "signal.npy": stream.getvalue(), "changed-signal.npy": changed.getvalue(),
             "transform-plan.json": (json.dumps(plan, indent=2) + "\n").encode()}
 
 
