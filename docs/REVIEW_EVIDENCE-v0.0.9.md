@@ -14,7 +14,7 @@ v0.0.2 旧申报书将 cell、struct、char、sparse 排除在范围外，该边
 | --- | --- |
 | MoonBit 为主要实现语言 | `src` 下的标签解析、数值与递归树、CSC、zlib、NPY、变换、快照和 diff；宿主只做文件/进程接口 |
 | 公开基本类 1—15 | `scripts/compatibility.py`，大小端×压缩×global 开关×native/JS 的 16 组混合往返；报告 `compatibility-v0.0.9.json` |
-| 可下载混合类型文件 | `examples/mixed` 的 3 份 MAT、生成器与 SHA-256；包含 13 个根变量和交叉嵌套 |
+| 可下载混合类型文件 | `examples/mixed` 的 3 份 MAT，包含 13 个根变量和交叉嵌套；另附 `examples/workflows/all-base-classes.mat`，同一文件覆盖全部公开基本类 1—15；均有生成器与 SHA-256 |
 | 字符、IEEE 原始位、uint64、CSC 容量、异常输入 | `scripts/interop.py`、MoonBit 核心测试及版本/互操作报告 |
 | 真实工具双向运行 | `examples/octave` 与 `scripts/octave-interop.py`；GNU Octave 生产 v6/v7，native/JS 未压缩/压缩写回，Octave 递归核对，共 8 组；日志和哈希在 `octave-v0.0.9.json` |
 | 按需读取的可靠性 | `read_selected` / `inspect_roots` / `roots`；未选数据仍校验，独立 SciPy 与损坏输入回执在 `selection-v0.0.9.json` |
