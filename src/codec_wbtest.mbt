@@ -39,6 +39,20 @@ test "Octave blank subsystem header remains valid without accepting real offsets
 }
 
 ///|
+test "Octave nonsparse reserved word one is accepted and normalized" {
+  let original = tiny()
+  let octave = changed(original, 148, b'\x01')
+  assert_true(
+    read_mat(octave).arrays[0].real == read_mat(original).arrays[0].real,
+  )
+  assert_true(write_tree(read_tree(octave).variables) == original)
+  assert_eq(
+    error_code(() => ignore(read_tree(changed(original, 148, b'\x02')))),
+    "unsupported-flags",
+  )
+}
+
+///|
 test "deterministic MAT writer and column-major coordinates" {
   let array = numeric_array("matrix", Float64, [2, 3], [
     Floating(1.0),

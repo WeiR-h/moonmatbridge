@@ -100,13 +100,18 @@ JSON values are column-major; int64/uint64 use decimal strings.
 NaN payload bits survive binary and snapshot conversions but are normalized in readable dump/pack JSON.
 diff exits: 0 equal, 2 changed, 1 format/usage/IO error. Sparse arrays never expand implicitly.
 See docs, LICENSE, NOTICE, THIRD_PARTY.md and verification for details.
-MATLAB/Octave execution and competition submission are unverified. Public downloads are verified separately.
+MATLAB execution and organizer acceptance remain unverified. Actual GNU Octave receipts, when available,
+are included under verification/octave-v0.0.1.json. Public downloads are verified separately.
 """
 with zipfile.ZipFile(native_zip, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as z:
     add(z, DIST / "moonmat.exe", native_name, "moonmat.exe")
     for name in ["LICENSE", "NOTICE", "THIRD_PARTY.md", "CHANGELOG.md", "docs/API.md", "docs/COMPATIBILITY.md", "docs/JSON.md", "docs/FORMAT.md", "docs/RECIPES.md", "docs/DIFFERENTIATION.md", "docs/ITERATIONS-v0.0.3.md", "examples/transform-plan.json", "examples/sample.json", "examples/sample.mat", "examples/python/interop_example.py", "examples/matlab/interop_example.m"]:
         add(z, ROOT / name, native_name)
     for path in sorted((ROOT / "examples/mixed").glob("*")):
+        add(z, path, native_name)
+    for name in ["docs/COMPATIBILITY_MATRIX.md", "docs/PERFORMANCE.md"]:
+        add(z, ROOT / name, native_name)
+    for path in sorted((ROOT / "examples/octave").glob("*.m")):
         add(z, path, native_name)
     for path in sorted(REPORTS.glob("*.json")):
         add(z, path, native_name, "verification/" + path.name)

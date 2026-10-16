@@ -108,11 +108,11 @@ fn matrix(
     flags.start,
   )
   if (bits & 0xfffff100U) != 0U ||
-    bits_at(bytes, flags.start + 4, 4, little) != 0UL {
+    bits_at(bytes, flags.start + 4, 4, little) > 1UL {
     fail(
       "unsupported-flags",
       flags.start,
-      "Unknown flags or dense nzmax metadata cannot be preserved",
+      "Unknown flags or nonstandard dense reserved metadata",
     )
   }
   if (bits & 512U) != 0 {

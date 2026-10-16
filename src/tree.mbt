@@ -355,7 +355,7 @@ fn read_node(
     )
   }
   if (bits & 0xfffffb00U) != 0U ||
-    bits_at(bytes, flags.start + 4, 4, little) != 0UL {
+    bits_at(bytes, flags.start + 4, 4, little) > 1UL {
     fail(
       "unsupported-flags",
       flags.start,

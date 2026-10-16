@@ -16,6 +16,8 @@ const report = {status: 'running', version, module: moduleName,
   steps: [], installed_files: 0};
 const t = toolchain();
 function run(args, extraEnv = {}) {
+  if (['check', 'test'].includes(args[0])) args = [...args, '--jobs', '1'];
+  if (args[0] === 'test') args = [...args, '--no-parallelize'];
   const result = spawnSync(t.executable, args, {cwd: directory, env: {...t.env, ...extraEnv},
     encoding: 'utf8', timeout: 180000, maxBuffer: 4 * 1024 * 1024});
   const output = (result.stdout || '') + (result.stderr || '');
@@ -68,7 +70,8 @@ try {
   for (const target of ['js', 'wasm-gc', 'native']) {
     const extra = target === 'native' ? nativeEnv() : {};
     const output = run(['test', '--target', target, '--deny-warn'], extra);
-    if (!/Total tests: 6, passed: 6, failed: 0/.test(output)) throw new Error('Six consumer tests did not execute for ' + target);
+    const expected = (readFileSync(join(root, 'examples/registry_consumer/consumer_wbtest.mbt'), 'utf8').match(/^test /gm) || []).length;
+    if (!output.includes(`Total tests: ${expected}, passed: ${expected}, failed: 0`)) throw new Error('Consumer tests did not execute for ' + target);
   }
   report.status = 'passed';
 } catch (error) {

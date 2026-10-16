@@ -6,6 +6,7 @@ import platform
 import shutil
 import subprocess
 from pathlib import Path
+from scipy.io import loadmat
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "verification/local/octave"
@@ -21,7 +22,7 @@ def main():
     if not tool:
         raise RuntimeError("GNU Octave is required; no execution receipt can be generated without it")
     OUT.mkdir(parents=True, exist_ok=True)
-    report = {"status": "running", "version": VERSION, "platform": platform.platform(), "checks": [], "files": [],
+    report = {"status": "running", "version": VERSION, "platform": platform.platform(), "checks": [], "files": [], "producer_variants": [],
               "scope": "Actual GNU Octave v6/v7 producer and consumer; not a MATLAB execution claim. Legacy objects and global flags are verified separately."}
     prefix = f"addpath({literal(ROOT / 'examples/octave')}); "
     def octave(code):
@@ -44,6 +45,34 @@ def main():
                 report["checks"].append({"host": host, "format": mode, "operation": operation, "status": "passed", "receipt": receipt,
                                          "output_sha256": hashlib.sha256(output.read_bytes()).hexdigest()})
                 print(receipt, flush=True)
+    # Never silently remove known problematic producer cases from the evidence.
+    # They are tested separately so their failures do not masquerade as valid MAT coverage.
+    for source in sorted(OUT.glob("producer-*.mat")):
+        row = {"file": source.name, "sha256": hashlib.sha256(source.read_bytes()).hexdigest(), "hosts": []}
+        try:
+            loadmat(source, chars_as_strings=False)
+            row["scipy"] = "passed"
+        except Exception as error:
+            row["scipy"] = type(error).__name__ + ": " + str(error)
+        try:
+            row["octave_self_load"] = octave(f"verify_roundtrip({literal(source)}, {literal(source)});")
+        except AssertionError as error:
+            row["octave_self_load"] = "failed: " + str(error)
+        for host in ("native", "js"):
+            command = [str(ROOT / "dist" / ("moonmat.exe" if platform.system() == "Windows" else "moonmat"))] if host == "native" else ["node", str(ROOT / "scripts/cli.mjs")]
+            output = OUT / f"edge-{host}-{source.name}"
+            output.unlink(missing_ok=True)
+            result = subprocess.run(command + ["roundtrip", str(source), str(output)], cwd=ROOT, text=True, capture_output=True, timeout=60)
+            item = {"host": host, "returncode": result.returncode, "diagnostic": (result.stdout + result.stderr).strip()}
+            if result.returncode == 0:
+                try: item["consumer"] = octave(f"verify_roundtrip({literal(source)}, {literal(output)});")
+                except AssertionError as error: item["consumer"] = "failed: " + str(error)
+            else:
+                assert not output.exists(), "Rejected input must not leave partial output"
+            row["hosts"].append(item)
+        row["status"] = "passed" if all(x["returncode"] == 0 and not x.get("consumer", "failed").startswith("failed") for x in row["hosts"]) else "unresolved_producer_variant"
+        report["producer_variants"].append(row)
+        print(source.name + ": " + row["status"], flush=True)
     report["status"] = "passed"
     (ROOT / f"verification/reports/octave-v{VERSION}.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 

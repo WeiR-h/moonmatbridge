@@ -43,7 +43,7 @@ v0.0.6 新增 [15 个基本类的独立读写矩阵](docs/COMPATIBILITY_MATRIX.m
 
 **明确边界：**当前不支持 MATLAB 私有对象扩展（MCOS/opaque）、函数句柄、子系统 workspace、MAT v4、HDF5 MAT v7.3、复数整数、流式读取；NPY 的 object/pickle、结构化、字符串、float16、datetime、NPZ 和含义不明确的 native-endian 描述符。CSC 仅支持 double/logical/complex double；活动行索引必须在每列严格递增，重复或乱序返回错误。`info/roundtrip/compress/select` 使用完整混合树；JSON、NPY、变换、快照和 diff 保持原数值/CSC 输入域。遇到不支持的类别会返回错误，不会静默丢掉变量。变量名限非空 UTF-8，避免 NUL；非 UTF-8 旧名称不在此版支持范围内。MAT 类型与存储类型不同的密集文件会按声明类型恢复，拒绝无法安全转换的值。
 
-混合类型案例：[三个可下载 MAT 文件及复现步骤](examples/mixed/README.md)，含 13 个根变量及嵌套 cell/struct/char/CSC，保留精确 uint64、复数和 legacy 类名。实际 MATLAB/Octave 验证尚未完成，详见兼容计划。
+混合类型案例：[三个可下载 MAT 文件及复现步骤](examples/mixed/README.md)，含 13 个根变量及嵌套 cell/struct/char/CSC，保留精确 uint64、复数和 legacy 类名。真实 GNU Octave 流程由 CI 执行，实际结果见各版 `verification/reports/octave-v*.json`；MATLAB 执行尚无回执，兼容缺口见读写矩阵。
 
 ## 直接运行 Windows 程序
 
