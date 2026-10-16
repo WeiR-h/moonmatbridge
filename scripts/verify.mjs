@@ -50,7 +50,16 @@ try {
   record('Independent SciPy/NumPy cross-compatibility', command(python, ['scripts/interop.py']));
   record('All public Level 5 base classes in mixed files', command(python, ['scripts/compatibility.py']));
   record('Strict selected reads and root metadata independent checks', command(python, ['scripts/selection-checks.py']));
-  record('Three complete scientific workflows with independent oracles', command(python, ['scripts/scientific-workflows.py']));
+  const workflowOutput = command(python, ['scripts/scientific-workflows.py']);
+  const workflowReceipt = join(root, `verification/reports/workflows-v${version}.json`);
+  const firstWorkflows = JSON.parse(readFileSync(workflowReceipt, 'utf8'));
+  command(python, ['scripts/scientific-workflows.py']);
+  const secondWorkflows = JSON.parse(readFileSync(workflowReceipt, 'utf8'));
+  const resultHashes = report => JSON.stringify(report.checks.map(row => [row.host, row.workflow, row.outputs]));
+  if (resultHashes(firstWorkflows) !== resultHashes(secondWorkflows)) throw new Error('Scientific output bytes are not reproducible across fresh command processes');
+  secondWorkflows.reproduction_repetitions = 2;
+  writeFileSync(workflowReceipt, JSON.stringify(secondWorkflows, null, 2) + '\n');
+  record('Three complete scientific workflows with independent oracles', workflowOutput + '; repeated outputs have identical hashes');
   const fingerprint = sourceFingerprint();
   const report = {
     status: 'passed', version, checked_at: new Date().toISOString(), source: fingerprint,
