@@ -1,10 +1,10 @@
 {
   "status": "passed",
   "version": "0.0.6",
-  "checked_at": "2026-10-16T18:33:30.109Z",
+  "checked_at": "2026-10-16T19:02:26.364Z",
   "source": {
-    "sha256": "a6b81c59b0c7012fc020a8e180ecc409ac782564e72c68f7959b2dbe4bbe0a0c",
-    "files": 113
+    "sha256": "2ed75b31b12e5f954cae06f6c8da290cec2503c6d901703a3ea3e246e2ef51e1",
+    "files": 117
   },
   "environment": {
     "moon": "moon 0.1.20260920 (914d7da 2026-09-20)\n\nFeature flags enabled: rr_moon_mod,rr_moon_pkg",
@@ -16,22 +16,22 @@
     {
       "name": "MoonBit JS checks",
       "status": "passed",
-      "output": "Finished. moon: no work to do"
+      "output": "Finished. moon: ran 12 tasks, now up to date"
     },
     {
       "name": "MoonBit JS unit tests",
       "status": "passed",
-      "output": "Total tests: 59, passed: 59, failed: 0."
+      "output": "Total tests: 61, passed: 61, failed: 0."
     },
     {
       "name": "MoonBit wasm-gc unit tests",
       "status": "passed",
-      "output": "Total tests: 59, passed: 59, failed: 0."
+      "output": "Total tests: 61, passed: 61, failed: 0."
     },
     {
       "name": "MoonBit native unit tests",
       "status": "passed",
-      "output": "Total tests: 59, passed: 59, failed: 0."
+      "output": "Total tests: 61, passed: 61, failed: 0."
     },
     {
       "name": "MoonBit direct JS example",
@@ -51,7 +51,7 @@
     {
       "name": "MoonBit JS bridge build",
       "status": "passed",
-      "output": "Finished. moon: ran 3 tasks, now up to date"
+      "output": "Finished. moon: ran 4 tasks, now up to date"
     },
     {
       "name": "Native release build",
@@ -74,6 +74,6 @@
       "output": "All 15 base classes: 8 independent mixed-file host checks passed"
     }
   ],
-  "native_sha256": "32ca233480aecda658f100393bc4170e9147d82bed4389c01ae00caffb8f01e7",
-  "scope": "Local source/build/runtime and independent SciPy/NumPy verification. MATLAB/Octave execution, public publishing and organizer acceptance are unverified."
+  "native_sha256": "ae1da11882339417d2f63549eacc8af8ccbd85f3bfbc5add8f78e96b5e9824d1",
+  "scope": "Local source/build/runtime and independent SciPy/NumPy verification. Actual Octave CI receipts are separate octave reports. MATLAB execution, public publishing and organizer acceptance are separate checks."
 }
