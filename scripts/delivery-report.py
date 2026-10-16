@@ -23,6 +23,7 @@ def main():
     selected = read(f"selection-v{VERSION}.json")
     workflows = read(f"workflows-v{VERSION}.json")
     registry = read(f"registry-v{VERSION}.json")
+    audit = read(f"mooncake-audit-v{VERSION}.json")
     mooncakes = read(f"mooncakes-v{VERSION}.json")
     release = read(f"release-v{VERSION}.json")
     public = read(f"public-downloads-v{VERSION}.json")
@@ -32,9 +33,12 @@ def main():
     assert len(octave["checks"]) == 8 and workflows["passed"] == public_workflows["passed"] == 6
     fingerprint = version["source"]["sha256"]
     assert fingerprint == registry["source"]["sha256"] == mooncakes["source_sha256"] == release["source_sha256"]
+    assert audit["archive_sha256"] == mooncakes["archive_sha256"]
     downloaded = {row["file"]: row["sha256"] for row in public["assets"]}
     for archive in release["archives"]:
         assert downloaded[archive["file"]] == archive["sha256"]
+    for kind in ("source", "js", "windows-x64"):
+        assert public_workflows["public_archives_sha256"][kind] == downloaded[f"MoonMatBridge-v{VERSION}-{kind}.zip"]
     final_measurement = performance["measurements"][-1]
     missed = [target for target in final_measurement["targets"] if not target["passed"]]
     publications = []
@@ -47,7 +51,7 @@ def main():
                              "github": download_receipt["github"], "mooncakes": registry_receipt["url"],
                              "verified_public_assets": len(download_receipt["assets"]),
                              "mooncakes_archive_sha256": registry_receipt["archive_sha256"]})
-    evidence = [f"{prefix}-v{VERSION}.json" for prefix in ("compatibility", "octave", "selection", "workflows", "registry", "mooncakes", "release", "public-downloads", "workflows-public", "performance-summary")]
+    evidence = [f"{prefix}-v{VERSION}.json" for prefix in ("compatibility", "octave", "selection", "workflows", "registry", "mooncake-audit", "mooncakes", "release", "public-downloads", "workflows-public", "performance-summary")]
     evidence.append(f"v{VERSION}.json")
     report = {"status": "public_delivery_verified", "version": VERSION, "source": version["source"],
               "publication_history": publications,
