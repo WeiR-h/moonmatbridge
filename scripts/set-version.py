@@ -10,5 +10,15 @@ assert re.fullmatch(r"\d+\.\d+\.\d+", version)
 old = json.loads((root / "package.json").read_text())["version"]
 for name in ["package.json", "moon.mod", "src/version.mbt", "examples/registry_consumer/consumer_wbtest.mbt", "README.md", "docs/API.md"]:
     path = root / name
-    path.write_text(path.read_text(encoding="utf-8").replace(old, version), encoding="utf-8", newline="\n")
+    text = path.read_text(encoding="utf-8")
+    if name == "README.md":
+        text = text.replace(f"# MoonMatBridge v{old}", f"# MoonMatBridge v{version}")
+        text = text.replace(f"当前源码版本为 v{old}", f"当前源码版本为 v{version}")
+        text = text.replace(f"| 能力 | v{old} |", f"| 能力 | v{version} |")
+        text = text.replace(f"@{old}", f"@{version}")
+    elif name == "docs/API.md":
+        text = text.replace(f"# MoonBit API v{old}", f"# MoonBit API v{version}").replace(f"@{old}", f"@{version}")
+    else:
+        text = text.replace(old, version)
+    path.write_text(text, encoding="utf-8", newline="\n")
 print(f"Current version: {old} -> {version}")

@@ -586,7 +586,10 @@ fn node_size(
   tree : TreeLimits,
   budget : TreeBudget,
   depth : Int,
+  planned : Array[Int],
 ) -> Int raise MatError {
+  let plan_index = planned.length()
+  planned.push(0)
   charge_node(budget, depth, tree)
   validate_name(node.name(), limits, allow_empty=depth > 1)
   let shape = node.shape()
@@ -622,7 +625,8 @@ fn node_size(
         fail("payload-size", 0, "Cell child count differs from dimensions")
       }
       for child in a.values {
-        let bytes = node_size(child, limits, tree, budget, depth + 1) + 8
+        let bytes = node_size(child, limits, tree, budget, depth + 1, planned) +
+          8
         if bytes > limits.max_file_bytes - size {
           fail("file-limit", 0, "Encoded tree exceeds byte limit")
         }
@@ -666,7 +670,8 @@ fn node_size(
         size = size + element_size(@utf8.encode(class_name[:]).length())
       }
       for child in a.values {
-        let bytes = node_size(child, limits, tree, budget, depth + 1) + 8
+        let bytes = node_size(child, limits, tree, budget, depth + 1, planned) +
+          8
         if bytes > limits.max_file_bytes - size {
           fail("file-limit", 0, "Encoded tree exceeds byte limit")
         }
@@ -678,123 +683,6 @@ fn node_size(
   if size > limits.max_file_bytes - 8 {
     fail("file-limit", 0, "Encoded matrix exceeds byte limit")
   }
+  planned[plan_index] = size
   size
-}
-
-///|
-fn encoded_node(node : MatNode) -> Bytes {
-  match node {
-    Numeric(a) => return encoded_matrix(a)
-    Csc(a) => return encoded_sparse(a)
-    _ => ()
-  }
-  let (class, global) = match node {
-    Character(a) => (4, a.is_global)
-    Cell(a) => (1, a.is_global)
-    Structure(a) => (if a.class_name is Some(_) { 3 } else { 2 }, a.is_global)
-    _ => abort("unreachable")
-  }
-  let out = []
-  let flags = []
-  push_bits(flags, (class + (if global { 1024 } else { 0 })).to_uint64(), 4)
-  push_bits(flags, 0UL, 4)
-  append_element(out, 6, Bytes::from_array(flags))
-  let dims = []
-  for dim in node.shape() {
-    push_bits(dims, dim.to_uint64(), 4)
-  }
-  append_element(out, 5, Bytes::from_array(dims))
-  append_element(out, 1, @utf8.encode(node.name()[:]))
-  match node {
-    Character(a) => append_element(out, a.encoding.tag_id(), a.data)
-    Cell(a) =>
-      for child in a.values {
-        append_element(out, 14, encoded_node(child))
-      }
-    Structure(a) => {
-      if a.class_name is Some(class_name) {
-        append_element(out, 1, @utf8.encode(class_name[:]))
-      }
-      let mut width = 1
-      for field in a.fields {
-        let required = @utf8.encode(field[:]).length() + 1
-        if required > width {
-          width = required
-        }
-      }
-      // MATLAB/SciPy/Octave agree on the small miINT32 field-width tag.
-      push_bits(out, (5 + (4 << 16)).to_uint64(), 4)
-      push_bits(out, width.to_uint64(), 4)
-      let names = []
-      for field in a.fields {
-        let bytes = @utf8.encode(field[:])
-        for byte in bytes {
-          names.push(byte)
-        }
-        for i = bytes.length(); i < width; i = i + 1 {
-          names.push(b'\x00')
-        }
-      }
-      append_element(out, 1, Bytes::from_array(names))
-      for child in a.values {
-        append_element(out, 14, encoded_node(child))
-      }
-    }
-    _ => ()
-  }
-  Bytes::from_array(out)
-}
-
-///|
-/// Validate the entire tree before output allocation. Canonical output is little-endian.
-pub fn write_tree(
-  variables : Array[MatNode],
-  compressed? : Bool = false,
-  limits? : Limits = default_limits(),
-  tree_limits? : TreeLimits = default_tree_limits(),
-) -> Bytes raise MatError {
-  validate_limits(limits)
-  validate_tree_limits(tree_limits)
-  if variables.length() > limits.max_variables {
-    fail("variable-limit", 0, "Too many root variables")
-  }
-  let budget : TreeBudget = { nodes: 0, elements: 0, }
-  let names : Map[String, Bool] = Map([])
-  let mut size = 128
-  for node in variables {
-    if names.contains(node.name()) {
-      fail("duplicate-name", 0, "Duplicate root variable")
-    }
-    names[node.name()] = true
-    let bytes = node_size(node, limits, tree_limits, budget, 1) + 8
-    if bytes > limits.max_file_bytes - size {
-      fail("file-limit", 0, "Encoded tree exceeds byte limit")
-    }
-    size = size + bytes
-  }
-  let out = write_mat([]).to_array()
-  let mut expanded = 0
-  for node in variables {
-    let encoded = encoded_node(node)
-    if compressed {
-      let matrix = []
-      append_element(matrix, 14, encoded)
-      if matrix.length() > limits.max_expanded_bytes - expanded {
-        fail("expanded-limit", 0, "Expanded tree exceeds byte limit")
-      }
-      expanded = expanded + matrix.length()
-      let available = limits.max_file_bytes - out.length() - 8
-      if available < 6 {
-        fail("file-limit", 0, "No room for compressed matrix")
-      }
-      append_element(
-        out,
-        15,
-        deflate_zlib(Bytes::from_array(matrix), max_bytes=available),
-      )
-    } else {
-      append_element(out, 14, encoded)
-    }
-  }
-  Bytes::from_array(out)
 }
