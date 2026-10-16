@@ -1,9 +1,9 @@
 {
   "status": "passed",
   "version": "0.0.6",
-  "checked_at": "2026-10-16T19:02:26.364Z",
+  "checked_at": "2026-10-16T19:08:30.384Z",
   "source": {
-    "sha256": "2ed75b31b12e5f954cae06f6c8da290cec2503c6d901703a3ea3e246e2ef51e1",
+    "sha256": "7a50753528a95eda51aea159f32ad3c1c0f2f2c6e9c12c101086f85dd0e63aa2",
     "files": 117
   },
   "environment": {
@@ -51,7 +51,7 @@
     {
       "name": "MoonBit JS bridge build",
       "status": "passed",
-      "output": "Finished. moon: ran 4 tasks, now up to date"
+      "output": "Finished. moon: no work to do"
     },
     {
       "name": "Native release build",

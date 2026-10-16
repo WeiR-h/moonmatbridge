@@ -380,19 +380,19 @@
     },
     {
       "file": "corrupt-checksum.mat",
-      "sha256": "0466293e37ffa74dbf02178885cbd2fc9c683fbeb12a40e5a6177f16106dc955"
+      "sha256": "8bf756aa0d43cffab309a505b8e0116f91645c28fe5ffd815699918fc78a264b"
     },
     {
       "file": "diff-changed.mat",
-      "sha256": "010b91d5340f5d702954c225479122c0c48c45eb0a08a85a8cf9ac9e7a9f3337"
+      "sha256": "2493c45ca20b86bf51879a993303c65e41895cd05183f2d83eea029616c2104f"
     },
     {
       "file": "diff-compressed.mat",
-      "sha256": "24cb763d9d61314e76317523a83e74dbd57efdc128d6fc5e7b10724505928a66"
+      "sha256": "ae0ba56253f3007eb4ecf07738ece3f3bc0b0a2aabca61c397cc72f2499ffac8"
     },
     {
       "file": "diff-original.mat",
-      "sha256": "fc7c210b4e32263ce413269cec3b507744fa3bdf27ded6e444378efc3b45b6ca"
+      "sha256": "425328b6bdb22bfc4442cfc993b6cc499f1e960ca462133a4b9a3014d0c1d980"
     },
     {
       "file": "independent-sparse-big-endian.mat",
@@ -1208,27 +1208,27 @@
     },
     {
       "file": "scientific-transform-source.mat",
-      "sha256": "b147ee001daf29282f196738941c0091aba0d44fd0d96d99e73983de9c0085a7"
+      "sha256": "e3ef3536e780a447ba0bee1db6751d78f8156742c625a78eef433152fe93c48d"
     },
     {
       "file": "scipy-compressed.mat",
-      "sha256": "820f1bece9d6c660b85c6bfd6bee1bccdf1dc942e6e390b69b238e015162c095"
+      "sha256": "9282b8766c462c12a0afa8829c6432676009718ff540a00c8f9d25124da0e92d"
     },
     {
       "file": "scipy-sparse-False.mat",
-      "sha256": "c9c9eb6b0f6cd421cdc2426799176c8cb3077dfbce631c82c4fd1e19e7990ad4"
+      "sha256": "cbb2237103aa479b77704872a6d5d28834c796356e0a67090c4649d41c71d920"
     },
     {
       "file": "scipy-sparse-True.mat",
-      "sha256": "7dfd4e3c5a4814935d1a44501b86ff51f5e27c869d0b8ecc2ed8c548ce327377"
+      "sha256": "dbde052145d8bbfca5eb37e528d5dea3c15e81dcdf94e41a3b68c024f43f1599"
     },
     {
       "file": "scipy-uncompressed.mat",
-      "sha256": "27739370bb1513005a702090681c1b1c06977b55c808105b5f3760a6431c8490"
+      "sha256": "3e1a49515fd1882b5dab2cd0f68bde998d39235b7547b3494d03427a8be6e06e"
     },
     {
       "file": "sparse-expansion-source.mat",
-      "sha256": "b254f55cc33221cd9c5f4ad70304dee633c86402689716b3577c5cad42c9f665"
+      "sha256": "202a166d9ca96c7f3113edcc41b1eba180243c37f650f9926929b4da9ba1d264"
     },
     {
       "file": "unsupported-cell.mat",

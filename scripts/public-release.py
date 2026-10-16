@@ -39,12 +39,20 @@ def mooncakes():
     fingerprint = run(["node", "--input-type=module", "-e", "import {sourceFingerprint} from './scripts/verify.mjs'; console.log(sourceFingerprint().sha256);"]).stdout.strip()
     verified = json.loads((REPORTS / f"v{VERSION}.json").read_text())
     assert verified["status"] == "passed" and fingerprint == verified["source"]["sha256"], "Source changed after verification"
-    print(run(["node", "scripts/moon.mjs", "publish", "--dry-run"]).stdout.strip(), flush=True)
+    dry = run(["node", "scripts/moon.mjs", "publish", "--dry-run"], ok=False)
+    dry_text = dry.stdout + dry.stderr
+    # This SDK treats the registry's successful 202 response as exit 1.
+    # Require the explicit server success text, then independently audit bytes.
+    assert dry.returncode == 0 or "Dry run completed successfully. No changes were made." in dry_text, dry_text
+    print(dry_text.strip(), flush=True)
     python = os.environ.get("MOONMAT_PYTHON") or str(ROOT / ".venv/Scripts/python.exe")
     print(run([python, "scripts/audit-mooncake.py"]).stdout.strip(), flush=True)
     current = manifest()
     if not any(v["version"] == VERSION for v in current["versions"]):
-        print(run(["node", "scripts/moon.mjs", "publish"]).stdout.strip(), flush=True)
+        published = run(["node", "scripts/moon.mjs", "publish"], ok=False)
+        publish_text = published.stdout + published.stderr
+        assert published.returncode == 0 or "202 Accepted" in publish_text, publish_text
+        print(publish_text.strip(), flush=True)
     for _ in range(18):
         current = manifest()
         if current["version"] == VERSION and current["build_status"] == "success" and not current["yanked"]: break
