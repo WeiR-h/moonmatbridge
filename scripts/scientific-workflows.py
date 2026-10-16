@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import argparse
 import json
+import os
 import platform
 import subprocess
 import sys
@@ -34,8 +35,12 @@ def fresh(name):
 
 def invoke(host, *args, exit_code=0):
     prefix = [str(NATIVE_EXECUTABLE)] if host == "native" else ["node", str(JS_CLI)]
+    environment = {key: value for key, value in os.environ.items()
+                   if not key.startswith("MOON") and key not in {"NODE_PATH", "NODE_OPTIONS", "PYTHONPATH", "VIRTUAL_ENV"}}
+    if host == "native":
+        environment["PATH"] = str(Path(os.environ["SystemRoot"]) / "System32") if platform.system() == "Windows" else "/usr/bin:/bin"
     result = subprocess.run(prefix + [str(arg) for arg in args], cwd=ROOT, capture_output=True,
-                            encoding="utf-8", timeout=60)
+                            encoding="utf-8", timeout=60, env=environment)
     assert result.returncode == exit_code, (host, args, result.returncode, result.stdout, result.stderr)
     if args[0] == "diff" and len(args) == 4:
         return json.loads(Path(args[3]).read_text(encoding="utf-8"))
@@ -119,6 +124,7 @@ def main():
         record(host, "NumPy to MoonBit transform and difference check", ["NPY to MAT to reshape/permute/slice/gather to NPY", "independent NumPy column-major and raw-byte oracle", "input NaN payload and signed zero preserved", "diff exit 0 equal and exit 2 at coordinate [0,0]", "missing export exit 1 with no partial output"], [mat, transformed, exported, diff_report])
     report = {"status": "passed", "version": VERSION, "producer": f"SciPy {scipy.__version__} / NumPy {np.__version__}",
               "passed": len(checks), "checks": checks,
+              "consumer_environment": "MoonBit/Python/module injection variables removed; native PATH contains only Windows System32 or Linux system bins",
               "scope": "Actual native and JS commands plus independent Python oracles; examples demonstrate reproducible workflows, not external adoption or organizer acceptance."}
     (ROOT / f"verification/reports/workflows-v{VERSION}.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"Three scientific workflows: {len(checks)} host workflows passed")
