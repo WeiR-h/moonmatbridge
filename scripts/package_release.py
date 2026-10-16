@@ -110,6 +110,10 @@ with zipfile.ZipFile(native_zip, "w", compression=zipfile.ZIP_DEFLATED, compress
         add(z, ROOT / name, native_name)
     for path in sorted((ROOT / "examples/mixed").glob("*")):
         add(z, path, native_name)
+    for path in sorted((ROOT / "examples/workflows").glob("*")):
+        add(z, path, native_name)
+    for name in ["docs/SCIENTIFIC_WORKFLOWS.md", "docs/REVIEW_EVIDENCE-v0.0.9.md"]:
+        add(z, ROOT / name, native_name)
     for name in ["docs/COMPATIBILITY_MATRIX.md", "docs/PERFORMANCE.md", "benchmarks/manifest.json"]:
         add(z, ROOT / name, native_name)
     for path in sorted((ROOT / "examples/octave").glob("*.m")):
@@ -127,6 +131,9 @@ with zipfile.ZipFile(js_zip, "w", compression=zipfile.ZIP_DEFLATED, compressleve
         add(z, ROOT / name, js_name)
     for path in sorted((ROOT / "examples/mixed").glob("*")):
         add(z, path, js_name)
+    for path in sorted((ROOT / "examples/workflows").glob("*")):
+        add(z, path, js_name)
+    add(z, ROOT / "docs/SCIENTIFIC_WORKFLOWS.md", js_name)
     z.writestr(f"{js_name}/README.txt", f"MoonMatBridge v{VERSION} JS exports. Import bridge.mjs; see docs/API.md. Host-neutral MoonBit build, no Python/zlib dependency. Browser UI is not shipped/tested.\n")
     z.writestr(f"{js_name}/SOURCE_SHA256.txt", source_hash + "\n")
 
@@ -182,6 +189,11 @@ original = digest(consumer / "sample.mat")
 repeated = subprocess.run([exe, "sample", str(consumer / "sample.mat")], cwd=native, env=clean_env, capture_output=True, encoding="utf-8", timeout=10)
 assert repeated.returncode == 1 and json.loads(repeated.stderr)["code"] == "output-exists"
 assert digest(consumer / "sample.mat") == original
+
+demo_output = native / "portable-workflows"
+demo = run([str(Path(os.environ["SystemRoot"]) / "System32/WindowsPowerShell/v1.0/powershell.exe"), "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(native / "examples/workflows/demo.ps1"), "-OutputDirectory", str(demo_output)], native, clean_env)
+assert json.loads((demo_output / "demo-receipt.json").read_text(encoding="utf-8-sig"))["status"] == "passed"
+(LOCAL / f"portable-demo-v{VERSION}.log").write_text(demo.stdout + demo.stderr, encoding="utf-8")
 
 source = extract(source_zip, fresh_root / "source")
 config = json.loads((ROOT / ".local-toolchain.json").read_text(encoding="utf-8-sig")) if (ROOT / ".local-toolchain.json").exists() else {}

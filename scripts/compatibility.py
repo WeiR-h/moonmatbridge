@@ -36,11 +36,12 @@ def values():
 def main():
     checks = []
     fixtures = []
-    for compressed in (False, True):
-        plain = mixed.deterministic_mat(values(), compressed)
+    for global_flags, compressed in ((g, c) for g in (False, True) for c in (False, True)):
+        data_values = values()
+        plain = mixed.deterministic_mat(data_values, compressed, list(data_values) if global_flags else None)
         for endian in ("little", "big"):
             data = plain if endian == "little" else mixed.big_endian(plain)
-            name = f"all-classes-{endian}-{'compressed' if compressed else 'plain'}.mat"
+            name = f"all-classes-{'global-' if global_flags else ''}{endian}-{'compressed' if compressed else 'plain'}.mat"
             source = OUT / name
             source.write_bytes(data)
             fixtures.append({"file": name, "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()})
@@ -54,7 +55,8 @@ def main():
     report = {"status": "passed", "version": VERSION, "producer": f"SciPy {scipy.__version__} / NumPy {np.__version__}",
               "base_classes": list(range(1, 16)), "checks": checks, "fixtures": fixtures,
               "coverage": ["all public base classes in mixed files", "little/big endian", "plain/compressed", "numeric N-D and empty N-D",
-                           "cell to struct to cell", "struct to cell to sparse", "legacy class name and fields", "UTF8 Chinese/nonBMP"],
+                           "cell to struct to cell", "struct to cell to sparse", "legacy class name and fields", "UTF8 Chinese/nonBMP",
+                           "global flag across all 15 base classes, both endians and compression modes"],
               "remaining": ["MATLAB runtime execution not claimed", "noncanonical CSC remains rejected", "non-UTF8 legacy names remain rejected",
                             "producer-specific UTF16/nonBMP dimensions require separate receipts"]}
     (ROOT / f"verification/reports/compatibility-v{VERSION}.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

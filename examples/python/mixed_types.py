@@ -44,9 +44,15 @@ def mixed_values():
     }
 
 
-def deterministic_mat(values, compressed=False):
+def deterministic_mat(values, compressed=False, global_names=None):
     stream = BytesIO()
-    savemat(stream, values, do_compression=compressed, long_field_names=True)
+    if global_names is None:
+        savemat(stream, values, do_compression=compressed, long_field_names=True)
+    else:
+        # Test producer only: savemat does not expose the writer's global_vars option.
+        from scipy.io.matlab._mio5 import MatFile5Writer
+        MatFile5Writer(stream, do_compression=compressed, long_field_names=True,
+                       global_vars=global_names).put_variables(values)
     data = bytearray(stream.getvalue())
     data[:116] = b"MATLAB 5.0 MAT-file, reproducible MoonMatBridge mixed-type fixture (SciPy producer)".ljust(116, b" ")
     return bytes(data)

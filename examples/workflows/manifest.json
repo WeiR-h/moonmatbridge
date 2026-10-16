@@ -1,0 +1,25 @@
+{
+  "producer": "NumPy/SciPy; deterministic header and exact binary input bits",
+  "files": [
+    {
+      "file": "sparse-system.mat",
+      "bytes": 4568,
+      "sha256": "509ddbb8f2829d6589b318d855af2ea97df9aae98333e047c5fd5f0198b40b80"
+    },
+    {
+      "file": "signal.npy",
+      "bytes": 512,
+      "sha256": "608c72351e4db5cf5f147d13628a95d63cad2ec4c6b300a143da4e2e19debdd2"
+    },
+    {
+      "file": "changed-signal.npy",
+      "bytes": 224,
+      "sha256": "c632c81f42c17e284a8dde395cc1e25235d213ec4e6d959db15f948f9d4b8f72"
+    },
+    {
+      "file": "transform-plan.json",
+      "bytes": 565,
+      "sha256": "36aea011d953bb099cea95a6766c559fc48106f2c4a75ca2be21b889d890f1fa"
+    }
+  ]
+}

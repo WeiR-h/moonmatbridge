@@ -54,10 +54,12 @@ def main():
             assert all(r["compressed"] == ("compressed" in source.name) for r in roots)
             assert next(r for r in roots if r["name"] == "wave")["complex"]
             assert next(r for r in roots if r["name"] == "logical_mask")["logical"]
+            assert [r["name"] for r in roots if r["global"]] == expected["__globals__"]
             output = fresh(f"{host}-{source.name}")
             invoke(host, "select", source, output, *selected)
             actual = loadmat(output, chars_as_strings=False, spmatrix=False)
             assert [name for name in actual if not name.startswith("__")] == selected
+            assert actual["__globals__"] == [name for name in selected if name in expected["__globals__"]]
             for name in selected: mixed.assert_tree_equal(actual[name], expected[name])
             checks.append({"host": host, "case": source.name, "status": "passed", "sha256": hashlib.sha256(source.read_bytes()).hexdigest()})
     data = bytearray(mixed.deterministic_mat({"good": np.array([[1.0]]), "bad": np.array([[18446744073709551615]], dtype="uint64")}))

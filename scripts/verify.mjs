@@ -50,6 +50,7 @@ try {
   record('Independent SciPy/NumPy cross-compatibility', command(python, ['scripts/interop.py']));
   record('All public Level 5 base classes in mixed files', command(python, ['scripts/compatibility.py']));
   record('Strict selected reads and root metadata independent checks', command(python, ['scripts/selection-checks.py']));
+  record('Three complete scientific workflows with independent oracles', command(python, ['scripts/scientific-workflows.py']));
   const fingerprint = sourceFingerprint();
   const report = {
     status: 'passed', version, checked_at: new Date().toISOString(), source: fingerprint,
