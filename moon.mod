@@ -1,6 +1,6 @@
 name = "WeiR-h/moonmatbridge"
 
-version = "0.0.5"
+version = "0.0.6"
 
 source = "src"
 
@@ -12,6 +12,6 @@ repository = "https://github.com/WeiR-h/moonmatbridge"
 
 keywords = [ "matlab", "mat", "scientific-data", "interop" ]
 
-description = "Native MoonBit MAT Level 5 numeric reader, writer and scientific data bridge"
+description = "Native MoonBit recursive MAT Level 5 reader, writer and scientific data bridge"
 
 preferred_target = "js"

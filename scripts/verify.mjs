@@ -48,6 +48,7 @@ try {
   record('JS differential and malformed input tests', command(process.execPath, ['scripts/js-checks.mjs']));
   const python = process.env.MOONMAT_PYTHON || join(root, '.venv', process.platform === 'win32' ? 'Scripts/python.exe' : 'bin/python');
   record('Independent SciPy/NumPy cross-compatibility', command(python, ['scripts/interop.py']));
+  record('All public Level 5 base classes in mixed files', command(python, ['scripts/compatibility.py']));
   const fingerprint = sourceFingerprint();
   const report = {
     status: 'passed', version, checked_at: new Date().toISOString(), source: fingerprint,

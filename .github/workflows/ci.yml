@@ -8,7 +8,7 @@ concurrency:
 jobs:
   linux-interop:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     env:
       MOONMAT_PYTHON: python
     steps:
@@ -27,8 +27,12 @@ jobs:
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
       - name: Install independent scientific readers
         run: python -m pip install -r requirements-dev.txt
+      - name: Install real GNU Octave verifier
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends octave
       - name: Verify three MoonBit targets and both command line hosts
         run: npm run verify
+      - name: Real Octave v6 and v7 mixed-file producer and consumer
+        run: python scripts/octave-interop.py
       - name: Preserve verification reports
         if: always()
         uses: actions/upload-artifact@v4

@@ -75,7 +75,9 @@ def big_endian(data):
             else:
                 width = widths[kind]
                 assert len(raw) % width == 0
-                raw = b"".join(raw[i:i + width][::-1] for i in range(0, len(raw), width))
+                # Vectorized unit swapping avoids millions of temporary Python objects.
+                if width > 1:
+                    raw = np.frombuffer(raw, dtype=f"u{width}").byteswap().tobytes()
             result += struct.pack(">II", kind, len(raw)) + raw
             if kind != 15:
                 result += b"\0" * ((-len(raw)) % 8)

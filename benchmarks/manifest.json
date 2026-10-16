@@ -1,0 +1,16 @@
+{
+  "schema": "moonmatbridge/benchmarks/1",
+  "seed": 20261017,
+  "baseline_commit": "b9df1eddaacdefebc2e32eee468fada8cc9e6020",
+  "generator": "scripts/performance.py",
+  "cases": [
+    {"name": "dense-16m", "payload_bytes": 16777216, "dtype": "float64", "operations": ["read", "write"]},
+    {"name": "dense-be-16m", "payload_bytes": 16777216, "dtype": "float64", "endian": "big", "operations": ["read"]},
+    {"name": "complex-16m", "payload_bytes": 16777216, "dtype": "complex128", "operations": ["read", "write"]},
+    {"name": "nested-4m", "numeric_payload_bytes": 4194304, "depth_wrappers": 8, "operations": ["read", "write"]},
+    {"name": "sparse-100k", "shape": [1000000, 1000], "nnz": 100000, "operations": ["read", "write"]},
+    {"name": "compressed-random-16m", "expanded_payload_bytes": 16777216, "operations": ["read"]},
+    {"name": "zeros-16m", "payload_bytes": 16777216, "operations": ["compress"]},
+    {"name": "select-1-of-16", "variables": 16, "variable_bytes": 1048576, "selected": "v00", "operations": ["select"]}
+  ]
+}

@@ -20,6 +20,11 @@ export function toolchain() {
 }
 export function runMoon(args, extraEnv = {}) {
   const t = toolchain();
+  // Avoid parallel compiler/test processes exhausting memory on development machines.
+  if (['check', 'test', 'build'].includes(args[0]) && !args.includes('--jobs') && !args.includes('-j')) {
+    args = [...args, '--jobs', process.env.MOONMAT_JOBS || '1'];
+  }
+  if (args[0] === 'test' && !args.includes('--no-parallelize')) args = [...args, '--no-parallelize'];
   const result = spawnSync(t.executable, args, {cwd: root, env: {...t.env, ...extraEnv}, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024});
   if (result.error) throw result.error;
   if (result.status !== 0) throw new Error(`${args.join(' ')} failed\n${result.stdout}\n${result.stderr}`);
