@@ -47,7 +47,11 @@ fn tag(
 
 ///|
 fn payload(bytes : Bytes, element : Element) -> Bytes {
-  bytes[element.start:element.start + element.size].to_owned()
+  // Tags have already bounded this interval. Copy into a new private buffer;
+  // callers still own their result independently of the input allocation.
+  let buffer = FixedArray::make(element.size, b'\x00')
+  buffer.blit_from_bytes(0, bytes, element.start, element.size)
+  finish_owned_buffer(buffer)
 }
 
 ///|
