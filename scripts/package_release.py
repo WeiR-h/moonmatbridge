@@ -86,6 +86,7 @@ Open PowerShell in this folder:
   .\moonmat.exe diff compressed.mat restored.mat equality-report.json
   .\moonmat.exe sparsify sample.mat temperature sparse.mat
   .\moonmat.exe densify sparse.mat temperature dense.mat
+  powershell -ExecutionPolicy Bypass -File examples\workflows\demo.ps1
 
 The executable requires no MoonBit, C compiler, Python or Node installation.
 Only Windows system KERNEL32.dll and msvcrt.dll are imported in this build.
@@ -251,7 +252,7 @@ archives = [{"file": path.name, "bytes": path.stat().st_size, "sha256": digest(p
 result = {
     "status": "passed", "version": VERSION, "source_sha256": source_hash,
     "native_sha256": digest(DIST / "moonmat.exe"), "archives": archives,
-    "fresh_consumers": {"native": f"version + {len(commands)} commands + sparse/transform/compress/snapshot/diff + Unicode/spaces + no overwrite; PATH limited to System32; diff-change exit 2 verified",
+    "fresh_consumers": {"native": f"version + {len(commands)} commands + sparse/transform/compress/snapshot/diff + Unicode/spaces + no overwrite; PATH limited to System32; diff-change exit 2 verified; complete three-workflow PowerShell demo passed",
                         "source": f"unpacked source check and {test_match.group(2)} JS tests; no local settings/build cache bundled",
                         "js": "unpacked exports: recursive mixed cell/struct/char/object fixture, JSON, compression, sparse, mixed transform, snapshot restore and exact diff"},
     "scope": "Local archives and fresh consumers; no public publishing or organizer acceptance",
