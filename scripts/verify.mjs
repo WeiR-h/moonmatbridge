@@ -54,7 +54,7 @@ try {
     status: 'passed', version, checked_at: new Date().toISOString(), source: fingerprint,
     environment: {moon: sdkVersion, node: process.version, platform: process.platform, arch: process.arch}, checks,
     native_sha256: createHash('sha256').update(readFileSync(executable)).digest('hex'),
-    scope: 'Local source/build/runtime and independent SciPy/NumPy verification. MATLAB/Octave execution, public publishing and organizer acceptance are unverified.',
+    scope: 'Local source/build/runtime and independent SciPy/NumPy verification. Actual Octave CI receipts are separate octave reports. MATLAB execution, public publishing and organizer acceptance are separate checks.',
   };
   mkdirSync(join(root, 'verification/reports'), {recursive: true});
   for (const [name, data] of [[`v${version}.json`, report], [ `interop-v${version}.json`, JSON.parse(readFileSync(join(root, 'verification/local/interop-report.json'), 'utf8'))], [ `js-v${version}.json`, JSON.parse(readFileSync(join(root, 'verification/local/js-report.json'), 'utf8'))]]) {

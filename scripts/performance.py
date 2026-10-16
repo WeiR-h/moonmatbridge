@@ -79,6 +79,10 @@ def build_baseline():
         for name in ("src/bench_bridge", "src/cmd/bench"):
             shutil.copytree(ROOT / name, BASELINE / name)
     command(["node", ROOT / "scripts/build-bench.mjs", BASELINE])
+    binary = BASELINE / "dist" / ("moonmat.exe" if platform.system() == "Windows" else "moonmat")
+    if not binary.exists():
+        command(["node", BASELINE / "scripts/build-native.mjs"], cwd=BASELINE)
+        command(["node", BASELINE / "scripts/moon.mjs", "build", "src/bridge", "--target", "js", "--release", "--jobs", "1"], cwd=BASELINE)
 
 
 def measure(root, host, path, operation, kind):
@@ -106,6 +110,35 @@ def source_hash():
     return digest.hexdigest()
 
 
+def cli_measure(root, host, fixture, operation):
+    executable = root / "dist" / ("moonmat.exe" if platform.system() == "Windows" else "moonmat")
+    prefix = [executable] if host == "native" else ["node", root / "scripts/cli.mjs"]
+    output = LOCAL / f"cli-{root.name}-{host}-{fixture['name']}-{operation}.mat"
+    assert output.resolve().is_relative_to(LOCAL.resolve())
+    samples = []
+    last = None
+    for i in range(35):
+        output.unlink(missing_ok=True)
+        action = {"read": "info", "write": "roundtrip", "compress": "compress", "select": "select"}[operation]
+        args = prefix + [action, fixture["path"]]
+        if action != "info": args.append(output)
+        if action == "select": args.append("v00")
+        start = time.perf_counter()
+        last = json.loads(command(args, cwd=root))
+        elapsed = (time.perf_counter() - start) * 1000
+        if i >= 5: samples.append(elapsed)
+    if operation in ("write", "compress"):
+        mixed.assert_file_equal(output, fixture["path"])
+    if operation == "select":
+        from scipy.io import loadmat
+        actual = loadmat(output, chars_as_strings=False)
+        source = loadmat(fixture["path"], chars_as_strings=False)
+        assert [k for k in actual if not k.startswith("__")] == ["v00"]
+        mixed.assert_tree_equal(actual["v00"], source["v00"])
+    return {"samples_ms": samples, "median_ms": statistics.median(samples), "p95_ms": sorted(samples)[28], "output_bytes": output.stat().st_size if output.exists() else None,
+            "scope": "end to end: process startup, disk I/O, codec and response; includes five warmups"}
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--baseline-only", action="store_true")
@@ -125,6 +158,9 @@ def main():
                            "timing": "codec only; preloaded input/prepared write tree; JS GC outside samples",
                            "memory": "fresh child, no warmup, one operation; peak process working set/RSS includes input and write preparation"},
               "fixtures": [{k: v for k, v in x.items() if k != "path"} for x in manifest], "results": []}
+    baseline["environment"] = report["environment"]
+    baseline["protocol"] = report["protocol"]
+    baseline["fixtures"] = report["fixtures"]
     for fixture in manifest:
         if args.case and fixture["name"] not in args.case: continue
         for operation in fixture["operations"]:
@@ -138,6 +174,10 @@ def main():
                     print("baseline " + key, flush=True)
                 base = baseline["measurements"][key]
                 assert base["fixture_sha256"] == fixture["sha256"]
+                if "cli" not in base:
+                    base["cli"] = cli_measure(BASELINE, host, fixture, operation)
+                    baseline_file.write_text(json.dumps(baseline, indent=2) + "\n")
+                    print("baseline CLI " + key, flush=True)
                 if args.baseline_only: continue
                 baseline_batches = []
                 candidate_batches = []
@@ -158,6 +198,9 @@ def main():
                        "speedup": baseline_ms / statistics.median(samples), "peak_bytes_samples": memory,
                        "peak_bytes": peak, "baseline_peak_bytes": baseline_peak, "memory_reduction": 1 - peak / baseline_peak}
                 report["results"].append(row)
+                row["cli"] = cli_measure(ROOT, host, fixture, operation)
+                row["baseline_cli"] = base["cli"]
+                row["cli_speedup"] = base["cli"]["median_ms"] / row["cli"]["median_ms"]
                 print(f"{key}: {row['speedup']:.3f}x, peak reduction {row['memory_reduction']:.1%}", flush=True)
                 (LOCAL / f"candidate-v{version}.json").write_text(json.dumps(report, indent=2) + "\n")
     if args.baseline_only:

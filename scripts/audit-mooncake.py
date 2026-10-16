@@ -8,7 +8,7 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 version = json.loads((ROOT / 'package.json').read_text(encoding='utf-8'))['version']
 archive = ROOT / '_build/publish' / f'WeiR-h-moonmatbridge-{version}.zip'
-allowed = {'.moonignore', 'moon.mod', 'README.md', 'CHANGELOG.md', 'LICENSE', 'NOTICE', 'THIRD_PARTY.md'}
+allowed = {'.moonignore', 'moon.mod', 'README.md', 'CHANGELOG.md', 'LICENSE', 'NOTICE', 'THIRD_PARTY.md', 'benchmarks/manifest.json'}
 allowed.update('docs/' + name for name in ['API.md', 'FORMAT.md', 'JSON.md', 'RECIPES.md',
                                          'DIFFERENTIATION.md', 'ITERATIONS-v0.0.3.md', 'COMPATIBILITY.md',
                                          'COMPATIBILITY_MATRIX.md', 'NEXT_RELEASES.md', 'PERFORMANCE.md'])

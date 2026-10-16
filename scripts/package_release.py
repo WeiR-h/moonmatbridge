@@ -109,7 +109,7 @@ with zipfile.ZipFile(native_zip, "w", compression=zipfile.ZIP_DEFLATED, compress
         add(z, ROOT / name, native_name)
     for path in sorted((ROOT / "examples/mixed").glob("*")):
         add(z, path, native_name)
-    for name in ["docs/COMPATIBILITY_MATRIX.md", "docs/PERFORMANCE.md"]:
+    for name in ["docs/COMPATIBILITY_MATRIX.md", "docs/PERFORMANCE.md", "benchmarks/manifest.json"]:
         add(z, ROOT / name, native_name)
     for path in sorted((ROOT / "examples/octave").glob("*.m")):
         add(z, path, native_name)

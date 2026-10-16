@@ -659,7 +659,8 @@ fn node_size(
         width > limits.max_file_bytes / a.fields.length() {
         fail("file-limit", 0, "Field table exceeds byte limit")
       }
-      size = size + 16 + element_size(width * a.fields.length())
+      // Canonical field-name length uses the 8-byte small data element.
+      size = size + 8 + element_size(width * a.fields.length())
       if a.class_name is Some(class_name) {
         validate_name(class_name, limits)
         size = size + element_size(@utf8.encode(class_name[:]).length())
@@ -721,9 +722,9 @@ fn encoded_node(node : MatNode) -> Bytes {
           width = required
         }
       }
-      let length = []
-      push_bits(length, width.to_uint64(), 4)
-      append_element(out, 5, Bytes::from_array(length))
+      // MATLAB/SciPy/Octave agree on the small miINT32 field-width tag.
+      push_bits(out, (5 + (4 << 16)).to_uint64(), 4)
+      push_bits(out, width.to_uint64(), 4)
       let names = []
       for field in a.fields {
         let bytes = @utf8.encode(field[:])

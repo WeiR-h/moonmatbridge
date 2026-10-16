@@ -9,6 +9,9 @@
 !/THIRD_PARTY.md
 !/src/
 !/src/**
+!/benchmarks/
+/benchmarks/*
+!/benchmarks/manifest.json
 !/docs/
 /docs/*
 !/docs/API.md
