@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "version": "0.0.9",
+  "source": {
+    "sha256": "167a0426a6348c93751c592ade6e009ca280851d23092118bb935610ff36fd58",
+    "files": 149
+  },
+  "source_commit": "f51131f76461bdf62cfada11411a3236e6f99f5f",
+  "scope": "Working source matches the Git commit byte-for-byte under the documented fingerprint exclusions; LF text and unchanged binary fixtures."
+}

@@ -1,0 +1,78 @@
+{
+  "status": "passed",
+  "version": "0.0.9",
+  "executable_sha256": "f6a1ea0ac40f17710ab1703f3b4b33ca18d9b882181188e89a8370c8014f90d9",
+  "commands": 19,
+  "exit_codes": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    2,
+    1
+  ],
+  "files": [
+    {
+      "file": "all-base-classes.mat",
+      "sha256": "00b22d4cd9ed3231f0aa7fa73c3d683d6a5e516c8570d77501d234f70fb1a38e"
+    },
+    {
+      "file": "archive-compressed.mat",
+      "sha256": "a69c11cb0d8c96da730aa984b4f8158b2d84be7091e5777cdd2756bed5eea737"
+    },
+    {
+      "file": "archive-restored.mat",
+      "sha256": "acd1f76651df7da895fc666d4c25f93bf21fd939e8944a8527f1a1b81e27a2a5"
+    },
+    {
+      "file": "changed-report.json",
+      "sha256": "590b44db00d382df0325aa5894019109507e670699bb023571ae4ccef09ac3c3"
+    },
+    {
+      "file": "changed.mat",
+      "sha256": "05eb69b95798530b2cd06d9c6ff2f84a87a4deaf8064cf1872a3368ae80bf2c2"
+    },
+    {
+      "file": "signal.mat",
+      "sha256": "f607bd3867e2f771e7e62f74b3bb5b7a6fe3710bc1d9b8f1e774b94819bfe617"
+    },
+    {
+      "file": "system-restored.mat",
+      "sha256": "c093f42e5494bcdc58f430ed1522f4eefeac8fdd90434d9f12c8ea80ac5748ad"
+    },
+    {
+      "file": "system-snapshot.json",
+      "sha256": "7c91f2738b8897d3933e77aac636285816bfa7c8dedd6be126366834d0e57b30"
+    },
+    {
+      "file": "system.mat",
+      "sha256": "c093f42e5494bcdc58f430ed1522f4eefeac8fdd90434d9f12c8ea80ac5748ad"
+    },
+    {
+      "file": "transformed-copy.mat",
+      "sha256": "7e39e94ca21f6dc56e8a0ada3329eb8a8b96ceedb76c7f2af1a65c1da7f9d492"
+    },
+    {
+      "file": "transformed.mat",
+      "sha256": "7e39e94ca21f6dc56e8a0ada3329eb8a8b96ceedb76c7f2af1a65c1da7f9d492"
+    },
+    {
+      "file": "transformed.npy",
+      "sha256": "71a57179202d5733a95de594c5b709fb32490cd2173da1c5d93f6e7fe5c13bc2"
+    }
+  ],
+  "scope": "Actual Windows PowerShell demo using the v0.0.9 executable; system CLR hashing. Packaged clean-PATH demo checked separately."
+}

@@ -1,0 +1,668 @@
+{
+  "status": "summarized",
+  "version": "0.0.9",
+  "measured_versions": [
+    "0.0.7",
+    "0.0.8"
+  ],
+  "inherited_from": "v0.0.8",
+  "runtime_source_sha256": "811f16134941c49eae8d168b2d64d61e4517001c7bf8bf5d0b1d2e8104f33a8c",
+  "runtime_files": 58,
+  "hash_policy": "All src .mbt/.c and moon.pkg, excluding version.mbt; CRLF normalized to LF. This includes test and benchmark code.",
+  "baseline_commit": "b9df1eddaacdefebc2e32eee468fada8cc9e6020",
+  "measurements": [
+    {
+      "version": "0.0.7",
+      "environment": {
+        "platform": "Windows-11-10.0.22000-SP0",
+        "processor": "AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD",
+        "node": "v24.13.0",
+        "moon": "moon 0.1.20260920 (914d7da 2026-09-20)\n\nFeature flags enabled: rr_moon_mod,rr_moon_pkg",
+        "architecture": "AMD64",
+        "compiler": "gcc.exe (GCC) 16.2.0",
+        "build": "MoonBit --release; fixed SDK and compiler for both revisions"
+      },
+      "protocol": {
+        "warmup": 5,
+        "samples": 30,
+        "batches": 3,
+        "batch_samples": 10,
+        "timing": "codec only; preloaded input/prepared write tree; JS GC outside samples",
+        "memory": "fresh child, no warmup, one operation; peak process working set/RSS includes input and write preparation"
+      },
+      "targets": [
+        {
+          "case": "dense-16m",
+          "host": "native",
+          "goal": "write time -30%, peak memory -25%",
+          "passed": true
+        },
+        {
+          "case": "dense-16m",
+          "host": "js",
+          "goal": "write time -30%, peak memory -25%",
+          "passed": true
+        },
+        {
+          "case": "nested-4m",
+          "host": "native",
+          "goal": "write time -30%, peak memory -25%",
+          "passed": true
+        },
+        {
+          "case": "nested-4m",
+          "host": "js",
+          "goal": "write time -30%, peak memory -25%",
+          "passed": true
+        },
+        {
+          "case": "select-1-of-16",
+          "host": "native",
+          "goal": "select speed 2x, peak memory -40%",
+          "passed": false
+        },
+        {
+          "case": "select-1-of-16",
+          "host": "js",
+          "goal": "select speed 2x, peak memory -40%",
+          "passed": false
+        }
+      ],
+      "regressions_over_10_percent": [],
+      "report_sha256": "801dac6842cf6c1e0984b1e75834168d38bf9aab89ab5e328596868e58470c86",
+      "results": [
+        {
+          "case": "dense-16m",
+          "operation": "read",
+          "host": "native",
+          "median_ms": 8.575800001621246,
+          "p95_ms": 11.378800004720688,
+          "speedup": 0.9976387051231144,
+          "memory_reduction": 0.00010651896037494613,
+          "payload_MiB_per_second": 1865.7151515864662,
+          "cli_speedup": 1.0251160651597941
+        },
+        {
+          "case": "dense-16m",
+          "operation": "read",
+          "host": "js",
+          "median_ms": 52.95105000000001,
+          "p95_ms": 64.78309999999999,
+          "speedup": 0.9972767301120561,
+          "memory_reduction": -0.002516273726820284,
+          "payload_MiB_per_second": 302.1658682877865,
+          "cli_speedup": 0.9123093856193548
+        },
+        {
+          "case": "dense-16m",
+          "operation": "write",
+          "host": "native",
+          "median_ms": 8.383550003170967,
+          "p95_ms": 17.428700000047684,
+          "speedup": 12.231942311878255,
+          "memory_reduction": 0.3857747825690998,
+          "payload_MiB_per_second": 1908.4993819978663,
+          "cli_speedup": 2.5349586805256306
+        },
+        {
+          "case": "dense-16m",
+          "operation": "write",
+          "host": "js",
+          "median_ms": 73.67325,
+          "p95_ms": 92.00920000000008,
+          "speedup": 10.904876600394308,
+          "memory_reduction": 0.8702402636828867,
+          "payload_MiB_per_second": 217.17516194819694,
+          "cli_speedup": 4.138194477267002
+        },
+        {
+          "case": "dense-be-16m",
+          "operation": "read",
+          "host": "native",
+          "median_ms": 52.04569999873638,
+          "p95_ms": 60.31599998474121,
+          "speedup": 1.009321615607158,
+          "memory_reduction": 0.0,
+          "payload_MiB_per_second": 307.42213094239224,
+          "cli_speedup": 0.9849590860833521
+        },
+        {
+          "case": "dense-be-16m",
+          "operation": "read",
+          "host": "js",
+          "median_ms": 113.81200000000007,
+          "p95_ms": 137.5250000000001,
+          "speedup": 1.0503215829613748,
+          "memory_reduction": 0.00037839883236934213,
+          "payload_MiB_per_second": 140.582715355147,
+          "cli_speedup": 0.9942962084445023
+        },
+        {
+          "case": "complex-16m",
+          "operation": "read",
+          "host": "native",
+          "median_ms": 7.2943499982357025,
+          "p95_ms": 11.312100023031235,
+          "speedup": 1.0851960773903273,
+          "memory_reduction": 0.0,
+          "payload_MiB_per_second": 2193.478514723032,
+          "cli_speedup": 0.8087360483870386
+        },
+        {
+          "case": "complex-16m",
+          "operation": "read",
+          "host": "js",
+          "median_ms": 61.53839999999997,
+          "p95_ms": 83.39600000000007,
+          "speedup": 1.0945165945165933,
+          "memory_reduction": 0.0002589331952356222,
+          "payload_MiB_per_second": 260.00026000026014,
+          "cli_speedup": 1.0404449584957856
+        },
+        {
+          "case": "complex-16m",
+          "operation": "write",
+          "host": "native",
+          "median_ms": 7.841900005936623,
+          "p95_ms": 11.434299975633621,
+          "speedup": 13.864407849214729,
+          "memory_reduction": 0.38557893777899244,
+          "payload_MiB_per_second": 2040.321859228934,
+          "cli_speedup": 2.787676302893218
+        },
+        {
+          "case": "complex-16m",
+          "operation": "write",
+          "host": "js",
+          "median_ms": 73.71475000000004,
+          "p95_ms": 88.91129999999998,
+          "speedup": 11.03914074184609,
+          "memory_reduction": 0.8700570853504068,
+          "payload_MiB_per_second": 217.05289646915972,
+          "cli_speedup": 4.091995918612251
+        },
+        {
+          "case": "nested-4m",
+          "operation": "read",
+          "host": "native",
+          "median_ms": 1.6371500045061111,
+          "p95_ms": 2.8093000054359436,
+          "speedup": 0.9255718697752016,
+          "memory_reduction": 0.0,
+          "payload_MiB_per_second": 2443.2703105948463,
+          "cli_speedup": 0.9489557010478809
+        },
+        {
+          "case": "nested-4m",
+          "operation": "read",
+          "host": "js",
+          "median_ms": 15.515349999999998,
+          "p95_ms": 23.621399999999994,
+          "speedup": 0.9610708105199054,
+          "memory_reduction": -0.0007341544987355952,
+          "payload_MiB_per_second": 257.80920185493727,
+          "cli_speedup": 0.99400025692971
+        },
+        {
+          "case": "nested-4m",
+          "operation": "write",
+          "host": "native",
+          "median_ms": 1.6080999970436096,
+          "p95_ms": 2.242900013923645,
+          "speedup": 105.55198701114675,
+          "memory_reduction": 0.3523622047244095,
+          "payload_MiB_per_second": 2487.407504106553,
+          "cli_speedup": 6.384152632515597
+        },
+        {
+          "case": "nested-4m",
+          "operation": "write",
+          "host": "js",
+          "median_ms": 20.186849999999993,
+          "p95_ms": 25.558299999999974,
+          "speedup": 59.98716243495151,
+          "memory_reduction": 0.8737835779497354,
+          "payload_MiB_per_second": 198.1487948837982,
+          "cli_speedup": 8.816648453782587
+        },
+        {
+          "case": "sparse-100k",
+          "operation": "read",
+          "host": "native",
+          "median_ms": 0.6449000090360641,
+          "p95_ms": 0.895499974489212,
+          "speedup": 1.0003876520047237,
+          "memory_reduction": 0.0,
+          "payload_MiB_per_second": 1780.473989086546,
+          "cli_speedup": 0.9890455204297425
+        },
+        {
+          "case": "sparse-100k",
+          "operation": "read",
+          "host": "js",
+          "median_ms": 19.181750000000008,
+          "p95_ms": 24.965299999999985,
+          "speedup": 1.2103718378145873,
+          "memory_reduction": 0.0006734573617307449,
+          "payload_MiB_per_second": 59.860424187073136,
+          "cli_speedup": 1.0520165874175362
+        },
+        {
+          "case": "sparse-100k",
+          "operation": "write",
+          "host": "native",
+          "median_ms": 1.362299993634224,
+          "p95_ms": 1.7860000133514404,
+          "speedup": 6.229428201981779,
+          "memory_reduction": 0.27370990237099024,
+          "payload_MiB_per_second": 842.859646932281,
+          "cli_speedup": 1.3400681986692475
+        },
+        {
+          "case": "sparse-100k",
+          "operation": "write",
+          "host": "js",
+          "median_ms": 25.03695000000002,
+          "p95_ms": 38.04770000000002,
+          "speedup": 2.8946437165868804,
+          "memory_reduction": 0.588751603537911,
+          "payload_MiB_per_second": 45.86132462821509,
+          "cli_speedup": 1.4151622599456026
+        },
+        {
+          "case": "compressed-random-16m",
+          "operation": "read",
+          "host": "native",
+          "median_ms": 1775.2440499961376,
+          "p95_ms": 1890.8195999860764,
+          "speedup": 1.041019712195575,
+          "memory_reduction": 0.00023116042533521952,
+          "payload_MiB_per_second": 9.012845304303264,
+          "cli_speedup": 0.9916517160259601
+        },
+        {
+          "case": "compressed-random-16m",
+          "operation": "read",
+          "host": "js",
+          "median_ms": 2221.0416999999998,
+          "p95_ms": 2476.7797999999966,
+          "speedup": 0.989529417660191,
+          "memory_reduction": 0.0001825740126959463,
+          "payload_MiB_per_second": 7.203826924996501,
+          "cli_speedup": 0.9004450678848582
+        },
+        {
+          "case": "zeros-16m",
+          "operation": "compress",
+          "host": "native",
+          "median_ms": 165.97390000522137,
+          "p95_ms": 207.84029999375343,
+          "speedup": 1.6543191429726691,
+          "memory_reduction": 0.3809653916211293,
+          "payload_MiB_per_second": 96.4006991430379,
+          "cli_speedup": 1.3922798095321252
+        },
+        {
+          "case": "zeros-16m",
+          "operation": "compress",
+          "host": "js",
+          "median_ms": 282.8774500000002,
+          "p95_ms": 311.8575999999998,
+          "speedup": 3.8403955493801285,
+          "memory_reduction": 0.8617283392481747,
+          "payload_MiB_per_second": 56.56159584300548,
+          "cli_speedup": 3.2879599976522575
+        },
+        {
+          "case": "select-1-of-16",
+          "operation": "select",
+          "host": "native",
+          "median_ms": 6.616799995303154,
+          "p95_ms": 9.331000000238419,
+          "speedup": 2.1123050444076696,
+          "memory_reduction": 0.0,
+          "payload_MiB_per_second": 2418.0872946677223,
+          "cli_speedup": 1.7609985483898165
+        },
+        {
+          "case": "select-1-of-16",
+          "operation": "select",
+          "host": "js",
+          "median_ms": 73.08090000000004,
+          "p95_ms": 83.02679999999998,
+          "speedup": 1.4567616162362527,
+          "memory_reduction": 0.34780487804878046,
+          "payload_MiB_per_second": 218.9354537232025,
+          "cli_speedup": 1.456596119200277
+        }
+      ]
+    },
+    {
+      "version": "0.0.8",
+      "environment": {
+        "platform": "Windows-11-10.0.22000-SP0",
+        "processor": "AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD",
+        "node": "v24.13.0",
+        "moon": "moon 0.1.20260920 (914d7da 2026-09-20)\n\nFeature flags enabled: rr_moon_mod,rr_moon_pkg",
+        "architecture": "AMD64",
+        "compiler": "gcc.exe (GCC) 16.2.0",
+        "build": "MoonBit --release; fixed SDK and compiler for both revisions"
+      },
+      "protocol": {
+        "warmup": 5,
+        "samples": 30,
+        "batches": 3,
+        "batch_samples": 10,
+        "timing": "codec only; preloaded input/prepared write tree; JS GC outside samples",
+        "memory": "fresh child, no warmup, one operation; peak process working set/RSS includes input and write preparation"
+      },
+      "targets": [
+        {
+          "case": "dense-16m",
+          "host": "native",
+          "goal": "write time -30%, peak memory -25%",
+          "passed": true
+        },
+        {
+          "case": "dense-16m",
+          "host": "js",
+          "goal": "write time -30%, peak memory -25%",
+          "passed": true
+        },
+        {
+          "case": "nested-4m",
+          "host": "native",
+          "goal": "write time -30%, peak memory -25%",
+          "passed": true
+        },
+        {
+          "case": "nested-4m",
+          "host": "js",
+          "goal": "write time -30%, peak memory -25%",
+          "passed": true
+        },
+        {
+          "case": "select-1-of-16",
+          "host": "native",
+          "goal": "select speed 2x, peak memory -40%",
+          "passed": false
+        },
+        {
+          "case": "select-1-of-16",
+          "host": "js",
+          "goal": "select speed 2x, peak memory -40%",
+          "passed": true
+        }
+      ],
+      "regressions_over_10_percent": [],
+      "report_sha256": "7595648a896e6b1ae6ba9a5e5b89f595d444688b42ffab3e6c9ecf2879bc5902",
+      "results": [
+        {
+          "case": "dense-16m",
+          "operation": "read",
+          "host": "native",
+          "median_ms": 7.205449998378754,
+          "p95_ms": 10.497299998998642,
+          "speedup": 1.0453476202493277,
+          "memory_reduction": -0.00042693990820796834,
+          "payload_MiB_per_second": 2220.541396248679,
+          "cli_speedup": 1.0393045224202457
+        },
+        {
+          "case": "dense-16m",
+          "operation": "read",
+          "host": "js",
+          "median_ms": 53.47750000000002,
+          "p95_ms": 60.71519999999998,
+          "speedup": 1.0011070076200261,
+          "memory_reduction": -0.00016375545851521345,
+          "payload_MiB_per_second": 299.1912486559767,
+          "cli_speedup": 1.0511806047472771
+        },
+        {
+          "case": "dense-16m",
+          "operation": "write",
+          "host": "native",
+          "median_ms": 7.056099995970726,
+          "p95_ms": 10.588799983263016,
+          "speedup": 13.437288313880318,
+          "memory_reduction": 0.3859089459053001,
+          "payload_MiB_per_second": 2267.541561079994,
+          "cli_speedup": 2.8236131079528692
+        },
+        {
+          "case": "dense-16m",
+          "operation": "write",
+          "host": "js",
+          "median_ms": 73.86505,
+          "p95_ms": 97.49720000000002,
+          "speedup": 11.202211329986245,
+          "memory_reduction": 0.8701760677432788,
+          "payload_MiB_per_second": 216.61123900951802,
+          "cli_speedup": 4.335196748392189
+        },
+        {
+          "case": "dense-be-16m",
+          "operation": "read",
+          "host": "native",
+          "median_ms": 51.40710000693798,
+          "p95_ms": 57.90109997987747,
+          "speedup": 0.9869191219516877,
+          "memory_reduction": -0.00032020493115592075,
+          "payload_MiB_per_second": 311.2410542092554,
+          "cli_speedup": 1.025408236222392
+        },
+        {
+          "case": "dense-be-16m",
+          "operation": "read",
+          "host": "js",
+          "median_ms": 110.36019999999996,
+          "p95_ms": 134.65650000000005,
+          "speedup": 1.051906846852398,
+          "memory_reduction": -0.0015706239168111757,
+          "payload_MiB_per_second": 144.9798025012641,
+          "cli_speedup": 1.0804733656323018
+        },
+        {
+          "case": "complex-16m",
+          "operation": "read",
+          "host": "native",
+          "median_ms": 5.7669499814510345,
+          "p95_ms": 9.673899978399277,
+          "speedup": 1.0939231333508497,
+          "memory_reduction": -0.0003201365916123411,
+          "payload_MiB_per_second": 2774.4301669795664,
+          "cli_speedup": 0.999342247013431
+        },
+        {
+          "case": "complex-16m",
+          "operation": "read",
+          "host": "js",
+          "median_ms": 53.24369999999999,
+          "p95_ms": 88.3624000000001,
+          "speedup": 1.0134588693122384,
+          "memory_reduction": -0.0031716519932192266,
+          "payload_MiB_per_second": 300.5050362765924,
+          "cli_speedup": 1.1163105424134607
+        },
+        {
+          "case": "complex-16m",
+          "operation": "write",
+          "host": "native",
+          "median_ms": 6.198899984359741,
+          "p95_ms": 8.852299988269806,
+          "speedup": 14.753093328091296,
+          "memory_reduction": 0.3856673960612691,
+          "payload_MiB_per_second": 2581.103105449212,
+          "cli_speedup": 3.4727435827451285
+        },
+        {
+          "case": "complex-16m",
+          "operation": "write",
+          "host": "js",
+          "median_ms": 73.77819999999997,
+          "p95_ms": 99.58899999999994,
+          "speedup": 10.592753008341225,
+          "memory_reduction": 0.8701522584228063,
+          "payload_MiB_per_second": 216.86622877760647,
+          "cli_speedup": 4.1247382284833325
+        },
+        {
+          "case": "nested-4m",
+          "operation": "read",
+          "host": "native",
+          "median_ms": 1.5260499864816666,
+          "p95_ms": 3.126599997282028,
+          "speedup": 0.916811387582609,
+          "memory_reduction": -0.0018587360594795044,
+          "payload_MiB_per_second": 2621.146119349646,
+          "cli_speedup": 0.9825169953749116
+        },
+        {
+          "case": "nested-4m",
+          "operation": "read",
+          "host": "js",
+          "median_ms": 14.494549999999975,
+          "p95_ms": 18.900299999999987,
+          "speedup": 1.012604737642772,
+          "memory_reduction": -0.0008170602173380725,
+          "payload_MiB_per_second": 275.96579403982923,
+          "cli_speedup": 1.041041167632796
+        },
+        {
+          "case": "nested-4m",
+          "operation": "write",
+          "host": "native",
+          "median_ms": 0.9635500013828278,
+          "p95_ms": 1.902099996805191,
+          "speedup": 175.69721316815094,
+          "memory_reduction": 0.35236938031591736,
+          "payload_MiB_per_second": 4151.315442124898,
+          "cli_speedup": 6.833338940435121
+        },
+        {
+          "case": "nested-4m",
+          "operation": "write",
+          "host": "js",
+          "median_ms": 19.685450000000003,
+          "p95_ms": 24.065499999999986,
+          "speedup": 59.87652047578286,
+          "memory_reduction": 0.8739974613323305,
+          "payload_MiB_per_second": 203.19576133641849,
+          "cli_speedup": 9.276867947947991
+        },
+        {
+          "case": "sparse-100k",
+          "operation": "read",
+          "host": "native",
+          "median_ms": 0.5049499869346619,
+          "p95_ms": 0.8481999933719635,
+          "speedup": 1.4388553948431564,
+          "memory_reduction": -0.003961516694963141,
+          "payload_MiB_per_second": 2273.9434030304583,
+          "cli_speedup": 1.0352294122133294
+        },
+        {
+          "case": "sparse-100k",
+          "operation": "read",
+          "host": "js",
+          "median_ms": 8.599450000000012,
+          "p95_ms": 10.936800000000005,
+          "speedup": 2.338690265075088,
+          "memory_reduction": 0.06800709639266711,
+          "payload_MiB_per_second": 133.523387152712,
+          "cli_speedup": 1.2212226450516204
+        },
+        {
+          "case": "sparse-100k",
+          "operation": "write",
+          "host": "native",
+          "median_ms": 1.2597000002861023,
+          "p95_ms": 1.5574000179767609,
+          "speedup": 6.843851717252069,
+          "memory_reduction": 0.2731741573033708,
+          "payload_MiB_per_second": 911.5088444785314,
+          "cli_speedup": 1.4084908940240435
+        },
+        {
+          "case": "sparse-100k",
+          "operation": "write",
+          "host": "js",
+          "median_ms": 23.3035,
+          "p95_ms": 28.445699999999988,
+          "speedup": 2.762443409788231,
+          "memory_reduction": 0.588310854206808,
+          "payload_MiB_per_second": 49.272756952835,
+          "cli_speedup": 1.6628022349705707
+        },
+        {
+          "case": "compressed-random-16m",
+          "operation": "read",
+          "host": "native",
+          "median_ms": 1743.1054999828339,
+          "p95_ms": 1787.6519999802113,
+          "speedup": 1.0032487132921504,
+          "memory_reduction": -0.00017362115863184258,
+          "payload_MiB_per_second": 9.179019858613014,
+          "cli_speedup": 1.027770248763285
+        },
+        {
+          "case": "compressed-random-16m",
+          "operation": "read",
+          "host": "js",
+          "median_ms": 2210.0746500000005,
+          "p95_ms": 2566.7589000000007,
+          "speedup": 0.993684421474179,
+          "memory_reduction": -0.0005213654137457002,
+          "payload_MiB_per_second": 7.239574464147623,
+          "cli_speedup": 1.061044853355977
+        },
+        {
+          "case": "zeros-16m",
+          "operation": "compress",
+          "host": "native",
+          "median_ms": 154.17740000784397,
+          "p95_ms": 161.26700001955032,
+          "speedup": 1.5792048639914464,
+          "memory_reduction": 0.3809936189608022,
+          "payload_MiB_per_second": 103.77655868620161,
+          "cli_speedup": 1.5859091193647001
+        },
+        {
+          "case": "zeros-16m",
+          "operation": "compress",
+          "host": "js",
+          "median_ms": 275.36739999999986,
+          "p95_ms": 288.3030000000001,
+          "speedup": 3.8180768674868597,
+          "memory_reduction": 0.8626054718186082,
+          "payload_MiB_per_second": 58.104190982665365,
+          "cli_speedup": 3.446204611755999
+        },
+        {
+          "case": "select-1-of-16",
+          "operation": "select",
+          "host": "native",
+          "median_ms": 0.9378999918699265,
+          "p95_ms": 1.30239999294281,
+          "speedup": 14.186853747127309,
+          "memory_reduction": 0.3825910931174089,
+          "payload_MiB_per_second": 17059.38814233296,
+          "cli_speedup": 2.085973556850319
+        },
+        {
+          "case": "select-1-of-16",
+          "operation": "select",
+          "host": "js",
+          "median_ms": 9.7055,
+          "p95_ms": 10.867799999999988,
+          "speedup": 10.348616763690693,
+          "memory_reduction": 0.48097513340076026,
+          "payload_MiB_per_second": 1648.549791355417,
+          "cli_speedup": 2.091746547622862
+        }
+      ]
+    }
+  ],
+  "scope": "Historical measured versions remain identified. Delivery runtime matches v0.0.8 except version text; no fresh v0.0.9 timing claimed. Targets are project engineering goals, not official award criteria."
+}
