@@ -250,7 +250,12 @@ console.log('Fresh JS consumer: passed');
 run(["node", str(probe)], js)
 
 workflow_report = json.loads((REPORTS / f"workflows-v{VERSION}.json").read_text(encoding="utf-8"))
-assert workflow_report["status"] == "passed" and workflow_report["version"] == VERSION and workflow_report["passed"] == 6
+assert workflow_report["status"] == "passed" and workflow_report["version"] == VERSION
+assert workflow_report["passed"] == len(workflow_report["checks"]) > 0
+assert {(c["host"], c["workflow"]) for c in workflow_report["checks"]} == {
+    (host, workflow) for host in ("native", "js")
+    for workflow in ("mixed experimental archive", "large sparse simulation exchange", "NumPy to MoonBit transform and difference check")
+}
 workflow_directory = LOCAL / "workflows"
 for check in workflow_report["checks"]:
     for output in check["outputs"]:
@@ -281,7 +286,7 @@ result = {
     "fresh_consumers": {"native": f"version + {len(commands)} commands + sparse/transform/compress/snapshot/diff + Unicode/spaces + no overwrite; PATH limited to System32; diff-change exit 2 verified; complete three-workflow PowerShell demo passed",
                         "source": f"unpacked source check and {test_match.group(2)} JS tests; no local settings/build cache bundled",
                         "js": "unpacked exports: recursive mixed cell/struct/char/object fixture, JSON, compression, sparse, mixed transform, snapshot restore and exact diff",
-                        "workflow_evidence": "actual six-workflow outputs matched their independent report hashes, then every bundled file was checked after ZIP creation"},
+                        "workflow_evidence": f"actual {workflow_report['passed']} host workflows matched independent report hashes; every bundled file checked after ZIP creation"},
     "scope": "Local archives and fresh consumers; no public publishing or organizer acceptance",
 }
 (DIST / f"release-v{VERSION}.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

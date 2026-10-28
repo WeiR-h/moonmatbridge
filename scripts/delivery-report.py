@@ -25,7 +25,10 @@ def main():
     workflows = read(f"workflows-v{VERSION}.json")
     licenses = read(f"licenses-v{VERSION}.json")
     snapshot = read(f"source-snapshot-v{VERSION}.json")
+    ci = read(f"ci-v{VERSION}.json")
     assert not snapshot["changed_files"]
+    assert snapshot["before"] == snapshot["after"] == version["source"]
+    assert ci["checked_source_sha256"] == version["source"]["sha256"]
     registry = read(f"registry-v{VERSION}.json")
     audit = read(f"mooncake-audit-v{VERSION}.json")
     mooncakes = read(f"mooncakes-v{VERSION}.json")
