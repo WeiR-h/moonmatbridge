@@ -1,6 +1,9 @@
 ///|
 priv struct SourceBits {
   cursor : SourceCursor
+  data : FixedArray[Byte]
+  mut block_start : Int
+  mut block_end : Int
   end : Int
   mut position : Int
   mut buffer : Int
@@ -11,7 +14,18 @@ priv struct SourceBits {
 #inline
 fn SourceBits::fill(self : SourceBits, count : Int) -> Bool raise MatError {
   while self.available < count && self.position < self.end {
-    self.buffer = self.buffer | (self.cursor.byte().to_int() << self.available)
+    if self.position >= self.block_end {
+      self.cursor.position = self.position
+      ignore(self.cursor.byte())
+      self.block_start = self.cursor.start
+      self.block_end = if self.cursor.start + self.cursor.available < self.end {
+        self.cursor.start + self.cursor.available
+      } else {
+        self.end
+      }
+    }
+    self.buffer = self.buffer |
+      (self.data[self.position - self.block_start].to_int() << self.available)
     self.available = self.available + 8
     self.position = self.position + 1
   }
@@ -38,6 +52,7 @@ fn SourceBits::align(self : SourceBits) -> Unit {
 }
 
 ///|
+#inline
 fn Huffman::decode_source(
   self : Huffman,
   reader : SourceBits,
@@ -136,6 +151,7 @@ priv struct SourceInflater {
   mut s1 : UInt
   mut s2 : UInt
   mut adler_count : Int
+  mut checksum_verified : Bool
   mut mode : Int
   mut last : Bool
   mut stored : Int
@@ -189,6 +205,13 @@ fn make_source_inflater(
     ],
     reader: {
       cursor,
+      data: cursor.buffer,
+      block_start: cursor.start,
+      block_end: if cursor.start + cursor.available < end - 4 {
+        cursor.start + cursor.available
+      } else {
+        end - 4
+      },
       end: end - 4,
       position: cursor.position,
       buffer: 0,
@@ -201,6 +224,7 @@ fn make_source_inflater(
     s1: 1U,
     s2: 0U,
     adler_count: 0,
+    checksum_verified: false,
     mode: 0,
     last: false,
     stored: 0,
@@ -226,15 +250,40 @@ fn SourceInflater::emit(
   }
   self.history[self.produced & 32767] = byte
   self.produced = self.produced + 1
-  self.s1 = self.s1 + byte.to_uint()
-  self.s2 = self.s2 + self.s1
-  self.adler_count = self.adler_count + 1
-  if self.adler_count == 5552 {
-    self.s1 = self.s1 % 65521U
-    self.s2 = self.s2 % 65521U
-    self.adler_count = 0
-  }
   byte
+}
+
+///|
+fn SourceInflater::adler_block(
+  self : SourceInflater,
+  bytes : FixedArray[Byte],
+  count : Int,
+) -> Unit {
+  let mut s1 = self.s1
+  let mut s2 = self.s2
+  let mut pending = self.adler_count
+  let mut offset = 0
+  while offset < count {
+    let n = if count - offset < 5552 - pending {
+      count - offset
+    } else {
+      5552 - pending
+    }
+    for i = offset; i < offset + n; i = i + 1 {
+      s1 = s1 + bytes[i].to_uint()
+      s2 = s2 + s1
+    }
+    offset = offset + n
+    pending = pending + n
+    if pending == 5552 {
+      s1 = s1 % 65521U
+      s2 = s2 % 65521U
+      pending = 0
+    }
+  }
+  self.s1 = s1
+  self.s2 = s2
+  self.adler_count = pending
 }
 
 ///|
@@ -243,13 +292,24 @@ fn SourceInflater::finish(self : SourceInflater) -> Unit raise MatError {
   if self.reader.position - self.reader.available / 8 != self.reader.end {
     fail("invalid-zlib", self.reader.position, "Trailing DEFLATE bytes")
   }
+  self.reader.cursor.position = self.reader.position
+  self.mode = 3
+}
+
+///|
+fn SourceInflater::verify_checksum(
+  self : SourceInflater,
+) -> Unit raise MatError {
+  if self.checksum_verified {
+    return
+  }
   let checksum = self.reader.cursor.owned(4)
   let expected = bits_at(checksum, 0, 4, false).to_uint()
   let actual = ((self.s2 % 65521U) << 16) | (self.s1 % 65521U)
   if actual != expected {
     fail("invalid-zlib", self.reader.position, "Adler32 mismatch")
   }
-  self.mode = 3
+  self.checksum_verified = true
 }
 
 ///|
@@ -283,7 +343,7 @@ fn SourceInflater::start_copy(
 }
 
 ///|
-fn SourceInflater::next(self : SourceInflater) -> Byte? raise MatError {
+fn SourceInflater::decode_one(self : SourceInflater) -> Byte? raise MatError {
   while true {
     if self.mode == 3 {
       return None
@@ -365,6 +425,25 @@ fn SourceInflater::next(self : SourceInflater) -> Byte? raise MatError {
 }
 
 ///|
+fn SourceInflater::next(self : SourceInflater) -> Byte? raise MatError {
+  let byte = self.decode_one()
+  match byte {
+    Some(value) => {
+      self.s1 = self.s1 + value.to_uint()
+      self.s2 = self.s2 + self.s1
+      self.adler_count = self.adler_count + 1
+      if self.adler_count == 5552 {
+        self.s1 = self.s1 % 65521U
+        self.s2 = self.s2 % 65521U
+        self.adler_count = 0
+      }
+    }
+    None => self.verify_checksum()
+  }
+  byte
+}
+
+///|
 fn SourceInflater::fill(
   self : SourceInflater,
   output : FixedArray[Byte],
@@ -374,52 +453,77 @@ fn SourceInflater::fill(
     fail("expanded-limit", self.reader.position, "Expanded block exceeds quota")
   }
   let mut i = 0
+  let history = self.history
+  let reader = self.reader
   while i < count {
     if self.copy > 0 {
       let n = if self.copy > count - i { count - i } else { self.copy }
+      let begin = self.produced
+      let distance = self.distance
       for j = 0; j < n; j = j + 1 {
-        output[i + j] = self.emit(
-          self.history[(self.produced - self.distance) & 32767],
-        )
+        let byte = history[(begin + j - distance) & 32767]
+        output[i + j] = byte
+        history[(begin + j) & 32767] = byte
       }
+      self.produced = begin + n
       self.copy = self.copy - n
       i = i + n
     } else if self.mode == 1 && self.stored > 0 {
       let n = if self.stored > count - i { count - i } else { self.stored }
+      let begin = self.produced
       for j = 0; j < n; j = j + 1 {
-        output[i + j] = self.emit(self.reader.take(8).to_byte())
+        let byte = reader.take(8).to_byte()
+        output[i + j] = byte
+        history[(begin + j) & 32767] = byte
       }
+      self.produced = begin + n
       self.stored = self.stored - n
       i = i + n
     } else if self.mode == 2 {
-      // The common literal path writes directly into the parser buffer. Only
-      // block transitions use next(), avoiding an Option allocation per byte.
-      let symbol = self.literals.unwrap().decode_source(self.reader)
-      if symbol < 256 {
-        output[i] = self.emit(symbol.to_byte())
-        i = i + 1
-      } else if symbol == 256 {
-        if self.last {
-          self.finish()
+      // Keep the current Huffman table and write position local for a literal
+      // run. Synchronize before block/copy transitions and the next buffer.
+      let literals = self.literals.unwrap()
+      let mut position = self.produced
+      while i < count {
+        let symbol = literals.decode_source(reader)
+        if symbol < 256 {
+          let byte = symbol.to_byte()
+          output[i] = byte
+          history[position & 32767] = byte
+          position = position + 1
+          i = i + 1
         } else {
-          self.mode = 0
+          self.produced = position
+          if symbol == 256 {
+            if self.last {
+              self.finish()
+            } else {
+              self.mode = 0
+            }
+          } else {
+            self.start_copy(symbol)
+          }
+          break
         }
-      } else {
-        self.start_copy(symbol)
       }
+      self.produced = position
     } else {
-      match self.next() {
+      match self.decode_one() {
         Some(byte) => {
           output[i] = byte
           i = i + 1
         }
-        None =>
+        None => {
+          self.adler_block(output, i)
+          self.verify_checksum()
           fail(
             "invalid-compressed",
             self.produced,
             "Expanded matrix ends early",
           )
+        }
       }
     }
   }
+  self.adler_block(output, count)
 }

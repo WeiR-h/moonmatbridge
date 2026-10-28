@@ -78,3 +78,32 @@ test "incremental inflate retains circular history declared windows and cumulati
     0,
   )
 }
+
+///|
+test "buffered checksum covers partial final blocks and rejects extra expanded bytes" {
+  assert_true(source_inflate_test(deflate_zlib(b""), 0, 3) == b"")
+  let encoded = write_tree([
+    Numeric(numeric_array("one", Float64, [1, 1], [Floating(1.0)])),
+  ])
+  let matrix = encoded[128:].to_owned()
+  let oversized = changed(matrix, 4, (matrix[4].to_int() + 8).to_byte())
+  for (data, chunk) in [(oversized, 11), (matrix + b"extra", 3)] {
+    let out : Array[Byte] = []
+    for i = 0; i < 128; i = i + 1 {
+      out.push(encoded[i])
+    }
+    append_element(out, 15, deflate_zlib(data))
+    let bytes = Bytes::from_array(out)
+    assert_eq(
+      error_code(() => {
+        ignore(
+          read_selected_from(test_source(bytes, 3), [], limits={
+            ..default_source_limits(),
+            chunk_bytes: chunk,
+          }),
+        )
+      }),
+      "invalid-compressed",
+    )
+  }
+}
