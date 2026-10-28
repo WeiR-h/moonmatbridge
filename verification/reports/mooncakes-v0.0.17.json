@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "version": "0.0.17",
+  "module": "WeiR-h/moonmatbridge",
+  "url": "https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.0.17",
+  "public_manifest_url": "https://mooncakes.io/api/v0/manifest/WeiR-h/moonmatbridge",
+  "build_status": "success",
+  "archive_sha256": "d6a476c52a5fe4f204e20782441387462966195bd4baac60813bf819be0c736c",
+  "source_sha256": "14fc82520782741fc1a08a42d416b44c815325fc6d0dba40cdf7399014e41c55",
+  "installed_source_files": 74,
+  "targets": [
+    "js",
+    "wasm-gc",
+    "native"
+  ],
+  "scope": "Previously accepted immutable registry version; audited checksum and actual fresh consumers. No re-upload."
+}

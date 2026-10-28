@@ -1,0 +1,68 @@
+{
+  "status": "passed",
+  "version": "0.0.17",
+  "source_sha256": "14fc82520782741fc1a08a42d416b44c815325fc6d0dba40cdf7399014e41c55",
+  "checks": [
+    {
+      "archive": "MoonMatBridge-v0.0.17-source.zip",
+      "file": "LICENSE",
+      "sha256": "aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe"
+    },
+    {
+      "archive": "MoonMatBridge-v0.0.17-source.zip",
+      "file": "NOTICE",
+      "sha256": "5a863af375432e8bc4e8bb6af3757f9aa687f503745b518221e637bd6f5d8c9a"
+    },
+    {
+      "archive": "MoonMatBridge-v0.0.17-source.zip",
+      "file": "THIRD_PARTY.md",
+      "sha256": "3a0daf11a46d06cd40075124668a985d64554f3e97d8d8b9bdb10d736a9c8c37"
+    },
+    {
+      "archive": "MoonMatBridge-v0.0.17-windows-x64.zip",
+      "file": "LICENSE",
+      "sha256": "aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe"
+    },
+    {
+      "archive": "MoonMatBridge-v0.0.17-windows-x64.zip",
+      "file": "NOTICE",
+      "sha256": "5a863af375432e8bc4e8bb6af3757f9aa687f503745b518221e637bd6f5d8c9a"
+    },
+    {
+      "archive": "MoonMatBridge-v0.0.17-windows-x64.zip",
+      "file": "THIRD_PARTY.md",
+      "sha256": "3a0daf11a46d06cd40075124668a985d64554f3e97d8d8b9bdb10d736a9c8c37"
+    },
+    {
+      "archive": "MoonMatBridge-v0.0.17-js.zip",
+      "file": "LICENSE",
+      "sha256": "aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe"
+    },
+    {
+      "archive": "MoonMatBridge-v0.0.17-js.zip",
+      "file": "NOTICE",
+      "sha256": "5a863af375432e8bc4e8bb6af3757f9aa687f503745b518221e637bd6f5d8c9a"
+    },
+    {
+      "archive": "MoonMatBridge-v0.0.17-js.zip",
+      "file": "THIRD_PARTY.md",
+      "sha256": "3a0daf11a46d06cd40075124668a985d64554f3e97d8d8b9bdb10d736a9c8c37"
+    },
+    {
+      "archive": "MoonMatBridge-v0.0.17-workflows.zip",
+      "file": "LICENSE",
+      "sha256": "aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe"
+    },
+    {
+      "archive": "MoonMatBridge-v0.0.17-workflows.zip",
+      "file": "NOTICE",
+      "sha256": "5a863af375432e8bc4e8bb6af3757f9aa687f503745b518221e637bd6f5d8c9a"
+    },
+    {
+      "archive": "MoonMatBridge-v0.0.17-workflows.zip",
+      "file": "THIRD_PARTY.md",
+      "sha256": "3a0daf11a46d06cd40075124668a985d64554f3e97d8d8b9bdb10d736a9c8c37"
+    }
+  ],
+  "scope": "Every release archive carries byte-exact Apache-2.0 license, runtime attribution and reference notices; no legal certification claimed."
+}
