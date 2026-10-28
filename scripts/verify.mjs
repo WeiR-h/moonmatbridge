@@ -49,6 +49,8 @@ try {
   const python = process.env.MOONMAT_PYTHON || join(root, '.venv', process.platform === 'win32' ? 'Scripts/python.exe' : 'bin/python');
   record('Independent SciPy/NumPy cross-compatibility', command(python, ['scripts/interop.py']));
   record('All public Level 5 base classes in mixed files', command(python, ['scripts/compatibility.py']));
+  record('Compatibility gap characterization', command(python, ['scripts/compatibility-gaps.py']));
+  record('Performance evidence invalidation guards', command(python, ['scripts/test-evidence.py']));
   record('Strict selected reads and root metadata independent checks', command(python, ['scripts/selection-checks.py']));
   const workflowOutput = command(python, ['scripts/scientific-workflows.py']);
   const workflowReceipt = join(root, `verification/reports/workflows-v${version}.json`);

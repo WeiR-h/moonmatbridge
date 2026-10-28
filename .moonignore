@@ -45,3 +45,6 @@
 !/examples/workflows/**
 
 /examples/python/__pycache__/
+
+!/examples/compatibility/
+!/examples/compatibility/**

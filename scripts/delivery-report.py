@@ -19,6 +19,7 @@ def read(name, status="passed"):
 def main():
     version = read(f"v{VERSION}.json")
     compatibility = read(f"compatibility-v{VERSION}.json")
+    gaps = read(f"compatibility-gaps-v{VERSION}.json", "characterized")
     octave = read(f"octave-v{VERSION}.json")
     selected = read(f"selection-v{VERSION}.json")
     workflows = read(f"workflows-v{VERSION}.json")
@@ -30,7 +31,10 @@ def main():
     public_workflows = read(f"workflows-public-v{VERSION}.json")
     performance = read(f"performance-summary-v{VERSION}.json", "summarized")
     assert compatibility["base_classes"] == list(range(1, 16))
-    assert len(octave["checks"]) == 8 and workflows["passed"] == public_workflows["passed"] == 6
+    assert {(c['host'], c['format'], c['operation']) for c in octave['checks']} == {(h,f,o) for h in ('native','js') for f in ('v6','v7') for o in ('roundtrip','compress')}
+    assert workflows['passed'] == len(workflows['checks']) > 0
+    assert public_workflows['passed'] == len(public_workflows['checks']) == workflows['passed']
+    assert {(c['host'],c['workflow']) for c in workflows['checks']} == {(c['host'],c['workflow']) for c in public_workflows['checks']}
     assert public_workflows["released_output_hashes_match"]
     fingerprint = version["source"]["sha256"]
     assert fingerprint == registry["source"]["sha256"] == mooncakes["source_sha256"] == release["source_sha256"]
@@ -43,7 +47,8 @@ def main():
     final_measurement = performance["measurements"][-1]
     missed = [target for target in final_measurement["targets"] if not target["passed"]]
     publications = []
-    for revision in ("0.0.6", "0.0.7", "0.0.8", "0.0.9"):
+    revisions = sorted((p.name.removeprefix('public-downloads-v').removesuffix('.json') for p in REPORTS.glob('public-downloads-v*.json')), key=lambda v: tuple(map(int,v.split('.'))))
+    for revision in revisions:
         registry_receipt = json.loads((REPORTS / f"mooncakes-v{revision}.json").read_text(encoding="utf-8"))
         download_receipt = json.loads((REPORTS / f"public-downloads-v{revision}.json").read_text(encoding="utf-8"))
         assert registry_receipt["status"] == download_receipt["status"] == "passed"
@@ -53,7 +58,7 @@ def main():
                              "verified_public_assets": len(download_receipt["assets"]),
                              "mooncakes_archive_sha256": registry_receipt["archive_sha256"]})
     evidence = [f"{prefix}-v{VERSION}.json" for prefix in ("compatibility", "octave", "selection", "workflows", "registry", "mooncake-audit", "mooncakes", "release", "public-downloads", "workflows-public", "performance-summary")]
-    evidence.append(f"v{VERSION}.json")
+    evidence.extend([f"v{VERSION}.json", f"compatibility-gaps-v{VERSION}.json"])
     report = {"status": "public_delivery_verified", "version": VERSION, "source": version["source"],
               "publication_history": publications,
               "verification": {"local_groups": len(version["checks"]), "mixed_class_host_cases": len(compatibility["checks"]),
@@ -62,10 +67,10 @@ def main():
               "performance": {"measured_versions": performance["measured_versions"], "runtime_source_sha256": performance["runtime_source_sha256"],
                               "unmet_engineering_targets": missed, "regressions_over_10_percent": final_measurement["regressions_over_10_percent"],
                               "scope": "Historical measurements are identified; delivery runtime equivalence is checked. No new delivery-version timing is claimed."},
-              "open_compatibility": compatibility["remaining"] + ["Octave producer variants remain unresolved; original files and tool disagreements retained", "All public standard variants must pass before v1.0.0"],
-              "organizer_state": {"registration_update": "not_performed_in_this_delivery", "acceptance": "no_new_organizer_receipt", "award": "not_claimed"},
+              "open_compatibility": compatibility["remaining"] + [c['file'] for c in gaps['cases'] if c['compatibility_state'].startswith('unresolved')] + ["All public standard variants must pass before v1.0.0"],
+              "organizer_state": {"registration": "initial_review_passed_user_notification_2026-10-28", "acceptance": "awaiting_formal_receipt", "award": "not_claimed"},
               "evidence": [{"file": name, "sha256": hashlib.sha256((REPORTS / name).read_bytes()).hexdigest()} for name in evidence],
-              "scope": "Four versions published and downloaded, exact public packages installed, and final scientific workflows reproduced. Publication is separate from full compatibility, engineering targets and organizer decisions."}
+              "scope": "Listed versions published and downloaded, exact public packages installed, and final scientific workflows reproduced. Publication is separate from full compatibility, engineering targets and organizer decisions."}
     path = REPORTS / f"delivery-v{VERSION}.json"
     path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(json.dumps({"status": report["status"], "versions": len(publications), "unmet_engineering_targets": len(missed), "file": str(path)}))

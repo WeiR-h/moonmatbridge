@@ -14,7 +14,7 @@ allowed.update('docs/' + name for name in ['API.md', 'FORMAT.md', 'JSON.md', 'RE
                                          'COMPATIBILITY_MATRIX.md', 'NEXT_RELEASES.md', 'PERFORMANCE.md',
                                          'SCIENTIFIC_WORKFLOWS.md', 'REVIEW_EVIDENCE-v0.0.9.md'])
 allowed.update('examples/' + name for name in ['sample.mat', 'sample.json', 'transform-plan.json'])
-for directory in ['src', 'examples/python', 'examples/matlab', 'examples/octave', 'examples/registry_consumer', 'examples/mixed', 'examples/workflows']:
+for directory in ['src', 'examples/python', 'examples/matlab', 'examples/octave', 'examples/registry_consumer', 'examples/mixed', 'examples/workflows', 'examples/compatibility']:
     allowed.update(path.relative_to(ROOT).as_posix() for path in (ROOT / directory).rglob('*') if path.is_file() and '__pycache__' not in path.parts)
 entries = []
 seen = set()

@@ -1,44 +1,38 @@
-"""Summarize measured revisions; verify the delivery revision has identical runtime code."""
+"""Inherit measurements only after comparing the complete production file set."""
 from pathlib import Path
-import hashlib
-import json
-import subprocess
-
+import hashlib, json, subprocess
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))["version"]
-REPORTS = ROOT / "verification/reports"
-REFERENCE = "v0.0.8"
-
-
-def git(*args):
-    return subprocess.check_output(["git", *args], cwd=ROOT)
-
-
+VERSION = json.loads((ROOT / 'package.json').read_text(encoding='utf-8'))['version']
+REPORTS = ROOT / 'verification/reports'
+REFERENCE = 'v0.0.8'
+def production(name):
+    p = Path(name)
+    return (name.startswith('src/') and p.name != 'version.mbt'
+        and not p.name.endswith(('_wbtest.mbt', '_test.mbt'))
+        and not any(x in ('bench_bridge','bench','examples') for x in p.parts)
+        and (p.suffix in ('.mbt','.c') or p.name == 'moon.pkg'))
+def snapshot(ref=None):
+    names = subprocess.check_output(['git','ls-tree','-r','--name-only',ref,'--','src'],cwd=ROOT).decode().splitlines() if ref else [p.relative_to(ROOT).as_posix() for p in (ROOT/'src').rglob('*') if p.is_file()]
+    names = sorted(n for n in names if production(n))
+    h=hashlib.sha256()
+    for n in names:
+        data=subprocess.check_output(['git','show',f'{ref}:{n}'],cwd=ROOT) if ref else (ROOT/n).read_bytes()
+        h.update(n.encode()+b'\0'+data.replace(b'\r\n',b'\n')+b'\0')
+    return names,h.hexdigest()
 def main():
-    files = git("ls-tree", "-r", "--name-only", REFERENCE, "--", "src").decode().splitlines()
-    files = [name for name in files if name != "src/version.mbt" and
-             (name.endswith((".mbt", ".c")) or Path(name).name == "moon.pkg")]
-    old, new = hashlib.sha256(), hashlib.sha256()
-    for name in files:
-        for digest, data in ((old, git("show", f"{REFERENCE}:{name}")), (new, (ROOT / name).read_bytes())):
-            digest.update(name.encode() + b"\0" + data.replace(b"\r\n", b"\n") + b"\0")
-    assert old.hexdigest() == new.hexdigest(), "Runtime changed: inherited measurements would be misleading"
-    reports = [json.loads((REPORTS / f"performance-v{v}.json").read_text(encoding="utf-8")) for v in ("0.0.7", "0.0.8")]
-    for report in reports:
-        assert report["status"] == "measured" and len(report["results"]) == 24
-    summary = {"status": "summarized", "version": VERSION, "measured_versions": [r["version"] for r in reports],
-               "inherited_from": REFERENCE, "runtime_source_sha256": new.hexdigest(), "runtime_files": len(files),
-               "hash_policy": "All src .mbt/.c and moon.pkg, excluding version.mbt; CRLF normalized to LF. This includes test and benchmark code.",
-               "baseline_commit": reports[0]["baseline_commit"],
-               "measurements": [{"version": r["version"], "environment": r["environment"], "protocol": r["protocol"],
-                                 "targets": r["targets"], "regressions_over_10_percent": r["regressions_over_10_percent"],
-                                 "report_sha256": hashlib.sha256((REPORTS / f'performance-v{r["version"]}.json').read_bytes()).hexdigest(),
-                                 "results": [{k: row[k] for k in ("case", "operation", "host", "median_ms", "p95_ms", "speedup", "memory_reduction", "payload_MiB_per_second", "cli_speedup")} for row in r["results"]]}
-                                for r in reports],
-               "scope": "Historical measured versions remain identified. Delivery runtime matches v0.0.8 except version text; no fresh v0.0.9 timing claimed. Targets are project engineering goals, not official award criteria."}
-    (REPORTS / f"performance-summary-v{VERSION}.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
-    print(json.dumps({"status": "summarized", "version": VERSION, "runtime_source_sha256": new.hexdigest()}))
-
-
-if __name__ == "__main__":
-    main()
+    names,fingerprint=snapshot()
+    assert (names,fingerprint)==snapshot(REFERENCE), 'Runtime changed: fresh measurements required; historical inheritance forbidden'
+    reports=[]
+    for v in ('0.0.7','0.0.8'):
+        path=REPORTS/f'performance-v{v}.json'
+        r=json.loads(path.read_text(encoding='utf-8'))
+        assert r['status']=='measured' and r['version']==v and r['results']
+        reports.append({**r,'report_sha256':hashlib.sha256(path.read_bytes()).hexdigest()})
+    result={'status':'summarized','version':VERSION,'measured_versions':[r['version'] for r in reports],
+        'inherited_from':REFERENCE,'runtime_source_sha256':fingerprint,'runtime_files':len(names),
+        'hash_policy':'Complete sorted production source set, LF normalized; excludes tests, benches, examples and version text',
+        'baseline_commit':reports[0]['baseline_commit'],'measurements':reports,
+        'scope':'Historical measurements guarded by production source/file-set equality; no new timing claimed.'}
+    (REPORTS/f'performance-summary-v{VERSION}.json').write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')
+    print(json.dumps({'status':'summarized','version':VERSION,'runtime_source_sha256':fingerprint}))
+if __name__=='__main__': main()
