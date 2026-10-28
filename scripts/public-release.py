@@ -108,6 +108,11 @@ def public_workflows(directory, exe):
         tree_receipt = json.loads((source / f"verification/reports/tree-operations-v{VERSION}.json").read_text(encoding="utf-8"))
         write_report("tree-operations-public", tree_receipt)
     receipt["released_output_hashes_match"] = True
+    source_script = source / "scripts/source-checks.py"
+    if source_script.exists():
+        print(run([python,source_script,"--native-executable",exe,"--js-cli",cli,"--fixture-manifest",ROOT/"verification/local/file-performance/manifest.json"]).stdout.strip(),flush=True)
+        source_receipt=json.loads((source/f"verification/reports/source-operations-v{VERSION}.json").read_bytes())
+        write_report("source-operations-public",source_receipt)
     receipt["public_archives_sha256"] = {kind: hashlib.sha256((directory / f"MoonMatBridge-v{VERSION}-{kind}.zip").read_bytes()).hexdigest() for kind in ("source", "js", "windows-x64")}
     receipt["scope"] = "All scientific workflows executed using publicly downloaded inputs, native executable and precompiled JS module, checked by independent NumPy/SciPy and exact released output hashes. Adapter only points to the downloaded module."
     (directory / f"workflows-public-v{VERSION}.json").write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
