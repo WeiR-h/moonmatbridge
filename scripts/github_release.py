@@ -6,6 +6,7 @@ import time
 import urllib.parse
 import urllib.request
 from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor
 
 ROOT = Path(__file__).resolve().parents[1]
 REPO = 'WeiR-h/moonmatbridge'
@@ -81,10 +82,9 @@ def ensure_release(tag, assets, notes):
 def download_release(release, directory, assets):
     expected = {p.name:checksum(p) for p in assets}
     assert set(expected) == {a['name'] for a in release['assets']}
-    receipts = []
-    for asset in release['assets']:
+    def download(asset):
         name = asset['name']
-        assert Path(name).name == name and '/' not in name and '\\' not in name
+        assert Path(name).name == name and '/' not in name and chr(92) not in name
         target = directory / name
         assert not target.exists()
         for attempt in range(5):
@@ -94,12 +94,14 @@ def download_release(release, directory, assets):
                     data = response.read()
                 assert len(data) == asset['size'] and hashlib.sha256(data).hexdigest() == expected[name], name
                 target.write_bytes(data)
-                receipts.append({'file':name,'sha256':expected[name],'url':asset['browser_download_url']})
-                break
+                print('Public download verified: '+name, flush=True)
+                return {'file':name,'sha256':expected[name],'url':asset['browser_download_url']}
             except Exception:
                 if attempt == 4:
                     raise
                 time.sleep(min(2 ** attempt,8))
-        print('Public download verified: '+name, flush=True)
+    # Independent public reads; a receipt is written only after every future succeeds.
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        receipts = list(executor.map(download, release['assets']))
     (directory/'public-http-downloads.json').write_text(json.dumps({'method':'Unauthenticated public HTTPS',
         'assets':receipts},indent=2)+'\n',encoding='utf-8',newline='\n')

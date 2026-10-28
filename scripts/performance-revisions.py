@@ -45,7 +45,14 @@ def prepare(ref):
                 p.write_text(p.read_text(encoding='utf-8').replace('@mat.read_selected(bytes, ["v00"]).variables','@mat.read_tree(bytes).select(["v00"])'),encoding='utf-8',newline='\n')
         write(marker,{'commit':commit,'version':version})
     assert json.loads(marker.read_bytes())['commit']==commit
-    shutil.copyfile(ROOT/'.local-toolchain.json',directory/'.local-toolchain.json')
+    previous_root=evidence.ROOT
+    evidence.ROOT=Path(perf.command(['git','rev-parse','--show-toplevel']))
+    expected=evidence.snapshot(commit)
+    evidence.ROOT=directory
+    assert evidence.snapshot()==expected, 'Frozen revision source differs from its Git commit'
+    evidence.ROOT=previous_root
+    if (ROOT/'.local-toolchain.json').exists():
+        shutil.copyfile(ROOT/'.local-toolchain.json',directory/'.local-toolchain.json')
     build(directory)
     return directory,commit
 
@@ -83,7 +90,8 @@ def main():
     evidence.ROOT=candidate
     runtime_before=evidence.snapshot()
     version=json.loads((candidate/'package.json').read_bytes())['version']
-    config=json.loads((ROOT/'.local-toolchain.json').read_bytes())
+    config_path=ROOT/'.local-toolchain.json'
+    config=json.loads(config_path.read_bytes()) if config_path.exists() else {}
     report={'status':'running','version':version,'baseline_ref':args.baseline_ref,'baseline_commit':base_sha,'baseline_version':json.loads((baseline/'package.json').read_bytes())['version'],
         'baseline_runtime_source_sha256':baseline_before[1],'candidate_ref':args.candidate_ref,'candidate_head_commit':candidate_sha,'candidate_runtime_source_sha256':runtime_before[1],
         'candidate_source_mode':'fixed Git revision' if args.candidate_ref else 'current working source; runtime hash checked before and after',
@@ -144,7 +152,7 @@ def main():
     report['regressions_over_10_percent']=[{'case':r['case'],'operation':r['operation'],'host':r['host'],'speedup':r['speedup'],'memory_reduction':r['memory_reduction']} for r in report['results'] if r['speedup']<1/1.1 or r['memory_reduction']<-.1]
     report['scope']='Fixed inputs and same-machine paired revisions. Per-case engineering targets; historical measurements remain independent.'
     write(run_path,report)
-    destination=ROOT/'verification/reports'/f'{stem}{"-partial-"+run_id[:8] if partial else ""}.json'
+    destination=ROOT/'verification/reports'/f'performance-vs-{base_sha[:7]}{"-partial-"+run_id[:8] if partial else ""}-v{version}.json'
     write(destination,report)
     print(str(destination),flush=True)
 

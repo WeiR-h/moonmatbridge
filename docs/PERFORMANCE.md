@@ -1,4 +1,27 @@
-# 性能测量与结果边界
+# 性能测量
+
+## v0.0.14 固定提交对照
+
+新入口支持同时指定基线和候选 Git 提交；注解标签会解析到实际提交。直接基线为 v0.0.9 (`4d1e261bd6189260575b191ca786018b0906ec0d`)，候选为 `de4ffddc08c9def613e581c9f6d76ddbbc08424c`。两个版本用同一 MoonBit、GCC、Node 和 release 参数构建，原始样本及运行时源码哈希随报告保留。
+
+```powershell
+.venv\Scripts\python.exe scripts/performance-revisions.py --baseline-ref v0.0.9 --candidate-ref de4ffdd
+.venv\Scripts\python.exe scripts/performance-revisions.py --baseline-ref v0.0.5 --candidate-ref de4ffdd --case select-1-of-16 --host native
+```
+
+固定八种输入、24 个操作与宿主组合。核心计时每批预热 5 次，3 批各测量 10 次；基线和候选分批交错执行。进程峰值使用三个独立进程，命令行另外执行 5 次预热和 30 次完整调用。报告保存全部样本、中位数、p95、吞吐、输出大小和进程峰值，局部复测使用独立文件。报告中的 `output_bytes=null` 表示读取操作没有生成输出文件。
+
+| 16 MiB 压缩随机数据读取 | 核心提速 | 核心耗时下降 | 进程峰值下降 |
+| --- | --- | --- | --- |
+| native | 3.476 倍 | 71.2% | 22.7% |
+| js | 3.556 倍 | 71.9% | 82.7% |
+
+[完整 24 组原始报告](../verification/reports/performance-vs-4d1e261-v0.0.14.json)、[短操作复测](../verification/reports/performance-vs-4d1e261-partial-085ca5f5-v0.0.14.json)和[历史选择读取复测](../verification/reports/performance-vs-b9df1ed-partial-292bfae3-v0.0.14.json)保留全部样本；[结果汇总](../verification/reports/performance-evaluation-v0.0.14.json)核对运行时哈希。压缩读取的两个宿主均超过耗时降低 25% 的工程目标。
+
+原生选择读取的额外峰值下降相对 v0.0.9 为 0.0%；相对 v0.0.5 提速 19.047 倍、峰值下降 38.2%，额外下降 10% 和历史下降 40% 的目标未达。首轮两项原生短操作波动超过 10%，同输入、同协议复测均回到阈值内；首轮及复测同时保留。
+
+## 历史测量
+
 
 从 v0.0.6 开始固定 [基准清单](../benchmarks/manifest.json) 和输入种子 `20261017`。`scripts/performance.py` 从提交 `b9df1eddaacdefebc2e32eee468fada8cc9e6020` 取出 v0.0.5 源码，仅加入相同开发计时适配器，再用同一工具链构建对照。
 

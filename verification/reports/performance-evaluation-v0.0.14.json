@@ -1,0 +1,68 @@
+{
+  "status": "evaluated",
+  "version": "0.0.14",
+  "comparison_valid": true,
+  "fixed_scenarios": 24,
+  "baseline_commit": "4d1e261bd6189260575b191ca786018b0906ec0d",
+  "candidate_commit": "de4ffddc08c9def613e581c9f6d76ddbbc08424c",
+  "candidate_runtime_source_sha256": "bac0872dacf05583a9ef4dfb168e50f2a950d6329b3781799d001e499040c309",
+  "moon_compiler": "v0.10.14+7d59c7ec9 (2026-09-18)",
+  "reports": [
+    {
+      "file": "performance-vs-4d1e261-v0.0.14.json",
+      "sha256": "f6b7e03d6c80f2cb701ae966f674e41e5fd2efc5b049e2ddf85153856dada390"
+    },
+    {
+      "file": "performance-vs-4d1e261-partial-085ca5f5-v0.0.14.json",
+      "sha256": "f462622ee32b7805bcbda474c5f39cec25a156a95eab1edd66a59f4db2b8df10"
+    },
+    {
+      "file": "performance-vs-b9df1ed-partial-292bfae3-v0.0.14.json",
+      "sha256": "5d6b2554715a9f2ef8f3ef6cf8617568dae7f17fa3edd3ad583cd9619d4d44b2"
+    }
+  ],
+  "targets": [
+    {
+      "case": "compressed-random-16m",
+      "host": "native",
+      "goal": "compressed core read time -25%",
+      "passed": true
+    },
+    {
+      "case": "compressed-random-16m",
+      "host": "js",
+      "goal": "compressed core read time -25%",
+      "passed": true
+    },
+    {
+      "case": "select-1-of-16",
+      "host": "native",
+      "goal": "native select process peak -10% versus v0.0.9",
+      "passed": false
+    },
+    {
+      "case": "select-1-of-16",
+      "host": "native",
+      "goal": "native select process peak -40% versus v0.0.5",
+      "passed": false
+    }
+  ],
+  "initial_regressions_over_10_percent": [
+    {
+      "case": "sparse-100k",
+      "operation": "read",
+      "host": "native",
+      "speedup": 0.9078522655375194,
+      "memory_reduction": 0.0016703786191536452
+    },
+    {
+      "case": "select-1-of-16",
+      "operation": "select",
+      "host": "native",
+      "speedup": 0.8960353004792313,
+      "memory_reduction": 0.00034376074252318034
+    }
+  ],
+  "reproduced_regressions_over_10_percent": [],
+  "scope": "All 24 fixed combinations retained. Initial short-operation timing changes rechecked with identical protocol. Per-case engineering targets remain separate from correctness."
+}

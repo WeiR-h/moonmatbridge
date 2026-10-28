@@ -81,6 +81,9 @@ Open PowerShell in this folder:
   .\moonmat.exe roundtrip sample.mat copy.mat
   .\moonmat.exe transform sample.mat examples\transform-plan.json transformed.mat
   .\moonmat.exe compress transformed.mat compressed.mat
+  .\moonmat.exe snapshot-tree examples\mixed\research-mixed.mat mixed.tree.json
+  .\moonmat.exe restore-tree mixed.tree.json mixed-restored.mat
+  .\moonmat.exe diff-tree examples\mixed\research-mixed.mat mixed-restored.mat mixed-report.json
   .\moonmat.exe snapshot compressed.mat archive.json
   .\moonmat.exe restore archive.json restored.mat
   .\moonmat.exe diff compressed.mat restored.mat equality-report.json
@@ -93,7 +96,7 @@ Only Windows system KERNEL32.dll and msvcrt.dll are imported in this build.
 Output paths must be NEW; existing files are never overwritten.
 Core: MAT Level 5 recursive cell/struct/char/legacy object, dense numeric/logical arrays, complex float32/64,
 CSC double/logical/complex double, little/big endian, deterministic compressed/uncompressed writing,
-primitive NPY, raw-byte slice/gather/concat/reshape/permutation, exact snapshot/restore and diff.
+primitive NPY, raw-byte slice/gather/concat/reshape/permutation, exact recursive tree snapshot/restore and diff.
 Unsupported: private MCOS/opaque/function workspace, MAT v4/v7.3, noncanonical or non-double numerical CSC,
 structured/object/string NPY, NPZ, floating tolerance and file streaming.
 
@@ -156,6 +159,9 @@ consumer.mkdir()
 commands = [
     ["sample", str(consumer / "sample.mat")],
     ["diff-tree", str(native / "examples/mixed/research-mixed.mat"), str(native / "examples/mixed/research-mixed.mat"), str(consumer / "mixed-equal.json")],
+    ["snapshot-tree", str(native / "examples/mixed/research-mixed.mat"), str(consumer / "mixed.tree.json")],
+    ["restore-tree", str(consumer / "mixed.tree.json"), str(consumer / "mixed-restored.mat")],
+    ["diff-tree", str(native / "examples/mixed/research-mixed.mat"), str(consumer / "mixed-restored.mat"), str(consumer / "mixed-restored-diff.json")],
     ["info", str(consumer / "sample.mat")],
     ["roots", str(consumer / "sample.mat")],
     ["dump", str(consumer / "sample.mat"), str(consumer / "sample.json")],

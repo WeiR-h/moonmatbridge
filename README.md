@@ -6,6 +6,7 @@ MAT 递归 cell/struct/char/legacy object、密集/CSC 稀疏读写、数值编�
 
 当前源码版本为 v0.0.14，发布模块名为 `WeiR-h/moonmatbridge`。
 
+- 压缩读取采用位缓冲、Huffman 短码表与有界输入窗口，减少临时复制和展开缓冲扩容。
 - 完整递归混合数据读写；预检尺寸后写入固定缓冲，保留字符单位、精确整数、复数和 CSC 容量。
 - `read_selected` 和 `inspect_roots` 支持根目录及按名读取，未选变量仍执行完整校验。
 - `diff-tree` 按结构化路径定位 cell、struct、char、数值及 CSC 的精确变化，见 [混合树比较](docs/TREE_DIFF.md)。
