@@ -1,9 +1,9 @@
 {
   "status": "passed",
   "version": "0.0.10",
-  "checked_at": "2026-10-28T07:08:40.126Z",
+  "checked_at": "2026-10-28T07:13:02.635Z",
   "source": {
-    "sha256": "5399be649ba060ac6e905772c9d44d46b05078230423dd279181e73a4bbc1716",
+    "sha256": "36aa445cbeac3969f35fe1e3a98a3f0c70f8ce49e6fb665de1b33bb183b186e8",
     "files": 162
   },
   "environment": {
@@ -77,6 +77,11 @@
       "name": "Compatibility gap characterization",
       "status": "passed",
       "output": "50 gap characterization checks; unresolved cases retained"
+    },
+    {
+      "name": "Performance evidence invalidation guards",
+      "status": "passed",
+      "output": "Performance evidence guards: unchanged, LF, changed, added, removed, test-only passed"
     },
     {
       "name": "Strict selected reads and root metadata independent checks",

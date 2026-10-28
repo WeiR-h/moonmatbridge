@@ -1,0 +1,9 @@
+{
+  "conclusion": "success",
+  "headSha": "de1a971fc04dac9f383b6ef38ec332f7a9f23e5d",
+  "status": "passed",
+  "url": "https://github.com/WeiR-h/moonmatbridge/actions/runs/40648638747",
+  "version": "0.0.10",
+  "run_id": 40648638747,
+  "octave_report_sha256": "0f3677927dbd4e285c36d14f9a71ede01b2ebabd7b831ca1be069998393747bc"
+}
