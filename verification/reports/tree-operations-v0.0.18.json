@@ -1,0 +1,43 @@
+{
+  "status": "passed",
+  "version": "0.0.18",
+  "checks": [
+    {
+      "host": "native",
+      "operation": "diff-tree",
+      "status": "passed",
+      "cases": 4,
+      "report_sha256": "9c266d5a5a8e1eb5d5b33c0326816ea61c38b344ad9a859018346beed51841f5"
+    },
+    {
+      "host": "native",
+      "operation": "snapshot-tree",
+      "status": "passed",
+      "cases": 6
+    },
+    {
+      "host": "js",
+      "operation": "diff-tree",
+      "status": "passed",
+      "cases": 4,
+      "report_sha256": "9c266d5a5a8e1eb5d5b33c0326816ea61c38b344ad9a859018346beed51841f5"
+    },
+    {
+      "host": "js",
+      "operation": "snapshot-tree",
+      "status": "passed",
+      "cases": 6
+    }
+  ],
+  "passed": 20,
+  "inputs": [
+    {
+      "file": "left.mat",
+      "sha256": "7b83b6008ca428c479e3b63a062980ede035a1b673d4dcd3d0424b4cce1ec077"
+    },
+    {
+      "file": "right.mat",
+      "sha256": "b9bd95248c3b2e0970e6ee617d8f4a79bdf257d29e23f63850975bdf195d10d5"
+    }
+  ]
+}

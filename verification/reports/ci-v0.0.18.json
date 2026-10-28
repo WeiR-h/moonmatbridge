@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "version": "0.0.18",
+  "run_id": 40741875396,
+  "head_commit": "a0454c79fe1a312015e7e975d43409861cf3e6fe",
+  "url": "https://github.com/WeiR-h/moonmatbridge/actions/runs/40741875396",
+  "checked_source_sha256": "99db56484dbbb7809662effac985e985629e5bfc96f28d83b26f25aeeb100e07",
+  "local_linux_source_identical": true,
+  "source_unchanged_during_ci": true,
+  "environment": {
+    "moon": "moon 0.1.20260920 (914d7da 2026-09-20)\n\nFeature flags enabled: rr_moon_mod,rr_moon_pkg",
+    "node": "v24.22.1",
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "real_octave_workflows": 8
+}
