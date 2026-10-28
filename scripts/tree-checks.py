@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 import subprocess
+import sys
 import numpy as np
 from scipy.io import loadmat
 import importlib.util
@@ -37,7 +38,8 @@ def main():
                                 capture_output=True, encoding='utf-8', timeout=90)
         assert result.returncode == expected, (operation,result.returncode,result.stdout,result.stderr)
         return result
-    for host, prefix in [('native',[args.native_executable or str(ROOT/'dist/moonmat.exe')]),
+    executable = 'moonmat.exe' if sys.platform == 'win32' else 'moonmat'
+    for host, prefix in [('native',[args.native_executable or str(ROOT/'dist'/executable)]),
                          ('js',['node',args.js_cli or str(ROOT/'scripts/cli.mjs')])]:
         report = directory / f'{host}-changed.json'
         report.unlink(missing_ok=True)
