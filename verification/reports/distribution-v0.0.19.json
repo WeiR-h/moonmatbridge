@@ -1,0 +1,121 @@
+{
+  "status": "verified",
+  "version": "0.0.19",
+  "source_sha256": "f2583f0f4c3a0b439ce34d7c77923e81b687d2891694e8c5285da65c07f3ee12",
+  "tag_commit": "8a1f47973f3077adaa5246c2a111f7840495f312",
+  "github": "https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.0.19",
+  "mooncakes": "https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.0.19",
+  "public_assets": 30,
+  "public_scientific_host_workflows": 6,
+  "public_tree_checks": 20,
+  "evidence": [
+    {
+      "file": "ci-v0.0.19.json",
+      "sha256": "f9fa75f35c4f7ed8571c1caca47cbcdc01b1fe8cc264d6856e1e00fc320c5382"
+    },
+    {
+      "file": "compatibility-gaps-v0.0.19.json",
+      "sha256": "d7242f59bbdc3df7a0448935939809a56ac72e366758163cf0f4b6c2351c3401"
+    },
+    {
+      "file": "compatibility-v0.0.19.json",
+      "sha256": "b713014ce3537331787439ccda85896e3d8105b08e77a6ac8abae4498eaa24ca"
+    },
+    {
+      "file": "file-performance-v0.0.19.json",
+      "sha256": "64736b80bb7eec3f629f8bc26451c905fe13ccdb23a19963908fb5035e3fd929"
+    },
+    {
+      "file": "interop-v0.0.19.json",
+      "sha256": "010c29426f47aaf8417325c63bcdc96052a85d1858c46699247e30fd445e9ec4"
+    },
+    {
+      "file": "js-v0.0.19.json",
+      "sha256": "7d3739b2704eb2c341e499d12d95e99a22d39a032c8e8a0e0b27f31322c81629"
+    },
+    {
+      "file": "licenses-v0.0.19.json",
+      "sha256": "84f2c9b28f3f60294a993eadb222f4daf74ccb4d385fb339ddf6df9b019eaff7"
+    },
+    {
+      "file": "mooncake-audit-v0.0.19.json",
+      "sha256": "131352ab00d45a8ba91590d21f4274df926f81ff887b8cd21187a72cfa819e5e"
+    },
+    {
+      "file": "mooncakes-v0.0.19.json",
+      "sha256": "250a60f85096a1d3d40ad8db34a262bb43a8888db5e15c1aa551b63a1edbe79e"
+    },
+    {
+      "file": "octave-v0.0.19.json",
+      "sha256": "7f8457f53a6fe1b309b5c13dcb84d3815a474a88a8675e706501bd0d6c8f41d0"
+    },
+    {
+      "file": "performance-evaluation-v0.0.19.json",
+      "sha256": "cbede7dd11e414d70c6ffc170a71111f303af10db7d40dc5293a9cfe924faa09"
+    },
+    {
+      "file": "performance-vs-21291ce-partial-c2cb0035-v0.0.19.json",
+      "sha256": "efb1dd1cedfa5ba0a09f58561574dadf87ab615e9d75e8fd6e17fcc20263ae6e"
+    },
+    {
+      "file": "performance-vs-21291ce-v0.0.19.json",
+      "sha256": "96dc53c72789ddee417cbcaa88dc5085417294bc27ba6dc703f43a65bc731285"
+    },
+    {
+      "file": "public-downloads-v0.0.19.json",
+      "sha256": "91e9c37a6e01a8d4bd5353fee946b2ccab7f369497c9a2a059f581e487c2e88d"
+    },
+    {
+      "file": "registry-v0.0.19.json",
+      "sha256": "28d4f13914121bb80b2e66aeb75a16c71e42a8b9d95a4cb29c3d3affbf3a3c43"
+    },
+    {
+      "file": "release-v0.0.19.json",
+      "sha256": "e0ce8d45f5ed6a66c1cdd030c2fdcb1489e531f9aa11ff11614d73b8931fa635"
+    },
+    {
+      "file": "selection-v0.0.19.json",
+      "sha256": "47f14e4a9257c2c881bc736763e7da1bb3506c740240b4b3f03d065876ee3670"
+    },
+    {
+      "file": "source-operations-public-v0.0.19.json",
+      "sha256": "82e674e62bb011166e54e298e565721988176f9af5b10dc57e3dff5104670bab"
+    },
+    {
+      "file": "source-operations-v0.0.19.json",
+      "sha256": "4be2cdbf013fa594c1360e0bfd864eaa6abf5db8e4223a3e1cb6ccf389318595"
+    },
+    {
+      "file": "source-snapshot-v0.0.19.json",
+      "sha256": "63d481d65742675a9fb4df7949baa76d5360dbf74202898e65c285cbe1618b52"
+    },
+    {
+      "file": "tree-close-public-v0.0.19.json",
+      "sha256": "2a3360b9d61baa317741ce4dd6d45a5d33cadb27b08dd7f061ba46571449f973"
+    },
+    {
+      "file": "tree-close-v0.0.19.json",
+      "sha256": "2a3360b9d61baa317741ce4dd6d45a5d33cadb27b08dd7f061ba46571449f973"
+    },
+    {
+      "file": "tree-operations-public-v0.0.19.json",
+      "sha256": "486bbb740008d47cb4e2008c54550f5eb159d18b6f4519074da69790e1abbae0"
+    },
+    {
+      "file": "tree-operations-v0.0.19.json",
+      "sha256": "486bbb740008d47cb4e2008c54550f5eb159d18b6f4519074da69790e1abbae0"
+    },
+    {
+      "file": "v0.0.19.json",
+      "sha256": "74deb94f1c131a0d5cd4e340aa09cd23c39d0e38d7f62a17413e0281f854938b"
+    },
+    {
+      "file": "workflows-public-v0.0.19.json",
+      "sha256": "e5fd510a5b41b1c2d5705dad9016a025a8d9b1e8f7875030e5de9c6efc3f52ca"
+    },
+    {
+      "file": "workflows-v0.0.19.json",
+      "sha256": "c3df7b810f95b112b7c111b62ea2b6950d37259e69c7e9637eec0078e14cf901"
+    }
+  ]
+}
