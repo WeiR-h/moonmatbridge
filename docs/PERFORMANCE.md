@@ -1,5 +1,22 @@
 # 性能测量
 
+## 分块文件流程
+
+v0.0.18 对照固定 v0.0.14，独立报告三类文件流程。性能报告包含环境、文件哈希、实际读取量、最大请求、全部计时样本和三个独立峰值进程。进程完整耗时另随内存进程记录；核心操作和完整命令行的既有 24 组报告继续保留。
+
+复现：`python scripts/file-performance.py --candidate-ref <固定提交>`。当前结果见 `verification/reports/file-performance-v0.0.18.json`；不能将工程目标当作实测值。
+
+v0.0.17 已测结果（候选 49ed45e，对照 21291ce）：
+
+| 文件场景 | 宿主 | 文件流程提速 | 进程峰值下降 |
+| --- | --- | --- | --- |
+| select-1-of-16 | native | 2.164 倍 | 69.0% |
+| select-1-of-16 | js | 1.587 倍 | 25.8% |
+| large-uncompressed | native | 2.865 倍 | 97.4% |
+| large-uncompressed | js | 2.025 倍 | 85.6% |
+
+首轮小文件结果及优化后的完整测量分别保留，见 file-performance-initial-v0.0.17.json 与 file-performance-v0.0.17.json。
+
 ## v0.0.16 文件流程
 
 固定 v0.0.14（21291ce）与数据源实现提交 03ce6ec，用相同工具链和开发适配器测量打开文件、读取、校验、选取、关闭与序列化；启动时间和文件生成不计入该表。

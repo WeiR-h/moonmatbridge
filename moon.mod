@@ -1,6 +1,6 @@
 name = "WeiR-h/moonmatbridge"
 
-version = "0.0.17"
+version = "0.0.18"
 
 source = "src"
 

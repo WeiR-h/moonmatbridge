@@ -1,6 +1,6 @@
 """Fixed-revision file pipelines. Builds identical development adapters around old/new APIs."""
 from pathlib import Path
-import argparse,hashlib,importlib.util,json,platform,shutil,statistics,subprocess,zipfile,zlib,struct
+import argparse,hashlib,importlib.util,json,platform,shutil,statistics,subprocess,zipfile,zlib,struct,time
 import numpy as np
 ROOT=Path(__file__).resolve().parents[1]
 LOCAL=ROOT/'verification/local/file-performance'
@@ -57,10 +57,8 @@ extern "C" fn argc(fallback : Int) -> Int = "moonmat_arg_count"
 extern "C" fn arg(i : Int, fallback : String) -> String = "moonmat_arg"
 ///|
 #borrow(path)
-#warnings("-unused_value")
 extern "C" fn read(path : Bytes, limit : Int) -> Bytes = "moonmat_read"
 ///|
-#warnings("-unused_value")
 extern "C" fn io_error() -> Int = "moonmat_error"
 ///|
 extern "C" fn now() -> Double = "moonmat_now"
@@ -176,7 +174,7 @@ def prepare(ref):
  shutil.copyfile(folder/'src/cmd/bench/bench.c',d/'bench.c')
  (d/'main.mbt').write_text(NATIVE.replace('@FFI@',SOURCE_FFI if source else '').replace('@READ@',SOURCE_READ if source else BYTES_READ),encoding='utf-8')
  d=folder/'src/file_bench_bridge';d.mkdir(exist_ok=True)
- (d/'moon.pkg').write_text('import { "WeiR-h/moonmatbridge" @mat, }\nsupported_targets = "js"\npkgtype(kind: "foreign_library")\n',encoding='utf-8')
+ (d/'moon.pkg').write_text('import { "WeiR-h/moonmatbridge" @mat, }\nsupported_targets = "js"\n',encoding='utf-8')
  extra='''#export_name("file_source")
 pub fn file_source(size : Int, reader : (Int, FixedArray[Byte], Int, Int) -> Int) -> @mat.MatSource { { size, read_into: reader, } }''' if source else ''
  (d/'bench.mbt').write_text(JS_BRIDGE.replace('@SOURCE@',extra).replace('@ARGS@','source : @mat.MatSource' if source else 'bytes : Bytes').replace('@READ@','@mat.read_selected_from(source,[name])' if source else '@mat.read_selected(bytes,[name],limits=basic)'),encoding='utf-8')
@@ -187,13 +185,17 @@ pub fn file_source(size : Int, reader : (Int, FixedArray[Byte], Int, Int) -> Int
 def measure(folder,host,case,kind):
  if host=='native':args=[folder/'_build/native/release/build/cmd/file_bench'/('file_bench.exe' if platform.system()=='Windows' else 'file_bench'),case['path'],case['variable'],kind]
  else:args=['node','--expose-gc',LOCAL/'driver.mjs',folder/'_build/js/release/build/file_bench_bridge/file_bench_bridge.js',case['path'],case['variable'],kind]
- r=json.loads(perf.command(args));assert r['checksum']>0 and r['peak_bytes']>0;return r
+ start=time.perf_counter();r=json.loads(perf.command(args));r['process_wall_ms']=(time.perf_counter()-start)*1000;assert r['checksum']>0 and r['peak_bytes']>0;return r
 
 def main():
  parser=argparse.ArgumentParser();parser.add_argument('--candidate-ref',default='HEAD');parser.add_argument('--case',action='append');args=parser.parse_args()
  cases=fixtures();(LOCAL/'driver.mjs').write_text(DRIVER,encoding='utf-8',newline='\n')
  baseline,bsha,bhash,_=prepare('v0.0.14');candidate,csha,chash,version=prepare(args.candidate_ref)
  report={'version':version,'status':'running','baseline_commit':bsha,'candidate_commit':csha,'baseline_runtime_source_sha256':bhash,'candidate_runtime_source_sha256':chash,'protocol':{'warmup_per_batch':5,'batches':3,'samples_per_batch':10,'memory_processes':3,'timing':'open, read, validate, select, close and serialize; process startup excluded; generated input excluded; warm OS cache; JS GC outside timing'},'results':[]}
+ report['environment']={'platform':platform.platform(),'architecture':platform.machine(),'node':perf.command(['node','--version']),'moon':perf.command(['node',ROOT/'scripts/moon.mjs','version']),'build':'same toolchain, release mode, one compiler job'}
+ config=ROOT/'.local-toolchain.json'
+ toolchain=json.loads(config.read_bytes()) if config.exists() else {}
+ report['environment']['compiler']=perf.command([toolchain.get('gcc','cc'),'--version']).splitlines()[0]
  for case in cases:
   if args.case and case['name'] not in args.case:continue
   if tuple(map(int,version.split('.')))<tuple(case['minimum_version']):continue
@@ -210,6 +212,7 @@ def main():
  for folder,ref in [(baseline,bsha),(candidate,csha)]:
   evidence.ROOT=ROOT;expected=evidence.snapshot(ref);evidence.ROOT=folder;assert evidence.snapshot()==expected
  report['status']='measured';report['scope']='File pipeline measurements; independent from preloaded codec benchmarks. Every previous case remains available.'
+ report['regressions_over_10_percent']=[{'case':r['case']['name'],'host':r['host'],'speedup':r['speedup'],'memory_reduction':r['memory_reduction']} for r in report['results'] if r['speedup']<1/1.1 or r['memory_reduction']<-.1]
  write(ROOT/f'verification/reports/file-performance-v{version}.json',report)
 
 if __name__=='__main__':main()

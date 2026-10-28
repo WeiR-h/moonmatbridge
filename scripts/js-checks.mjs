@@ -26,12 +26,34 @@ for (let i = 0; i < 40; i++) {
 let streams = 0;
 let truncations = 0;
 const blockTypes = new Set();
+function element(kind, payload) {
+  const tag=Buffer.alloc(8);tag.writeUInt32LE(kind);tag.writeUInt32LE(payload.length,4);
+  return Buffer.concat([tag,payload,Buffer.alloc(kind===15?0:(8-payload.length%8)%8)]);
+}
+const header=Buffer.alloc(128,32);header.fill(0,116,124);header.set([0,1,73,77],124);
+function matrix(input) {
+  const flags=Buffer.alloc(8);flags.writeUInt32LE(9);
+  const dims=Buffer.alloc(8);dims.writeUInt32LE(1);dims.writeUInt32LE(input.length,4);
+  return element(14,Buffer.concat([element(6,flags),element(5,dims),element(1,Buffer.from('x')),element(2,input)]));
+}
+function source(bytes) {
+  return api.make_source(bytes.length,(offset,target,start,length)=>{
+    const count=Math.min(length,4093);target.set(bytes.subarray(offset,offset+count),start);return count;
+  });
+}
 for (const input of corpus) {
+  const plainMatrix=matrix(input);
+  const expected=checked(api.select_mat(Buffer.concat([header,plainMatrix]),['x']));
   for (const level of [0, 1, 6, 9]) {
     for (const strategy of strategies) {
       const encoded = deflateSync(input, {level, strategy});
       blockTypes.add((encoded[2] >>> 1) & 3);
       assert.deepEqual(checked(api.inflate_zlib(encoded, input.length)), input);
+      const file=Buffer.concat([header,element(15,deflateSync(plainMatrix,{level,strategy}))]);
+      assert.deepEqual(checked(api.select_source_mat(source(file),['x'])),expected);
+      assert.equal(JSON.parse(api.inspect_roots_source(source(file))).roots[0].compressed,true);
+      const damaged=Buffer.from(file);damaged[damaged.length-1]^=1;
+      assert.equal(JSON.parse(api.inspect_roots_source(source(damaged))).code,'invalid-zlib');
       if (input.length > 0) assert.equal(status(api.inflate_zlib(encoded, input.length - 1)).code, 'expanded-limit');
       const broken = Buffer.from(encoded); broken[broken.length - 1] ^= 1;
       assert.equal(status(api.inflate_zlib(broken, 1024 * 1024)).code, 'invalid-zlib');
@@ -48,6 +70,7 @@ for (const input of corpus) {
 }
 assert.deepEqual([...blockTypes].sort(), [0, 1, 2]);
 record('RFC 1950/1951 differential corpus', {streams, strategies: 4, levels: 4, first_block_types: [...blockTypes].sort(), truncations, oracle: 'Node built-in zlib'});
+record('Incremental source decoder against independent Node zlib MAT producers',{streams,strategies:4,levels:4,short_read_bytes:4093,all_root_checksums_verified:true});
 // A flush inserts stored blocks between Huffman-coded blocks.
 const streaming = createDeflate({level: 6});
 const chunks = [];

@@ -1,6 +1,7 @@
 ///|
 priv struct SourceCursor {
   source : MatSource
+  producer : SourceInflater?
   buffer : FixedArray[Byte]
   mut position : Int
   mut start : Int
@@ -19,14 +20,18 @@ fn SourceCursor::byte(self : SourceCursor) -> Byte raise MatError {
     } else {
       self.buffer.length()
     }
-    source_fill(
-      self.source,
-      self.position,
-      self.buffer,
-      0,
-      self.available,
-      self.buffer.length(),
-    )
+    match self.producer {
+      None =>
+        source_fill(
+          self.source,
+          self.position,
+          self.buffer,
+          0,
+          self.available,
+          self.buffer.length(),
+        )
+      Some(producer) => producer.fill(self.buffer, self.available)
+    }
   }
   let value = self.buffer[self.position - self.start]
   self.position = self.position + 1
@@ -794,6 +799,7 @@ fn scan_source_stream(
   }
   let cursor : SourceCursor = {
     source,
+    producer: None,
     buffer: FixedArray::make(limits.chunk_bytes, b'\x00'),
     position: 0,
     start: 0,
@@ -836,54 +842,69 @@ fn scan_source_stream(
     let (node, root) = if outer.kind == 14 {
       source_stream_node(cursor, outer, little, state, 1, false)
     } else if outer.kind == 15 {
-      if outer.size > limits.max_buffered_root_bytes {
-        fail(
-          "source-buffer-limit",
-          outer.start,
-          "Compressed root exceeds staging quota",
-        )
+      let inflater = make_source_inflater(
+        cursor,
+        outer.start + outer.size,
+        limits.max_expanded_bytes - state.expanded,
+      )
+      let header = FixedArray::make(8, b'\x00')
+      for i = 0; i < 8; i = i + 1 {
+        match inflater.next() {
+          Some(byte) => header[i] = byte
+          None =>
+            fail("invalid-compressed", outer.start, "Missing matrix header")
+        }
       }
-      let raw = cursor.payload(outer)
-      let maximum = if limits.max_expanded_bytes - state.expanded <
-        limits.max_buffered_root_bytes {
-        limits.max_expanded_bytes - state.expanded
-      } else {
-        limits.max_buffered_root_bytes
-      }
-      let unpacked = inflate_zlib(raw, max_bytes=maximum)
-      state.expanded = state.expanded + unpacked.length()
-      let tag = tag(unpacked, 0, unpacked.length(), little)
-      if tag.kind != 14 || tag.next != unpacked.length() {
+      let prefix = Bytes::makei(8, i => header[i])
+      let kind = bits_at(prefix, 0, 4, little)
+      let body = bits_at(prefix, 4, 4, little)
+      let length = 8UL + body + (8UL - body % 8UL) % 8UL
+      if kind != 14UL {
         fail(
           "invalid-compressed",
           outer.start,
-          "Expected exactly one compressed matrix",
+          "Compressed root must contain a matrix",
         )
       }
-      let info = root_info(unpacked, tag, little, basic, true)
-      ignore(
-        visit_node(unpacked, tag, little, basic, tree, state.budget, 1, false),
+      if length > (limits.max_expanded_bytes - state.expanded).to_uint64() {
+        fail("expanded-limit", outer.start, "Expanded matrix exceeds quota")
+      }
+      let buffer = FixedArray::make(
+        if limits.chunk_bytes < 8 {
+          8
+        } else {
+          limits.chunk_bytes
+        },
+        b'\x00',
       )
-      let keep = match wanted {
-        None => true
-        Some(map) => map.contains(info.name)
+      for i = 0; i < 8; i = i + 1 {
+        buffer[i] = header[i]
       }
-      let node = if keep {
-        state.result(source_node_size(unpacked, tag, little, basic), true)
-        visit_node(
-          unpacked,
-          tag,
-          little,
-          basic,
-          tree,
-          { nodes: 0, elements: 0, metadata: 0, metadata_limit: 0, },
-          1,
-          true,
-        )
-      } else {
-        None
+      let virtual_source : MatSource = {
+        size: length.to_int(),
+        read_into: (_a, _b, _c, _d) => -1,
       }
-      (node, info)
+      let expanded : SourceCursor = {
+        source: virtual_source,
+        producer: Some(inflater),
+        buffer,
+        position: 0,
+        start: 0,
+        available: 8,
+      }
+      let matrix = expanded.tag(virtual_source.size, little)
+      let (value, root) = source_stream_node(
+        expanded, matrix, little, state, 1, false,
+      )
+      if expanded.position != virtual_source.size {
+        fail("invalid-compressed", outer.start, "Trailing matrix data")
+      }
+      if inflater.next() is Some(_) {
+        fail("invalid-compressed", outer.start, "Extra expanded content")
+      }
+      state.expanded = state.expanded + inflater.produced
+      cursor.finish(outer)
+      (value, { ..root, compressed: true, })
     } else {
       fail("unsupported-element", outer.start, "Unsupported root element")
       abort("unreachable")

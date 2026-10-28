@@ -51,6 +51,7 @@ def main():
     finally:os.utime(source,ns=(before.st_atime_ns,before.st_mtime_ns))
     checks.append({'host':'js','case':'source changed inside read callback','status':'passed'})
     report={'status':'passed','version':VERSION,'checks':checks,'passed':len(checks),'oracle':'Fixed seed NumPy expected data and SciPy output consumption; file fixture hashes and generator retained','seed':20261017,'block_bytes':32768,'repeats':8192}
+    (ROOT/'verification/reports').mkdir(parents=True,exist_ok=True)
     (ROOT/f'verification/reports/source-operations-v{VERSION}.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8',newline='\n')
     print(f"Large-file and source lifetime checks: {len(checks)} passed")
 

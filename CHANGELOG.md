@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.0.18
+
+- Incremental DEFLATE feeds the bounded recursive parser with a 32 KiB history window.
+- Compressed roots retain checksums, distance/window checks and cumulative expansion quotas without a full expansion buffer.
+- Added independent Node zlib source cases and large compressed-file reproduction.
+
 ## v0.0.17
 
 - Uncompressed file sources now parse numeric, CSC, character and recursive containers in bounded chunks.

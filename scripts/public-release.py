@@ -39,15 +39,20 @@ def mooncakes():
     fingerprint = run(["node", "--input-type=module", "-e", "import {sourceFingerprint} from './scripts/verify.mjs'; console.log(sourceFingerprint().sha256);"]).stdout.strip()
     verified = json.loads((REPORTS / f"v{VERSION}.json").read_text())
     assert verified["status"] == "passed" and fingerprint == verified["source"]["sha256"], "Source changed after verification"
+    current = manifest()
+    already_registered = any(v["version"] == VERSION for v in current["versions"])
     dry = run(["node", "scripts/moon.mjs", "publish", "--dry-run"], ok=False)
     dry_text = dry.stdout + dry.stderr
     # This SDK treats the registry's successful 202 response as exit 1.
     # Require the explicit server success text, then independently audit bytes.
-    assert dry.returncode == 0 or "Dry run completed successfully. No changes were made." in dry_text, dry_text
+    assert dry.returncode == 0 or "Dry run completed successfully. No changes were made." in dry_text or (already_registered and "409 Conflict" in dry_text and "duplicated" in dry_text), dry_text
     print(dry_text.strip(), flush=True)
     python = os.environ.get("MOONMAT_PYTHON") or str(ROOT / ".venv/Scripts/python.exe")
     print(run([python, "scripts/audit-mooncake.py"]).stdout.strip(), flush=True)
     current = manifest()
+    if already_registered:
+        audit_now=json.loads((REPORTS / f"mooncake-audit-v{VERSION}.json").read_bytes())
+        assert current["version"] == VERSION and current["metadata"]["checksum"] == audit_now["archive_sha256"], "Existing registry archive differs"
     if not any(v["version"] == VERSION for v in current["versions"]):
         published = run(["node", "scripts/moon.mjs", "publish"], ok=False)
         publish_text = published.stdout + published.stderr
