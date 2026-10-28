@@ -1,0 +1,62 @@
+{
+  "status": "passed",
+  "version": "0.0.11",
+  "run_id": 40653858496,
+  "head_commit": "d5ce1e85c4f77f72989f730ab504c6ea46463d6c",
+  "url": "https://github.com/WeiR-h/moonmatbridge/actions/runs/40653858496",
+  "conclusion": "success",
+  "checked_source_sha256": "92528c044ef51bd693043559fe0b004cbc457da6e327ad78216c5178c7e3bd26",
+  "local_linux_source_identical": true,
+  "source_unchanged_during_ci": true,
+  "environment": {
+    "moon": "moon 0.1.20260920 (914d7da 2026-09-20)\n\nFeature flags enabled: rr_moon_mod,rr_moon_pkg",
+    "node": "v24.21.0",
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "local_groups": 16,
+  "real_octave": {
+    "tool": "8.4.0",
+    "workflows": 8,
+    "report_sha256": "a04dab5be9fa91dc06774c816dad553d5c9ed1ed6524892b8de73e836ac7cdf8"
+  },
+  "artifact_evidence": [
+    {
+      "file": "compatibility-gaps-v0.0.11.json",
+      "sha256": "1c4e453757e4e063b72cf07510e5d50999ad2bf5c75933959367bcd47f9ebfd6"
+    },
+    {
+      "file": "compatibility-v0.0.11.json",
+      "sha256": "2092c1eb1bfa48f2f549bb68aa6cec862a564629efb100f5b2e8837875ccd676"
+    },
+    {
+      "file": "interop-v0.0.11.json",
+      "sha256": "4c345122768fe7c3766a535eaf6d039df2bb7cb99aca9737f63b7259a9e1b1f1"
+    },
+    {
+      "file": "js-v0.0.11.json",
+      "sha256": "c8cc4e823cbd9e18e099429658f0a7b7f0ab046412c5e2b2501a3766aaf6c7b9"
+    },
+    {
+      "file": "octave-v0.0.11.json",
+      "sha256": "a04dab5be9fa91dc06774c816dad553d5c9ed1ed6524892b8de73e836ac7cdf8"
+    },
+    {
+      "file": "selection-v0.0.11.json",
+      "sha256": "7b5fbf4f4268bd14b3e2646ba7c1a42c926e7df9e52121a9fdc1987db1e67660"
+    },
+    {
+      "file": "source-snapshot-v0.0.11.json",
+      "sha256": "17e61be0c68b0c43f15b2009f23c0a65620433a0b75022388a6cd2a8195faa48"
+    },
+    {
+      "file": "v0.0.11.json",
+      "sha256": "f21fc41792e8d22577a454772c696cf1f0956afc569896270d9d03228353192e"
+    },
+    {
+      "file": "workflows-v0.0.11.json",
+      "sha256": "d15e439f0f8afaec0665e54dc856e7cf405f65fdbdc43c271521fdb63d48509b"
+    }
+  ],
+  "scope": "Actual Linux CI with pinned official compiler; source before/after and local source match byte for byte. Organizer acceptance remains separate."
+}
