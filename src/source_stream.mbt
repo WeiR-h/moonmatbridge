@@ -48,7 +48,12 @@ fn SourceCursor::owned(
     done = done + 1
     let available = self.start + self.available - self.position
     let n = if available < count - done { available } else { count - done }
-    self.buffer.blit_to(out, len=n, src_offset=self.position - self.start, dst_offset=done)
+    self.buffer.blit_to(
+      out,
+      len=n,
+      src_offset=self.position - self.start,
+      dst_offset=done,
+    )
     self.position = self.position + n
     done = done + n
   }
