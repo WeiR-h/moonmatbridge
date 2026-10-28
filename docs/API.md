@@ -15,7 +15,7 @@ The core package is `WeiR-h/moonmatbridge`. The executable, JSON adapter and JS 
 | `read_document(Bytes, limits?) -> MatDocument raise MatError` | Dense/CSC mixed input; no automatic densification |
 | `write_document(Array[MatVariable], compressed?, limits?)` | Validate aggregate dense/CSC metadata and write deterministic MAT |
 | `validate_document(variables, limits?)` | Validate public fields, names and aggregate limits without allocating output |
-| `raw_sparse_array(name, dtype, shape, row_indices, col_ptrs, real, imag?, nzmax?, is_global?, limits?)` | Validated two-dimensional canonical CSC, including unused stored capacity |
+| `raw_sparse_array(name, dtype, shape, row_indices, col_ptrs, real, imag?, nzmax?, is_global?, limits?)` | Validated two-dimensional CSC storage, including unused stored capacity |
 | `SparseArray::to_dense(limits?)` / `NumericArray::to_sparse(limits?)` | Explicit bounded conversion; negative zero and NaN bits are retained |
 | `MatDocument::get(name)` / `select(names)` / `convert_storage(name, sparse, limits?)` | Mixed variable lookup/subset or named storage conversion |
 | `numeric_array(name, dtype, shape, values, imaginary?, is_global?, limits?)` | Construct from exact `Value` scalars, preserve column-major order |

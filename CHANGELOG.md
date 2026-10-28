@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.0.15
+
+- Preserve CSC row order, duplicate slots, capacity and raw numerical planes.
+- Separate structural validation from is_canonical checks.
+- Densification sums duplicate float/complex values in storage order and ORs logical values.
+- Independent SciPy checks cover both original compatibility fixtures.
+
+
 ## v0.0.14
 
 - Buffered DEFLATE bits and 9-bit Huffman lookup with a reliable long-code path.

@@ -212,3 +212,19 @@ test "tree snapshot accumulates fields across distinct structs and all decoded e
   }
   assert_eq(code(), "element-limit")
 }
+
+///|
+test "duplicate CSC slots survive recursive snapshot and restore" {
+  let value = @mat.raw_sparse_array(
+    "s",
+    @mat.Float64,
+    [3, 1],
+    [2, 0, 0, -1],
+    [0, 3],
+    b"\x00\x00\x00\x00\x00\x00\xf0\x3f\x00\x00\x00\x00\x00\x00\x00\x80\x42\x00\x00\x00\x00\x00\xf8\x7f\x00\x00\x00\x00\x00\x00\x00\x00",
+    nzmax=7,
+  )
+  let original = [@mat.Csc(value)]
+  let restored = from_tree_snapshot(to_tree_snapshot(original))
+  assert_true(@mat.write_tree(original) == @mat.write_tree(restored))
+}

@@ -32,18 +32,18 @@
       "file": "csc-unsorted.mat",
       "sha256": "1b952f81aece74e7f9e8fdd60357874be343bcb9f01417f8cf999dc4eb528656",
       "bytes": 296,
-      "expected_error": "noncanonical-sparse",
-      "compatibility_state": "unresolved",
-      "note": "SciPy base fixture with explicit row-vector mutation; rejection remains a compatibility gap",
+      "expected_error": null,
+      "compatibility_state": "verified_storage",
+      "note": "Original row order and duplicate slots retained; densification uses mathematical values",
       "scipy": "readable"
     },
     {
       "file": "csc-duplicate.mat",
       "sha256": "3cd1e07be6008a980ded3ebf717b8b7d59295208ea0c68cfb8dcaec3c6630452",
       "bytes": 296,
-      "expected_error": "noncanonical-sparse",
-      "compatibility_state": "unresolved",
-      "note": "SciPy base fixture with explicit row-vector mutation; rejection remains a compatibility gap",
+      "expected_error": null,
+      "compatibility_state": "verified_storage",
+      "note": "Original row order and duplicate slots retained; densification uses mathematical values",
       "scipy": "readable"
     },
     {

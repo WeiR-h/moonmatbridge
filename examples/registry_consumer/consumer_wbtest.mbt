@@ -1,6 +1,6 @@
 ///|
 test "published compressed dense data preserves complex and uint64" {
-  assert_eq(@mat.version(), "0.0.14")
+  assert_eq(@mat.version(), "0.0.15")
   let id = @mat.numeric_array("id", @mat.UInt64, [1, 2], [
     Unsigned(9007199254740993UL),
     Unsigned(18446744073709551615UL),
@@ -129,4 +129,13 @@ test "published recursive snapshot and tree comparison preserve exact bits" {
   let before = @mat.read_tree(@mat.write_tree(nodes))
   let after = @mat.read_tree(@mat.write_tree(restored))
   assert_true(@mat.compare_trees(before,after).content_equal)
+}
+///|
+test "published CSC order duplicates and dense values" {
+  let a = @mat.raw_sparse_array("s", @mat.Logical, [2, 1], [1, 1, 0], [0, 3], b"\x01\x00\x01")
+  assert_false(a.is_canonical())
+  assert_true(a.to_dense().real == b"\x01\x01")
+  let tree = @mat.read_tree(@mat.write_tree([@mat.Csc(a)]))
+  let restored = @mat.read_tree(@mat.write_tree(@wire.from_tree_snapshot(@wire.to_tree_snapshot(tree.variables))))
+  assert_true(@mat.compare_trees(tree, restored).content_equal)
 }

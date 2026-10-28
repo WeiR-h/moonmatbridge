@@ -149,18 +149,11 @@ fn sparse_matrix_read(
           "invalid-sparse", col, "CSC column pointers must be monotone and bounded",
         )
       }
-      let mut previous = -1
       for i = start; i < end; i = i + 1 {
         let row = csc_index_at(bytes, ir.start + i * 4, little)
         if row < 0 || row >= shape[0] {
           fail("invalid-sparse", i, "Sparse row is outside dimensions")
         }
-        if row <= previous {
-          fail(
-            "noncanonical-sparse", i, "CSC rows must increase strictly within each column",
-          )
-        }
-        previous = row
       }
     }
     return (None, slots)

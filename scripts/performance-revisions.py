@@ -144,7 +144,7 @@ def main():
     report['runtime_unchanged']=True
     report['targets']=[]
     for row in report['results']:
-        if row['case']=='compressed-random-16m':
+        if row['case']=='compressed-random-16m' and base_sha.startswith('4d1e261'):
             report['targets'].append({'case':row['case'],'host':row['host'],'goal':'compressed core read time -25%','passed':row['time_reduction']>=.25})
         if row['operation']=='select' and row['host']=='native' and base_sha.startswith(('4d1e261','b9df1ed')):
             report['targets'].append({'case':row['case'],'host':row['host'],'goal':'native select process peak -10% versus v0.0.9' if base_sha.startswith('4d1e261') else 'native select process peak -40% versus v0.0.5',

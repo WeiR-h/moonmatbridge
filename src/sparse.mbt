@@ -1,5 +1,5 @@
 ///|
-/// Canonical CSC sparse double/logical matrix. Payload includes all stored slots, including unused capacity.
+/// CSC sparse double/logical matrix, preserving stored order and duplicate slots. Payload includes all stored slots, including unused capacity.
 pub(all) struct SparseArray {
   name : String
   dtype : DType
@@ -167,18 +167,11 @@ fn validate_sparse(
         "invalid-sparse", col, "CSC column pointers must be monotone and bounded",
       )
     }
-    let mut previous = -1
     for index = start; index < end; index = index + 1 {
       let row = a.row_indices[index]
       if row < 0 || row >= a.shape[0] {
         fail("invalid-sparse", index, "Sparse row is outside dimensions")
       }
-      if row <= previous {
-        fail(
-          "noncanonical-sparse", index, "CSC rows must increase strictly within each column",
-        )
-      }
-      previous = row
     }
   }
   if a.dtype == Logical {
@@ -240,20 +233,49 @@ pub fn SparseArray::to_dense(
     limits.max_file_bytes / (if self.imag is Some(_) { 2 } else { 1 }) {
     fail("file-limit", 0, "Dense sparse expansion exceeds byte limit")
   }
+  let canonical = self.is_canonical(limits~)
   let expand = fn(bytes : Bytes) {
-    let out = Array::make(count * width, b'\x00')
+    let out = FixedArray::make(count * width, b'\x00')
+    let seen = FixedArray::make(
+      if canonical || self.dtype == Logical || count == 0 {
+        0
+      } else {
+        (self.shape[0] + 7) / 8
+      },
+      b'\x00',
+    )
     for col = 0; col < self.shape[1]; col = col + 1 {
+      for i = 0; i < seen.length(); i = i + 1 {
+        seen[i] = b'\x00'
+      }
       for index = self.col_ptrs[col]
           index < self.col_ptrs[col + 1]
           index = index + 1 {
-        let target = (col * self.shape[0] + self.row_indices[index]) * width
-        for j = 0; j < width; j = j + 1 {
-          out[target + j] = bytes[index * width + j]
+        let row = self.row_indices[index]
+        let target = (col * self.shape[0] + row) * width
+        if self.dtype == Logical {
+          out[target] = (out[target].to_int() | bytes[index].to_int()).to_byte()
+        } else if !canonical && (seen[row / 8].to_int() & (1 << (row % 8))) != 0 {
+          let prior = finish_owned_buffer(
+            FixedArray::makei(8, j => out[target + j]),
+          )
+          let value = bits_at(prior, 0, 8, true).reinterpret_as_double() +
+            bits_at(bytes, index * width, 8, true).reinterpret_as_double()
+          let bits = value.reinterpret_as_uint64()
+          for j = 0; j < 8; j = j + 1 {
+            out[target + j] = ((bits >> (j * 8)) & 255UL).to_byte()
+          }
+        } else {
+          if !canonical {
+            seen[row / 8] = (seen[row / 8].to_int() | (1 << (row % 8))).to_byte()
+          }
+          out.blit_from_bytes(target, bytes, index * width, width)
         }
       }
     }
-    Bytes::from_array(out)
+    finish_owned_buffer(out)
   }
+
   {
     name: self.name,
     dtype: self.dtype,
@@ -328,4 +350,24 @@ pub fn NumericArray::to_sparse(
     is_global=self.is_global,
     limits~,
   )
+}
+
+///|
+/// True when active row indexes increase strictly in every column.
+pub fn SparseArray::is_canonical(
+  self : SparseArray,
+  limits? : Limits = default_limits(),
+) -> Bool raise MatError {
+  validate_limits(limits)
+  ignore(validate_sparse(self, limits))
+  for col = 0; col < self.shape[1]; col = col + 1 {
+    let mut previous = -1
+    for i = self.col_ptrs[col]; i < self.col_ptrs[col + 1]; i = i + 1 {
+      if self.row_indices[i] <= previous {
+        return false
+      }
+      previous = self.row_indices[i]
+    }
+  }
+  true
 }

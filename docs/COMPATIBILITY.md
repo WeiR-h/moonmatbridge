@@ -12,7 +12,7 @@
 | 2 struct | 标量/多维数组、字段表、空结构、嵌套值、列优先元素与字段顺序 | 已实现 |
 | 3 legacy object | 类名、形状、字段与递归值的数据级读写 | 已实现；不执行 MATLAB 类 |
 | 4 char | 字符矩阵、空字符、中文、非 BMP；miINT8/UINT8/UINT16/UTF8/UTF16/UTF32 | 已实现；保留编码及原始单位，详见下文 |
-| 5 sparse | 二维 CSC double、logical、complex double；索引、容量与稀疏存储 | 已实现规范 CSC；乱序/重复索引仍显式拒绝 |
+| 5 sparse | 二维 CSC double、logical、complex double；索引、容量与稀疏存储 | 已实现；保留乱序索引、重复项与容量 |
 | 6–15 numeric | double/single、int/uint 8/16/32/64、logical 标记、浮点复数、多维/空数组 | 已实现 |
 
 所有基本类均需支持全局标记、小数据标签和标准标签、容器内匿名矩阵、文件级压缩，以及共享的文件/元素/深度/节点限额。原有数值互操作功能继续保留：NPY、可读 JSON、数值变换、数值/CSC 快照和精确 diff。这些接口的输入域不会自动扩大为任意混合树。
@@ -41,7 +41,7 @@
 
 UTF8 数组以 Unicode scalar 数计维度，遵循本版独立 SciPy 案例；UINT16/UTF16 保存 16 位单位（包括代理项），UTF32 保存合法 scalar。非 BMP 字符在不同生产工具中的维度差异尚需 MATLAB 实测，当前不宣称跨工具所有 Unicode 变体已经验证。
 
-当前 CSC 只接受每列行索引严格递增的规范表示；不会静默合并重复值或重排行。此限制及旧编码名称文件将在终点矩阵中显式跟踪；不把“拒绝输入”计为已兼容。读取只接受 UTF-8 名称，根变量名非空；容器内空名可保留。文件描述、大小端和压缩布局在写回时规范化。
+CSC 保留活动行索引顺序、重复槽位及容量；`is_canonical()` 单独判断排序与重复状态。显式 densify 按原顺序累加重复数值，logical 使用逻辑或。旧名称编码继续由独立案例跟踪。读取只接受 UTF-8 名称，根变量名非空；容器内空名可保留。文件描述、大小端和压缩布局在写回时规范化。
 
 MAT v4 与 HDF5 MAT v7.3 属于不同格式，不属于 Level 5 终点。MATLAB 私有运行时扩展（function handle、mxOPAQUE/MCOS、子系统 workspace）也不等同于公开基本类；当前明确返回错误。若赛事要求这些扩展，也将列为额外交付项并取得真实案例，不能声称“支持所有 MATLAB 对象”。legacy mxOBJECT 基本类的数据级支持不代表能够执行 MATLAB 对象。流式 I/O 与 NPY object/pickle 不属于此 Level 5 读写兼容目标。
 

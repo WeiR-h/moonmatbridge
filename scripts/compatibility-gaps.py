@@ -68,8 +68,8 @@ def main():
             position = tag(data, position)[1]
         rows = tag(data, position)[0]
         struct.pack_into('<ii', data, rows, *indices)
-        add(name, bytes(data), 'noncanonical-sparse',
-            'unresolved', 'SciPy base fixture with explicit row-vector mutation; rejection remains a compatibility gap')
+        add(name, bytes(data), None,
+            'verified_storage', 'Original row order and duplicate slots retained; densification uses mathematical values')
     add('legacy-object-data', mixed.deterministic_mat({'good': np.array([[1.]]), 'record': mixed.all_base_values()['legacy_record']}),
         None, 'verified_data_only', 'Legacy class name and fields; MATLAB runtime behavior unverified')
     add('legacy-latin1-name', good + character(b'caf\xe9', b'A\x00', [1, 1]), 'invalid-name',
@@ -105,6 +105,17 @@ def main():
                     assert char_units(source.read_bytes()) == char_units(output.read_bytes()), 'Character storage tag/units changed'
                 if case['scipy'] == 'readable':
                     mixed.assert_file_equal(output, source)
+                if case['file'].startswith('csc-'):
+                    before = loadmat(source, spmatrix=False)['s']
+                    after = loadmat(output, spmatrix=False)['s']
+                    np.testing.assert_array_equal(before.indices, after.indices)
+                    np.testing.assert_array_equal(before.indptr, after.indptr)
+                    assert before.data.tobytes()==after.data.tobytes()
+                    dense = output.with_suffix('.dense.mat')
+                    dense.unlink(missing_ok=True)
+                    run = subprocess.run(prefix+['densify',str(source),'s',str(dense)],capture_output=True,text=True,encoding='utf-8')
+                    assert run.returncode==0,run.stderr
+                    np.testing.assert_array_equal(loadmat(dense)['s'],before.toarray())
                 checks.append({'case': case['file'], 'host': host, 'operation': 'roundtrip', 'actual': 'storage_verified',
                                'compatibility_state': case['compatibility_state']})
     for path in sorted((ROOT / 'examples/octave/variants').glob('producer-*.mat')):

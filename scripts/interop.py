@@ -351,11 +351,11 @@ for host in ("native", "js"):
     np.testing.assert_array_equal(actual.indices, expected.indices)
     np.testing.assert_array_equal(actual.indptr, expected.indptr)
     record(f"{host}: independent big-endian sparse/capacity fixture", "Python struct-built fixture; small name tag, nzmax and inactive slots retained")
-    for label, rows, cols, expected_code in [("pointers", [0], [0, 2, 1], "invalid-sparse"), ("row-range", [3], [0, 1, 1], "invalid-sparse"), ("row-order", [1, 0], [0, 2, 2], "noncanonical-sparse")]:
+    for label, rows, cols, expected_code in [("pointers", [0], [0, 2, 1], "invalid-sparse"), ("row-range", [3], [0, 1, 1], "invalid-sparse")]:
         invalid_file = OUT / f"invalid-sparse-{label}.mat"
         invalid_file.write_bytes(independent_sparse(rows, cols, np.zeros(len(rows)), (3, 2)))
         assert invoke(host, "info", invalid_file, ok=False)["code"] == expected_code
-    record(f"{host}: invalid CSC pointers rows and ordering rejected")
+    record(f"{host}: invalid CSC pointers and row ranges rejected")
 
 transform_source = OUT / "scientific-transform-source.mat"
 transform_inputs = {

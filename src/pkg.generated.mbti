@@ -234,6 +234,7 @@ pub(all) struct SparseArray {
   nzmax : Int
   is_global : Bool
 } derive(@debug.Debug)
+pub fn SparseArray::is_canonical(Self, limits? : Limits) -> Bool raise MatError
 pub fn SparseArray::nnz(Self) -> Int
 pub fn SparseArray::to_dense(Self, limits? : Limits) -> NumericArray raise MatError
 pub fn SparseArray::to_repr(Self) -> @debug.Repr
