@@ -49,7 +49,7 @@ def fixtures():
  return cases
 
 NATIVE=r'''///|
-extern "C" fn init() -> Unit = "moonmat_init"
+extern "C" fn host_init() -> Unit = "moonmat_init"
 ///|
 extern "C" fn argc(fallback : Int) -> Int = "moonmat_arg_count"
 ///|
@@ -57,8 +57,10 @@ extern "C" fn argc(fallback : Int) -> Int = "moonmat_arg_count"
 extern "C" fn arg(i : Int, fallback : String) -> String = "moonmat_arg"
 ///|
 #borrow(path)
+#warnings("-unused_value")
 extern "C" fn read(path : Bytes, limit : Int) -> Bytes = "moonmat_read"
 ///|
+#warnings("-unused_value")
 extern "C" fn io_error() -> Int = "moonmat_error"
 ///|
 extern "C" fn now() -> Double = "moonmat_now"
@@ -76,7 +78,7 @@ fn run(path : String, name : String, stats : Stats) -> Int raise @mat.MatError {
 }
 ///|
 fn main {
- init()
+ host_init()
  let args = @env.args()
  if argc(args.length()) != 4 { abort("file_bench INPUT VARIABLE timing|memory") }
  let path = arg(1,args.get(1).unwrap_or(""))
@@ -90,7 +92,7 @@ fn main {
   for _i = 0; _i < (if memory { 1 } else { 10 }); _i = _i + 1 {
    let start = now(); checksum = checksum + run(path,name,stats); samples.push(now()-start)
   }
-  println(({ "samples_ms": Json::array(samples.map(Json::number)), "checksum": checksum, "peak_bytes": peak(), "input_bytes": stats.input, "read_bytes": stats.bytes, "maximum_read_request": stats.largest } : Json).stringify())
+  println(({ "samples_ms": Json::array(samples.map(v => Json::number(v))), "checksum": checksum, "peak_bytes": peak(), "input_bytes": stats.input, "read_bytes": stats.bytes, "maximum_read_request": stats.largest } : Json).stringify())
  } catch { _ => abort("File pipeline failed") }
 }
 '''
@@ -174,7 +176,7 @@ def prepare(ref):
  shutil.copyfile(folder/'src/cmd/bench/bench.c',d/'bench.c')
  (d/'main.mbt').write_text(NATIVE.replace('@FFI@',SOURCE_FFI if source else '').replace('@READ@',SOURCE_READ if source else BYTES_READ),encoding='utf-8')
  d=folder/'src/file_bench_bridge';d.mkdir(exist_ok=True)
- (d/'moon.pkg').write_text('import { "WeiR-h/moonmatbridge" @mat, }\nsupported_targets = "js"\n',encoding='utf-8')
+ (d/'moon.pkg').write_text('import { "WeiR-h/moonmatbridge" @mat, }\nsupported_targets = "js"\npkgtype(kind: "foreign_library")\n',encoding='utf-8')
  extra='''#export_name("file_source")
 pub fn file_source(size : Int, reader : (Int, FixedArray[Byte], Int, Int) -> Int) -> @mat.MatSource { { size, read_into: reader, } }''' if source else ''
  (d/'bench.mbt').write_text(JS_BRIDGE.replace('@SOURCE@',extra).replace('@ARGS@','source : @mat.MatSource' if source else 'bytes : Bytes').replace('@READ@','@mat.read_selected_from(source,[name])' if source else '@mat.read_selected(bytes,[name],limits=basic)'),encoding='utf-8')
