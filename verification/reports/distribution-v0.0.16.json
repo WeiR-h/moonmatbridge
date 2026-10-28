@@ -1,0 +1,101 @@
+{
+  "status": "verified",
+  "version": "0.0.16",
+  "source_sha256": "e140582420be3a0d1e1f2d38a4395ff95c73f474b1ce3b012cf1eae6620a015c",
+  "tag_commit": "1a29e257f880bcf30fdb1ebbc223c81b2563b6dd",
+  "github": "https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.0.16",
+  "mooncakes": "https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.0.16",
+  "public_assets": 26,
+  "public_scientific_host_workflows": 6,
+  "public_tree_checks": 20,
+  "evidence": [
+    {
+      "file": "ci-v0.0.16.json",
+      "sha256": "b875ea1a8f33ff4c0485aa1830c11038350ce3b8c5eac7a6d42d013d1715949b"
+    },
+    {
+      "file": "compatibility-gaps-v0.0.16.json",
+      "sha256": "64364154d9c23b989027de4dd58e4883c1063aaa0cdfe75d6a51dfa687272124"
+    },
+    {
+      "file": "compatibility-v0.0.16.json",
+      "sha256": "21e24c9088cf88ed3714136e75508a959321c15387aa4169b2c93d85c98334dd"
+    },
+    {
+      "file": "file-performance-v0.0.16.json",
+      "sha256": "994e7e462a278cbd3a9b85db4577454b4c28c4a721594de8e1b6bfa9d320a414"
+    },
+    {
+      "file": "interop-v0.0.16.json",
+      "sha256": "3d026eeef7b6feba97ce660a3300f9dae2a8d3aa3b5bbf6aab48342daed6d511"
+    },
+    {
+      "file": "js-v0.0.16.json",
+      "sha256": "c526c3122e48f86d234e6caf9d028b2080117c9aefaced6164e23cf11964714b"
+    },
+    {
+      "file": "licenses-v0.0.16.json",
+      "sha256": "42d5aa2b1b312c4d2c0d4a034c4e736df0ee1d9474d28cab2e95445b8cabcc68"
+    },
+    {
+      "file": "mooncake-audit-v0.0.16.json",
+      "sha256": "8a86ec6908c4eaf4edec784f40e10584568a0615dbe9dc88f808a93f5d75f0be"
+    },
+    {
+      "file": "mooncakes-v0.0.16.json",
+      "sha256": "3bccbba7cbf86818ab8e3078d9cdaf312c0107c613c93a0b0d7cc3abd918c6f5"
+    },
+    {
+      "file": "octave-v0.0.16.json",
+      "sha256": "21e00fb8b2d21130c9ddd9914725ab8c8cec3bd23c05544ee0940a81171ee991"
+    },
+    {
+      "file": "performance-vs-21291ce-partial-db1fdf9a-v0.0.16.json",
+      "sha256": "a070b42d67e3427e9e8a565b728ca39f5db08b20a4b4d10c0e35daddda9bbe70"
+    },
+    {
+      "file": "performance-vs-21291ce-v0.0.16.json",
+      "sha256": "3f239fde46979ee285721c133a68f18f675de358115b7ddb7794fce6ca71ada1"
+    },
+    {
+      "file": "public-downloads-v0.0.16.json",
+      "sha256": "187ed07281fd81dc202d338a6a275e3a832210a5ee7110d1443499ac4473f142"
+    },
+    {
+      "file": "registry-v0.0.16.json",
+      "sha256": "7e4e3d8e0faef18bdac40128dfdd71c05eab80d7b95f7d27e70c0e34bbf7a8d3"
+    },
+    {
+      "file": "release-v0.0.16.json",
+      "sha256": "6ebcefa36f9e135b6e36c6ba897700f34a1f3c0397929bef222f2db36f969935"
+    },
+    {
+      "file": "selection-v0.0.16.json",
+      "sha256": "35265105874de0f7c78225d2367db14bf4c734f301e27948cdf113438ce65eb0"
+    },
+    {
+      "file": "source-snapshot-v0.0.16.json",
+      "sha256": "fe3ff165747371621bd4d1aa4a1b85d71c1d975b4c3c75774aea3f082486b60a"
+    },
+    {
+      "file": "tree-operations-public-v0.0.16.json",
+      "sha256": "d216f439e6b22cdb07621acac76530113bdf6b23358419aa24af52ff5608d1c5"
+    },
+    {
+      "file": "tree-operations-v0.0.16.json",
+      "sha256": "d216f439e6b22cdb07621acac76530113bdf6b23358419aa24af52ff5608d1c5"
+    },
+    {
+      "file": "v0.0.16.json",
+      "sha256": "6eff1c9196d5b8861fbdb89242c182f5a3fa68cc0f718855f720e94d3e2de125"
+    },
+    {
+      "file": "workflows-public-v0.0.16.json",
+      "sha256": "88d895d8906947ac0ff8c2816ffb3318d804b121da5dd23e9b19d07770400676"
+    },
+    {
+      "file": "workflows-v0.0.16.json",
+      "sha256": "802aac03b716b7182986118fd0e16bbb8db0cbf677a6feca2325ba7814061764"
+    }
+  ]
+}
