@@ -8,7 +8,7 @@
 | 2 | struct | 2×2 数组、字段顺序、空字段表、空多维、递归子值 |
 | 3 | legacy object | `ExperimentRecord` 类名、字段、递归值；数据级验证 |
 | 4 | char | 中文、非 BMP、字符矩阵和空字符；六种存储标签另见原互操作报告 |
-| 5 | sparse | 规范 CSC，与密集数据及容器混合；double/logical/complex 另见原互操作报告 |
+| 5 | sparse | CSC 与混合容器；原始乱序、重复槽位、未用容量保真及显式密集转换 |
 | 6 | double | 多维、空多维、复数及精确 IEEE 样例 |
 | 7 | single | 多维、空多维、复数及精确 IEEE 样例 |
 | 8–15 | int/uint 8/16/32/64 | 每个类型的多维和空多维；精确 uint64 上界另含在混合文件中 |
@@ -25,7 +25,7 @@ Octave 8.4 的短 UTF8 字符矩阵会出现声明长度与实际长度不符，
 
 Octave 的空格 subsystem 字段与 nonsparse 保留字 1 现已接受，写回规范化为零；实际 subsystem 偏移及未知标记仍拒绝。
 
-## 尚未关闭的问题
+## 兼容状态
 
 | 项目 | 当前状态与处理 |
 | --- | --- |
@@ -35,3 +35,5 @@ Octave 的空格 subsystem 字段与 nonsparse 保留字 1 现已接受，写回
 | legacy object 的 MATLAB 类恢复 | SciPy 数据级验证；实际 MATLAB 类行为未验证 |
 
 最终范围与 v1.0 门槛仍以 [COMPATIBILITY.md](COMPATIBILITY.md) 为准。上述缺口未消除前保持 0.x，不以矩阵的基本类数量冒充所有标准变体都已兼容。
+
+文件后端在保持上述格式校验的同时，支持未压缩递归分块读取；奇数块长、短读、未选嵌套损坏及源文件变化由 source 单元测试和 source-operations 报告覆盖。

@@ -42,8 +42,15 @@ fn SourceCursor::owned(
     fail("truncated-data", self.position, "Payload exceeds source")
   }
   let out = FixedArray::make(count, b'\x00')
-  for i = 0; i < count; i = i + 1 {
-    out[i] = self.byte()
+  let mut done = 0
+  while done < count {
+    out[done] = self.byte()
+    done = done + 1
+    let available = self.start + self.available - self.position
+    let n = if available < count - done { available } else { count - done }
+    self.buffer.blit_to(out, len=n, src_offset=self.position - self.start, dst_offset=done)
+    self.position = self.position + n
+    done = done + n
   }
   finish_owned_buffer(out)
 }

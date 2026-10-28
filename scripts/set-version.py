@@ -17,7 +17,7 @@ for name in ["package.json", "moon.mod", "src/version.mbt", "examples/registry_c
         text = text.replace(f"| 能力 | v{old} |", f"| 能力 | v{version} |")
         text = text.replace(f"@{old}", f"@{version}")
     elif name == "docs/API.md":
-        text = text.replace(f"# MoonBit API v{old}", f"# MoonBit API v{version}").replace(f"@{old}", f"@{version}")
+        text = re.sub(r"^# MoonBit API v[0-9.]+", f"# MoonBit API v{version}", text).replace(f"@{old}", f"@{version}")
     else:
         text = text.replace(old, version)
     path.write_text(text, encoding="utf-8", newline="\n")

@@ -1,4 +1,4 @@
-# MoonBit API v0.0.13
+# MoonBit API v0.0.17
 
 The core package is `WeiR-h/moonmatbridge`. The executable, JSON adapter and JS ABI are separate packages; core parsing performs no host I/O.
 
