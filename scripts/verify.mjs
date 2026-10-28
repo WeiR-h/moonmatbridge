@@ -53,6 +53,7 @@ try {
   record('Compatibility gap characterization', command(python, ['scripts/compatibility-gaps.py']));
   record('Performance evidence invalidation guards', command(python, ['scripts/test-evidence.py']));
   record('Strict selected reads and root metadata independent checks', command(python, ['scripts/selection-checks.py']));
+  record('Large file sources and lifetime checks', command(python, ['scripts/source-checks.py']));
   record('Recursive mixed tree operations', command(python, ['scripts/tree-checks.py']));
   const workflowOutput = command(python, ['scripts/scientific-workflows.py']);
   const workflowReceipt = join(root, `verification/reports/workflows-v${version}.json`);

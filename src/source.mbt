@@ -97,18 +97,6 @@ fn source_fill(
 }
 
 ///|
-fn source_bytes(
-  source : MatSource,
-  offset : Int,
-  length : Int,
-  chunk : Int,
-) -> Bytes raise MatError {
-  let out = FixedArray::make(length, b'\x00')
-  source_fill(source, offset, out, 0, length, chunk)
-  finish_owned_buffer(out)
-}
-
-///|
 fn source_charge_metadata(
   bytes : Bytes,
   outer : Element,
@@ -220,153 +208,12 @@ fn source_node_size(
 }
 
 ///|
-fn scan_source(
-  source : MatSource,
-  selection : Array[String]?,
-  collect : Bool,
-  limits : SourceLimits,
-  tree : TreeLimits,
-) -> (MatTree, Array[MatRootInfo]) raise MatError {
-  let basic = source_limits(limits)
-  validate_tree_limits(tree)
-  if source.size < 128 {
-    fail("invalid-header", 0, "MAT Level 5 header needs 128 bytes")
-  }
-  if source.size > limits.max_source_bytes {
-    fail("file-limit", 0, "Source exceeds input quota")
-  }
-  let header = source_bytes(source, 0, 128, limits.chunk_bytes)
-  let info = read_tree(header, limits=basic, tree_limits=tree)
-  let little = info.little_endian
-  let wanted : Map[String, Bool] = Map([])
-  if selection is Some(names) {
-    for name in names {
-      wanted[name] = true
-    }
-  }
-  let seen : Map[String, Bool] = Map([])
-  let kept : Map[String, MatNode] = Map([])
-  let variables = []
-  let roots = []
-  let budget : TreeBudget = {
-    nodes: 0,
-    elements: 0,
-    metadata: 0,
-    metadata_limit: limits.max_metadata_bytes,
-  }
-  let mut offset = 128
-  let mut expanded = 0
-  let mut result_size = 128
-  let mut count = 0
-  while offset < source.size {
-    if count >= limits.max_variables {
-      fail("variable-limit", offset, "Too many source roots")
-    }
-    if source.size - offset < 8 {
-      fail("truncated-tag", offset, "Root tag needs eight bytes")
-    }
-    let tag_bytes = source_bytes(source, offset, 8, limits.chunk_bytes)
-    let kind = bits_at(tag_bytes, 0, 4, little)
-    let size = bits_at(tag_bytes, 4, 4, little)
-    if kind != 14UL && kind != 15UL {
-      fail("unsupported-element", offset, "Expected matrix or compressed root")
-    }
-    let padding = if kind == 15UL { 0UL } else { (8UL - size % 8UL) % 8UL }
-    if size + padding > (source.size - offset - 8).to_uint64() {
-      fail("truncated-data", offset, "Root exceeds source")
-    }
-    if size + 8UL + padding > limits.max_buffered_root_bytes.to_uint64() {
-      fail("source-buffer-limit", offset, "Root exceeds temporary buffer quota")
-    }
-    let raw = source_bytes(
-      source,
-      offset,
-      8 + size.to_int() + padding.to_int(),
-      limits.chunk_bytes,
-    )
-    let (bytes, outer) = if kind == 14UL {
-      (raw, tag(raw, 0, raw.length(), little))
-    } else {
-      let available = if limits.max_expanded_bytes - expanded <
-        limits.max_buffered_root_bytes {
-        limits.max_expanded_bytes - expanded
-      } else {
-        limits.max_buffered_root_bytes
-      }
-      let unpacked = inflate_window(
-        raw,
-        8,
-        size.to_int(),
-        available,
-        Some(little),
-      )
-      expanded = expanded + unpacked.length()
-      let inner = tag(unpacked, 0, unpacked.length(), little)
-      if inner.kind != 14 || inner.next != unpacked.length() {
-        fail(
-          "invalid-compressed", offset, "Compressed root needs exactly one matrix",
-        )
-      }
-      (unpacked, inner)
-    }
-    let root = root_info(bytes, outer, little, basic, kind == 15UL)
-    ignore(visit_node(bytes, outer, little, basic, tree, budget, 1, false))
-    if seen.contains(root.name) {
-      fail("duplicate-name", offset, "Duplicate source root")
-    }
-    seen[root.name] = true
-    let keep = selection is None || wanted.contains(root.name)
-    if keep {
-      let n = source_node_size(bytes, outer, little, basic)
-      if n > limits.max_result_bytes - result_size {
-        fail("result-limit", offset, "Selected normalized MAT exceeds quota")
-      }
-      result_size = result_size + n
-      let materialize_budget : TreeBudget = {
-        nodes: 0,
-        elements: 0,
-        metadata: 0,
-        metadata_limit: 0,
-      }
-      let node = visit_node(
-        bytes, outer, little, basic, tree, materialize_budget, 1, true,
-      ).unwrap()
-      variables.push(node)
-      kept[root.name] = node
-    }
-    if collect {
-      roots.push(root)
-    }
-    offset = offset + raw.length()
-    count = count + 1
-  }
-  let ordered = if selection is Some(names) {
-    let result = []
-    let selected : Map[String, Bool] = Map([])
-    for name in names {
-      if selected.contains(name) {
-        fail("duplicate-name", 0, "Repeated selection: " + name)
-      }
-      selected[name] = true
-      match kept.get(name) {
-        Some(node) => result.push(node)
-        None => fail("missing-variable", 0, "Missing variable: " + name)
-      }
-    }
-    result
-  } else {
-    variables
-  }
-  ({ ..info, variables: ordered, }, roots)
-}
-
-///|
 pub fn read_tree_from(
   source : MatSource,
   limits? : SourceLimits = default_source_limits(),
   tree_limits? : TreeLimits = default_tree_limits(),
 ) -> MatTree raise MatError {
-  scan_source(source, None, false, limits, tree_limits).0
+  scan_source_stream(source, None, false, limits, tree_limits).0
 }
 
 ///|
@@ -376,7 +223,7 @@ pub fn read_selected_from(
   limits? : SourceLimits = default_source_limits(),
   tree_limits? : TreeLimits = default_tree_limits(),
 ) -> MatTree raise MatError {
-  scan_source(source, Some(names), false, limits, tree_limits).0
+  scan_source_stream(source, Some(names), false, limits, tree_limits).0
 }
 
 ///|
@@ -385,7 +232,7 @@ pub fn inspect_roots_from(
   limits? : SourceLimits = default_source_limits(),
   tree_limits? : TreeLimits = default_tree_limits(),
 ) -> Array[MatRootInfo] raise MatError {
-  scan_source(source, Some([]), true, limits, tree_limits).1
+  scan_source_stream(source, Some([]), true, limits, tree_limits).1
 }
 
 ///|

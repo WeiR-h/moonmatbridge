@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.0.17
+
+- Uncompressed file sources now parse numeric, CSC, character and recursive containers in bounded chunks.
+- Short reads and chunk boundaries retain full validation for omitted roots and children.
+- Added fixed 256 MiB omitted-variable scenarios and source-change checks for both file hosts.
+
 ## v0.0.16
 
 - Add callback-based MatSource and independent source, expansion, result and metadata quotas.

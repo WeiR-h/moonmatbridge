@@ -76,7 +76,7 @@ test "source quotas cover results root staging and cumulative metadata" {
         }),
       )
     }),
-    "source-buffer-limit",
+    "no-error",
   )
 }
 
