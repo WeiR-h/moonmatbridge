@@ -9,6 +9,7 @@ priv struct SourceCursor {
 }
 
 ///|
+#inline
 fn SourceCursor::byte(self : SourceCursor) -> Byte raise MatError {
   if self.position < self.start || self.position >= self.start + self.available {
     if self.position >= self.source.size {
