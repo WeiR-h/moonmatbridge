@@ -113,8 +113,8 @@ def main():
     report = {'status': 'characterized', 'version': VERSION, 'producer': f'SciPy {scipy.__version__}; independent Level 5 unit fixture encoder',
               'reference': 'https://www.mathworks.com/help/pdf_doc/matlab/matfile_format.pdf', 'cases': cases, 'checks': checks,
               'scope': 'Assertions check observed supported/rejected behavior; unresolved cases are NOT compatibility passes. MATLAB execution not claimed.'}
-    (ROOT / f'verification/reports/compatibility-gaps-v{VERSION}.json').write_text(json.dumps(report, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
-    (OUT / 'manifest.json').write_text(json.dumps({'reference': report['reference'], 'cases': cases}, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
+    (ROOT / f'verification/reports/compatibility-gaps-v{VERSION}.json').write_text(json.dumps(report, ensure_ascii=False, indent=2)+'\n', encoding='utf-8', newline='\n')
+    (OUT / 'manifest.json').write_text(json.dumps({'reference': report['reference'], 'cases': cases}, ensure_ascii=False, indent=2)+'\n', encoding='utf-8', newline='\n')
     print(f'{len(checks)} gap characterization checks; unresolved cases retained')
 
 
