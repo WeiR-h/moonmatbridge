@@ -73,4 +73,128 @@ test "streamed CSC retains inactive capacity duplicate rows and original planes"
     error_code(() => ignore(read_selected_from(test_source(bad, 1), []))),
     "invalid-sparse",
   )
+  let jc = tag(bytes, ir.next, outer.start + outer.size, true)
+  let bad_pointer = changed(bytes, jc.start, b'\x01')
+  assert_eq(
+    error_code(() => ignore(read_selected_from(test_source(bad_pointer, 1), []))),
+    "invalid-sparse",
+  )
+}
+
+///|
+test "source structural limits apply to omitted nodes in both encodings" {
+  for compressed in [false, true] {
+    let bytes = write_tree(mixed_tree(), compressed~)
+    let source = test_source(bytes, 3)
+    assert_eq(
+      error_code(() => {
+        ignore(
+          read_selected_from(source, [], tree_limits={
+            ..default_tree_limits(),
+            max_depth: 2,
+          }),
+        )
+      }),
+      "depth-limit",
+    )
+    assert_eq(
+      error_code(() => {
+        ignore(
+          read_selected_from(source, [], tree_limits={
+            ..default_tree_limits(),
+            max_nodes: 2,
+          }),
+        )
+      }),
+      "node-limit",
+    )
+    assert_eq(
+      error_code(() => {
+        ignore(
+          read_selected_from(source, [], tree_limits={
+            ..default_tree_limits(),
+            max_fields: 1,
+          }),
+        )
+      }),
+      "invalid-fields",
+    )
+    assert_eq(
+      error_code(() => {
+        ignore(
+          read_selected_from(source, [], limits={
+            ..default_source_limits(),
+            max_elements: 1,
+          }),
+        )
+      }),
+      "element-limit",
+    )
+    assert_eq(
+      error_code(() => {
+        ignore(
+          read_selected_from(source, [], limits={
+            ..default_source_limits(),
+            max_variables: 1,
+          }),
+        )
+      }),
+      "variable-limit",
+    )
+  }
+}
+
+///|
+test "source metadata quota is cumulative and duplicate roots are rejected" {
+  let values = []
+  for i = 0; i < 8; i = i + 1 {
+    values.push(
+      Numeric(
+        numeric_array("variable_" + i.to_string(), Float64, [1, 1], [
+          Floating(1.0),
+        ]),
+      ),
+    )
+  }
+  for compressed in [false, true] {
+    let bytes = write_tree(values, compressed~)
+    assert_eq(
+      error_code(() => {
+        ignore(
+          read_selected_from(test_source(bytes, 3), [], limits={
+            ..default_source_limits(),
+            max_metadata_bytes: 128,
+          }),
+        )
+      }),
+      "metadata-limit",
+    )
+    let one = write_tree([values[0]], compressed~)
+    let duplicate = one + one[128:].to_owned()
+    assert_eq(
+      error_code(() => ignore(inspect_roots_from(test_source(duplicate, 3)))),
+      "duplicate-name",
+    )
+  }
+}
+
+///|
+test "source expansion quota is cumulative even after a selected root" {
+  let raw = Bytes::make(512, b'\x01')
+  let one = Numeric(raw_array("one", UInt8, [1, 512], raw))
+  let two = Numeric(raw_array("two", UInt8, [1, 512], raw))
+  let bytes = write_tree([one, two], compressed=true)
+  let first = tag(bytes, 128, bytes.length(), true)
+  let maximum = inflate_window(bytes, first.start, first.size, 4096, Some(true)).length()
+  assert_eq(
+    error_code(() => {
+      ignore(
+        read_selected_from(test_source(bytes, 3), ["one"], limits={
+          ..default_source_limits(),
+          max_expanded_bytes: maximum,
+        }),
+      )
+    }),
+    "expanded-limit",
+  )
 }
