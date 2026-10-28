@@ -104,8 +104,9 @@ def public_workflows(directory, exe):
         assert row["outputs"] == expected[row["host"], row["workflow"]], "Public reproduction differs from released workflow outputs"
     receipt["released_output_hashes_match"] = True
     receipt["public_archives_sha256"] = {kind: hashlib.sha256((directory / f"MoonMatBridge-v{VERSION}-{kind}.zip").read_bytes()).hexdigest() for kind in ("source", "js", "windows-x64")}
-    receipt["scope"] = "All six workflows executed using publicly downloaded inputs, native executable and precompiled JS module, checked by independent NumPy/SciPy and exact released output hashes. Adapter only points to the downloaded module."
+    receipt["scope"] = "All scientific workflows executed using publicly downloaded inputs, native executable and precompiled JS module, checked by independent NumPy/SciPy and exact released output hashes. Adapter only points to the downloaded module."
     (directory / f"workflows-public-v{VERSION}.json").write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    write_report("workflows-public", receipt)
     return receipt["passed"]
 
 
@@ -152,6 +153,7 @@ def github():
                "scope": "Public assets downloaded and compared byte-for-byte; downloaded executable consumes mixed file. Local archive consumers are in release receipt."}
     if (ROOT / "scripts/scientific-workflows.py").exists():
         receipt["public_scientific_workflows_passed"] = public_workflows(directory, exe)
+    write_report("public-downloads", receipt)
     (directory / "public-downloads.json").write_text(json.dumps(receipt, indent=2) + "\n")
     print(json.dumps({"status": "passed", "public_assets": len(hashes), "receipt": str(directory / "public-downloads.json")}))
 

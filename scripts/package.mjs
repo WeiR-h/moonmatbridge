@@ -11,3 +11,6 @@ const python = process.env.MOONMAT_PYTHON || toolchain().config.python || join(r
 const result = spawnSync(python, ['scripts/package_release.py'], {cwd: root, encoding: 'utf8', env: {...process.env, PYTHONUTF8: '1'}, maxBuffer: 4 * 1024 * 1024, timeout: 180000});
 if (result.error || result.status !== 0) throw new Error(result.error?.message || result.stdout + result.stderr);
 console.log(result.stdout.trim());
+const licenses = spawnSync(python, ['scripts/license-checks.py'], {cwd: root, encoding: 'utf8', env: {...process.env, PYTHONUTF8: '1'}});
+if (licenses.status !== 0) throw new Error(licenses.stdout + licenses.stderr);
+console.log(licenses.stdout.trim());

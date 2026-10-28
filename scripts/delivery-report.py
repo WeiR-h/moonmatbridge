@@ -23,6 +23,9 @@ def main():
     octave = read(f"octave-v{VERSION}.json")
     selected = read(f"selection-v{VERSION}.json")
     workflows = read(f"workflows-v{VERSION}.json")
+    licenses = read(f"licenses-v{VERSION}.json")
+    snapshot = read(f"source-snapshot-v{VERSION}.json")
+    assert not snapshot["changed_files"]
     registry = read(f"registry-v{VERSION}.json")
     audit = read(f"mooncake-audit-v{VERSION}.json")
     mooncakes = read(f"mooncakes-v{VERSION}.json")
@@ -58,7 +61,7 @@ def main():
                              "verified_public_assets": len(download_receipt["assets"]),
                              "mooncakes_archive_sha256": registry_receipt["archive_sha256"]})
     evidence = [f"{prefix}-v{VERSION}.json" for prefix in ("compatibility", "octave", "selection", "workflows", "registry", "mooncake-audit", "mooncakes", "release", "public-downloads", "workflows-public", "performance-summary")]
-    evidence.extend([f"v{VERSION}.json", f"compatibility-gaps-v{VERSION}.json"])
+    evidence.extend([f"v{VERSION}.json", f"compatibility-gaps-v{VERSION}.json", f"licenses-v{VERSION}.json", f"source-snapshot-v{VERSION}.json", f"ci-v{VERSION}.json"])
     report = {"status": "public_delivery_verified", "version": VERSION, "source": version["source"],
               "publication_history": publications,
               "verification": {"local_groups": len(version["checks"]), "mixed_class_host_cases": len(compatibility["checks"]),

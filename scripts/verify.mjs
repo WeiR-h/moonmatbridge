@@ -21,7 +21,7 @@ export function sourceFingerprint() {
   walk(root); files.sort();
   const hash = createHash('sha256');
   for (const name of files) { hash.update(name + '\0'); hash.update(readFileSync(join(root, name))); hash.update('\0'); }
-  return {sha256: hash.digest('hex'), files: files.length};
+  return {sha256: hash.digest('hex'), files: files.length, entries: files.map(file => ({file, sha256: createHash('sha256').update(readFileSync(join(root, file))).digest('hex')}))};
 }
 export function verify() {
 const checks = [];
@@ -32,6 +32,7 @@ function command(executable, args) {
   return (result.stdout + result.stderr).trim();
 }
 try {
+  const before = sourceFingerprint();
   const sdkVersion = runMoon(['version']);
   if (!readFileSync(join(root, 'moon.mod'), 'utf8').includes(`version = "${version}"`)) throw new Error('Manifest versions differ');
   record('MoonBit JS checks', runMoon(['check', '--target', 'js', '--deny-warn']));
@@ -63,6 +64,11 @@ try {
   writeFileSync(workflowReceipt, JSON.stringify(secondWorkflows, null, 2) + '\n');
   record('Three complete scientific workflows with independent oracles', workflowOutput + '; repeated outputs have identical hashes');
   const fingerprint = sourceFingerprint();
+  const old = new Map(before.entries.map(entry => [entry.file, entry.sha256]));
+  const current = new Map(fingerprint.entries.map(entry => [entry.file, entry.sha256]));
+  const changed = [...new Set([...old.keys(), ...current.keys()])].filter(file => old.get(file) !== current.get(file));
+  writeFileSync(join(root, `verification/reports/source-snapshot-v${version}.json`), JSON.stringify({status: changed.length ? 'failed' : 'passed', version, before, after: fingerprint, changed_files: changed}, null, 2) + '\n');
+  if (changed.length) throw new Error('Source changed during verification: ' + changed.join(', '));
   const report = {
     status: 'passed', version, checked_at: new Date().toISOString(), source: fingerprint,
     environment: {moon: sdkVersion, node: process.version, platform: process.platform, arch: process.arch}, checks,

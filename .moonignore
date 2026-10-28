@@ -15,6 +15,7 @@
 !/docs/
 /docs/*
 !/docs/API.md
+!/docs/ACCEPTANCE.md
 !/docs/COMPATIBILITY.md
 !/docs/COMPATIBILITY_MATRIX.md
 !/docs/NEXT_RELEASES.md
