@@ -32,12 +32,12 @@ MAT 递归 cell/struct/char/legacy object、密集/CSC 稀疏读写、数值编�
 | NumPy 互通 | 导出 NPY v1.0；读取 NPY 1/2/3，大小端与 C/Fortran 顺序，复数交错编码 |
 | 数组处理 | 保留原始字节的切片、按轴取样、拼接、reshape、轴置换；混合文件按名称提取变量 |
 | 根目录与按需构造 | `roots` / `inspect_roots` 返回根变量元数据；`read_selected` 保持请求顺序并验证未选变量 |
-| 无损快照 | 严格 JSON + 原始十六进制字节；密集/CSC、NaN 编码、负零、容量与全局标记 |
-| 科研差异 | 按变量名比较原始字节与元数据；全局样本额度、坐标、实/虚部计数和 CI 退出码 |
+| 无损快照 | 完整递归混合树；保留字符编码、字段顺序、legacy 类名、数值位模式与 CSC 容量 |
+| 科研差异 | 结构化路径定位完整混合树变化；按名称匹配、精确载荷与元数据、全局样本额度和 CI 退出码 |
 | 核心编译目标 | JS、wasm-gc、native 已验证 |
 | 命令行 | Windows x64 原生 EXE；可选 Node.js 文件适配器 |
 
-**明确边界：**当前不支持 MATLAB 私有对象扩展（MCOS/opaque）、函数句柄、子系统 workspace、MAT v4、HDF5 MAT v7.3、复数整数、流式读取；NPY 的 object/pickle、结构化、字符串、float16、datetime、NPZ 和含义不明确的 native-endian 描述符。CSC 仅支持 double/logical/complex double；活动行索引必须在每列严格递增，重复或乱序返回错误。`info/roundtrip/compress/select` 使用完整混合树；JSON、NPY、变换、快照和 diff 保持原数值/CSC 输入域。遇到不支持的类别会返回错误，不会静默丢掉变量。变量名限非空 UTF-8，避免 NUL；非 UTF-8 旧名称不在此版支持范围内。MAT 类型与存储类型不同的密集文件会按声明类型恢复，拒绝无法安全转换的值。
+完整格式与边界见[兼容范围](docs/COMPATIBILITY.md)。`info/roundtrip/compress/select`、`snapshot-tree/restore-tree` 与 `diff-tree` 使用完整混合树；原有 JSON、NPY、数组变换、数值快照和 `diff` 沿用数值/CSC 输入域。遇到未覆盖类别会返回明确错误。
 
 混合类型案例：[三个可下载 MAT 文件及复现步骤](examples/mixed/README.md)，含 13 个根变量及嵌套 cell/struct/char/CSC，保留精确 uint64、复数和 legacy 类名。真实 GNU Octave 流程由 CI 执行，实际结果见各版 `verification/reports/octave-v*.json`；MATLAB 执行尚无回执，兼容缺口见读写矩阵。
 
