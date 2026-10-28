@@ -1,0 +1,89 @@
+{
+  "status": "verified",
+  "version": "0.0.13",
+  "source_sha256": "41ce59b0efc9fafed3c31359f903f450e656ca003bd7b65ecef655307f69480a",
+  "tag_commit": "203314d0b0c7c18efcc44f05d5849684cb3178a1",
+  "github": "https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.0.13",
+  "mooncakes": "https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.0.13",
+  "public_assets": 23,
+  "public_scientific_host_workflows": 6,
+  "public_tree_checks": 20,
+  "evidence": [
+    {
+      "file": "ci-v0.0.13.json",
+      "sha256": "6d49fcd01910aa5dd4da94b22d1a01d4876e2a1201bb0ec71306a0958d7d2b2d"
+    },
+    {
+      "file": "compatibility-gaps-v0.0.13.json",
+      "sha256": "6c5a66020a54e41733c01162a9d735ced5592b643f77086c007194f68de182f9"
+    },
+    {
+      "file": "compatibility-v0.0.13.json",
+      "sha256": "c3816d5a705fa9fb2aa813badd33e3cbcb7b094b5152b2ba92b1b4d66359f32a"
+    },
+    {
+      "file": "interop-v0.0.13.json",
+      "sha256": "f4bf861908349bd7bc5926528a55ac449d6f5019ff5f232ebe38854bf46e6c0a"
+    },
+    {
+      "file": "js-v0.0.13.json",
+      "sha256": "3d904f382fea3b811f6bbc041a05da3e7237ba2b799cb1835919c02d2bb20949"
+    },
+    {
+      "file": "licenses-v0.0.13.json",
+      "sha256": "8b1f4aa6f22d141386b6e442853b2a2e2dddc317c19a8fd847dbd64a6c1c92d5"
+    },
+    {
+      "file": "mooncake-audit-v0.0.13.json",
+      "sha256": "687ccace72735dc67377dc28078e8f07bd2ce534cc24b8543146187c96690a57"
+    },
+    {
+      "file": "mooncakes-v0.0.13.json",
+      "sha256": "06240fb5eaec968c6ab2a9f317179ed0eae18fa4a14ad6c33bb871c645a6c255"
+    },
+    {
+      "file": "octave-v0.0.13.json",
+      "sha256": "9d25e1c5786c04e714861f82c681fe26d3cde42e3a5f1dbe37879ef70f38a6e6"
+    },
+    {
+      "file": "public-downloads-v0.0.13.json",
+      "sha256": "64818dbe306c75870843a0920a928c9ae9429b58c92e6eb39e0a6bc297fd9855"
+    },
+    {
+      "file": "registry-v0.0.13.json",
+      "sha256": "7ddd061e48921c0611aea2d9367a7d3801ce602278b078492fb2debe26ebeb51"
+    },
+    {
+      "file": "release-v0.0.13.json",
+      "sha256": "43d4a568b1b8f5a3cae2d86aa102a5418503eed598ef3cd6c67c86a0051bb3a7"
+    },
+    {
+      "file": "selection-v0.0.13.json",
+      "sha256": "663a4e0191cb221d0d8956c5bba96c07bd6134e1c95fad76f0c46ba3cb070fd7"
+    },
+    {
+      "file": "source-snapshot-v0.0.13.json",
+      "sha256": "7bf4988ef5806538e395df0f42804d299798d2d0cab3b2e59431c802c5217ec4"
+    },
+    {
+      "file": "tree-operations-public-v0.0.13.json",
+      "sha256": "9b9b6797d1227dfad201613663afd7a1ca638d6b20925f46af2485f345eb91c0"
+    },
+    {
+      "file": "tree-operations-v0.0.13.json",
+      "sha256": "9b9b6797d1227dfad201613663afd7a1ca638d6b20925f46af2485f345eb91c0"
+    },
+    {
+      "file": "v0.0.13.json",
+      "sha256": "477cdfdbd1caa05973256340612d77831742a2c0b97f4726fe858adf56478f3b"
+    },
+    {
+      "file": "workflows-public-v0.0.13.json",
+      "sha256": "8eb9189f14542bd744854d0b36c7dee472f6a97fac6beaaa5b65386b2063da7a"
+    },
+    {
+      "file": "workflows-v0.0.13.json",
+      "sha256": "3a14b72d6ec9927f300b93e508cb110ef3e5cae16f0c2faf90b24c0eaf5e4052"
+    }
+  ]
+}
