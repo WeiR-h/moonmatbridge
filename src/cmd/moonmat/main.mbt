@@ -96,6 +96,7 @@ fn usage() -> String {
   "  moonmat densify INPUT.mat VARIABLE OUTPUT.mat\n" +
   "  moonmat snapshot INPUT.mat OUTPUT.json\n" +
   "  moonmat restore SNAPSHOT.json OUTPUT.mat\n" +
+  "  moonmat diff-tree LEFT.mat RIGHT.mat REPORT.json\n" +
   "  moonmat diff LEFT.mat RIGHT.mat [REPORT.json]\n" +
   "  moonmat sample OUTPUT.mat\n" +
   "  moonmat version\n" +
@@ -141,6 +142,16 @@ fn run(args : Array[String]) -> Unit raise @mat.MatError {
       _ => raise @mat.MatError("invalid-utf8", 0, "Snapshot must be UTF-8")
     }
     save(args[3], @mat.write_document(@wire.from_snapshot(text)))
+  } else if command == "diff-tree" && args.length() == 5 {
+    let report = @mat.compare_trees(
+      @mat.read_tree(read(args[2])),
+      @mat.read_tree(read(args[3])),
+    )
+    let text = @wire.tree_diff_json(report).stringify() + "\n"
+    save(args[4], @utf8.encode(text[:]))
+    if !report.content_equal {
+      exit_process(2)
+    }
   } else if command == "diff" && (args.length() == 4 || args.length() == 5) {
     let report = @mat.compare_documents(
       @mat.read_document(read(args[2])),

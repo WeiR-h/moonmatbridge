@@ -30,6 +30,8 @@ pub fn transform(Array[@moonmatbridge.NumericArray], String, limits? : @moonmatb
 
 pub fn transform_document(Array[@moonmatbridge.MatVariable], String, limits? : @moonmatbridge.Limits) -> Array[@moonmatbridge.MatVariable] raise @moonmatbridge.MatError
 
+pub fn tree_diff_json(@moonmatbridge.TreeDifference) -> Json
+
 pub fn tree_info(@moonmatbridge.MatTree) -> Json
 
 // Errors

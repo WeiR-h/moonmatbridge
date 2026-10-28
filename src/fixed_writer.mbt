@@ -175,13 +175,11 @@ fn fixed_node(
 }
 
 ///|
-/// Preflight all nodes, then write directly to a privately owned fixed buffer.
-pub fn write_tree(
+fn plan_tree(
   variables : Array[MatNode],
-  compressed? : Bool = false,
-  limits? : Limits = default_limits(),
-  tree_limits? : TreeLimits = default_tree_limits(),
-) -> Bytes raise MatError {
+  limits : Limits,
+  tree_limits : TreeLimits,
+) -> (Array[Int], Array[Int], Int) raise MatError {
   validate_limits(limits)
   validate_tree_limits(tree_limits)
   if variables.length() > limits.max_variables {
@@ -204,6 +202,28 @@ pub fn write_tree(
     }
     size = size + length
   }
+  (planned, roots, size)
+}
+
+///|
+/// Validate recursive data and cumulative budgets without constructing MAT bytes.
+pub fn validate_tree(
+  variables : Array[MatNode],
+  limits? : Limits = default_limits(),
+  tree_limits? : TreeLimits = default_tree_limits(),
+) -> Unit raise MatError {
+  ignore(plan_tree(variables, limits, tree_limits))
+}
+
+///|
+/// Preflight all nodes, then write directly to a privately owned fixed buffer.
+pub fn write_tree(
+  variables : Array[MatNode],
+  compressed? : Bool = false,
+  limits? : Limits = default_limits(),
+  tree_limits? : TreeLimits = default_tree_limits(),
+) -> Bytes raise MatError {
+  let (planned, roots, size) = plan_tree(variables, limits, tree_limits)
   let header = canonical_header()
   if !compressed {
     let out = FixedArray::make(size, b'\x00')

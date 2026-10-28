@@ -53,6 +53,7 @@ try {
   record('Compatibility gap characterization', command(python, ['scripts/compatibility-gaps.py']));
   record('Performance evidence invalidation guards', command(python, ['scripts/test-evidence.py']));
   record('Strict selected reads and root metadata independent checks', command(python, ['scripts/selection-checks.py']));
+  record('Recursive mixed tree operations', command(python, ['scripts/tree-checks.py']));
   const workflowOutput = command(python, ['scripts/scientific-workflows.py']);
   const workflowReceipt = join(root, `verification/reports/workflows-v${version}.json`);
   const firstWorkflows = JSON.parse(readFileSync(workflowReceipt, 'utf8'));
@@ -73,7 +74,7 @@ try {
     status: 'passed', version, checked_at: new Date().toISOString(), source: fingerprint,
     environment: {moon: sdkVersion, node: process.version, platform: process.platform, arch: process.arch}, checks,
     native_sha256: createHash('sha256').update(readFileSync(executable)).digest('hex'),
-    scope: 'Local source/build/runtime and independent SciPy/NumPy verification. Actual Octave CI receipts are separate octave reports. MATLAB execution, public publishing and organizer acceptance are separate checks.',
+    scope: 'Local source/build/runtime and independent SciPy/NumPy verification. Actual Octave CI receipts are separate octave reports. Public package and download checks have separate receipts.',
   };
   mkdirSync(join(root, 'verification/reports'), {recursive: true});
   for (const [name, data] of [[`v${version}.json`, report], [ `interop-v${version}.json`, JSON.parse(readFileSync(join(root, 'verification/local/interop-report.json'), 'utf8'))], [ `js-v${version}.json`, JSON.parse(readFileSync(join(root, 'verification/local/js-report.json'), 'utf8'))]]) {

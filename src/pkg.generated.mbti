@@ -8,6 +8,8 @@ import {
 // Values
 pub fn compare_documents(MatDocument, MatDocument, max_samples? : Int, limits? : Limits) -> DocumentDifference raise MatError
 
+pub fn compare_trees(MatTree, MatTree, max_samples? : Int, limits? : Limits, tree_limits? : TreeLimits) -> TreeDifference raise MatError
+
 pub fn concat_arrays(String, Array[NumericArray], Int, limits? : Limits) -> NumericArray raise MatError
 
 pub fn default_limits() -> Limits
@@ -41,6 +43,8 @@ pub fn read_tree(Bytes, limits? : Limits, tree_limits? : TreeLimits) -> MatTree 
 pub fn utf8_char_array(String, Array[Int], String, is_global? : Bool, limits? : Limits) -> CharArray raise MatError
 
 pub fn validate_document(Array[MatVariable], limits? : Limits) -> Unit raise MatError
+
+pub fn validate_tree(Array[MatNode], limits? : Limits, tree_limits? : TreeLimits) -> Unit raise MatError
 
 pub fn version() -> String
 
@@ -244,6 +248,25 @@ pub(all) struct StructArray {
 } derive(@debug.Debug)
 pub fn StructArray::to_repr(Self) -> @debug.Repr
 
+pub(all) struct TreeDifference {
+  content_equal : Bool
+  variable_order_changed : Bool
+  differences : Int
+  samples : Array[TreeDifferenceSample]
+  truncated : Bool
+} derive(@debug.Debug)
+pub fn TreeDifference::to_repr(Self) -> @debug.Repr
+
+pub(all) struct TreeDifferenceSample {
+  path : Array[TreePathSegment]
+  kind : String
+  index : Int
+  coordinates : Array[Int]
+  before : Bytes
+  after : Bytes
+} derive(@debug.Debug)
+pub fn TreeDifferenceSample::to_repr(Self) -> @debug.Repr
+
 pub(all) struct TreeLimits {
   max_depth : Int
   max_nodes : Int
@@ -252,6 +275,16 @@ pub(all) struct TreeLimits {
 pub fn TreeLimits::equal(Self, Self) -> Bool
 pub fn TreeLimits::not_equal(Self, Self) -> Bool
 pub fn TreeLimits::to_repr(Self) -> @debug.Repr
+
+pub(all) enum TreePathSegment {
+  Root(String)
+  CellElement(Int)
+  StructElement(Int)
+  Field(String)
+} derive(Eq, @debug.Debug)
+pub fn TreePathSegment::equal(Self, Self) -> Bool
+pub fn TreePathSegment::not_equal(Self, Self) -> Bool
+pub fn TreePathSegment::to_repr(Self) -> @debug.Repr
 
 pub(all) enum Value {
   Signed(Int64)

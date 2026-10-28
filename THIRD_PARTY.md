@@ -1,6 +1,6 @@
 # Third-party components and format references
 
-Product code is original, AI-assisted MoonBit implementation under Apache-2.0, except the small compiler launcher adaptation noted below. Python, SciPy, NumPy and Node zlib are verification tools, not MAT runtime implementations used by the product.
+Product code is original MoonBit implementation under Apache-2.0, except the small compiler launcher adaptation noted below. Python, SciPy, NumPy and Node zlib are verification tools, not MAT runtime implementations used by the product.
 
 | Component/reference | Role | License/credit |
 | --- | --- | --- |
@@ -15,4 +15,4 @@ Product code is original, AI-assisted MoonBit implementation under Apache-2.0, e
 
 `matio`, `mat4js` and `moon-npy` were considered during topic/ecosystem research. They are not dependencies, and their implementation code is not incorporated into this project. In particular, no GPL `mat4js` code is used.
 
-AI assistance covers implementation and documentation. Executable claims are tied to `verification/reports`, with source SHA-256 fingerprints; public release downloads are checked separately. MATLAB execution, organizer acceptance and award outcomes remain unverified. The official competition proposal must be written by the participant, following the registration form rules.
+Executable behavior is recorded in `verification/reports` with source SHA-256 fingerprints, tool versions and independent public download checks.

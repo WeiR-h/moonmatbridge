@@ -1,37 +1,22 @@
-# MoonMatBridge v0.0.11
+# MoonMatBridge v0.0.12
 
 **MoonBit 原生 MAT Level 5 读写与科研数据互操作库。**
 
 MAT 递归 cell/struct/char/legacy object、密集/CSC 稀疏读写、数值编码、zlib/DEFLATE 解压与压缩、JSON/无损快照、NPY 互通和精确差异检查都由 MoonBit 实现。运行核心库和 Windows 命令行程序不需要 MATLAB、Python、SciPy、Node.js 或第三方压缩库。Node.js 仅用于开发脚本与可选 JS 命令行；SciPy/NumPy 仅用作独立兼容性验证。
 
-当前源码版本为 v0.0.11，发布模块名为 `WeiR-h/moonmatbridge`。[v0.0.3](https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.0.3) 完成的五轮核心迭代继续保留，详见 [迭代记录](docs/ITERATIONS-v0.0.3.md)。v0.0.5 补齐的 cell、struct、char 和 legacy object 递归读写继续提供混合文件与独立验证；[最终读写范围与验收终点](docs/COMPATIBILITY.md) 明确全部公开基本类 1–15 的交付目标。
+当前源码版本为 v0.0.12，发布模块名为 `WeiR-h/moonmatbridge`。
 
-项目定位是把科研数组**连同类型、维度、列优先顺序和复数分量一起保留下来**，让 MoonBit 项目直接交换 MATLAB/Python 数据。
+- 完整递归混合数据读写；预检尺寸后写入固定缓冲，保留字符单位、精确整数、复数和 CSC 容量。
+- `read_selected` 和 `inspect_roots` 支持根目录及按名读取，未选变量仍执行完整校验。
+- `diff-tree` 按结构化路径定位 cell、struct、char、数值及 CSC 的精确变化，见 [混合树比较](docs/TREE_DIFF.md)。
+- `snapshot` / `restore` 提供数值和 CSC 的原始字节归档，`diff` 保留原有数值报告格式。
+- NPY、JSON 和列优先转换覆盖切片、取样、拼接、整形及轴置换。
 
-- 以 CSC 存储处理大型稀疏矩阵；只有明确调用 `densify` 才尝试展开，并在分配前检查额度。
-- 用 `snapshot` / `restore` 保存原始数值字节、NaN 编码、负零和稀疏容量；普通 JSON 继续用于可读数据交换。
-- 用 `diff` 按变量名检查内容与存储元数据，定位变化坐标，忽略原文件的头部描述、压缩形式与大小端；退出码可直接作为 CI 门禁。
-- 转换流程支持切片、按轴取样、拼接、整形和轴置换，复制原始字节，保留未处理的稀疏变量。
-
-这些能力共同服务于可复现的科研文件交换；范围比较与已有项目的交集见 [独特性说明](docs/DIFFERENTIATION.md)。
-
-本轮执行记录见 [v0.0.6—v0.0.9 计划与交付索引](docs/NEXT_RELEASES.md)，实测结果见 [性能方法与报告](docs/PERFORMANCE.md)。自定工程目标与官方验收分别记录。
-
-v0.0.6 新增 [15 个基本类的独立读写矩阵](docs/COMPATIBILITY_MATRIX.md)、真实 GNU Octave v6/v7 双向验证入口，以及 [同机性能对照方法](docs/PERFORMANCE.md)。运行报告分别记录已经验证的行为和未关闭的兼容缺口。
-
-v0.0.7 将密集、CSC 与混合树写入统一到预检尺寸的固定缓冲，避免逐层复制；完整输入验证后才分配主要输出。性能结果按宿主与场景分别记录。
-
-v0.0.8 新增 `read_selected`、`inspect_roots` 和 `roots` 命令；未选变量仍执行完整验证，减少其数据树和负载分配。空选择也不会跳过校验。输入仍整体驻留内存，压缩根变量仍需有界解压。
-
-v0.0.9 冻结 API，提供 [三个完整科研流程](docs/SCIENTIFIC_WORKFLOWS.md) 与便携包一键演示，扩大全部基本类的 global 标记交叉验证，并整理 [复审技术附件](docs/REVIEW_EVIDENCE-v0.0.9.md)。完整标准变体和 MATLAB 运行仍有未完成项，保持 0.x。
-
-本轮性能结果保留未达项：v0.0.8 原生选择读取提速约 14.2 倍，峰值下降 38.3%，仍未达到自定 40% 内存目标；JS 对应约 10.3 倍和 48.1%。四组写入目标通过，完整固定场景未发现超过 10% 的退化；原始样本与首轮退化记录均保留。
-
-v0.0.11 为本轮验收交付版，运行时 API 保持兼容。当前三目标各 69 项核心测试；新增 50 项最小兼容行为及写回检查。验证过程记录逐文件指纹并检查源码没有变化，四类发行附件均附许可证与参考说明。验收入口见 [验收索引](docs/ACCEPTANCE.md)；初审已通过（参赛者提供通知），最终验收待提交和正式回执。
+[三个科研流程](docs/SCIENTIFIC_WORKFLOWS.md)提供可运行示例；[兼容矩阵](docs/COMPATIBILITY_MATRIX.md)和[性能报告](docs/PERFORMANCE.md)记录独立工具的实际结果。源码、Windows、JS 及流程发行包包含许可证、来源说明和校验值。
 
 ## 支持范围
 
-| 能力 | v0.0.11 |
+| 能力 | v0.0.12 |
 | --- | --- |
 | MAT Level 5 读取 | 小端、大端；标准标签与小数据标签；多变量 |
 | 压缩读取 | `miCOMPRESSED`；MoonBit 解码 stored/fixed/dynamic DEFLATE，验证 Adler-32 |
@@ -92,10 +77,10 @@ JS 适配器只读写文件；格式处理使用编译后的 MoonBit。
 
 ## MoonBit API
 
-发布模块名为 [`WeiR-h/moonmatbridge`](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.0.11)。在已有 MoonBit 项目中安装：
+发布模块名为 [`WeiR-h/moonmatbridge`](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.0.12)。在已有 MoonBit 项目中安装：
 
 ```powershell
-moon add WeiR-h/moonmatbridge@0.0.11
+moon add WeiR-h/moonmatbridge@0.0.12
 ```
 
 核心代码在 `src/`，公开接口在 `src/pkg.generated.mbti`。包内示例可直接运行：

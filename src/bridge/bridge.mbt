@@ -167,3 +167,21 @@ pub fn compare_mat(left : Bytes, right : Bytes) -> String {
     error => @wire.error_json(error).stringify()
   }
 }
+
+///|
+#export_name("compare_mat_trees")
+pub fn compare_mat_trees(
+  left : Bytes,
+  right : Bytes,
+  max_samples : Int,
+) -> String {
+  @wire.tree_diff_json(
+    @mat.compare_trees(
+      @mat.read_tree(left),
+      @mat.read_tree(right),
+      max_samples~,
+    ),
+  ).stringify() catch {
+    error => @wire.error_json(error).stringify()
+  }
+}

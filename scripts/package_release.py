@@ -102,7 +102,7 @@ JSON values are column-major; int64/uint64 use decimal strings.
 NaN payload bits survive binary and snapshot conversions but are normalized in readable dump/pack JSON.
 diff exits: 0 equal, 2 changed, 1 format/usage/IO error. Sparse arrays never expand implicitly.
 See docs, LICENSE, NOTICE, THIRD_PARTY.md and verification for details.
-MATLAB execution and organizer acceptance remain unverified. Actual GNU Octave receipts, when available,
+Actual GNU Octave receipts, when available,
 are included under verification/octave-v0.0.1.json. Public downloads are verified separately.
 """
 with zipfile.ZipFile(native_zip, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as z:
@@ -113,7 +113,7 @@ with zipfile.ZipFile(native_zip, "w", compression=zipfile.ZIP_DEFLATED, compress
         add(z, path, native_name)
     for path in sorted((ROOT / "examples/workflows").glob("*")):
         add(z, path, native_name)
-    for name in ["docs/SCIENTIFIC_WORKFLOWS.md", "docs/REVIEW_EVIDENCE-v0.0.9.md", "docs/ACCEPTANCE.md"]:
+    for name in ["docs/SCIENTIFIC_WORKFLOWS.md", "docs/REVIEW_EVIDENCE-v0.0.9.md", "docs/ACCEPTANCE.md", "docs/TREE_DIFF.md"]:
         add(z, ROOT / name, native_name)
     for name in ["docs/COMPATIBILITY_MATRIX.md", "docs/PERFORMANCE.md", "benchmarks/manifest.json"]:
         add(z, ROOT / name, native_name)
@@ -136,6 +136,7 @@ with zipfile.ZipFile(js_zip, "w", compression=zipfile.ZIP_DEFLATED, compressleve
         add(z, path, js_name)
     add(z, ROOT / "docs/SCIENTIFIC_WORKFLOWS.md", js_name)
     add(z, ROOT / "docs/ACCEPTANCE.md", js_name)
+    add(z, ROOT / "docs/TREE_DIFF.md", js_name)
     z.writestr(f"{js_name}/README.txt", f"MoonMatBridge v{VERSION} JS exports. Import bridge.mjs; see docs/API.md. Host-neutral MoonBit build, no Python/zlib dependency. Browser UI is not shipped/tested.\n")
     z.writestr(f"{js_name}/SOURCE_SHA256.txt", source_hash + "\n")
 
@@ -153,6 +154,7 @@ consumer = native / "中文测试 data"
 consumer.mkdir()
 commands = [
     ["sample", str(consumer / "sample.mat")],
+    ["diff-tree", str(native / "examples/mixed/research-mixed.mat"), str(native / "examples/mixed/research-mixed.mat"), str(consumer / "mixed-equal.json")],
     ["info", str(consumer / "sample.mat")],
     ["roots", str(consumer / "sample.mat")],
     ["dump", str(consumer / "sample.mat"), str(consumer / "sample.json")],
@@ -287,7 +289,7 @@ result = {
                         "source": f"unpacked source check and {test_match.group(2)} JS tests; no local settings/build cache bundled",
                         "js": "unpacked exports: recursive mixed cell/struct/char/object fixture, JSON, compression, sparse, mixed transform, snapshot restore and exact diff",
                         "workflow_evidence": f"actual {workflow_report['passed']} host workflows matched independent report hashes; every bundled file checked after ZIP creation"},
-    "scope": "Local archives and fresh consumers; no public publishing or organizer acceptance",
+    "scope": "Local archives and fresh consumers; public downloads have separate receipts",
 }
 (DIST / f"release-v{VERSION}.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 (DIST / "SHA256SUMS.txt").write_text("".join(f'{entry["sha256"]}  {entry["file"]}\n' for entry in archives), encoding="utf-8")

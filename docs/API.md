@@ -1,4 +1,4 @@
-# MoonBit API v0.0.11
+# MoonBit API v0.0.12
 
 The core package is `WeiR-h/moonmatbridge`. The executable, JSON adapter and JS ABI are separate packages; core parsing performs no host I/O.
 
@@ -63,7 +63,7 @@ Exports: `npy_to_mat`, `select_mat`, `inspect_mat`, `mat_to_json`, `json_to_mat`
 
 `DocumentDifference` reports `content_equal`, `variable_order_changed`, `changed_variables`, `variables`. Metadata differences list dtype, shape, global/complex, storage or CSC pointers/rows/capacity. Comparable value changes are counted separately per real/imaginary plane; samples contain a zero-based linear/CSC-slot index, coordinates and exact before/after bytes. Inactive CSC slots have empty coordinates. Shape/type/storage/index-mapping changes are metadata differences, not fabricated element-by-element matches. File descriptions/endian/compression are excluded, while CSC storage metadata is included. No floating tolerance is applied.
 
-`src/pkg.generated.mbti` and the interfaces under `src/interchange` and `src/bridge` contain the complete compiler-generated signatures. Install the exact registry version with `moon add WeiR-h/moonmatbridge@0.0.11`, then import the core and/or interchange package. `examples/registry_consumer` contains a consumer that uses only these public interfaces; the registry verification script resolves a fresh copy and checks its source bytes before running all three targets.
+`src/pkg.generated.mbti` and the interfaces under `src/interchange` and `src/bridge` contain the complete compiler-generated signatures. Install the exact registry version with `moon add WeiR-h/moonmatbridge@0.0.12`, then import the core and/or interchange package. `examples/registry_consumer` contains a consumer that uses only these public interfaces; the registry verification script resolves a fresh copy and checks its source bytes before running all three targets.
 
 NPY input supports primitive float32/64, complex64/128, signed/unsigned integers and bool. Header strings must be plain ASCII, the header fits 64 KiB and no duplicate/unknown keys or trailing payload are accepted. Structured, object/pickle, string, datetime, float16 and ambiguous native-endian descriptors are rejected. NPY scalars become `[1,1]` and vectors become `[n,1]`; multidimensional shape is unchanged. Nonzero bool bytes normalize to canonical 1. All numerical bytes, including nonfinite payloads and exact 64-bit integers, are copied without scalar conversion.
 
@@ -78,3 +78,7 @@ NPY input supports primitive float32/64, complex64/128, signed/unsigned integers
 Public structures may be constructed directly. Nested node names may be empty; root names must be nonempty. Writers revalidate public fields and enforce recursive limits before encoding. Defaults add max_depth=64, max_nodes=65536, max_fields=4096; custom hard bounds are depth<=128, nodes<=1048576, fields<=65536. max_elements charges container positions plus leaf elements/stored CSC slots across the whole tree. The same budget applies to compressed roots.
 
 CLI info/roundtrip/compress/select and corresponding JS exports use this API. Older read_mat/read_document and numeric JSON/NPY/transforms/snapshot/diff retain their documented domains and reject containers explicitly; they never silently skip mixed values. `tree_info` returns recursive metadata with children in the same order as values, fields and class_name for structs/objects, encoding/byte count for characters. It does not serialize character payload as JSON text.
+
+## 递归精确比较
+
+`compare_trees(left : MatTree, right : MatTree, max_samples?, limits?, tree_limits?) -> TreeDifference`。结构化路径与报告定义见 [TREE_DIFF.md](TREE_DIFF.md)。`validate_tree(variables, limits?, tree_limits?)` 可单独执行无 MAT 输出分配的完整预检。
