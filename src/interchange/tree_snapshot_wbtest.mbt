@@ -163,3 +163,52 @@ test "tree snapshot preserves empty multi-dimensional arrays and deep supported 
     @mat.write_tree(restored, tree_limits=tree),
   )
 }
+
+///|
+test "tree snapshot accumulates fields across distinct structs and all decoded elements" {
+  let empty : @mat.StructArray = {
+    name: "left",
+    shape: [0, 0],
+    fields: ["a", "b"],
+    values: [],
+    class_name: None,
+    is_global: false,
+  }
+  let nodes = [
+    @mat.Structure(empty),
+    @mat.Structure({ ..empty, name: "right", }),
+  ]
+  let text = to_tree_snapshot(nodes)
+  let small : @mat.TreeLimits = { ..@mat.default_tree_limits(), max_fields: 3, }
+  let encoded_error = fn() {
+    ignore(to_tree_snapshot(nodes, tree_limits=small)) catch {
+      e => return e.code()
+    }
+    "ok"
+  }
+  let decoded_error = fn() {
+    ignore(from_tree_snapshot(text, tree_limits=small)) catch {
+      e => return e.code()
+    }
+    "ok"
+  }
+  assert_eq(encoded_error(), "invalid-fields")
+  assert_eq(decoded_error(), "invalid-fields")
+  let numeric = @mat.raw_array("x", @mat.UInt8, [1, 2], b"\x01\x02")
+  let text = to_tree_snapshot([
+    @mat.Numeric(numeric),
+    @mat.Numeric({ ..numeric, name: "y", }),
+  ])
+  let code = fn() {
+    ignore(
+      from_tree_snapshot(text, limits={
+        ..@mat.default_limits(),
+        max_elements: 3,
+      }),
+    ) catch {
+      e => return e.code()
+    }
+    "ok"
+  }
+  assert_eq(code(), "element-limit")
+}

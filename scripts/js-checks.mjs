@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {deflateSync, inflateSync, constants} from 'node:zlib';
+import {createDeflate, deflateSync, inflateSync, constants} from 'node:zlib';
 import {createHash} from 'node:crypto';
 import {mkdirSync, writeFileSync} from 'node:fs';
 import {join} from 'node:path';
@@ -48,6 +48,17 @@ for (const input of corpus) {
 }
 assert.deepEqual([...blockTypes].sort(), [0, 1, 2]);
 record('RFC 1950/1951 differential corpus', {streams, strategies: 4, levels: 4, first_block_types: [...blockTypes].sort(), truncations, oracle: 'Node built-in zlib'});
+// A flush inserts stored blocks between Huffman-coded blocks.
+const streaming = createDeflate({level: 6});
+const chunks = [];
+streaming.on('data', chunk => chunks.push(chunk));
+const completed = new Promise((resolve, reject) => { streaming.on('end', resolve); streaming.on('error', reject); });
+streaming.write(Buffer.from('abcabcabc'));
+await new Promise(resolve => streaming.flush(constants.Z_SYNC_FLUSH, resolve));
+streaming.end(Buffer.from('XYZXYZ'));
+await completed;
+assert.deepEqual(checked(api.inflate_zlib(Buffer.concat(chunks), 15)), Buffer.from('abcabcabcXYZXYZ'));
+record('Buffered Huffman and stored flush transitions', {oracle: 'Node zlib Z_SYNC_FLUSH'});
 const encodedTypes = new Set();
 for (const input of corpus) {
   const compressed = checked(api.deflate_zlib(input, 1024 * 1024));

@@ -4,32 +4,114 @@ priv struct BitReader {
   bytes : Bytes
   end : Int
   mut position : Int
-  mut bit : Int
+  mut buffer : Int
+  mut available : Int
+}
+
+///|
+// Never refill beyond the compressed window or into the Adler checksum.
+fn BitReader::fill(self : BitReader, count : Int) -> Bool {
+  while self.available < count && self.position < self.end {
+    self.buffer = self.buffer |
+      (self.bytes[self.position].to_int() << self.available)
+    self.available = self.available + 8
+    self.position = self.position + 1
+  }
+  self.available >= count
 }
 
 ///|
 fn BitReader::take(self : BitReader, count : Int) -> Int raise MatError {
-  let mut value = 0
-  for i = 0; i < count; i = i + 1 {
-    if self.position >= self.end {
-      fail("invalid-zlib", self.position, "Truncated DEFLATE bit stream")
-    }
-    value = value |
-      (((self.bytes[self.position].to_int() >> self.bit) & 1) << i)
-    self.bit = self.bit + 1
-    if self.bit == 8 {
-      self.bit = 0
-      self.position = self.position + 1
-    }
+  if !self.fill(count) {
+    fail("invalid-zlib", self.position, "Truncated DEFLATE bit stream")
   }
+  let value = self.buffer & ((1 << count) - 1)
+  self.buffer = self.buffer >> count
+  self.available = self.available - count
   value
 }
 
 ///|
+// Drop padding only; whole prefetched bytes belong to the next block.
 fn BitReader::align(self : BitReader) -> Unit {
-  if self.bit != 0 {
-    self.bit = 0
-    self.position = self.position + 1
+  let padding = self.available % 8
+  self.buffer = self.buffer >> padding
+  self.available = self.available - padding
+}
+
+///|
+priv struct InflateOutput {
+  mut data : FixedArray[Byte]
+  mut used : Int
+  limit : Int
+  matrix_little : Bool?
+  mut hinted : Bool
+}
+
+///|
+fn InflateOutput::reserve(
+  self : InflateOutput,
+  additional : Int,
+  offset : Int,
+) -> Unit raise MatError {
+  if additional > self.limit - self.used {
+    fail("expanded-limit", offset, "Expanded bytes exceed configured limit")
+  }
+  let needed = self.used + additional
+  if needed <= self.data.length() {
+    return
+  }
+  let doubled = if self.data.length() <= self.limit / 2 {
+    self.data.length() * 2
+  } else {
+    self.limit
+  }
+  let capacity = if needed > doubled { needed } else { doubled }
+  let data = FixedArray::make(capacity, b'\x00')
+  for i = 0; i < self.used; i = i + 1 {
+    data[i] = self.data[i]
+  }
+  self.data = data
+}
+
+///|
+// This is an allocation hint, never a substitute for full matrix validation.
+fn InflateOutput::matrix_hint(self : InflateOutput) -> Unit {
+  if self.hinted || self.used < 8 {
+    return
+  }
+  self.hinted = true
+  if self.matrix_little is Some(little) {
+    let header = Bytes::makei(8, i => self.data[i])
+    if bits_at(header, 0, 4, little) != 14 {
+      return
+    }
+    let size = bits_at(header, 4, 4, little)
+    if size > (self.limit - 8).to_uint64() {
+      return
+    }
+    let total = 8 + (size.to_int() + 7) / 8 * 8
+    if total <= self.limit && total > self.data.length() {
+      let data = FixedArray::make(total, b'\x00')
+      for i = 0; i < self.used; i = i + 1 {
+        data[i] = self.data[i]
+      }
+      self.data = data
+    }
+  }
+}
+
+///|
+fn InflateOutput::push(
+  self : InflateOutput,
+  byte : Byte,
+  offset : Int,
+) -> Unit raise MatError {
+  self.reserve(1, offset)
+  self.data[self.used] = byte
+  self.used = self.used + 1
+  if self.used == 8 {
+    self.matrix_hint()
   }
 }
 
@@ -38,6 +120,7 @@ priv struct Huffman {
   left : Array[Int]
   right : Array[Int]
   symbol : Array[Int]
+  fast : FixedArray[Int]
 }
 
 ///|
@@ -64,7 +147,12 @@ fn huffman(lengths : Array[Int], offset : Int) -> Huffman raise MatError {
     code = (code + counts[length - 1]) << 1
     next_code[length] = code
   }
-  let tree : Huffman = { left: [-1], right: [-1], symbol: [-1], }
+  let tree : Huffman = {
+    left: [-1],
+    right: [-1],
+    symbol: [-1],
+    fast: FixedArray::make(512, 0),
+  }
   for symbol = 0; symbol < lengths.length(); symbol = symbol + 1 {
     let length = lengths[symbol]
     if length == 0 {
@@ -72,6 +160,15 @@ fn huffman(lengths : Array[Int], offset : Int) -> Huffman raise MatError {
     }
     let code = next_code[length]
     next_code[length] = code + 1
+    if length <= 9 {
+      let mut reversed = 0
+      for i = 0; i < length; i = i + 1 {
+        reversed = (reversed << 1) | ((code >> i) & 1)
+      }
+      for tail = 0; tail < 1 << (9 - length); tail = tail + 1 {
+        tree.fast[(tail << length) | reversed] = (length << 16) | (symbol + 1)
+      }
+    }
     let mut node = 0
     for bit = length - 1; bit >= 0; bit = bit - 1 {
       if tree.symbol[node] >= 0 {
@@ -102,6 +199,14 @@ fn huffman(lengths : Array[Int], offset : Int) -> Huffman raise MatError {
 
 ///|
 fn Huffman::decode(self : Huffman, reader : BitReader) -> Int raise MatError {
+  // At stream end, a valid short symbol may have fewer than nine bits left.
+  if reader.fill(9) {
+    let entry = self.fast[reader.buffer & 511]
+    if entry != 0 {
+      ignore(reader.take(entry >> 16))
+      return (entry & 65535) - 1
+    }
+  }
   let mut node = 0
   for depth = 0; depth <= 15; depth = depth + 1 {
     if self.symbol[node] >= 0 {
@@ -195,10 +300,9 @@ fn dynamic_trees(reader : BitReader) -> (Huffman, Huffman) raise MatError {
 ///|
 fn inflate_codes(
   reader : BitReader,
-  out : Array[Byte],
+  out : InflateOutput,
   literals : Huffman,
   distances : Huffman,
-  limit : Int,
   window : Int,
 ) -> Unit raise MatError {
   let length_base = [
@@ -223,14 +327,7 @@ fn inflate_codes(
       break
     }
     if symbol < 256 {
-      if out.length() >= limit {
-        fail(
-          "expanded-limit",
-          reader.position,
-          "Expanded bytes exceed configured limit",
-        )
-      }
-      out.push(symbol.to_byte())
+      out.push(symbol.to_byte(), reader.position)
     } else {
       if symbol > 285 {
         fail("invalid-zlib", reader.position, "Reserved length symbol")
@@ -243,23 +340,20 @@ fn inflate_codes(
       }
       let distance = distance_base[distance_symbol] +
         reader.take(distance_extra[distance_symbol])
-      if distance > out.length() || distance > window {
+      if distance > out.used || distance > window {
         fail(
           "invalid-zlib",
           reader.position,
           "Distance exceeds output or declared zlib window",
         )
       }
-      if length > limit - out.length() {
-        fail(
-          "expanded-limit",
-          reader.position,
-          "Expanded bytes exceed configured limit",
-        )
-      }
+      out.reserve(length, reader.position)
+      let begin = out.used
       for i = 0; i < length; i = i + 1 {
-        out.push(out[out.length() - distance])
+        out.data[begin + i] = out.data[begin + i - distance]
       }
+      out.used = begin + length
+      out.matrix_hint()
     }
   }
 }
@@ -270,14 +364,25 @@ pub fn inflate_zlib(
   bytes : Bytes,
   max_bytes? : Int = 64 * 1024 * 1024,
 ) -> Bytes raise MatError {
+  inflate_window(bytes, 0, bytes.length(), max_bytes, None)
+}
+
+///|
+fn inflate_window(
+  bytes : Bytes,
+  start : Int,
+  size : Int,
+  max_bytes : Int,
+  matrix_little : Bool?,
+) -> Bytes raise MatError {
   if max_bytes < 0 || max_bytes > 1073741824 {
     fail("invalid-limits", 0, "Invalid expanded byte limit")
   }
-  if bytes.length() < 6 {
+  if start < 0 || size < 6 || start > bytes.length() - size {
     fail("invalid-zlib", 0, "Truncated zlib header or checksum")
   }
-  let cmf = bytes[0].to_int()
-  let flags = bytes[1].to_int()
+  let cmf = bytes[start].to_int()
+  let flags = bytes[start + 1].to_int()
   if (cmf & 15) != 8 || cmf >> 4 > 7 || (cmf * 256 + flags) % 31 != 0 {
     fail("invalid-zlib", 0, "Invalid zlib compression header")
   }
@@ -287,11 +392,25 @@ pub fn inflate_zlib(
   let window = 1 << ((cmf >> 4) + 8)
   let reader : BitReader = {
     bytes,
-    end: bytes.length() - 4,
-    position: 2,
-    bit: 0,
+    end: start + size - 4,
+    position: start + 2,
+    buffer: 0,
+    available: 0,
   }
-  let out : Array[Byte] = []
+  let out : InflateOutput = {
+    data: FixedArray::make(
+      if max_bytes < 256 {
+        max_bytes
+      } else {
+        256
+      },
+      b'\x00',
+    ),
+    used: 0,
+    limit: max_bytes,
+    matrix_little,
+    hinted: false,
+  }
   let mut last_block = false
   while !last_block {
     last_block = reader.take(1) == 1
@@ -308,42 +427,51 @@ pub fn inflate_zlib(
             "Stored block length checksum mismatch",
           )
         }
-        if count > max_bytes - out.length() {
-          fail(
-            "expanded-limit",
-            reader.position,
-            "Expanded bytes exceed configured limit",
-          )
-        }
+        out.reserve(count, reader.position)
+        let begin = out.used
         for i = 0; i < count; i = i + 1 {
-          out.push(reader.take(8).to_byte())
+          out.data[begin + i] = reader.take(8).to_byte()
         }
+        out.used = begin + count
+        out.matrix_hint()
       }
       1 => {
         let (literals, distances) = fixed_trees()
-        inflate_codes(reader, out, literals, distances, max_bytes, window)
+        inflate_codes(reader, out, literals, distances, window)
       }
       2 => {
         let (literals, distances) = dynamic_trees(reader)
-        inflate_codes(reader, out, literals, distances, max_bytes, window)
+        inflate_codes(reader, out, literals, distances, window)
       }
       _ => fail("invalid-zlib", reader.position, "Reserved DEFLATE block type")
     }
   }
   reader.align()
-  if reader.position != reader.end {
+  if reader.position - reader.available / 8 != reader.end {
     fail("invalid-zlib", reader.position, "Trailing bytes in zlib stream")
   }
-  let mut s1 = 1
-  let mut s2 = 0
-  for byte in out {
-    s1 = (s1 + byte.to_int()) % 65521
-    s2 = (s2 + s1) % 65521
+  // 5552 bytes keep both Adler accumulators within unsigned 32-bit range.
+  let mut s1 : UInt = 1
+  let mut s2 : UInt = 0
+  let mut begin = 0
+  while begin < out.used {
+    let end = if out.used - begin > 5552 { begin + 5552 } else { out.used }
+    for i = begin; i < end; i = i + 1 {
+      s1 = s1 + out.data[i].to_int().reinterpret_as_uint()
+      s2 = s2 + s1
+    }
+    s1 = s1 % 65521
+    s2 = s2 % 65521
+    begin = end
   }
-  let expected = bits_at(bytes, bytes.length() - 4, 4, false).to_uint()
-  let actual = (s2.reinterpret_as_uint() << 16) | s1.reinterpret_as_uint()
+  let expected = bits_at(bytes, start + size - 4, 4, false).to_uint()
+  let actual = (s2 << 16) | s1
   if expected != actual {
-    fail("invalid-zlib", bytes.length() - 4, "Adler-32 checksum mismatch")
+    fail("invalid-zlib", start + size - 4, "Adler-32 checksum mismatch")
   }
-  Bytes::from_array(out)
+  if out.used == out.data.length() {
+    return finish_owned_buffer(out.data)
+  }
+  let data = FixedArray::makei(out.used, i => out.data[i])
+  finish_owned_buffer(data)
 }

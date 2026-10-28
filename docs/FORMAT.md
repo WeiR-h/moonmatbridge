@@ -42,3 +42,12 @@ The additive read_tree/write_tree API handles classes 1 cell, 2 struct, 3 legacy
 Char data retains the source storage tag (miINT8/UINT8/UINT16/UTF8/UTF16/UTF32). Multi-byte payload units normalize to little-endian. UTF8 must decode strictly and its Unicode scalar count must match shape; UINT16/UTF16 use raw 16-bit units (surrogates preserved); UTF32 validates every scalar. No automatic string flattening or field coercion occurs. UTF16 nonBMP dimensions across MATLAB/SciPy remain an explicit external validation gate.
 
 TreeLimits defaults: depth 64, nodes 65,536, fields per struct 4,096. Hard maxima are 128 / 1,048,576 / 65,536. The existing cumulative element limit includes every container position and every leaf element/CSC slot. Writer preflight traverses all nodes and validates aggregate output size before constructing matrices. Headers/compression are canonical rather than byte-for-byte reproductions. New errors include depth-limit, node-limit, invalid-child, invalid-fields, duplicate-field, invalid-char and unsupported-char-encoding. Private function/opaque/subsystem metadata remain explicit errors. See [COMPATIBILITY.md](COMPATIBILITY.md) for the final delivery scope and remaining verification gates.
+
+
+## 压缩读取实现
+
+DEFLATE 位缓冲按需从受限区间补入字节。9 位前缀表直接处理短 Huffman 码；长码或末尾不足 9 位时使用完整树回退。对齐时保留已预读的完整字节，按实际消费位置检查流结束，拒绝校验和前的额外字节。
+
+MAT 压缩根解码直接引用已验证标签的输入区间，不复制压缩负载。解出 miMATRIX 头后，只在声明尺寸满足累计展开额度时预分配私有固定缓冲；其余数据使用有界扩容。公开数值与字符结果拥有自身数据。Adler-32 使用最多 5552 字节的无符号累计批次，距离和声明窗口、块长度、截断、累计解压额度及未选变量校验继续执行。
+
+格式依据：[RFC 1950](https://www.rfc-editor.org/rfc/rfc1950)、[RFC 1951](https://www.rfc-editor.org/rfc/rfc1951)。

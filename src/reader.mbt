@@ -268,9 +268,12 @@ pub fn read_document(
     let array = if outer.kind == 14 {
       read_variable(bytes, outer, little, limits)
     } else if outer.kind == 15 {
-      let unpacked = inflate_zlib(
-        payload(bytes, outer),
-        max_bytes=limits.max_expanded_bytes - expanded,
+      let unpacked = inflate_window(
+        bytes,
+        outer.start,
+        outer.size,
+        limits.max_expanded_bytes - expanded,
+        Some(little),
       )
       expanded = expanded + unpacked.length()
       let inner = tag(unpacked, 0, unpacked.length(), little)

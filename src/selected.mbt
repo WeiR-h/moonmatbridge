@@ -117,9 +117,12 @@ fn scan_tree(
     let (source, inner, compressed) = if outer.kind == 14 {
       (bytes, outer, false)
     } else if outer.kind == 15 {
-      let unpacked = inflate_zlib(
-        payload(bytes, outer),
-        max_bytes=limits.max_expanded_bytes - expanded,
+      let unpacked = inflate_window(
+        bytes,
+        outer.start,
+        outer.size,
+        limits.max_expanded_bytes - expanded,
+        Some(little),
       )
       expanded = expanded + unpacked.length()
       let inner = tag(unpacked, 0, unpacked.length(), little)

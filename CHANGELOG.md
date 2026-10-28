@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.0.14
+
+- Buffered DEFLATE bits and 9-bit Huffman lookup with a reliable long-code path.
+- Bounded compressed input windows, MAT-sized owned buffers and chunked Adler-32.
+- Fixed-revision paired benchmarks with raw timing batches and process memory samples.
+- Regression coverage for final prefixes, long codes, input windows and unselected compressed roots.
+
+
 ## v0.0.13 — 2026-10-28
 
 - 新增完整混合树快照与恢复，保留字符编码、字段顺序、legacy 类名和精确原始载荷。
