@@ -94,6 +94,8 @@ fn usage() -> String {
   "  moonmat compress INPUT.mat OUTPUT.mat\n" +
   "  moonmat sparsify INPUT.mat VARIABLE OUTPUT.mat\n" +
   "  moonmat densify INPUT.mat VARIABLE OUTPUT.mat\n" +
+  "  moonmat snapshot-tree INPUT.mat OUTPUT.json\n" +
+  "  moonmat restore-tree SNAPSHOT.json OUTPUT.mat\n" +
   "  moonmat snapshot INPUT.mat OUTPUT.json\n" +
   "  moonmat restore SNAPSHOT.json OUTPUT.mat\n" +
   "  moonmat diff-tree LEFT.mat RIGHT.mat REPORT.json\n" +
@@ -133,6 +135,15 @@ fn run(args : Array[String]) -> Unit raise @mat.MatError {
         raise @mat.MatError("invalid-utf8", 0, "JSON input must be valid UTF-8")
     }
     save(args[3], @mat.write_mat(@wire.from_json(text)))
+  } else if command == "snapshot-tree" && args.length() == 4 {
+    let text = @wire.to_tree_snapshot(@mat.read_tree(read(args[2])).variables) +
+      "\n"
+    save(args[3], @utf8.encode(text[:]))
+  } else if command == "restore-tree" && args.length() == 4 {
+    let text = @utf8.decode(read(args[2])[:]) catch {
+      _ => raise @mat.MatError("invalid-utf8", 0, "Tree snapshot must be UTF-8")
+    }
+    save(args[3], @mat.write_tree(@wire.from_tree_snapshot(text)))
   } else if command == "snapshot" && args.length() == 4 {
     let text = @wire.to_snapshot(@mat.read_document(read(args[2])).variables) +
       "\n"

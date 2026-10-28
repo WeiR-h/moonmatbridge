@@ -126,8 +126,8 @@ def github():
     assets += [ROOT / "examples/mixed/manifest.json"]
     all_classes = ROOT / "examples/workflows/all-base-classes.mat"
     if all_classes.exists(): assets.append(all_classes)
-    assets += [p for p in REPORTS.glob(f"*-v{VERSION}.json") if p.name.startswith(("octave-", "compatibility-", "performance-", "mooncakes-", "selection-", "workflows-", "licenses-", "source-snapshot-", "ci-", "tree-operations-"))]
-    assets.append(ROOT / "docs/ACCEPTANCE.md")
+    assets += [p for p in REPORTS.glob(f"*-v{VERSION}.json") if "-public-" not in p.name and p.name.startswith(("octave-", "compatibility-", "performance-", "mooncakes-", "selection-", "workflows-", "licenses-", "source-snapshot-", "ci-", "tree-operations-"))]
+    assets.extend(ROOT / "docs" / name for name in ("TREE_DIFF.md", "TREE_SNAPSHOT.md") if (ROOT / "docs" / name).exists())
     review = ROOT / f"docs/REVIEW_EVIDENCE-v{VERSION}.md"
     if review.exists(): assets.append(review)
     from github_release import ensure_release, download_release

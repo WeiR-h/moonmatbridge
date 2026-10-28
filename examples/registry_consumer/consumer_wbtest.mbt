@@ -1,6 +1,6 @@
 ///|
 test "published compressed dense data preserves complex and uint64" {
-  assert_eq(@mat.version(), "0.0.12")
+  assert_eq(@mat.version(), "0.0.13")
   let id = @mat.numeric_array("id", @mat.UInt64, [1, 2], [
     Unsigned(9007199254740993UL),
     Unsigned(18446744073709551615UL),
@@ -119,4 +119,14 @@ test "published exact diff reports the negative-zero coordinate" {
   assert_eq(report.changed_variables, 1)
   assert_eq(report.variables[0].real_differences, 1)
   assert_eq(report.variables[0].samples[0].coordinates, [0, 0])
+}
+
+///|
+test "published recursive snapshot and tree comparison preserve exact bits" {
+  let value = @mat.raw_array("id", @mat.UInt64, [1,1], b"\xff\xff\xff\xff\xff\xff\xff\xff")
+  let nodes = [@mat.Numeric(value)]
+  let restored = @wire.from_tree_snapshot(@wire.to_tree_snapshot(nodes))
+  let before = @mat.read_tree(@mat.write_tree(nodes))
+  let after = @mat.read_tree(@mat.write_tree(restored))
+  assert_true(@mat.compare_trees(before,after).content_equal)
 }

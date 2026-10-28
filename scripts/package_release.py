@@ -113,7 +113,7 @@ with zipfile.ZipFile(native_zip, "w", compression=zipfile.ZIP_DEFLATED, compress
         add(z, path, native_name)
     for path in sorted((ROOT / "examples/workflows").glob("*")):
         add(z, path, native_name)
-    for name in ["docs/SCIENTIFIC_WORKFLOWS.md", "docs/REVIEW_EVIDENCE-v0.0.9.md", "docs/ACCEPTANCE.md", "docs/TREE_DIFF.md"]:
+    for name in ["docs/SCIENTIFIC_WORKFLOWS.md", "docs/REVIEW_EVIDENCE-v0.0.9.md", "docs/ACCEPTANCE.md", "docs/TREE_DIFF.md", "docs/TREE_SNAPSHOT.md"]:
         add(z, ROOT / name, native_name)
     for name in ["docs/COMPATIBILITY_MATRIX.md", "docs/PERFORMANCE.md", "benchmarks/manifest.json"]:
         add(z, ROOT / name, native_name)
@@ -137,6 +137,7 @@ with zipfile.ZipFile(js_zip, "w", compression=zipfile.ZIP_DEFLATED, compressleve
     add(z, ROOT / "docs/SCIENTIFIC_WORKFLOWS.md", js_name)
     add(z, ROOT / "docs/ACCEPTANCE.md", js_name)
     add(z, ROOT / "docs/TREE_DIFF.md", js_name)
+    add(z, ROOT / "docs/TREE_SNAPSHOT.md", js_name)
     z.writestr(f"{js_name}/README.txt", f"MoonMatBridge v{VERSION} JS exports. Import bridge.mjs; see docs/API.md. Host-neutral MoonBit build, no Python/zlib dependency. Browser UI is not shipped/tested.\n")
     z.writestr(f"{js_name}/SOURCE_SHA256.txt", source_hash + "\n")
 
@@ -247,6 +248,10 @@ const mixedCopy=api.roundtrip_mat(mixed);
 assert.equal(JSON.parse(api.result_status(mixedCopy)).status,'ok');
 const tree=JSON.parse(api.inspect_mat(api.result_bytes(mixedCopy)));
 assert.deepEqual(new Set(tree.arrays.map(x=>x.storage)),new Set(['dense','csc','char','cell','struct','object']));
+const treeSnapshot=api.mat_to_tree_snapshot(mixed);
+const restoredTree=api.tree_snapshot_to_mat(treeSnapshot);
+assert.equal(JSON.parse(api.result_status(restoredTree)).status,'ok');
+assert.equal(JSON.parse(api.compare_mat_trees(mixed,api.result_bytes(restoredTree),0)).content_equal,true);
 console.log('Fresh JS consumer: passed');
 """, encoding="utf-8")
 run(["node", str(probe)], js)

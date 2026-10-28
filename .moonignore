@@ -16,6 +16,7 @@
 /docs/*
 !/docs/API.md
 !/docs/TREE_DIFF.md
+!/docs/TREE_SNAPSHOT.md
 !/docs/ACCEPTANCE.md
 !/docs/COMPATIBILITY.md
 !/docs/COMPATIBILITY_MATRIX.md

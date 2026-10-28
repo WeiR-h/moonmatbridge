@@ -1,4 +1,4 @@
-# MoonBit API v0.0.12
+# MoonBit API v0.0.13
 
 The core package is `WeiR-h/moonmatbridge`. The executable, JSON adapter and JS ABI are separate packages; core parsing performs no host I/O.
 
@@ -63,7 +63,7 @@ Exports: `npy_to_mat`, `select_mat`, `inspect_mat`, `mat_to_json`, `json_to_mat`
 
 `DocumentDifference` reports `content_equal`, `variable_order_changed`, `changed_variables`, `variables`. Metadata differences list dtype, shape, global/complex, storage or CSC pointers/rows/capacity. Comparable value changes are counted separately per real/imaginary plane; samples contain a zero-based linear/CSC-slot index, coordinates and exact before/after bytes. Inactive CSC slots have empty coordinates. Shape/type/storage/index-mapping changes are metadata differences, not fabricated element-by-element matches. File descriptions/endian/compression are excluded, while CSC storage metadata is included. No floating tolerance is applied.
 
-`src/pkg.generated.mbti` and the interfaces under `src/interchange` and `src/bridge` contain the complete compiler-generated signatures. Install the exact registry version with `moon add WeiR-h/moonmatbridge@0.0.12`, then import the core and/or interchange package. `examples/registry_consumer` contains a consumer that uses only these public interfaces; the registry verification script resolves a fresh copy and checks its source bytes before running all three targets.
+`src/pkg.generated.mbti` and the interfaces under `src/interchange` and `src/bridge` contain the complete compiler-generated signatures. Install the exact registry version with `moon add WeiR-h/moonmatbridge@0.0.13`, then import the core and/or interchange package. `examples/registry_consumer` contains a consumer that uses only these public interfaces; the registry verification script resolves a fresh copy and checks its source bytes before running all three targets.
 
 NPY input supports primitive float32/64, complex64/128, signed/unsigned integers and bool. Header strings must be plain ASCII, the header fits 64 KiB and no duplicate/unknown keys or trailing payload are accepted. Structured, object/pickle, string, datetime, float16 and ambiguous native-endian descriptors are rejected. NPY scalars become `[1,1]` and vectors become `[n,1]`; multidimensional shape is unchanged. Nonzero bool bytes normalize to canonical 1. All numerical bytes, including nonfinite payloads and exact 64-bit integers, are copied without scalar conversion.
 
@@ -82,3 +82,7 @@ CLI info/roundtrip/compress/select and corresponding JS exports use this API. Ol
 ## 递归精确比较
 
 `compare_trees(left : MatTree, right : MatTree, max_samples?, limits?, tree_limits?) -> TreeDifference`。结构化路径与报告定义见 [TREE_DIFF.md](TREE_DIFF.md)。`validate_tree(variables, limits?, tree_limits?)` 可单独执行无 MAT 输出分配的完整预检。
+
+## 完整混合树快照
+
+`@interchange.to_tree_snapshot(variables, limits?, tree_limits?) -> String` 与 `from_tree_snapshot(text, limits?, tree_limits?) -> Array[MatNode]` 保留递归结构和原始存储，见 [TREE_SNAPSHOT.md](TREE_SNAPSHOT.md)。

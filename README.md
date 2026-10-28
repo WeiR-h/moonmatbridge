@@ -1,22 +1,22 @@
-# MoonMatBridge v0.0.12
+# MoonMatBridge v0.0.13
 
 **MoonBit 原生 MAT Level 5 读写与科研数据互操作库。**
 
 MAT 递归 cell/struct/char/legacy object、密集/CSC 稀疏读写、数值编码、zlib/DEFLATE 解压与压缩、JSON/无损快照、NPY 互通和精确差异检查都由 MoonBit 实现。运行核心库和 Windows 命令行程序不需要 MATLAB、Python、SciPy、Node.js 或第三方压缩库。Node.js 仅用于开发脚本与可选 JS 命令行；SciPy/NumPy 仅用作独立兼容性验证。
 
-当前源码版本为 v0.0.12，发布模块名为 `WeiR-h/moonmatbridge`。
+当前源码版本为 v0.0.13，发布模块名为 `WeiR-h/moonmatbridge`。
 
 - 完整递归混合数据读写；预检尺寸后写入固定缓冲，保留字符单位、精确整数、复数和 CSC 容量。
 - `read_selected` 和 `inspect_roots` 支持根目录及按名读取，未选变量仍执行完整校验。
 - `diff-tree` 按结构化路径定位 cell、struct、char、数值及 CSC 的精确变化，见 [混合树比较](docs/TREE_DIFF.md)。
-- `snapshot` / `restore` 提供数值和 CSC 的原始字节归档，`diff` 保留原有数值报告格式。
+- `snapshot-tree` / `restore-tree` 无损归档完整混合树；`snapshot` / `restore` 和数值 `diff` 保持兼容，见 [混合树快照](docs/TREE_SNAPSHOT.md)。
 - NPY、JSON 和列优先转换覆盖切片、取样、拼接、整形及轴置换。
 
 [三个科研流程](docs/SCIENTIFIC_WORKFLOWS.md)提供可运行示例；[兼容矩阵](docs/COMPATIBILITY_MATRIX.md)和[性能报告](docs/PERFORMANCE.md)记录独立工具的实际结果。源码、Windows、JS 及流程发行包包含许可证、来源说明和校验值。
 
 ## 支持范围
 
-| 能力 | v0.0.12 |
+| 能力 | v0.0.13 |
 | --- | --- |
 | MAT Level 5 读取 | 小端、大端；标准标签与小数据标签；多变量 |
 | 压缩读取 | `miCOMPRESSED`；MoonBit 解码 stored/fixed/dynamic DEFLATE，验证 Adler-32 |
@@ -77,10 +77,10 @@ JS 适配器只读写文件；格式处理使用编译后的 MoonBit。
 
 ## MoonBit API
 
-发布模块名为 [`WeiR-h/moonmatbridge`](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.0.12)。在已有 MoonBit 项目中安装：
+发布模块名为 [`WeiR-h/moonmatbridge`](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.0.13)。在已有 MoonBit 项目中安装：
 
 ```powershell
-moon add WeiR-h/moonmatbridge@0.0.12
+moon add WeiR-h/moonmatbridge@0.0.13
 ```
 
 核心代码在 `src/`，公开接口在 `src/pkg.generated.mbti`。包内示例可直接运行：

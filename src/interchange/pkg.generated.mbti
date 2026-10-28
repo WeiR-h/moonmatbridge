@@ -16,6 +16,8 @@ pub fn from_json(String, limits? : @moonmatbridge.Limits) -> Array[@moonmatbridg
 
 pub fn from_snapshot(String, limits? : @moonmatbridge.Limits) -> Array[@moonmatbridge.MatVariable] raise @moonmatbridge.MatError
 
+pub fn from_tree_snapshot(String, limits? : @moonmatbridge.Limits, tree_limits? : @moonmatbridge.TreeLimits) -> Array[@moonmatbridge.MatNode] raise @moonmatbridge.MatError
+
 pub fn info(@moonmatbridge.MatFile) -> Json
 
 pub fn roots_info(Array[@moonmatbridge.MatRootInfo]) -> Json
@@ -25,6 +27,8 @@ pub fn sample() -> Array[@moonmatbridge.NumericArray] raise @moonmatbridge.MatEr
 pub fn to_json(Array[@moonmatbridge.NumericArray]) -> Json raise @moonmatbridge.MatError
 
 pub fn to_snapshot(Array[@moonmatbridge.MatVariable], limits? : @moonmatbridge.Limits) -> String raise @moonmatbridge.MatError
+
+pub fn to_tree_snapshot(Array[@moonmatbridge.MatNode], limits? : @moonmatbridge.Limits, tree_limits? : @moonmatbridge.TreeLimits) -> String raise @moonmatbridge.MatError
 
 pub fn transform(Array[@moonmatbridge.NumericArray], String, limits? : @moonmatbridge.Limits) -> Array[@moonmatbridge.NumericArray] raise @moonmatbridge.MatError
 

@@ -185,3 +185,17 @@ pub fn compare_mat_trees(
     error => @wire.error_json(error).stringify()
   }
 }
+
+///|
+#export_name("mat_to_tree_snapshot")
+pub fn mat_to_tree_snapshot(bytes : Bytes) -> String {
+  @wire.to_tree_snapshot(@mat.read_tree(bytes).variables) catch {
+    error => @wire.error_json(error).stringify()
+  }
+}
+
+///|
+#export_name("tree_snapshot_to_mat")
+pub fn tree_snapshot_to_mat(text : String) -> BinaryResult {
+  binary(() => @mat.write_tree(@wire.from_tree_snapshot(text)))
+}

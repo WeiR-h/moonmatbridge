@@ -32,6 +32,7 @@ def main():
     changed = cell.copy()
     changed[0, 0] = np.array([[0.0, np.nan]], dtype=np.float64)
     right.write_bytes(mixed.deterministic_mat(fixture(changed), True))
+    snapshots = tuple(map(int,VERSION.split('.'))) >= (0,0,13)
     checks = []
     def run(prefix, operation, *paths, expected=0):
         result = subprocess.run([*map(str,prefix), operation, *map(str,paths)], cwd=ROOT,
@@ -66,6 +67,32 @@ def main():
         assert not output.exists()
         checks.append({'host':host,'operation':'diff-tree','status':'passed','cases':4,
                        'report_sha256':hashlib.sha256(report.read_bytes()).hexdigest()})
+        if snapshots:
+            cases = [ROOT/'examples/mixed'/name for name in ('research-mixed.mat','research-mixed-compressed.mat','research-mixed-big-endian.mat')]
+            cases.append(ROOT/'examples/workflows/all-base-classes.mat')
+            for index, source in enumerate(cases):
+                snapshot = directory/f'{host}-snapshot-{index}.json'
+                restored = directory/f'{host}-restored-{index}.mat'
+                compared = directory/f'{host}-restored-{index}-diff.json'
+                for path in (snapshot,restored,compared): path.unlink(missing_ok=True)
+                run(prefix,'snapshot-tree',source,snapshot)
+                data=json.loads(snapshot.read_bytes())
+                assert data['schema']=='moonmatbridge/tree-snapshot/1'
+                run(prefix,'restore-tree',snapshot,restored)
+                mixed.assert_file_equal(restored,source)
+                run(prefix,'diff-tree',source,restored,compared)
+                assert json.loads(compared.read_bytes())['content_equal']
+            broken=json.loads(snapshot.read_bytes())
+            broken['variables'][0]['unknown_field']=True
+            invalids=[broken,{'schema':'moonmatbridge/tree-snapshot/1','order':'row-major','byte_order':'little','variables':[]}]
+            for index,data in enumerate(invalids):
+                bad=directory/f'{host}-invalid-snapshot-{index}.json'
+                out=directory/f'{host}-invalid-snapshot-{index}.mat'
+                bad.write_text(json.dumps(data),encoding='utf-8')
+                out.unlink(missing_ok=True)
+                run(prefix,'restore-tree',bad,out,expected=1)
+                assert not out.exists()
+            checks.append({'host':host,'operation':'snapshot-tree','status':'passed','cases':len(cases)+len(invalids)})
     result={'status':'passed','version':VERSION,'checks':checks,'passed':sum(c['cases'] for c in checks),
             'inputs':[{'file':p.name,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in (left,right)]}
     reports=ROOT/'verification/reports'
