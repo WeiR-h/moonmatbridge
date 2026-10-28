@@ -42,8 +42,18 @@ def main():
                 result = subprocess.run(command + [operation, str(source), str(output)], cwd=ROOT, text=True, capture_output=True, timeout=60)
                 assert result.returncode == 0, result.stdout + result.stderr
                 receipt = octave(f"verify_roundtrip({literal(source)}, {literal(output)});")
+                source_input=source if operation=="roundtrip" else output
+                roots_result=subprocess.run(command+["roots",str(source_input)],cwd=ROOT,text=True,encoding="utf-8",capture_output=True,timeout=60)
+                assert roots_result.returncode==0,roots_result.stdout+roots_result.stderr
+                roots=json.loads(roots_result.stdout)["roots"]
+                selected=OUT/f"{host}-{mode}-{operation}-source-selected.mat"
+                selected.unlink(missing_ok=True)
+                selected_result=subprocess.run(command+["select",str(source_input),str(selected),*[row["name"] for row in roots]],cwd=ROOT,text=True,encoding="utf-8",capture_output=True,timeout=60)
+                assert selected_result.returncode==0,selected_result.stdout+selected_result.stderr
+                source_receipt=octave(f"verify_roundtrip({literal(source)}, {literal(selected)});")
                 report["checks"].append({"host": host, "format": mode, "operation": operation, "status": "passed", "receipt": receipt,
-                                         "output_sha256": hashlib.sha256(output.read_bytes()).hexdigest()})
+                                         "output_sha256": hashlib.sha256(output.read_bytes()).hexdigest(),
+                                         "source_backend_receipt":source_receipt,"source_selection_sha256":hashlib.sha256(selected.read_bytes()).hexdigest(),"source_roots":roots})
                 print(receipt, flush=True)
     # Never silently remove known problematic producer cases from the evidence.
     # They are tested separately so their failures do not masquerade as valid MAT coverage.
