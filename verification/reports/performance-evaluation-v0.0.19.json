@@ -1,0 +1,25 @@
+{
+  "status": "verified",
+  "version": "0.0.19",
+  "candidate_commit": "2c400465d2a7290b5c1f82af697bb304c42924b1",
+  "file_scenarios": 6,
+  "core_scenarios": 24,
+  "file_memory_goals_passed": true,
+  "initial_core_flags": [
+    {
+      "case": "dense-16m",
+      "operation": "write",
+      "host": "native",
+      "speedup": 0.8931232952743786,
+      "memory_reduction": -0.00029638411381149865
+    }
+  ],
+  "followups": [
+    {
+      "report": "performance-vs-21291ce-partial-c2cb0035-v0.0.19.json",
+      "sha256": "efb1dd1cedfa5ba0a09f58561574dadf87ab615e9d75e8fd6e17fcc20263ae6e",
+      "flags": []
+    }
+  ],
+  "scope": "All original samples retained. A flagged operation repeated in the same case and host blocks publication."
+}
