@@ -152,6 +152,7 @@ fn usage() -> String {
   "  moonmat restore-tree SNAPSHOT.json OUTPUT.mat\n" +
   "  moonmat snapshot INPUT.mat OUTPUT.json\n" +
   "  moonmat restore SNAPSHOT.json OUTPUT.mat\n" +
+  "  moonmat diff-tree-close LEFT.mat RIGHT.mat REPORT.json [OPTIONS.json]\n" +
   "  moonmat diff-tree LEFT.mat RIGHT.mat REPORT.json\n" +
   "  moonmat diff LEFT.mat RIGHT.mat [REPORT.json]\n" +
   "  moonmat sample OUTPUT.mat\n" +
@@ -209,6 +210,28 @@ fn run(args : Array[String]) -> Unit raise @mat.MatError {
       _ => raise @mat.MatError("invalid-utf8", 0, "Snapshot must be UTF-8")
     }
     save(args[3], @mat.write_document(@wire.from_snapshot(text)))
+  } else if command == "diff-tree-close" &&
+    (args.length() == 5 || args.length() == 6) {
+    let options = if args.length() == 6 {
+      @utf8.decode(read(args[5])[:]) catch {
+        _ =>
+          raise @mat.MatError(
+            "invalid-utf8", 0, "Tolerance options must be UTF-8",
+          )
+      }
+    } else {
+      "{}"
+    }
+    let report = @wire.compare_tree_text(
+      @mat.read_tree(read(args[2])),
+      @mat.read_tree(read(args[3])),
+      options,
+    )
+    let text = @wire.tree_close_json(report).stringify() + "\n"
+    save(args[4], @utf8.encode(text[:]))
+    if !report.within_tolerance {
+      exit_process(2)
+    }
   } else if command == "diff-tree" && args.length() == 5 {
     let report = @mat.compare_trees(
       @mat.read_tree(read(args[2])),

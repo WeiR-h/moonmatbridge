@@ -118,6 +118,10 @@ def public_workflows(directory, exe):
         print(run([python,source_script,"--native-executable",exe,"--js-cli",cli,"--fixture-manifest",ROOT/"verification/local/file-performance/manifest.json"]).stdout.strip(),flush=True)
         source_receipt=json.loads((source/f"verification/reports/source-operations-v{VERSION}.json").read_bytes())
         write_report("source-operations-public",source_receipt)
+    close_script=source/"scripts/tree-close-checks.py"
+    if close_script.exists():
+        print(run([python,close_script,"--native-executable",exe,"--js-cli",cli]).stdout.strip(),flush=True)
+        write_report("tree-close-public",json.loads((source/f"verification/reports/tree-close-v{VERSION}.json").read_bytes()))
     receipt["public_archives_sha256"] = {kind: hashlib.sha256((directory / f"MoonMatBridge-v{VERSION}-{kind}.zip").read_bytes()).hexdigest() for kind in ("source", "js", "windows-x64")}
     receipt["scope"] = "All scientific workflows executed using publicly downloaded inputs, native executable and precompiled JS module, checked by independent NumPy/SciPy and exact released output hashes. Adapter only points to the downloaded module."
     (directory / f"workflows-public-v{VERSION}.json").write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -136,8 +140,8 @@ def github():
     assets += [ROOT / "examples/mixed/manifest.json"]
     all_classes = ROOT / "examples/workflows/all-base-classes.mat"
     if all_classes.exists(): assets.append(all_classes)
-    assets += [p for p in REPORTS.glob(f"*-v{VERSION}.json") if "-public-" not in p.name and p.name.startswith(("octave-", "compatibility-", "performance-", "file-performance-", "mooncakes-", "selection-", "workflows-", "licenses-", "source-snapshot-", "source-operations-", "ci-", "tree-operations-"))]
-    assets.extend(ROOT / "docs" / name for name in ("TREE_DIFF.md", "TREE_SNAPSHOT.md") if (ROOT / "docs" / name).exists())
+    assets += [p for p in REPORTS.glob(f"*-v{VERSION}.json") if "-public-" not in p.name and p.name.startswith(("octave-", "compatibility-", "performance-", "file-performance-", "mooncakes-", "selection-", "workflows-", "licenses-", "source-snapshot-", "source-operations-", "ci-", "tree-operations-", "tree-close-"))]
+    assets.extend(ROOT / "docs" / name for name in ("TREE_DIFF.md", "TREE_SNAPSHOT.md", "TREE_CLOSE.md") if (ROOT / "docs" / name).exists())
     review = ROOT / f"docs/REVIEW_EVIDENCE-v{VERSION}.md"
     if review.exists(): assets.append(review)
     from github_release import ensure_release, download_release

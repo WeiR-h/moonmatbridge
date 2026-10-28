@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.0.19
+
+- Added symmetric floating tolerance comparison for complete mixed trees, complex planes and CSC data.
+- Separate tree-close/1 reports distinguish bit equality and tolerance equality; existing exact reports remain compatible.
+- Added native/Node diff-tree-close, JS export and independent scientific threshold checks.
+
 ## v0.0.18
 
 - Incremental DEFLATE feeds the bounded recursive parser with a 32 KiB history window.

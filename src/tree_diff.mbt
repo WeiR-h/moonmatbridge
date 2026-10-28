@@ -40,6 +40,8 @@ pub extend TreeDifference with @debug.Debug::{to_repr}
 
 ///|
 priv struct TreeDiffState {
+  tolerance : TreeTolerance?
+  mut exact_count : Int
   maximum : Int
   mut count : Int
   samples : Array[TreeDifferenceSample]
@@ -54,8 +56,12 @@ fn TreeDiffState::add(
   coordinates? : Array[Int] = [],
   before? : Bytes = b"",
   after? : Bytes = b"",
+  exact? : Bool = true,
 ) -> Unit {
   self.count = self.count + 1
+  if exact {
+    self.exact_count = self.exact_count + 1
+  }
   if self.samples.length() < self.maximum {
     self.samples.push({
       path: path.copy(),
@@ -112,6 +118,7 @@ fn diff_tree_plane(
   right : Bytes,
   width : Int,
   shape : Array[Int],
+  floating? : DType,
 ) -> Unit {
   if left.length() != right.length() {
     state.add(path, kind + "_size")
@@ -129,7 +136,11 @@ fn diff_tree_plane(
         changed = true
       }
     }
-    if changed {
+    let equivalent = match (state.tolerance, floating) {
+      (Some(t), Some(dtype)) => tree_float_close(left, right, i, dtype, t)
+      _ => !changed
+    }
+    if !equivalent {
       // Allocate coordinate/byte samples only inside the global sample budget.
       if state.samples.length() < state.maximum {
         state.add(
@@ -139,10 +150,16 @@ fn diff_tree_plane(
           coordinates=tree_coordinates(shape, i),
           before=left[i * width:(i + 1) * width].to_owned(),
           after=right[i * width:(i + 1) * width].to_owned(),
+          exact=changed,
         )
       } else {
         state.count = state.count + 1
+        if changed {
+          state.exact_count = state.exact_count + 1
+        }
       }
+    } else if changed {
+      state.exact_count = state.exact_count + 1
     }
   }
 }
@@ -155,10 +172,11 @@ fn diff_tree_imag(
   right : Bytes?,
   width : Int,
   shape : Array[Int],
+  floating? : DType,
 ) -> Unit {
   match (left, right) {
     (Some(a), Some(b)) =>
-      diff_tree_plane(state, path, "imag", a, b, width, shape)
+      diff_tree_plane(state, path, "imag", a, b, width, shape, floating?)
     (None, None) => ()
     _ => state.add(path, "complex")
   }
@@ -196,8 +214,25 @@ fn diff_tree_node(
           b.real,
           a.dtype.width(),
           a.shape,
+          floating?=if a.dtype == Float64 || a.dtype == Float32 {
+            Some(a.dtype)
+          } else {
+            None
+          },
         )
-        diff_tree_imag(state, path, a.imag, b.imag, a.dtype.width(), a.shape)
+        diff_tree_imag(
+          state,
+          path,
+          a.imag,
+          b.imag,
+          a.dtype.width(),
+          a.shape,
+          floating?=if a.dtype == Float64 || a.dtype == Float32 {
+            Some(a.dtype)
+          } else {
+            None
+          },
+        )
       }
     (Csc(a), Csc(b)) => {
       if a.dtype != b.dtype {
@@ -214,8 +249,25 @@ fn diff_tree_node(
       }
       if a.dtype == b.dtype {
         // CSC coordinates denote storage slots, including inactive capacity.
-        diff_tree_plane(state, path, "real", a.real, b.real, a.dtype.width(), [])
-        diff_tree_imag(state, path, a.imag, b.imag, a.dtype.width(), [])
+        diff_tree_plane(
+          state,
+          path,
+          "real",
+          a.real,
+          b.real,
+          a.dtype.width(),
+          [],
+          floating?=if a.dtype == Float64 { Some(Float64) } else { None },
+        )
+        diff_tree_imag(
+          state,
+          path,
+          a.imag,
+          b.imag,
+          a.dtype.width(),
+          [],
+          floating?=if a.dtype == Float64 { Some(Float64) } else { None },
+        )
       }
     }
     (Character(a), Character(b)) =>
@@ -301,19 +353,26 @@ fn diff_tree_node(
 ///|
 /// Exact recursive comparison; ignores MAT header, compression and source endian.
 /// All input nodes are validated even when the sample budget is zero.
-pub fn compare_trees(
+fn run_tree_comparison(
   left : MatTree,
   right : MatTree,
+  tolerance : TreeTolerance?,
   max_samples? : Int = 16,
   limits? : Limits = default_limits(),
   tree_limits? : TreeLimits = default_tree_limits(),
-) -> TreeDifference raise MatError {
+) -> (TreeDiffState, Bool) raise MatError {
   validate_tree(left.variables, limits~, tree_limits~)
   validate_tree(right.variables, limits~, tree_limits~)
   if max_samples < 0 || max_samples > 256 {
     fail("invalid-limits", 0, "Diff sample budget must be between 0 and 256")
   }
-  let state : TreeDiffState = { maximum: max_samples, count: 0, samples: [], }
+  let state : TreeDiffState = {
+    maximum: max_samples,
+    count: 0,
+    exact_count: 0,
+    tolerance,
+    samples: [],
+  }
   let by_name : Map[String, MatNode] = Map([])
   for node in right.variables {
     by_name[node.name()] = node
@@ -334,6 +393,25 @@ pub fn compare_trees(
       state.add([Root(node.name())], "added")
     }
   }
+  (state, order)
+}
+
+///|
+pub fn compare_trees(
+  left : MatTree,
+  right : MatTree,
+  max_samples? : Int = 16,
+  limits? : Limits = default_limits(),
+  tree_limits? : TreeLimits = default_tree_limits(),
+) -> TreeDifference raise MatError {
+  let (state, order) = run_tree_comparison(
+    left,
+    right,
+    None,
+    max_samples~,
+    limits~,
+    tree_limits~,
+  )
   {
     content_equal: state.count == 0,
     variable_order_changed: order,

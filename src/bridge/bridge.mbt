@@ -230,3 +230,21 @@ pub fn select_source_mat(
     })
   })
 }
+
+///|
+#export_name("compare_mat_trees_close")
+pub fn compare_mat_trees_close(
+  left : Bytes,
+  right : Bytes,
+  options : String,
+) -> String {
+  @wire.tree_close_json(
+    @wire.compare_tree_text(
+      @mat.read_tree(left),
+      @mat.read_tree(right),
+      options,
+    ),
+  ).stringify() catch {
+    error => @wire.error_json(error).stringify()
+  }
+}

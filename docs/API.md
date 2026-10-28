@@ -1,4 +1,4 @@
-# MoonBit API v0.0.18
+# MoonBit API v0.0.19
 
 The core package is `WeiR-h/moonmatbridge`. The executable, JSON adapter and JS ABI are separate packages; core parsing performs no host I/O.
 
@@ -90,3 +90,7 @@ CLI info/roundtrip/compress/select and corresponding JS exports use this API. Ol
 ## 文件数据源
 
 `MatSource`、`SourceLimits`、`default_source_limits()` 及 `read_tree_from` / `read_selected_from` / `inspect_roots_from` 见 [文件数据源](SOURCES.md)。
+
+## 对称浮点容差比较
+
+`compare_trees_close(left, right, atol?, rtol?, equal_nan?, max_samples?, limits?, tree_limits?) -> TreeCloseDifference`。独立报告、CLI 参数文件和 JS 导出见 [TREE_CLOSE.md](TREE_CLOSE.md)。精确比较接口和格式保持兼容。

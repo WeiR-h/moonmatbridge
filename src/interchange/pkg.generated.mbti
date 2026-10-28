@@ -6,6 +6,8 @@ import {
 }
 
 // Values
+pub fn compare_tree_text(@moonmatbridge.MatTree, @moonmatbridge.MatTree, String) -> @moonmatbridge.TreeCloseDifference raise @moonmatbridge.MatError
+
 pub fn diff_json(@moonmatbridge.DocumentDifference) -> Json
 
 pub fn document_info(@moonmatbridge.MatDocument) -> Json
@@ -33,6 +35,8 @@ pub fn to_tree_snapshot(Array[@moonmatbridge.MatNode], limits? : @moonmatbridge.
 pub fn transform(Array[@moonmatbridge.NumericArray], String, limits? : @moonmatbridge.Limits) -> Array[@moonmatbridge.NumericArray] raise @moonmatbridge.MatError
 
 pub fn transform_document(Array[@moonmatbridge.MatVariable], String, limits? : @moonmatbridge.Limits) -> Array[@moonmatbridge.MatVariable] raise @moonmatbridge.MatError
+
+pub fn tree_close_json(@moonmatbridge.TreeCloseDifference) -> Json
 
 pub fn tree_diff_json(@moonmatbridge.TreeDifference) -> Json
 

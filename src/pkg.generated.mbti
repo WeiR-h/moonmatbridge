@@ -10,6 +10,8 @@ pub fn compare_documents(MatDocument, MatDocument, max_samples? : Int, limits? :
 
 pub fn compare_trees(MatTree, MatTree, max_samples? : Int, limits? : Limits, tree_limits? : TreeLimits) -> TreeDifference raise MatError
 
+pub fn compare_trees_close(MatTree, MatTree, atol? : Double, rtol? : Double, equal_nan? : Bool, max_samples? : Int, limits? : Limits, tree_limits? : TreeLimits) -> TreeCloseDifference raise MatError
+
 pub fn concat_arrays(String, Array[NumericArray], Int, limits? : Limits) -> NumericArray raise MatError
 
 pub fn default_limits() -> Limits
@@ -277,6 +279,19 @@ pub(all) struct StructArray {
   is_global : Bool
 } derive(@debug.Debug)
 pub fn StructArray::to_repr(Self) -> @debug.Repr
+
+pub(all) struct TreeCloseDifference {
+  exact_equal : Bool
+  within_tolerance : Bool
+  variable_order_changed : Bool
+  differences : Int
+  samples : Array[TreeDifferenceSample]
+  truncated : Bool
+  atol : Double
+  rtol : Double
+  equal_nan : Bool
+} derive(@debug.Debug)
+pub fn TreeCloseDifference::to_repr(Self) -> @debug.Repr
 
 pub(all) struct TreeDifference {
   content_equal : Bool

@@ -52,6 +52,12 @@ try {
   else if (command === 'restore-tree' && args.length === 2) save(args[1], bytes(api.tree_snapshot_to_mat(new TextDecoder('utf-8', {fatal: true}).decode(read(args[0])))));
   else if (command === 'snapshot' && args.length === 2) save(args[1], checkedJSON(api.mat_to_snapshot(read(args[0]))) + '\n');
   else if (command === 'restore' && args.length === 2) save(args[1], bytes(api.snapshot_to_mat(new TextDecoder('utf-8', {fatal: true}).decode(read(args[0])))));
+  else if (command === 'diff-tree-close' && (args.length === 3 || args.length === 4)) {
+    const options = args.length === 4 ? new TextDecoder('utf-8', {fatal: true}).decode(read(args[3])) : '{}';
+    const report = checkedJSON(api.compare_mat_trees_close(read(args[0]), read(args[1]), options));
+    save(args[2], report + '\n');
+    process.exitCode = JSON.parse(report).within_tolerance ? 0 : 2;
+  }
   else if (command === 'diff-tree' && args.length === 3) {
     const report = checkedJSON(api.compare_mat_trees(read(args[0]), read(args[1]), 16));
     save(args[2], report + '\n');
@@ -70,7 +76,7 @@ try {
   else if (command === 'select' && args.length >= 3) save(args[1], bytes(withSource(args[0], source => api.select_source_mat(source, args.slice(2)))));
   else if (command === 'transform' && args.length === 3) save(args[2], bytes(api.transform_mat(read(args[0]), new TextDecoder('utf-8', {fatal: true}).decode(read(args[1])))));
   else if (command === 'sample' && args.length === 1) save(args[0], bytes(api.sample_mat()));
-  else if (command === 'help' || command === '--help') console.log(`MoonMatBridge v${version}\ninfo INPUT.mat\nroots INPUT.mat\ndump INPUT.mat OUTPUT.json\npack INPUT.json OUTPUT.mat\nroundtrip INPUT.mat OUTPUT.mat\ncompress INPUT.mat OUTPUT.mat\nnpy INPUT.mat VARIABLE OUTPUT.npy\nfrom-npy INPUT.npy VARIABLE OUTPUT.mat\nselect INPUT.mat OUTPUT.mat VARIABLE...\ntransform INPUT.mat PLAN.json OUTPUT.mat\nsparsify INPUT.mat VARIABLE OUTPUT.mat\ndensify INPUT.mat VARIABLE OUTPUT.mat\nsnapshot-tree INPUT.mat OUTPUT.json\nrestore-tree SNAPSHOT.json OUTPUT.mat\nsnapshot INPUT.mat OUTPUT.json\nrestore SNAPSHOT.json OUTPUT.mat\ndiff-tree LEFT.mat RIGHT.mat REPORT.json\ndiff LEFT.mat RIGHT.mat [REPORT.json]\nsample OUTPUT.mat\nversion\nOutput files must be new. Diff exits: 0 equal, 2 changed, 1 error.`);
+  else if (command === 'help' || command === '--help') console.log(`MoonMatBridge v${version}\ninfo INPUT.mat\nroots INPUT.mat\ndump INPUT.mat OUTPUT.json\npack INPUT.json OUTPUT.mat\nroundtrip INPUT.mat OUTPUT.mat\ncompress INPUT.mat OUTPUT.mat\nnpy INPUT.mat VARIABLE OUTPUT.npy\nfrom-npy INPUT.npy VARIABLE OUTPUT.mat\nselect INPUT.mat OUTPUT.mat VARIABLE...\ntransform INPUT.mat PLAN.json OUTPUT.mat\nsparsify INPUT.mat VARIABLE OUTPUT.mat\ndensify INPUT.mat VARIABLE OUTPUT.mat\nsnapshot-tree INPUT.mat OUTPUT.json\nrestore-tree SNAPSHOT.json OUTPUT.mat\nsnapshot INPUT.mat OUTPUT.json\nrestore SNAPSHOT.json OUTPUT.mat\ndiff-tree-close LEFT.mat RIGHT.mat REPORT.json [OPTIONS.json]\ndiff-tree LEFT.mat RIGHT.mat REPORT.json\ndiff LEFT.mat RIGHT.mat [REPORT.json]\nsample OUTPUT.mat\nversion\nOutput files must be new. Diff exits: 0 equal, 2 changed, 1 error.`);
   else throw new Error('Invalid command or arguments. Run help.');
 } catch (error) {
   console.error(JSON.stringify(error.diagnostic || {status: 'error', code: error.code === 'EEXIST' ? 'output-exists' : 'host-error', message: error.message}));

@@ -55,6 +55,7 @@ try {
   record('Strict selected reads and root metadata independent checks', command(python, ['scripts/selection-checks.py']));
   record('Large file sources and lifetime checks', command(python, ['scripts/source-checks.py']));
   record('Recursive mixed tree operations', command(python, ['scripts/tree-checks.py']));
+  record('Symmetric mixed-tree tolerance and atomic reports', command(python, ['scripts/tree-close-checks.py']));
   const workflowOutput = command(python, ['scripts/scientific-workflows.py']);
   const workflowReceipt = join(root, `verification/reports/workflows-v${version}.json`);
   const firstWorkflows = JSON.parse(readFileSync(workflowReceipt, 'utf8'));

@@ -1,6 +1,6 @@
 ///|
 test "published compressed dense data preserves complex and uint64" {
-  assert_eq(@mat.version(), "0.0.18")
+  assert_eq(@mat.version(), "0.0.19")
   let id = @mat.numeric_array("id", @mat.UInt64, [1, 2], [
     Unsigned(9007199254740993UL),
     Unsigned(18446744073709551615UL),
@@ -150,4 +150,15 @@ test "published data sources support short reads and selected ownership" {
   assert_eq(@mat.inspect_roots_from(source)[0].class_id,15)
   let selected=@mat.read_selected_from(source,["id"])
   assert_true(@mat.write_tree(selected.variables)==bytes)
+}
+
+///|
+test "published tolerance comparison preserves exact and close results" {
+  let a=@mat.raw_array("x",@mat.Float64,[1,1],b"\x00\x00\x00\x00\x00\x00\x00\x80")
+  let b={..a,real:b"\x00\x00\x00\x00\x00\x00\x00\x00",}
+  let left=@mat.read_tree(@mat.write_tree([@mat.Numeric(a)]))
+  let right=@mat.read_tree(@mat.write_tree([@mat.Numeric(b)]))
+  let report=@mat.compare_trees_close(left,right)
+  assert_true(report.within_tolerance && !report.exact_equal)
+  assert_true(@wire.tree_close_json(report).stringify().contains("moonmatbridge/tree-close/1"))
 }

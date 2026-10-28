@@ -2,7 +2,7 @@
 
 ## v0.0.15—v0.0.19
 
-以 v0.0.14（21291ce）为固定基线，逐版实现、验证并发布 GitHub / Mooncakes。
+以 v0.0.14（21291ce）为固定基线，逐版实现、验证并发布 GitHub / Mooncakes。源码、兼容、性能与公开发行的独立证据按版本保存于 verification/reports；完整公开交付以 distribution 回执为准。
 
 | 版本 | 交付 |
 | --- | --- |
