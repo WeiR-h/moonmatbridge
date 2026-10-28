@@ -1,0 +1,118 @@
+{
+  "status": "passed",
+  "version": "0.0.14",
+  "assets": [
+    {
+      "file": "MoonMatBridge-v0.0.14-source.zip",
+      "sha256": "fc38123132d92c9fd8d64d9a7f38975d0d5e194456830a6cfd79bd09a7cd3a71"
+    },
+    {
+      "file": "MoonMatBridge-v0.0.14-windows-x64.zip",
+      "sha256": "13e32bf4b8418c836e27044c5cca52c2159242d90134f33f0a22a5a5f74e5951"
+    },
+    {
+      "file": "MoonMatBridge-v0.0.14-js.zip",
+      "sha256": "586c858ec5c759cf1ae2953c7d1c9c93f1006442574f191049819eb71c074c38"
+    },
+    {
+      "file": "MoonMatBridge-v0.0.14-workflows.zip",
+      "sha256": "8369c599bc06357efd0fcdfb832f84d9bcac7a2cb04c07ee3f294f9663f9089b"
+    },
+    {
+      "file": "SHA256SUMS.txt",
+      "sha256": "64369fd05a80ca435f1af27518482410dc4e5cada0db42dfe98d0214c5e6f0ae"
+    },
+    {
+      "file": "release-v0.0.14.json",
+      "sha256": "6a05660a0641d19bd17acdb67b36dee0b3d028e742a066761b065ae33c073fd7"
+    },
+    {
+      "file": "research-mixed-big-endian.mat",
+      "sha256": "85b42cb7fc511d87df425b67c79d7306cd9911b7db4567a6d29fce794d125afb"
+    },
+    {
+      "file": "research-mixed-compressed.mat",
+      "sha256": "7439e4fe2b599d94744a491cc3c43d242f26c65850c7acc67d1e059a7304a573"
+    },
+    {
+      "file": "research-mixed.mat",
+      "sha256": "e25902d8cbed12604b7aba7ae64d9a4f31a01d25d163ea378587e3b6a5f83ef2"
+    },
+    {
+      "file": "manifest.json",
+      "sha256": "00187e9ac153d81ed2baca6d50cd40aad895f5867d826802f4cce9de2d68f5ea"
+    },
+    {
+      "file": "all-base-classes.mat",
+      "sha256": "7bc63d1232b4d25a36c31bd3d879c00f15257ebfb25370c3afcada75528c2e6e"
+    },
+    {
+      "file": "ci-v0.0.14.json",
+      "sha256": "3e6665dbd5f88bdd50620080faf55b65be8ae009270fc0f43691da80027ae11a"
+    },
+    {
+      "file": "compatibility-gaps-v0.0.14.json",
+      "sha256": "326418474eae01c62953f5dfd4735021899680ac2a5533fe3920c165aae3b94d"
+    },
+    {
+      "file": "compatibility-v0.0.14.json",
+      "sha256": "2062f94af77da99624b84ec5df5c1bbd03408f2f9a05514f87e8792e8ff7d3e4"
+    },
+    {
+      "file": "licenses-v0.0.14.json",
+      "sha256": "f3db007aea46777a18580a60acfb9f2ca8f9a73dbe6536fdd320d41688fa2a4c"
+    },
+    {
+      "file": "mooncakes-v0.0.14.json",
+      "sha256": "de37cc4a2badf68cb1acec39583b890edd50f4e2462f10f5a8b90b70a34d2ba1"
+    },
+    {
+      "file": "octave-v0.0.14.json",
+      "sha256": "944e2cd8976d4e90cce826eb6d89ee4c0b02bf5a0292ba2896e40b6ce4e734d6"
+    },
+    {
+      "file": "performance-evaluation-v0.0.14.json",
+      "sha256": "ea329b385d2a5927322d943281f3a642954e24775ba3ec12dd6b95070bb4bc6a"
+    },
+    {
+      "file": "performance-vs-4d1e261-partial-085ca5f5-v0.0.14.json",
+      "sha256": "f462622ee32b7805bcbda474c5f39cec25a156a95eab1edd66a59f4db2b8df10"
+    },
+    {
+      "file": "performance-vs-4d1e261-v0.0.14.json",
+      "sha256": "f6b7e03d6c80f2cb701ae966f674e41e5fd2efc5b049e2ddf85153856dada390"
+    },
+    {
+      "file": "performance-vs-b9df1ed-partial-292bfae3-v0.0.14.json",
+      "sha256": "5d6b2554715a9f2ef8f3ef6cf8617568dae7f17fa3edd3ad583cd9619d4d44b2"
+    },
+    {
+      "file": "selection-v0.0.14.json",
+      "sha256": "b9f9864e6338601d56bbcf49aec69b327d2f3bb306a466128d2fad8b8a316df1"
+    },
+    {
+      "file": "source-snapshot-v0.0.14.json",
+      "sha256": "40b75b08b2d894dc3f9568f4b11e92c6076435ee2a3a5b9d38711fbcc4f57476"
+    },
+    {
+      "file": "tree-operations-v0.0.14.json",
+      "sha256": "fb41426bdffd09df979cf267e4d8f76a41c9b132da452d1b55f50ef9551303d2"
+    },
+    {
+      "file": "workflows-v0.0.14.json",
+      "sha256": "30e08f16e81e54ecad072d4ccfb91d2a2b707cfdfdf286b455a6fffa843d46a7"
+    },
+    {
+      "file": "TREE_DIFF.md",
+      "sha256": "7caf89b589cec2707e6d9829ae5d0699955792d32752611641a85782114ed272"
+    },
+    {
+      "file": "TREE_SNAPSHOT.md",
+      "sha256": "e9186f1692314298a78e3de505677a1970a34ee84b57a37078dd0a43e9044e26"
+    }
+  ],
+  "downloaded_native_mixed_roots": 13,
+  "github": "https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.0.14",
+  "scope": "Public assets downloaded and compared byte-for-byte; downloaded executable consumes mixed file. Local archive consumers are in release receipt.",
+  "public_scientific_workflows_passed": 6
+}
