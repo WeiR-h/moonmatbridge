@@ -1,0 +1,164 @@
+{
+  "status": "passed",
+  "version": "0.0.16",
+  "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+  "checks": [
+    {
+      "host": "native",
+      "format": "v6",
+      "operation": "roundtrip",
+      "status": "passed",
+      "receipt": "Octave 8.4.0 verified 33 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/native-v6-roundtrip.mat",
+      "output_sha256": "df0811d15a6b0b2359048469b92e33c8acd58a0f47837289167a6c68123b2032"
+    },
+    {
+      "host": "native",
+      "format": "v6",
+      "operation": "compress",
+      "status": "passed",
+      "receipt": "Octave 8.4.0 verified 33 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/native-v6-compress.mat",
+      "output_sha256": "8b51bb77de47270115ed7644bcbb9756258653984ebf51bdca33e8d87ea29157"
+    },
+    {
+      "host": "js",
+      "format": "v6",
+      "operation": "roundtrip",
+      "status": "passed",
+      "receipt": "Octave 8.4.0 verified 33 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/js-v6-roundtrip.mat",
+      "output_sha256": "df0811d15a6b0b2359048469b92e33c8acd58a0f47837289167a6c68123b2032"
+    },
+    {
+      "host": "js",
+      "format": "v6",
+      "operation": "compress",
+      "status": "passed",
+      "receipt": "Octave 8.4.0 verified 33 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/js-v6-compress.mat",
+      "output_sha256": "8b51bb77de47270115ed7644bcbb9756258653984ebf51bdca33e8d87ea29157"
+    },
+    {
+      "host": "native",
+      "format": "v7",
+      "operation": "roundtrip",
+      "status": "passed",
+      "receipt": "Octave 8.4.0 verified 33 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/native-v7-roundtrip.mat",
+      "output_sha256": "df0811d15a6b0b2359048469b92e33c8acd58a0f47837289167a6c68123b2032"
+    },
+    {
+      "host": "native",
+      "format": "v7",
+      "operation": "compress",
+      "status": "passed",
+      "receipt": "Octave 8.4.0 verified 33 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/native-v7-compress.mat",
+      "output_sha256": "8b51bb77de47270115ed7644bcbb9756258653984ebf51bdca33e8d87ea29157"
+    },
+    {
+      "host": "js",
+      "format": "v7",
+      "operation": "roundtrip",
+      "status": "passed",
+      "receipt": "Octave 8.4.0 verified 33 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/js-v7-roundtrip.mat",
+      "output_sha256": "df0811d15a6b0b2359048469b92e33c8acd58a0f47837289167a6c68123b2032"
+    },
+    {
+      "host": "js",
+      "format": "v7",
+      "operation": "compress",
+      "status": "passed",
+      "receipt": "Octave 8.4.0 verified 33 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/js-v7-compress.mat",
+      "output_sha256": "8b51bb77de47270115ed7644bcbb9756258653984ebf51bdca33e8d87ea29157"
+    }
+  ],
+  "files": [
+    {
+      "file": "octave-v6.mat",
+      "bytes": 7968,
+      "sha256": "4ee80b54b99c76afa70d0c45920d71dcf9601dabcdac5ef6542fc411cec39fb3"
+    },
+    {
+      "file": "octave-v7.mat",
+      "bytes": 2993,
+      "sha256": "fc3894a60b4cf1a608d5fc693c7d0edcc7bab5e3ea58a4ec7603fbedd77c6a35"
+    }
+  ],
+  "producer_variants": [
+    {
+      "file": "producer-small_char_matrix-v6.mat",
+      "sha256": "50ac622200da4a9d99154e37d4ca688daa8475264fb66ee9ae2adc599d73e022",
+      "hosts": [
+        {
+          "host": "native",
+          "returncode": 1,
+          "diagnostic": "{\"status\":\"error\",\"code\":\"truncated-data\",\"offset\":128,\"message\":\"Data element payload exceeds enclosing stream\"}"
+        },
+        {
+          "host": "js",
+          "returncode": 1,
+          "diagnostic": "{\"status\":\"error\",\"code\":\"truncated-data\",\"offset\":128,\"message\":\"Data element payload exceeds enclosing stream\"}"
+        }
+      ],
+      "scipy": "passed",
+      "octave_self_load": "Octave 8.4.0 verified 1 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/producer-small_char_matrix-v6.mat",
+      "status": "unresolved_producer_variant"
+    },
+    {
+      "file": "producer-small_char_matrix-v7.mat",
+      "sha256": "888d7b3e9aa2e351f49d232eba71f25728a57e7c521f6f3fceebc3d3a335b185",
+      "hosts": [
+        {
+          "host": "native",
+          "returncode": 1,
+          "diagnostic": "{\"status\":\"error\",\"code\":\"truncated-data\",\"offset\":0,\"message\":\"Data element payload exceeds enclosing stream\"}"
+        },
+        {
+          "host": "js",
+          "returncode": 1,
+          "diagnostic": "{\"status\":\"error\",\"code\":\"truncated-data\",\"offset\":0,\"message\":\"Data element payload exceeds enclosing stream\"}"
+        }
+      ],
+      "scipy": "passed",
+      "octave_self_load": "Octave 8.4.0 verified 1 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/producer-small_char_matrix-v7.mat",
+      "status": "unresolved_producer_variant"
+    },
+    {
+      "file": "producer-sparse_logical-v6.mat",
+      "sha256": "22e85a506ff1cb6828789eeab081cb616480736bf714cdaec50fcc9cb5f71ec0",
+      "hosts": [
+        {
+          "host": "native",
+          "returncode": 1,
+          "diagnostic": "{\"status\":\"error\",\"code\":\"unsupported-flags\",\"offset\":144,\"message\":\"Unknown flags or nonstandard dense reserved metadata\"}"
+        },
+        {
+          "host": "js",
+          "returncode": 1,
+          "diagnostic": "{\"status\":\"error\",\"code\":\"unsupported-flags\",\"offset\":144,\"message\":\"Unknown flags or nonstandard dense reserved metadata\"}"
+        }
+      ],
+      "scipy": "ValueError: cannot reshape array of size 2 into shape (3,4)",
+      "octave_self_load": "Octave 8.4.0 verified 1 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/producer-sparse_logical-v6.mat",
+      "status": "unresolved_producer_variant"
+    },
+    {
+      "file": "producer-sparse_logical-v7.mat",
+      "sha256": "58e28c5a7725bb08e9fce2841def875c61f81024f7c5a217c169b37626a7d0ac",
+      "hosts": [
+        {
+          "host": "native",
+          "returncode": 1,
+          "diagnostic": "{\"status\":\"error\",\"code\":\"unsupported-flags\",\"offset\":16,\"message\":\"Unknown flags or nonstandard dense reserved metadata\"}"
+        },
+        {
+          "host": "js",
+          "returncode": 1,
+          "diagnostic": "{\"status\":\"error\",\"code\":\"unsupported-flags\",\"offset\":16,\"message\":\"Unknown flags or nonstandard dense reserved metadata\"}"
+        }
+      ],
+      "scipy": "ValueError: cannot reshape array of size 2 into shape (3,4)",
+      "octave_self_load": "Octave 8.4.0 verified 1 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/producer-sparse_logical-v7.mat",
+      "status": "unresolved_producer_variant"
+    }
+  ],
+  "scope": "Actual GNU Octave v6/v7 producer and consumer; not a MATLAB execution claim. Legacy objects and global flags are verified separately.",
+  "tool": "8.4.0",
+  "production": "Octave 8.4.0 produced 33 variables in v6/v7 formats"
+}
