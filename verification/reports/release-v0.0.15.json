@@ -1,0 +1,35 @@
+{
+  "status": "passed",
+  "version": "0.0.15",
+  "source_sha256": "f1a95c6eb59e62d874a78f609e592ceffe39e672533bdc03669dd1ff83824c46",
+  "native_sha256": "b721573c837ba4272a56a6eaa082fb20bcc8f480bbea1ae243c5a68938efc7c9",
+  "archives": [
+    {
+      "file": "MoonMatBridge-v0.0.15-source.zip",
+      "bytes": 1075074,
+      "sha256": "8034229be6cad9a237a8b6915139d399dc19c5125322f92a90e4691eb13f53c8"
+    },
+    {
+      "file": "MoonMatBridge-v0.0.15-windows-x64.zip",
+      "bytes": 1206186,
+      "sha256": "a755ad250ea6a1e87dca6f4f75344340774df0d5970e3a6f4f92349806130557"
+    },
+    {
+      "file": "MoonMatBridge-v0.0.15-js.zip",
+      "bytes": 161381,
+      "sha256": "741585fe3ad9c2f0796df87c937a90e22b1dd0b8858df28d236e17ec300abefb"
+    },
+    {
+      "file": "MoonMatBridge-v0.0.15-workflows.zip",
+      "bytes": 36982,
+      "sha256": "946fe2b44c212aba1540d19348b5cd04417c0cec21705f21e92ceb32a9c7c432"
+    }
+  ],
+  "fresh_consumers": {
+    "native": "version + 27 commands + sparse/transform/compress/snapshot/diff + Unicode/spaces + no overwrite; PATH limited to System32; diff-change exit 2 verified; complete three-workflow PowerShell demo passed",
+    "source": "unpacked source check and 86 JS tests; no local settings/build cache bundled",
+    "js": "unpacked exports: recursive mixed cell/struct/char/object fixture, JSON, compression, sparse, mixed transform, snapshot restore and exact diff",
+    "workflow_evidence": "actual 6 host workflows matched independent report hashes; every bundled file checked after ZIP creation"
+  },
+  "scope": "Local archives and fresh consumers; public downloads have separate receipts"
+}
