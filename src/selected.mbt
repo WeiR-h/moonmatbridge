@@ -101,7 +101,12 @@ fn scan_tree(
       wanted[name] = true
     }
   }
-  let budget : TreeBudget = { nodes: 0, elements: 0, }
+  let budget : TreeBudget = {
+    nodes: 0,
+    elements: 0,
+    metadata: 0,
+    metadata_limit: 0,
+  }
   let variables = []
   let roots = []
   let kept : Map[String, MatNode] = Map([])

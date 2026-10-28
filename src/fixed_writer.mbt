@@ -185,7 +185,12 @@ fn plan_tree(
   if variables.length() > limits.max_variables {
     fail("variable-limit", 0, "Too many root variables")
   }
-  let budget : TreeBudget = { nodes: 0, elements: 0, }
+  let budget : TreeBudget = {
+    nodes: 0,
+    elements: 0,
+    metadata: 0,
+    metadata_limit: 0,
+  }
   let names : Map[String, Bool] = Map([])
   let planned = []
   let roots = []

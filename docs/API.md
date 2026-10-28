@@ -86,3 +86,7 @@ CLI info/roundtrip/compress/select and corresponding JS exports use this API. Ol
 ## 完整混合树快照
 
 `@interchange.to_tree_snapshot(variables, limits?, tree_limits?) -> String` 与 `from_tree_snapshot(text, limits?, tree_limits?) -> Array[MatNode]` 保留递归结构和原始存储，见 [TREE_SNAPSHOT.md](TREE_SNAPSHOT.md)。
+
+## 文件数据源
+
+`MatSource`、`SourceLimits`、`default_source_limits()` 及 `read_tree_from` / `read_selected_from` / `inspect_roots_from` 见 [文件数据源](SOURCES.md)。

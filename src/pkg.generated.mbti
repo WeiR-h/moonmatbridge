@@ -14,6 +14,8 @@ pub fn concat_arrays(String, Array[NumericArray], Int, limits? : Limits) -> Nume
 
 pub fn default_limits() -> Limits
 
+pub fn default_source_limits() -> SourceLimits
+
 pub fn default_tree_limits() -> TreeLimits
 
 pub fn deflate_zlib(Bytes, max_bytes? : Int) -> Bytes raise MatError
@@ -23,6 +25,8 @@ pub fn dtype_from_name(String) -> DType raise MatError
 pub fn inflate_zlib(Bytes, max_bytes? : Int) -> Bytes raise MatError
 
 pub fn inspect_roots(Bytes, limits? : Limits, tree_limits? : TreeLimits) -> Array[MatRootInfo] raise MatError
+
+pub fn inspect_roots_from(MatSource, limits? : SourceLimits, tree_limits? : TreeLimits) -> Array[MatRootInfo] raise MatError
 
 pub fn numeric_array(String, DType, Array[Int], Array[Value], imaginary? : Array[Value], is_global? : Bool, limits? : Limits) -> NumericArray raise MatError
 
@@ -38,7 +42,11 @@ pub fn read_npy(Bytes, String, limits? : Limits) -> NumericArray raise MatError
 
 pub fn read_selected(Bytes, Array[String], limits? : Limits, tree_limits? : TreeLimits) -> MatTree raise MatError
 
+pub fn read_selected_from(MatSource, Array[String], limits? : SourceLimits, tree_limits? : TreeLimits) -> MatTree raise MatError
+
 pub fn read_tree(Bytes, limits? : Limits, tree_limits? : TreeLimits) -> MatTree raise MatError
+
+pub fn read_tree_from(MatSource, limits? : SourceLimits, tree_limits? : TreeLimits) -> MatTree raise MatError
 
 pub fn utf8_char_array(String, Array[Int], String, is_global? : Bool, limits? : Limits) -> CharArray raise MatError
 
@@ -187,6 +195,11 @@ pub(all) struct MatRootInfo {
 } derive(@debug.Debug)
 pub fn MatRootInfo::to_repr(Self) -> @debug.Repr
 
+pub(all) struct MatSource {
+  size : Int
+  read_into : (Int, FixedArray[Byte], Int, Int) -> Int
+}
+
 pub(all) struct MatTree {
   description : String
   little_endian : Bool
@@ -222,6 +235,22 @@ pub fn NumericArray::slice(Self, Array[Int], Array[Int], steps? : Array[Int], li
 pub fn NumericArray::to_repr(Self) -> @debug.Repr
 pub fn NumericArray::to_sparse(Self, limits? : Limits) -> SparseArray raise MatError
 pub fn NumericArray::value(Self, Int, imaginary? : Bool) -> Value raise MatError
+
+pub(all) struct SourceLimits {
+  max_source_bytes : Int
+  max_expanded_bytes : Int
+  max_result_bytes : Int
+  max_buffered_root_bytes : Int
+  max_metadata_bytes : Int
+  chunk_bytes : Int
+  max_elements : Int
+  max_variables : Int
+  max_dimensions : Int
+  max_name_bytes : Int
+} derive(Eq, @debug.Debug)
+pub fn SourceLimits::equal(Self, Self) -> Bool
+pub fn SourceLimits::not_equal(Self, Self) -> Bool
+pub fn SourceLimits::to_repr(Self) -> @debug.Repr
 
 pub(all) struct SparseArray {
   name : String

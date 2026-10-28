@@ -1,6 +1,10 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "WeiR-h/moonmatbridge/bridge"
 
+import {
+  "WeiR-h/moonmatbridge",
+}
+
 // Values
 pub fn compare_mat(Bytes, Bytes) -> String
 
@@ -18,7 +22,11 @@ pub fn inspect_mat(Bytes) -> String
 
 pub fn inspect_roots(Bytes) -> String
 
+pub fn inspect_roots_source(@moonmatbridge.MatSource) -> String
+
 pub fn json_to_mat(String) -> BinaryResult
+
+pub fn make_source(Int, (Int, FixedArray[Byte], Int, Int) -> Int) -> @moonmatbridge.MatSource
 
 pub fn mat_to_json(Bytes) -> String
 
@@ -39,6 +47,8 @@ pub fn roundtrip_mat(Bytes) -> BinaryResult
 pub fn sample_mat() -> BinaryResult
 
 pub fn select_mat(Bytes, Array[String]) -> BinaryResult
+
+pub fn select_source_mat(@moonmatbridge.MatSource, Array[String]) -> BinaryResult
 
 pub fn snapshot_to_mat(String) -> BinaryResult
 

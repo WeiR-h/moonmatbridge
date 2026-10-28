@@ -132,3 +132,64 @@ int32_t moonmat_save(moonbit_bytes_t path, moonbit_bytes_t bytes, int32_t size) 
 #endif
   return failed ? 1 : 0;
 }
+
+/* Random-access file transport. Format interpretation remains in MoonBit. */
+#ifdef _WIN32
+typedef struct _stat64 SourceStat;
+#else
+typedef struct stat SourceStat;
+#endif
+typedef struct { int active; int fd; SourceStat status;
+#ifdef _WIN32
+FILETIME modified;
+#endif
+} SourceSlot;
+static SourceSlot source_slots[16];
+int32_t moonmat_source_open(moonbit_bytes_t path, int32_t limit) {
+  int slot = 0; while (slot < 16 && source_slots[slot].active) ++slot;
+  if (slot == 16) return -1;
+#ifdef _WIN32
+  wchar_t *wide = wide_path((const char *)path);
+  int fd = wide ? _wopen(wide, _O_RDONLY | _O_BINARY) : -1;
+  free(wide);
+#else
+  int fd = open((const char *)path, O_RDONLY | O_NONBLOCK | O_CLOEXEC);
+#endif
+  if (fd < 0) return -1;
+  SourceSlot *s = &source_slots[slot];
+  if (FSTAT(fd, &s->status) || s->status.st_size < 0 || s->status.st_size > limit) { CLOSE(fd); return -2; }
+#ifdef _WIN32
+  if ((s->status.st_mode & _S_IFMT) != _S_IFREG || !GetFileTime((HANDLE)_get_osfhandle(fd),NULL,NULL,&s->modified)) { CLOSE(fd); return -1; }
+#else
+  if (!S_ISREG(s->status.st_mode)) { CLOSE(fd); return -1; }
+#endif
+  s->active = 1; s->fd = fd; return slot;
+}
+int32_t moonmat_source_size(int32_t slot) { return slot >= 0 && slot < 16 && source_slots[slot].active ? (int32_t)source_slots[slot].status.st_size : -1; }
+int32_t moonmat_source_read(int32_t slot, int32_t offset, moonbit_bytes_t buffer, int32_t start, int32_t length) {
+  if (slot < 0 || slot >= 16 || !source_slots[slot].active || offset < 0 || start < 0 || length < 0) return -1;
+  int fd = source_slots[slot].fd;
+#ifdef _WIN32
+  if (_lseeki64(fd, offset, SEEK_SET) < 0) return -1;
+  return _read(fd, buffer + start, (unsigned int)length);
+#else
+  ssize_t count;
+  do { count = pread(fd, buffer + start, (size_t)length, offset); } while (count < 0 && errno == EINTR);
+  return (int32_t)count;
+#endif
+}
+int32_t moonmat_source_close(int32_t slot) {
+  if (slot < 0 || slot >= 16 || !source_slots[slot].active) return 0;
+  SourceSlot *s = &source_slots[slot]; SourceStat after;
+  int changed = FSTAT(s->fd, &after) != 0;
+  if (!changed) changed = after.st_size != s->status.st_size || after.st_mtime != s->status.st_mtime;
+#ifdef _WIN32
+  FILETIME modified;
+  if (!GetFileTime((HANDLE)_get_osfhandle(s->fd),NULL,NULL,&modified) || CompareFileTime(&modified,&s->modified)) changed = 1;
+#else
+  if (!changed) changed = after.st_mtim.tv_nsec != s->status.st_mtim.tv_nsec || after.st_ctim.tv_nsec != s->status.st_ctim.tv_nsec || after.st_ctime != s->status.st_ctime;
+#endif
+  if (CLOSE(s->fd)) changed = 1;
+  s->active = 0;
+  return changed;
+}

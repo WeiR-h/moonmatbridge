@@ -1,6 +1,6 @@
 ///|
 test "published compressed dense data preserves complex and uint64" {
-  assert_eq(@mat.version(), "0.0.15")
+  assert_eq(@mat.version(), "0.0.16")
   let id = @mat.numeric_array("id", @mat.UInt64, [1, 2], [
     Unsigned(9007199254740993UL),
     Unsigned(18446744073709551615UL),
@@ -138,4 +138,16 @@ test "published CSC order duplicates and dense values" {
   let tree = @mat.read_tree(@mat.write_tree([@mat.Csc(a)]))
   let restored = @mat.read_tree(@mat.write_tree(@wire.from_tree_snapshot(@wire.to_tree_snapshot(tree.variables))))
   assert_true(@mat.compare_trees(tree, restored).content_equal)
+}
+///|
+test "published data sources support short reads and selected ownership" {
+  let bytes=@mat.write_tree([@mat.Numeric(@mat.raw_array("id",@mat.UInt64,[1,1],b"\xff\xff\xff\xff\xff\xff\xff\xff"))])
+  let source : @mat.MatSource={size:bytes.length(),read_into:(offset,target,start,length)=>{
+    let n=if length>3 {3} else {length}
+    for i=0;i<n;i=i+1{target[start+i]=bytes[offset+i]}
+    n
+  },}
+  assert_eq(@mat.inspect_roots_from(source)[0].class_id,15)
+  let selected=@mat.read_selected_from(source,["id"])
+  assert_true(@mat.write_tree(selected.variables)==bytes)
 }

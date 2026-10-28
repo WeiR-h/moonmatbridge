@@ -131,6 +131,8 @@ pub fn default_tree_limits() -> TreeLimits {
 priv struct TreeBudget {
   mut nodes : Int
   mut elements : Int
+  mut metadata : Int
+  metadata_limit : Int
 }
 
 ///|
@@ -344,6 +346,9 @@ fn visit_node(
         is_global: false,
       }),
     )
+  }
+  if budget.metadata_limit > 0 {
+    source_charge_metadata(bytes, outer, little, budget)
   }
   let end = outer.start + outer.size
   let flags = tag(bytes, outer.start, end, little)

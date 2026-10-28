@@ -22,7 +22,12 @@ def api(method, endpoint, body=None, binary=None, retry=True):
     if binary is not None:
         args += ['-H', 'Content-Type: application/octet-stream', '--input', str(binary)]
     for attempt in range(5 if retry else 1):
-        value = subprocess.run(args, cwd=ROOT, capture_output=True, timeout=120)
+        try:
+            value = subprocess.run(args, cwd=ROOT, capture_output=True, timeout=120)
+        except subprocess.TimeoutExpired as error:
+            if not retry or attempt == 4:
+                raise RuntimeError("GitHub request timed out; refresh remote state before retry") from error
+            continue
         if value.returncode == 0:
             return json.loads(value.stdout)
         if not retry or attempt == 4:

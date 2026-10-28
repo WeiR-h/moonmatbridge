@@ -199,3 +199,34 @@ pub fn mat_to_tree_snapshot(bytes : Bytes) -> String {
 pub fn tree_snapshot_to_mat(text : String) -> BinaryResult {
   binary(() => @mat.write_tree(@wire.from_tree_snapshot(text)))
 }
+
+///|
+#export_name("make_source")
+pub fn make_source(
+  size : Int,
+  reader : (Int, FixedArray[Byte], Int, Int) -> Int,
+) -> @mat.MatSource {
+  { size, read_into: reader, }
+}
+
+///|
+#export_name("inspect_roots_source")
+pub fn inspect_roots_source(source : @mat.MatSource) -> String {
+  @wire.roots_info(@mat.inspect_roots_from(source)).stringify() catch {
+    error => @wire.error_json(error).stringify()
+  }
+}
+
+///|
+#export_name("select_source_mat")
+pub fn select_source_mat(
+  source : @mat.MatSource,
+  names : Array[String],
+) -> BinaryResult {
+  binary(() => {
+    @mat.write_tree(@mat.read_selected_from(source, names).variables, limits={
+      ..@mat.default_limits(),
+      max_elements: @mat.default_source_limits().max_elements,
+    })
+  })
+}

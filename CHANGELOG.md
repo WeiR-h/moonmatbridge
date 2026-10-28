@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.0.16
+
+- Add callback-based MatSource and independent source, expansion, result and metadata quotas.
+- Read files root by root with reusable I/O buffers and full omitted-variable validation.
+- Connect native and Node roots/select to stable file handles with cleanup and source-change checks.
+
+
 ## v0.0.15
 
 - Preserve CSC row order, duplicate slots, capacity and raw numerical planes.

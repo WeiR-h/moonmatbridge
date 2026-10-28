@@ -116,7 +116,7 @@ with zipfile.ZipFile(native_zip, "w", compression=zipfile.ZIP_DEFLATED, compress
         add(z, path, native_name)
     for path in sorted((ROOT / "examples/workflows").glob("*")):
         add(z, path, native_name)
-    for name in ["docs/SCIENTIFIC_WORKFLOWS.md", "docs/REVIEW_EVIDENCE-v0.0.9.md", "docs/ACCEPTANCE.md", "docs/TREE_DIFF.md", "docs/TREE_SNAPSHOT.md"]:
+    for name in ["docs/SCIENTIFIC_WORKFLOWS.md", "docs/REVIEW_EVIDENCE-v0.0.9.md", "docs/ACCEPTANCE.md", "docs/TREE_DIFF.md", "docs/TREE_SNAPSHOT.md", "docs/SOURCES.md"]:
         add(z, ROOT / name, native_name)
     for name in ["docs/COMPATIBILITY_MATRIX.md", "docs/PERFORMANCE.md", "benchmarks/manifest.json"]:
         add(z, ROOT / name, native_name)
@@ -139,6 +139,7 @@ with zipfile.ZipFile(js_zip, "w", compression=zipfile.ZIP_DEFLATED, compressleve
         add(z, path, js_name)
     add(z, ROOT / "docs/SCIENTIFIC_WORKFLOWS.md", js_name)
     add(z, ROOT / "docs/ACCEPTANCE.md", js_name)
+    add(z, ROOT / "docs/SOURCES.md", js_name)
     add(z, ROOT / "docs/TREE_DIFF.md", js_name)
     add(z, ROOT / "docs/TREE_SNAPSHOT.md", js_name)
     z.writestr(f"{js_name}/README.txt", f"MoonMatBridge v{VERSION} JS exports. Import bridge.mjs; see docs/API.md. Host-neutral MoonBit build, no Python/zlib dependency. Browser UI is not shipped/tested.\n")

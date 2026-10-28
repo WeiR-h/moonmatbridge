@@ -28,6 +28,60 @@ extern "C" fn host_emit(data : Bytes, length : Int) -> Int = "moonmat_emit_error
 extern "C" fn exit_process(code : Int) -> Unit = "exit"
 
 ///|
+#borrow(path)
+extern "C" fn source_open(path : Bytes, limit : Int) -> Int = "moonmat_source_open"
+
+///|
+extern "C" fn source_size(handle : Int) -> Int = "moonmat_source_size"
+
+///|
+#borrow(buffer)
+extern "C" fn source_read(
+  handle : Int,
+  offset : Int,
+  buffer : FixedArray[Byte],
+  start : Int,
+  length : Int,
+) -> Int = "moonmat_source_read"
+
+///|
+extern "C" fn source_close(handle : Int) -> Int = "moonmat_source_close"
+
+///|
+fn[T] from_file(
+  path : String,
+  work : (@mat.MatSource) -> T raise @mat.MatError,
+) -> T raise @mat.MatError {
+  let handle = source_open(
+    path_bytes(path),
+    @mat.default_source_limits().max_source_bytes,
+  )
+  if handle < 0 {
+    raise @mat.MatError(
+      if handle == -2 {
+        "file-limit"
+      } else {
+        "io-error"
+      },
+      0,
+      "Cannot open bounded regular source",
+    )
+  }
+  let source : @mat.MatSource = {
+    size: source_size(handle),
+    read_into: (offset, buffer, start, count) => {
+      source_read(handle, offset, buffer, start, count)
+    },
+  }
+  defer ignore(source_close(handle))
+  let result = work(source)
+  if source_close(handle) != 0 {
+    raise @mat.MatError("source-changed", 0, "Source changed during reading")
+  }
+  result
+}
+
+///|
 fn path_bytes(path : String) -> Bytes raise @mat.MatError {
   if path.is_empty() || path.contains("\u{0000}") {
     raise @mat.MatError("invalid-path", 0, "Path is empty or contains NUL")
@@ -121,7 +175,9 @@ fn run(args : Array[String]) -> Unit raise @mat.MatError {
     println(@wire.tree_info(@mat.read_tree(read(args[2]))).stringify(indent=2))
   } else if command == "roots" && args.length() == 3 {
     println(
-      @wire.roots_info(@mat.inspect_roots(read(args[2]))).stringify(indent=2),
+      @wire.roots_info(
+        from_file(args[2], source => @mat.inspect_roots_from(source)),
+      ).stringify(indent=2),
     )
   } else if command == "dump" && args.length() == 4 {
     let document = @wire.to_json(@mat.read_mat(read(args[2])).arrays).stringify(
@@ -215,7 +271,13 @@ fn run(args : Array[String]) -> Unit raise @mat.MatError {
     let names = Array::makei(args.length() - 4, fn(i) { args[i + 4] })
     save(
       args[3],
-      @mat.write_tree(@mat.read_selected(read(args[2]), names).variables),
+      @mat.write_tree(
+        from_file(args[2], source => @mat.read_selected_from(source, names)).variables,
+        limits={
+          ..@mat.default_limits(),
+          max_elements: @mat.default_source_limits().max_elements,
+        },
+      ),
     )
   } else if command == "npy" && args.length() == 5 {
     let file = @mat.read_document(read(args[2]))
