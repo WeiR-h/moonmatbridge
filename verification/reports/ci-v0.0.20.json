@@ -1,0 +1,8 @@
+{
+  "status": "passed",
+  "version": "0.0.20",
+  "run_id": 40813520325,
+  "commit": "423fba97de140e5d9685dc40f3ec1139752f1814",
+  "url": "https://github.com/WeiR-h/moonmatbridge/actions/runs/40813520325",
+  "scope": "Actual Linux three-target verification and GNU Octave v6/v7 producer/consumer; downloaded run artifacts retained."
+}
