@@ -1,0 +1,51 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "WeiR-h/moonmatbridge/interchange"
+
+import {
+  "WeiR-h/moonmatbridge",
+}
+
+// Values
+pub fn compare_tree_text(@moonmatbridge.MatTree, @moonmatbridge.MatTree, String) -> @moonmatbridge.TreeCloseDifference raise @moonmatbridge.MatError
+
+pub fn diff_json(@moonmatbridge.DocumentDifference) -> Json
+
+pub fn document_info(@moonmatbridge.MatDocument) -> Json
+
+pub fn error_json(@moonmatbridge.MatError) -> Json
+
+pub fn from_json(String, limits? : @moonmatbridge.Limits) -> Array[@moonmatbridge.NumericArray] raise @moonmatbridge.MatError
+
+pub fn from_snapshot(String, limits? : @moonmatbridge.Limits) -> Array[@moonmatbridge.MatVariable] raise @moonmatbridge.MatError
+
+pub fn from_tree_snapshot(String, limits? : @moonmatbridge.Limits, tree_limits? : @moonmatbridge.TreeLimits) -> Array[@moonmatbridge.MatNode] raise @moonmatbridge.MatError
+
+pub fn info(@moonmatbridge.MatFile) -> Json
+
+pub fn roots_info(Array[@moonmatbridge.MatRootInfo]) -> Json
+
+pub fn sample() -> Array[@moonmatbridge.NumericArray] raise @moonmatbridge.MatError
+
+pub fn to_json(Array[@moonmatbridge.NumericArray]) -> Json raise @moonmatbridge.MatError
+
+pub fn to_snapshot(Array[@moonmatbridge.MatVariable], limits? : @moonmatbridge.Limits) -> String raise @moonmatbridge.MatError
+
+pub fn to_tree_snapshot(Array[@moonmatbridge.MatNode], limits? : @moonmatbridge.Limits, tree_limits? : @moonmatbridge.TreeLimits) -> String raise @moonmatbridge.MatError
+
+pub fn transform(Array[@moonmatbridge.NumericArray], String, limits? : @moonmatbridge.Limits) -> Array[@moonmatbridge.NumericArray] raise @moonmatbridge.MatError
+
+pub fn transform_document(Array[@moonmatbridge.MatVariable], String, limits? : @moonmatbridge.Limits) -> Array[@moonmatbridge.MatVariable] raise @moonmatbridge.MatError
+
+pub fn tree_close_json(@moonmatbridge.TreeCloseDifference) -> Json
+
+pub fn tree_diff_json(@moonmatbridge.TreeDifference) -> Json
+
+pub fn tree_info(@moonmatbridge.MatTree) -> Json
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits

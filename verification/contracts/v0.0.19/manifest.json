@@ -1,0 +1,8 @@
+{
+  "commit": "8a1f47973f3077adaa5246c2a111f7840495f312",
+  "files": {
+    "src/pkg.generated.mbti": "743e6bbf17a98ae8083883d091407a8df371c1d7aaa9e4566e3cbb393c1ca0d2",
+    "src/interchange/pkg.generated.mbti": "03b6054666f201dfffdd3706ec49ad6ba58503ffb16f18abf5070471119c4bc9",
+    "src/bridge/pkg.generated.mbti": "446a30cb42d29fda85573427ffa5e13af7eb555ef6ff0083a0c3543e75008288"
+  }
+}

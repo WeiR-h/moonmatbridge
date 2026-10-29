@@ -1,11 +1,15 @@
 """Compare published v0.0.19 public signatures with additive codec changes."""
 from pathlib import Path
-import json,re,subprocess
+import hashlib,json,re
 ROOT=Path(__file__).resolve().parents[1]
 VERSION=json.loads((ROOT/'package.json').read_bytes())['version']
 checks=[]
+baseline=ROOT/'verification/contracts/v0.0.19'
+manifest=json.loads((baseline/'manifest.json').read_text(encoding='utf-8'))
 for file in ['src/pkg.generated.mbti','src/interchange/pkg.generated.mbti','src/bridge/pkg.generated.mbti']:
-    old=subprocess.check_output(['git','show','v0.0.19:'+file],cwd=ROOT).decode('utf-8')
+    data=(baseline/file).read_bytes()
+    assert hashlib.sha256(data).hexdigest()==manifest['files'][file],file
+    old=data.decode('utf-8')
     new=(ROOT/file).read_text(encoding='utf-8')
     # Keep every previous declaration. The only permitted signature extension is
     # an optional trailing codec argument on the core MAT read/write family.
