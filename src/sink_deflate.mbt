@@ -25,11 +25,17 @@ fn sink_deflate_hash(state : SinkDeflater, at : Int32) -> Int32 {
 }
 
 ///|
-fn sink_deflate_insert(state : SinkDeflater, at : Int32, end : Int32) -> Unit {
+fn sink_deflate_insert(
+  state : SinkDeflater,
+  at : Int32,
+  end : Int32,
+  base : Int32,
+) -> Unit {
   if at + 2 < end {
     let key = sink_deflate_hash(state, at)
-    state.previous[at & 32767] = state.heads[key]
-    state.heads[key] = at
+    let absolute = base + at
+    state.previous[absolute & 32767] = state.heads[key]
+    state.heads[key] = absolute
   }
 }
 
@@ -38,12 +44,11 @@ fn sink_deflate_block(state : SinkDeflater) -> Unit raise MatError {
   let last = state.received == state.total
   let start = state.history
   let end = start + state.used
-  for i = 0; i < 32768; i = i + 1 {
-    state.heads[i] = -1
-    state.previous[i] = -1
-  }
-  for i = 0; i < start; i = i + 1 {
-    sink_deflate_insert(state, i, end)
+  let base = state.received - state.used - state.history
+  // Absolute positions keep the bounded hash chains across raw blocks. Only the
+  // previous block's two trailing, previously incomplete hashes need insertion.
+  for i = (if start >= 2 { start - 2 } else { 0 }); i < start; i = i + 1 {
+    sink_deflate_insert(state, i, end, base)
   }
   let writer : BitWriter = {
     out: [],
@@ -56,23 +61,24 @@ fn sink_deflate_block(state : SinkDeflater) -> Unit raise MatError {
   while position < end {
     let mut length = 0
     let mut distance = 0
+    let absolute = base + position
     if position + 2 < end {
       let mut candidate = state.heads[sink_deflate_hash(state, position)]
       let mut probes = 0
       let maximum = smaller(258, end - position)
-      while candidate >= 0 &&
-            candidate < position &&
-            position - candidate <= 32768 &&
+      while candidate >= base &&
+            candidate < absolute &&
+            absolute - candidate <= 32768 &&
             probes < 32 {
         let mut matched = 0
         while matched < maximum &&
-              state.window[candidate + matched] ==
+              state.window[candidate - base + matched] ==
               state.window[position + matched] {
           matched = matched + 1
         }
         if matched >= 3 && matched > length {
           length = matched
-          distance = position - candidate
+          distance = absolute - candidate
           if matched == maximum {
             break
           }
@@ -88,12 +94,12 @@ fn sink_deflate_block(state : SinkDeflater) -> Unit raise MatError {
     if length >= 3 {
       writer.match_code(length, distance)
       for i = 0; i < length; i = i + 1 {
-        sink_deflate_insert(state, position + i, end)
+        sink_deflate_insert(state, position + i, end, base)
       }
       position = position + length
     } else {
       writer.literal(state.window[position].to_int())
-      sink_deflate_insert(state, position, end)
+      sink_deflate_insert(state, position, end, base)
       position = position + 1
     }
   }
@@ -157,13 +163,36 @@ fn sink_deflate_feed(
   if count > state.total - state.received {
     fail("payload-size", 0, "Compressed root exceeds preflight size")
   }
-  for i = 0; i < count; i = i + 1 {
-    let byte = buffer[i]
-    state.window[state.history + state.used] = byte
-    state.s1 = (state.s1 + byte.to_int()) % 65521
-    state.s2 = (state.s2 + state.s1) % 65521
-    state.used = state.used + 1
-    state.received = state.received + 1
+  let mut offset = 0
+  while offset < count {
+    let size = smaller(count - offset, 65535 - state.used)
+    buffer.blit_to(
+      state.window,
+      len=size,
+      src_offset=offset,
+      dst_offset=state.history + state.used,
+    )
+    let end = offset + size
+    let mut at = offset
+    // 2,048 worst-case bytes keep both signed accumulators below Int32::max.
+    // Reducing once per batch is equivalent to reduction after every byte.
+    let mut s1 = state.s1
+    let mut s2 = state.s2
+    while at < end {
+      let stop = smaller(end, at + 2048)
+      while at < stop {
+        s1 = s1 + buffer[at].to_int()
+        s2 = s2 + s1
+        at = at + 1
+      }
+      s1 = s1 % 65521
+      s2 = s2 % 65521
+    }
+    state.s1 = s1
+    state.s2 = s2
+    offset = end
+    state.used = state.used + size
+    state.received = state.received + size
     if state.used == 65535 || state.received == state.total {
       sink_deflate_block(state)
     }

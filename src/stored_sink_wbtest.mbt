@@ -19,3 +19,15 @@ test "compressed sink chooses stored coding for fixed-seed incompressible blocks
     "invalid-zlib",
   )
 }
+
+///|
+test "compressed sink batched Adler handles maximum byte values across feeds" {
+  for count in [2047, 2048, 2049, 65537] {
+    let payload = FixedArray::make(count, b'\xff')
+    let node = Numeric(
+      raw_array("maximum", UInt8, [1, count], finish_owned_buffer(payload)),
+    )
+    let expected = compressed_sink_capture([node], 1048576, 1048576)
+    assert_true(compressed_sink_capture([node], 2051, 31) == expected)
+  }
+}

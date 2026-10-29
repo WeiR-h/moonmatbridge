@@ -3,7 +3,8 @@ from pathlib import Path
 import argparse,hashlib,json,platform,struct,subprocess,sys,tempfile,zlib
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'examples/python'))
-from mixed_types import assert_file_equal
+from mixed_types import assert_file_equal, deterministic_mat
+import numpy as np
 VERSION=json.loads((ROOT/'package.json').read_bytes())['version']
 
 def expanded(data):
@@ -23,6 +24,15 @@ def main():
     native=ROOT/'dist'/('moonmat.exe' if platform.system()=='Windows' else 'moonmat')
     files=sorted((ROOT/'verification/local/compatibility').glob('all-classes-*.mat'))
     assert len(files)==8
+    rng=np.random.default_rng(20261029)
+    block=rng.integers(0,256,32768,dtype=np.uint8).tobytes()
+    patterns={
+        'maximum-adler':np.full((1,65537),255,dtype=np.uint8),
+        'history-distance-32768':np.frombuffer(block*5+b'end!',dtype=np.uint8).reshape(1,-1),
+        'stored-boundaries':rng.integers(0,256,(1,150003),dtype=np.uint8),
+    }
+    for name,payload in patterns.items():
+        fixture=d/(name+'.mat');fixture.write_bytes(deterministic_mat({'pattern':payload},False));files.append(fixture)
     checks=[]
     for fixture in files:
         outputs=[]
@@ -36,8 +46,8 @@ def main():
             outputs.append(compressed.read_bytes())
             checks.append({'host':host,'case':fixture.name,'roots':len(sizes),'bytes':compressed.stat().st_size,'sha256':hashlib.sha256(outputs[-1]).hexdigest(),'expanded_equals_canonical':True})
         assert outputs[0]==outputs[1],'Host filesystem adapters changed compressed bytes'
-    report={'status':'passed','version':VERSION,'oracle':'Python zlib, SciPy/NumPy','checks':checks,'scope':'All 15 public base classes, global flags, endian and compressed/plain inputs; independent per-root zlib checks and exact canonical expansion; both hosts byte-identical'}
+    report={'status':'passed','version':VERSION,'oracle':'Python zlib, SciPy/NumPy','checks':checks,'scope':'All 15 public base classes, global flags, endian and compressed/plain inputs; maximum-byte Adler batches, 32 KiB match distance and stored block boundaries; independent per-root zlib checks and exact canonical expansion; both hosts byte-identical'}
     (ROOT/f'verification/reports/compressed-sink-v{VERSION}.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8',newline='\n')
-    print('Incremental sink: 16 independent zlib / all-class host checks passed')
+    print(f'Incremental sink: {len(checks)} independent zlib / all-class and boundary host checks passed')
 
 if __name__=='__main__':main()
