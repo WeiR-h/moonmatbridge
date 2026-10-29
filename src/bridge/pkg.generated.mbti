@@ -20,6 +20,10 @@ pub fn compare_mat_with_options(Bytes, Bytes, String) -> String
 
 pub fn compress_mat(Bytes) -> BinaryResult
 
+pub fn compress_mat_to(Bytes, @moonmatbridge.MatSink) -> String
+
+pub fn compress_mat_to_with_options(Bytes, @moonmatbridge.MatSink, String) -> String
+
 pub fn compress_mat_with_options(Bytes, String) -> BinaryResult
 
 pub fn convert_storage(Bytes, String, Bool) -> BinaryResult

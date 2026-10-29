@@ -68,7 +68,7 @@ pub fn write_npy(NumericArray, limits? : Limits) -> Bytes raise MatError
 
 pub fn write_tree(Array[MatNode], compressed? : Bool, limits? : Limits, tree_limits? : TreeLimits, name_encoding? : NameEncoding) -> Bytes raise MatError
 
-pub fn write_tree_to(Array[MatNode], MatSink, limits? : WriteLimits, tree_limits? : TreeLimits, name_encoding? : NameEncoding) -> Int32 raise MatError
+pub fn write_tree_to(Array[MatNode], MatSink, compressed? : Bool, limits? : WriteLimits, tree_limits? : TreeLimits, name_encoding? : NameEncoding) -> Int32 raise MatError
 
 // Errors
 pub(all) suberror MatError {

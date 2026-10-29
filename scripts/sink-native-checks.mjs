@@ -1,9 +1,9 @@
-import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
+import {readFileSync,writeFileSync,mkdirSync,mkdtempSync} from 'node:fs';
 import {join} from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {root,toolchain} from './moon.mjs';
 import {nativeEnv} from './build-native.mjs';
-const directory=join(root,'verification/local/sink-native-faults');
+const directory=mkdtempSync(join(root,'verification/local/sink-native-faults-'));
 mkdirSync(directory,{recursive:true});
 let source=readFileSync(join(root,'src/cmd/moonmat/io.c'),'utf8');
 source='static int fail_close_once,close_attempts;\nstatic int fault_close(int);\n'+source;

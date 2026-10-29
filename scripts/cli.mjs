@@ -120,7 +120,7 @@ try {
     process.exitCode = JSON.parse(report).content_equal ? 0 : 2;
   }
   else if (command === 'roundtrip' && args.length === 2) withSink(args[1], sink => codecApi.roundtrip_mat_to(read(args[0]), sink));
-  else if (command === 'compress' && args.length === 2) save(args[1], bytes(codecApi.compress_mat(read(args[0]))));
+  else if (command === 'compress' && args.length === 2) withSink(args[1], sink => codecApi.compress_mat_to(read(args[0]),sink));
   else if (['sparsify', 'densify'].includes(command) && args.length === 3) save(args[2], bytes(codecApi.convert_storage(read(args[0]), args[1], command === 'sparsify')));
   else if (command === 'npy' && args.length === 3) save(args[2], bytes(codecApi.mat_to_npy(read(args[0]), args[1])));
   else if (command === 'from-npy' && args.length === 3) save(args[2], bytes(codecApi.npy_to_mat(read(args[0]), args[1])));

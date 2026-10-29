@@ -286,12 +286,13 @@ fn validate_write_limits(limits : WriteLimits) -> Limits raise MatError {
 pub fn write_tree_to(
   variables : Array[MatNode],
   sink : MatSink,
+  compressed~ : Bool = false,
   limits~ : WriteLimits = default_write_limits(),
   tree_limits~ : TreeLimits = default_tree_limits(),
   name_encoding~ : NameEncoding = Utf8,
 ) -> Int32 raise MatError {
   let basic = validate_write_limits(limits)
-  let (planned, _, size) = plan_tree(
+  let (planned, roots, size) = plan_tree(
     variables,
     basic,
     tree_limits,
@@ -306,7 +307,7 @@ pub fn write_tree_to(
       name_encoding,
     )
   }
-  if size > limits.max_output_bytes {
+  if !compressed && size > limits.max_output_bytes {
     fail("file-limit", 0, "Encoded tree exceeds output byte quota")
   }
   let count = if size < limits.chunk_bytes { size } else { limits.chunk_bytes }
@@ -322,12 +323,27 @@ pub fn write_tree_to(
   }
   let header = canonical_header()
   sink_copy(cursor, header, 0, header.length())
-  for node in variables {
-    sink_node(cursor, node, planned, name_encoding~)
+  if compressed {
+    for i = 0; i < variables.length(); i = i + 1 {
+      sink_compressed_root(
+        cursor,
+        variables[i],
+        planned,
+        roots[i],
+        planned[roots[i]] + 8,
+        name_encoding,
+        sink,
+        limits.chunk_bytes,
+      )
+    }
+  } else {
+    for node in variables {
+      sink_node(cursor, node, planned, name_encoding~)
+    }
+    guard! cursor.offset == size
   }
-  guard! cursor.offset == size
   sink_flush(cursor)
-  size
+  cursor.offset
 }
 
 ///|

@@ -109,3 +109,28 @@ pub fn tree_snapshot_to_sink_with_options(
 pub fn tree_snapshot_to_sink(text : String, sink : @mat.MatSink) -> String {
   tree_snapshot_to_sink_with_options(text, sink, "{}")
 }
+
+///|
+#export_name("compress_mat_to_with_options")
+pub fn compress_mat_to_with_options(
+  bytes : Bytes,
+  sink : @mat.MatSink,
+  options : String,
+) -> String {
+  sink_status(() => {
+    let name_encoding = @wire.name_encoding_options(options)
+    @mat.write_tree_to(
+      @mat.read_tree(bytes, name_encoding~).variables,
+      sink,
+      compressed=true,
+      limits=command_write_limits(false),
+      name_encoding~,
+    )
+  })
+}
+
+///|
+#export_name("compress_mat_to")
+pub fn compress_mat_to(bytes : Bytes, sink : @mat.MatSink) -> String {
+  compress_mat_to_with_options(bytes, sink, "{}")
+}

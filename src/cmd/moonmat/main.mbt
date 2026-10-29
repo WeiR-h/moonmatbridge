@@ -23,6 +23,7 @@ fn save_tree(
   path : String,
   nodes : Array[@mat.MatNode],
   selected~ : Bool = false,
+  compressed~ : Bool = false,
   name_encoding~ : @mat.NameEncoding = @mat.Utf8,
 ) -> Unit raise @mat.MatError {
   let slot = sink_begin(path_bytes(path))
@@ -51,7 +52,13 @@ fn save_tree(
     max_dimensions: old.max_dimensions,
     max_name_bytes: old.max_name_bytes,
   }
-  let size = @mat.write_tree_to(nodes, sink, limits~, name_encoding~) catch {
+  let size = @mat.write_tree_to(
+    nodes,
+    sink,
+    compressed~,
+    limits~,
+    name_encoding~,
+  ) catch {
     error =>
       if sink_error(slot) == 3 {
         raise @mat.MatError("output-exists", 0, "Output already exists")
@@ -367,13 +374,11 @@ fn run_command(
       name_encoding~,
     )
   } else if command == "compress" && args.length() == 4 {
-    save(
+    save_tree(
       args[3],
-      @mat.write_tree(
-        @mat.read_tree(read(args[2]), name_encoding~).variables,
-        compressed=true,
-        name_encoding~,
-      ),
+      @mat.read_tree(read(args[2]), name_encoding~).variables,
+      compressed=true,
+      name_encoding~,
     )
   } else if (command == "sparsify" || command == "densify") &&
     args.length() == 5 {

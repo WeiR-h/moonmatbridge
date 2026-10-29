@@ -178,3 +178,19 @@ test "published bounded writer preserves callback bytes and short writes" {
   assert_eq(size,expected.length())
   assert_true(output.unsafe_reinterpret_as_bytes()==expected)
 }
+
+///|
+test "published incremental compressed writer handles positional backpatch" {
+  let a = @mat.numeric_array("signal",@mat.Float64,[1,2],[Floating(-0.0),Floating(2.0)])
+  let nodes = [@mat.Numeric(a)]
+  let output : Array[Byte] = []
+  let sink : @mat.MatSink = {write_from:fn(offset,buffer,start,count){
+    let n = if count<3 {count} else {3}
+    while output.length()<offset+n {output.push(b'\x00')}
+    for i=0;i<n;i=i+1 {output[offset+i]=buffer[start+i]}
+    n
+  }}
+  let size = @mat.write_tree_to(nodes,sink,compressed=true,limits={..@mat.default_write_limits(),chunk_bytes:7})
+  assert_eq(size,output.length())
+  assert_true(@mat.write_tree(@mat.read_tree(Bytes::from_array(output)).variables)==@mat.write_tree(nodes))
+}

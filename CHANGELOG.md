@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.1.4
+
+新增有界增量压缩写出，固定原始块与 32 KiB 历史窗口，按位成本选择 fixed Huffman 或 stored 编码。每根变量使用独立 zlib 流并定点回填长度。Node / native compress 命令接入新路径，增加独立 zlib 展开、全基本类和回填失败验证。
+
 ## v0.1.3
 
 新增 MatSink、独立写入额度及未压缩混合树分块写出。原生与 Node 的 roundtrip/select/restore-tree 使用同目录临时文件和禁止覆盖的提交方式，覆盖短写与关闭失败。提供驻留大树写出示例，公开消费者移除陈旧的固定版本断言。
