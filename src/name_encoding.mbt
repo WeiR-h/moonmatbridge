@@ -30,13 +30,13 @@ fn encode_name(text : String, encoding : NameEncoding) -> Bytes raise MatError {
 
 ///|
 fn decode_name(
-  bytes : Bytes,
+  bytes : BytesView,
   encoding : NameEncoding,
   offset : Int,
 ) -> String raise MatError {
   match encoding {
     Utf8 =>
-      @utf8.decode(bytes[:]) catch {
+      @utf8.decode(bytes) catch {
         _ => {
           fail("invalid-name", offset, "Name must be valid UTF-8")
           ""

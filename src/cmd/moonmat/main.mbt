@@ -73,13 +73,17 @@ fn[T] from_file(
       source_read(handle, offset, buffer, start, count)
     },
   }
-  defer ignore(source_close(handle))
+  let mut closed = false
+  defer if !closed { ignore(source_close(handle)) }
   let result = work(source)
-  if source_close(handle) != 0 {
+  let status = source_close(handle)
+  closed = true
+  if status != 0 {
     raise @mat.MatError("source-changed", 0, "Source changed during reading")
   }
   result
 }
+
 
 ///|
 fn path_bytes(path : String) -> Bytes raise @mat.MatError {

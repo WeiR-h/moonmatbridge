@@ -168,7 +168,7 @@ fn numeric_matrix(
     )
   }
   let name_text = decode_name(
-    bytes[name.start:name.start + name.size].to_owned(),
+    bytes[name.start:name.start + name.size],
     name_encoding,
     name.start,
   )

@@ -13,6 +13,7 @@ function produce(destination)
   data.sparse_signal = sparse([1,3], [2,1], [2,-3], 4,3);
   data.sparse_complex = complex(data.sparse_signal, data.sparse_signal * 2);
   data.title = 'research-data';
+  data.unicode_title = '科研🌙';
   data.char_matrix = ['abc'; 'def'];
   data.empty_char = '';
   data.empty_cell = cell(0,2,3);

@@ -1,16 +1,39 @@
 """Execute real GNU Octave production/consumption; missing tool is an error."""
 from __future__ import annotations
 import hashlib
+import importlib.util
 import json
 import platform
 import shutil
 import subprocess
+import struct
 from pathlib import Path
 from scipy.io import loadmat
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "verification/local/octave"
 VERSION = json.loads((ROOT / "package.json").read_text())["version"]
+
+def verify_unicode_storage(source):
+    """Independent raw-unit check of the actual Octave UTF16 producer."""
+    spec=importlib.util.spec_from_file_location('variants',ROOT/'scripts/variant-analysis.py')
+    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+    data=source.read_bytes();pos=128
+    while pos<len(data):
+        kind,n,start,end=module.element(data,pos)
+        if kind!=14: raise AssertionError('Expected uncompressed Octave v6 matrix')
+        body=data[pos:end];_,_,_,next_pos=module.element(body,8)
+        _,size,dims,next_pos=module.element(body,next_pos)
+        shape=list(struct.unpack_from('<'+'i'*(size//4),body,dims))
+        _,size,name,next_pos=module.element(body,next_pos)
+        label=body[name:name+size].decode('utf-8')
+        if label=='unicode_title':
+            tag,size,start,_=module.element(body,next_pos)
+            assert tag==17 and shape==[1,4],(tag,shape)
+            assert body[start:start+size]=='科研🌙'.encode('utf-16le')
+            return {'status':'passed','shape':shape,'storage_tag':tag,'utf16_units':4,'unicode_scalars':3,'source_sha256':hashlib.sha256(data).hexdigest(),'scope':'Actual Octave producer uses four UTF16 units for three scalars; both hosts and Octave consumer verify the complete file.'}
+        pos=end
+    raise AssertionError('Missing actual non-BMP producer case')
 
 
 def literal(path):
@@ -31,6 +54,7 @@ def main():
         return result.stdout.strip()
     report["tool"] = octave("disp(version());")
     report["production"] = octave(f"produce({literal(OUT)});")
+    report['unicode_storage']=verify_unicode_storage(OUT/'octave-v6.mat')
     for mode in ("v6", "v7"):
         source = OUT / f"octave-{mode}.mat"
         report["files"].append({"file": source.name, "bytes": source.stat().st_size, "sha256": hashlib.sha256(source.read_bytes()).hexdigest()})
@@ -59,6 +83,9 @@ def main():
     # They are tested separately so their failures do not masquerade as valid MAT coverage.
     for source in sorted(OUT.glob("producer-*.mat")):
         row = {"file": source.name, "sha256": hashlib.sha256(source.read_bytes()).hexdigest(), "hosts": []}
+        spec=importlib.util.spec_from_file_location('variants',ROOT/'scripts/variant-analysis.py')
+        analysis=importlib.util.module_from_spec(spec);spec.loader.exec_module(analysis)
+        row['format_analysis']=analysis.analyze(source)
         try:
             loadmat(source, chars_as_strings=False)
             row["scipy"] = "passed"

@@ -67,7 +67,7 @@ fn sparse_matrix_read(
     fail("invalid-name", name.start, "Expected bounded sparse variable name")
   }
   let text = decode_name(
-    bytes[name.start:name.start + name.size].to_owned(),
+    bytes[name.start:name.start + name.size],
     name_encoding,
     name.start,
   )

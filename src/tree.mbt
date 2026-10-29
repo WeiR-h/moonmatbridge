@@ -310,7 +310,7 @@ fn tree_text(
     fail("invalid-name", item.start, "Expected bounded miINT8 name")
   }
   let text = decode_name(
-    bytes[item.start:item.start + item.size].to_owned(),
+    bytes[item.start:item.start + item.size],
     name_encoding,
     item.start,
   )

@@ -53,6 +53,7 @@ try {
   record('Published API compatibility', command(python, ['scripts/api-contract.py']));
   record('Compatibility gap characterization', command(python, ['scripts/compatibility-gaps.py']));
   record('Explicit name codecs and independent mixed metadata checks', command(python, ['scripts/name-checks.py']));
+  record('Independent producer length and class diagnostics', command(python, ['scripts/variant-analysis.py']));
   record('Performance evidence invalidation guards', command(python, ['scripts/test-evidence.py']));
   record('Strict selected reads and root metadata independent checks', command(python, ['scripts/selection-checks.py']));
   record('Large file sources and lifetime checks', command(python, ['scripts/source-checks.py']));
