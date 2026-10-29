@@ -137,6 +137,8 @@ def github():
     assets = [ROOT / "dist" / row["file"] for row in release["archives"]]
     assets += [ROOT / "dist/SHA256SUMS.txt", ROOT / f"dist/release-v{VERSION}.json"]
     assets += sorted((ROOT / "examples/mixed").glob("*.mat"))
+    assets += sorted((ROOT / "examples/unicode").glob("*.mat"))
+    assets += sorted((ROOT / "examples/unicode").glob("*-manifest.json"))
     assets += [ROOT / "examples/mixed/manifest.json"]
     all_classes = ROOT / "examples/workflows/all-base-classes.mat"
     if all_classes.exists(): assets.append(all_classes)

@@ -1,48 +1,43 @@
-# MAT Level 5 读写范围与兼容性
+# MAT Level 5 数据范围与兼容性
 
-当前能力、数据范围与兼容性验证记录。混合树比较和快照接口覆盖递归数据；数值互操作接口保留各自输入域。
+## 数据级读写范围
 
-## 最终范围
+MoonMatBridge 以公开 MAT Level 5 基本类 **1—15** 的数据级读写为稳定范围，覆盖递归混合文件。写入生成确定性的小端文件；读取支持大小端及压缩、未压缩文件。兼容对象为名称、类型、形状、字段顺序、递归关系、全局标记及有效数据，文件描述与压缩布局规范化。
 
-项目以 **MAT Level 5 公开格式定义的全部基本数据类（class 1–15）均可读取、构造与写回** 为 v1.0 终点，包含混合文件和任意受资源限制的递归组合。cell、struct、char 与 sparse 都属于必交范围。写入以合法、确定性的小端 Level 5 为标准输出；读取兼容大小端和压缩/未压缩。兼容指数据类型、维度、字段顺序、嵌套关系及有效数据保持，不要求原文件逐字节复制。
-
-| 基本类 | 最终读写范围 | 当前实现 |
-| --- | --- | --- |
-| 1 cell | 多维、空数组、异构递归元素 | 已实现 |
-| 2 struct | 标量/多维数组、字段表、空结构、嵌套值、列优先元素与字段顺序 | 已实现 |
-| 3 legacy object | 类名、形状、字段与递归值的数据级读写 | 已实现；不执行 MATLAB 类 |
-| 4 char | 字符矩阵、空字符、中文、非 BMP；miINT8/UINT8/UINT16/UTF8/UTF16/UTF32 | 已实现；保留编码及原始单位，详见下文 |
-| 5 sparse | 二维 CSC double、logical、complex double；索引、容量与稀疏存储 | 已实现；保留乱序索引、重复项与容量 |
-| 6–15 numeric | double/single、int/uint 8/16/32/64、logical 标记、浮点复数、多维/空数组 | 已实现 |
-
-所有基本类均需支持全局标记、小数据标签和标准标签、容器内匿名矩阵、文件级压缩，以及共享的文件/元素/深度/节点限额。原有数值互操作功能继续保留：NPY、可读 JSON、数值变换、数值/CSC 快照和精确 diff。这些接口的输入域不会自动扩大为任意混合树。
-
-## 可检验的完成条件
-
-1. 每个基本类都有独立工具产生的读取案例，以及独立工具成功消费 MoonBit 输出的写入案例；全部类同时出现在混合文件中，至少覆盖 cell→struct→cell 和 struct→cell→sparse 等交叉嵌套。
-2. 按大小端、压缩、空数组、多维、字段顺序、UTF 编码、全局标记和资源异常建立逐项矩阵；JS、wasm-gc、native 三目标测试通过。独立验证不能只用本库自读自写。
-3. 给出可下载混合文件、生成器、校验值、运行命令和真实验证报告。数值同存储类型保留原始 IEEE 字节与精确整数；字符保留编码及规范化为小端的存储单位。
-4. 补充 MATLAB 或 GNU Octave 的实际生产/消费回执。对工具之间字符维度或 legacy object 行为不同的案例逐项记录，不能以 SciPy 结果替代 MATLAB 实测。
-5. 处理真实标准文件暴露的问题，并更新公开兼容矩阵。任何尚未完成项都保留“未验证/未完成”，未达门槛前不宣称完整兼容终点已经实现。
-
-## 交付计划
-
-| 日期 | 交付与验收 |
+| 类编号 | 数据范围 |
 | --- | --- |
-| 10 月 16 日，v0.0.5 | 补齐递归 cell/struct/char/legacy object，发布混合案例和独立往返报告，替换旧范围说明 |
-| 10 月 20 日前 | 扩大基本类×编码×空/多维×压缩组合矩阵，补充畸形字段、截断和递归预算用例 |
-| 10 月 24 日前 | 补充 MATLAB/Octave 实际回执；复核 UTF16 代理项/维度、legacy object 和 CSC 标准文件差异；工具不可用时明确列为未完成项 |
-| 10 月 28 日目标，v1.0 | 满足上述全部验收条件后发布兼容终点版本及可复现报告；否则公开剩余问题与修正计划，不用版本号替代验收 |
-| 10 月 31 日前 | 参赛者依据实际完成情况更新报名表并申请复审，保留正式提交回执 |
+| 1 cell | 多维、空数组、异构递归元素 |
+| 2 struct | 标量与多维数组、字段表、字段顺序、空结构与递归数据 |
+| 3 legacy object | 类名、字段、形状与递归值的数据级存储 |
+| 4 char | miINT8、UINT8、UINT16、UTF8、UTF16、UTF32；空数组、多维及非 BMP |
+| 5 sparse | 二维 CSC double、logical、complex double；原始索引顺序、重复槽位及容量 |
+| 6—15 numeric | double、single、有符号及无符号 8/16/32/64 位整数、logical 标记、浮点复数 |
 
-各小版本的范围、性能基准与时间不足时的取舍见 [v0.0.6—v0.0.9 更新计划](NEXT_RELEASES.md)。上述完整兼容终点不因性能优化或新增工作流而缩减。
+容器内匿名矩阵、小数据标签、标准标签及文件级压缩均纳入验证。数值同存储类型保留原始 IEEE 位、NaN payload、负零与精确整数；跨存储类型执行检查转换，无法无损表示时明确失败。logical 规范化为 0/1。
 
-## 当前限制与格式边界
+## 字符、名称与稀疏存储
 
-UTF8 数组以 Unicode scalar 数计维度，遵循本版独立 SciPy 案例；UINT16/UTF16 保存 16 位单位（包括代理项），UTF32 保存合法 scalar。非 BMP 字符在不同生产工具中的维度差异尚需 MATLAB 实测，当前不宣称跨工具所有 Unicode 变体已经验证。
+UTF8 以 Unicode scalar 数计维度，UINT16/UTF16 以 16 位存储单位计维度（包括代理项），UTF32 保留合法 scalar。真实 Octave 非 BMP 生产案例及原始文件见 [Unicode 案例](../examples/unicode/README.md)：`科研🌙` 使用四个 UTF16 单位，两种宿主读写后由 Octave 再次消费核对。
 
-CSC 保留活动行索引顺序、重复槽位及容量；`is_canonical()` 单独判断排序与重复状态。显式 densify 按原顺序累加重复数值，logical 使用逻辑或。旧名称字节通过显式 Latin1 策略读写，独立检查见 name-encoding 版本报告。读取默认严格 UTF-8，可显式指定 Latin1 名称策略，根变量名非空；容器内空名可保留。文件描述、大小端和压缩布局在写回时规范化。
+名称默认严格 UTF-8；可显式指定 Latin1，覆盖变量名、字段名与 legacy 类名，不自动猜测编码。比较和快照保存解码后的名称文本，恢复旧字节编码时明确使用相同写出策略，详见 [名称编码](NAME_ENCODING.md)。
 
-MAT v4 与 HDF5 MAT v7.3 属于不同格式，不属于 Level 5 终点。MATLAB 私有运行时扩展（function handle、mxOPAQUE/MCOS、子系统 workspace）也不等同于公开基本类；当前明确返回错误。若赛事要求这些扩展，也将列为额外交付项并取得真实案例，不能声称“支持所有 MATLAB 对象”。legacy mxOBJECT 基本类的数据级支持不代表能够执行 MATLAB 对象。流式 I/O 与 NPY object/pickle 不属于此 Level 5 读写兼容目标。
+CSC 保留活动索引顺序、重复项、未用槽位及 nzmax；`is_canonical()` 单独判断排序与重复状态。显式 densify 按原存储顺序累加重复数值，复数分量分别处理，logical 使用逻辑或。
 
-首组证据：[混合文件及复现步骤](../examples/mixed/README.md)、[接口与限制](API.md)、[独立验证源码](../scripts/interop.py)、[验证报告目录](../verification/reports)。格式行为参考 [SciPy 1.15.3 Level 5 读写源码](https://github.com/scipy/scipy/tree/v1.15.3/scipy/io/matlab)。
+## 独立证据与生产者差异
+
+- 基本类、混合文件、大小端、压缩、空数组、多维、global 与字段顺序由独立 SciPy/NumPy、格式检查及三目标回归共同验证。
+- 真实 GNU Octave 执行 v6/v7 生产、MoonBit 读写、Octave 消费输出，以及分块根目录和选择读取；具体版本、日志和哈希见各版 octave 回执。
+- 四个固定 Octave 8.4 特例保留原始文件及逐项诊断：短字符矩阵声明多出四个字节；logical CSC 使用普通数组类标记。各工具是否容忍这些文件单独记录，不能把容忍畸形文件等同于标准符合性。分析见 producer-variants 回执。
+- legacy object 的数据由独立工具核对；类执行和 MATLAB 私有运行时恢复不属于数据接口。MATLAB 工具本身的执行结论仅在有真实回执时记录。
+
+## 接口额度与格式边界
+
+内存接口默认输入、输出及累计展开各 64 MiB；文件数据源默认输入、累计展开各 1 GiB，所选规范 MAT 体积 64 MiB，元数据 8 MiB，块 1 MiB。各接口独立执行额度；这些值不等于进程峰值内存。未选变量仍完整校验，详情见 [文件数据源](SOURCES.md)。
+
+MAT v4、HDF5 MAT v7.3、私有 function/opaque/MCOS 与 subsystem workspace 使用其他格式或运行时机制；流式写入、多 GiB 与 NPY object/pickle 分别规划。legacy mxOBJECT 数据支持不执行类方法。
+
+## 稳定发行门槛
+
+全部公开基本类及已知标准变体须有独立案例；任何未解决或未判定的标准项都阻止稳定发行。三目标、真实工具、资源边界、性能及公开包消费通过后才发布稳定版本，日期不替代完成条件。当前路线见 [开发记录](NEXT_RELEASES.md)，历史报告保持原样。
+
+证据入口：[兼容矩阵](COMPATIBILITY_MATRIX.md)、[混合案例](../examples/mixed/README.md)、[科研流程](SCIENTIFIC_WORKFLOWS.md)、[验证报告](../verification/reports)。规范参考：[MathWorks MAT-File Format](https://www.mathworks.com/help/pdf_doc/matlab/matfile_format.pdf)、[SciPy Level 5 实现](https://github.com/scipy/scipy/tree/v1.15.3/scipy/io/matlab)。

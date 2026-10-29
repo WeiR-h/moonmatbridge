@@ -60,6 +60,8 @@ with zipfile.ZipFile(source_zip, "w", compression=zipfile.ZIP_DEFLATED, compress
         for name in sorted(files):
             if name in {".git", ".local-toolchain.json", "SOURCE_SHA256.txt"} or name.endswith(".pyc"):
                 continue
+            if directory == REPORTS and name.endswith(f"-v{VERSION}.json") and name.startswith(("licenses-", "mooncakes-", "mooncake-audit-", "registry-", "distribution-", "public-downloads-", "workflows-public-", "tree-operations-public-", "source-operations-public-", "tree-close-public-")):
+                continue
             add(z, directory / name, source_name)
     z.writestr(f"{source_name}/SOURCE_SHA256.txt", source_hash + "\n")
 
@@ -114,6 +116,8 @@ with zipfile.ZipFile(native_zip, "w", compression=zipfile.ZIP_DEFLATED, compress
     add(z, DIST / "moonmat.exe", native_name, "moonmat.exe")
     for name in ["LICENSE", "NOTICE", "THIRD_PARTY.md", "CHANGELOG.md", "docs/API.md", "docs/COMPATIBILITY.md", "docs/JSON.md", "docs/FORMAT.md", "docs/RECIPES.md", "docs/DIFFERENTIATION.md", "docs/ITERATIONS-v0.0.3.md", "examples/transform-plan.json", "examples/sample.json", "examples/sample.mat", "examples/python/interop_example.py", "examples/matlab/interop_example.m"]:
         add(z, ROOT / name, native_name)
+    for path in sorted((ROOT / "examples/unicode").glob("*")):
+        add(z, path, native_name)
     for path in sorted((ROOT / "examples/mixed").glob("*")):
         add(z, path, native_name)
     for path in sorted((ROOT / "examples/workflows").glob("*")):
@@ -135,6 +139,8 @@ with zipfile.ZipFile(js_zip, "w", compression=zipfile.ZIP_DEFLATED, compressleve
     add(z, ROOT / "_build/js/release/build/bridge/bridge.js", js_name, "bridge.mjs")
     for name in ["LICENSE", "NOTICE", "THIRD_PARTY.md", "docs/API.md", "docs/COMPATIBILITY.md", "docs/JSON.md", "docs/FORMAT.md", "docs/RECIPES.md", "examples/transform-plan.json", "examples/sample.json"]:
         add(z, ROOT / name, js_name)
+    for path in sorted((ROOT / "examples/unicode").glob("*")):
+        add(z, path, js_name)
     for path in sorted((ROOT / "examples/mixed").glob("*")):
         add(z, path, js_name)
     for path in sorted((ROOT / "examples/workflows").glob("*")):

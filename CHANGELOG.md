@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.0.22
+
+统一稳定接口、兼容证据及资源额度说明；提供真实 Octave 非 BMP 文件和稳定发行检查。
+
+## v0.0.21
+
+名称字节视图、源文件关闭路径、CSC 索引块写入、独立生产者诊断和真实 UTF16 非 BMP 验证。固定 v0.0.19 性能对照与全部原始样本随版本保存。
+
+## v0.0.20
+
+显式 UTF8/Latin1 名称策略；MAT 读写可选参数、命令行前置选项、JS 兼容导出及公开 API 基线回归。
+
+
 ## v0.0.19
 
 - Added symmetric floating tolerance comparison for complete mixed trees, complex planes and CSC data.

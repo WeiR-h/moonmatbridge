@@ -1,4 +1,4 @@
-# MoonBit API v0.0.21
+# MoonBit API v0.0.22
 
 The core package is `WeiR-h/moonmatbridge`. The executable, JSON adapter and JS ABI are separate packages; core parsing performs no host I/O.
 
@@ -63,7 +63,7 @@ Exports: `npy_to_mat`, `select_mat`, `inspect_mat`, `mat_to_json`, `json_to_mat`
 
 `DocumentDifference` reports `content_equal`, `variable_order_changed`, `changed_variables`, `variables`. Metadata differences list dtype, shape, global/complex, storage or CSC pointers/rows/capacity. Comparable value changes are counted separately per real/imaginary plane; samples contain a zero-based linear/CSC-slot index, coordinates and exact before/after bytes. Inactive CSC slots have empty coordinates. Shape/type/storage/index-mapping changes are metadata differences, not fabricated element-by-element matches. File descriptions/endian/compression are excluded, while CSC storage metadata is included. No floating tolerance is applied.
 
-`src/pkg.generated.mbti` and the interfaces under `src/interchange` and `src/bridge` contain the complete compiler-generated signatures. Install the exact registry version with `moon add WeiR-h/moonmatbridge@0.0.21`, then import the core and/or interchange package. `examples/registry_consumer` contains a consumer that uses only these public interfaces; the registry verification script resolves a fresh copy and checks its source bytes before running all three targets.
+`src/pkg.generated.mbti` and the interfaces under `src/interchange` and `src/bridge` contain the complete compiler-generated signatures. Install the exact registry version with `moon add WeiR-h/moonmatbridge@0.0.22`, then import the core and/or interchange package. `examples/registry_consumer` contains a consumer that uses only these public interfaces; the registry verification script resolves a fresh copy and checks its source bytes before running all three targets.
 
 NPY input supports primitive float32/64, complex64/128, signed/unsigned integers and bool. Header strings must be plain ASCII, the header fits 64 KiB and no duplicate/unknown keys or trailing payload are accepted. Structured, object/pickle, string, datetime, float16 and ambiguous native-endian descriptors are rejected. NPY scalars become `[1,1]` and vectors become `[n,1]`; multidimensional shape is unchanged. Nonzero bool bytes normalize to canonical 1. All numerical bytes, including nonfinite payloads and exact 64-bit integers, are copied without scalar conversion.
 
@@ -98,3 +98,9 @@ CLI info/roundtrip/compress/select and corresponding JS exports use this API. Ol
 ## Explicit MAT name codecs
 
 MAT read/write families accept optional `name_encoding`, default `NameEncoding::Utf8`; use `NameEncoding::Latin1` explicitly for legacy 8-bit names. It applies to variable, field and legacy class names, separately from character payload encoding. See [NAME_ENCODING.md](NAME_ENCODING.md).
+
+## 稳定接口约定
+
+1.x 保持已有调用、公共字段及既有 JSON 格式的含义。类型或参数的不兼容变更、公开枚举分支造成的穷举变化采用大版本；兼容功能采用次版本，修复采用补丁版本。错误码含义稳定，诊断文字与具体偏移不作为可缓存文件定位接口。精确树比较单独报告根顺序；容差比较将根顺序计为元数据差异，两者保持各自既有语义。
+
+内存、文件、比较和快照接口分别执行 Limits/SourceLimits/TreeLimits。名称转为 Unicode 文本后，UTF-8 体积可能大于旧编码；组合接口时可显式设置适合结果的资源额度。资源额度与峰值内存分别衡量。

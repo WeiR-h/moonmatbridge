@@ -21,7 +21,7 @@ v0.0.6—v0.0.8 组合：小端 / 大端 × 未压缩 / 压缩 × native / JS，
 
 Octave 报告保存真实版本、平台、日志、输入和输出哈希，见 `verification/reports/octave-v*.json`。只有实际存在且状态通过的报告才证明该版本的执行结果。它不等于 MATLAB 已执行，也不证明 Octave 未覆盖的 global 标记、legacy 类或所有 Unicode 变体。
 
-Octave 8.4 的短 UTF8 字符矩阵会出现声明长度与实际长度不符，稀疏 logical 会出现 dense class 与 CSC 负载不符。当前孤立的短字符案例可被 SciPy 和 Octave 自加载，本库仍拒绝；稀疏 logical 案例可被 Octave 自加载，而 SciPy 和本库拒绝。不能将这些工具分歧统一写成“独立工具也不能读取”，也不能把本库的拒绝计为兼容完成。生产器保留单独的 `producer-*.mat`，验证器始终尝试两种宿主并记录各工具实际结果；在 `producer_variants` 中单列为未解决。基本类的规范 char 和 logical CSC 继续由独立 SciPy 文件覆盖。
+Octave 8.4 的短 UTF8 字符矩阵会出现声明长度与实际长度不符，稀疏 logical 会出现 dense class 与 CSC 负载不符。当前孤立的短字符案例可被 SciPy 和 Octave 自加载，本库仍拒绝；稀疏 logical 案例可被 Octave 自加载，而 SciPy 和本库拒绝。不能将这些工具分歧统一写成“独立工具也不能读取”，也不能把本库的拒绝计为兼容完成。生产器保留单独的 `producer-*.mat`，验证器始终尝试两种宿主并记录各工具实际结果；在 `producer_variants` 中分别记录消费结果与独立格式诊断。基本类的规范 char 和 logical CSC 继续由独立 SciPy 文件覆盖。
 
 Octave 的空格 subsystem 字段与 nonsparse 保留字 1 现已接受，写回规范化为零；实际 subsystem 偏移及未知标记仍拒绝。
 
@@ -29,12 +29,12 @@ Octave 的空格 subsystem 字段与 nonsparse 保留字 1 现已接受，写回
 
 | 项目 | 当前状态与处理 |
 | --- | --- |
-| UTF16 / 非 BMP 的生产者维度差异 | 原始单位保留；继续追踪真实生产文件，不能用 UTF8 样例代替 |
+| UTF16 / 非 BMP 的生产者维度差异 | 真实 Octave UTF16 生产、原始单位、维度及双向消费已核对；见 examples/unicode |
 | 非规范 CSC 行顺序或重复项 | v0.0.15 支持原始存储读写；显式 densify 累加重复项 |
 | 非 UTF-8 的旧名称字节 | 显式 Latin1 策略已实现；UTF-8 默认仍严格拒绝；不自动猜测编码 |
-| legacy object 的 MATLAB 类恢复 | SciPy 数据级验证；实际 MATLAB 类行为未验证 |
+| legacy object | 类名、字段与递归值已独立验证；类执行不属于数据接口 |
 
-最终范围与 v1.0 门槛仍以 [COMPATIBILITY.md](COMPATIBILITY.md) 为准。上述缺口未消除前保持 0.x，不以矩阵的基本类数量冒充所有标准变体都已兼容。
+最终范围与 v1.0 门槛仍以 [COMPATIBILITY.md](COMPATIBILITY.md) 为准。已知案例须结合独立诊断判断；任何仍未解决或未判定的标准项继续阻止稳定发行。
 
 文件后端在保持上述格式校验的同时，支持未压缩递归分块读取；奇数块长、短读、未选嵌套损坏及源文件变化由 source 单元测试和 source-operations 报告覆盖。
 

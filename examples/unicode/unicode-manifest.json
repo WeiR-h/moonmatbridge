@@ -1,0 +1,15 @@
+{
+  "producer": "GNU Octave 8.4.0",
+  "ci_run": 40821379475,
+  "commit": "657145091d480a7e07b1cb640ff14d468e7fd0b2",
+  "file": "octave-utf16-nonbmp.mat",
+  "sha256": "111780a5fb75d2a4243f211170a8ed563c937b5106c9bbc53d6075c312597893",
+  "variable": "unicode_title",
+  "shape": [
+    1,
+    4
+  ],
+  "storage": "miUTF16",
+  "storage_units": 4,
+  "unicode_scalars": 3
+}

@@ -1,4 +1,4 @@
-# MoonMatBridge v0.0.21
+# MoonMatBridge v0.0.22
 
 支持显式 UTF-8 / Latin1 名称编解码，覆盖变量名、字段名和 legacy 类名。两个命令行宿主使用前置 `--name-encoding=latin1`；默认调用保持 UTF-8。[名称编码说明](docs/NAME_ENCODING.md)。
 
@@ -8,11 +8,11 @@ MAT 递归 cell/struct/char/legacy object、密集/CSC 稀疏读写、数值编�
 
 未压缩和压缩文件均支持分块读取 256 MiB 未选变量并提取所选结果；压缩读取保留 32 KiB 历史窗口，无需完整展开缓冲。详情见 [文件数据源](docs/SOURCES.md)。
 
-当前源码版本为 v0.0.21，发布模块名为 `WeiR-h/moonmatbridge`。
+当前源码版本为 v0.0.22，发布模块名为 `WeiR-h/moonmatbridge`。
 
 - 压缩读取采用位缓冲、Huffman 短码表与有界输入窗口，减少临时复制和展开缓冲扩容。
 - 完整递归混合数据读写；预检尺寸后写入固定缓冲，保留字符单位、精确整数、复数和 CSC 容量。
-- `roots/select` 按文件根变量读取，支持单次打开和有界暂存，见[文件数据源](docs/SOURCES.md)。
+- `roots/select` 按文件根变量读取，支持单次打开和分块解析，见[文件数据源](docs/SOURCES.md)。
 - `read_selected` 和 `inspect_roots` 支持根目录及按名读取，未选变量仍执行完整校验。
 - `diff-tree-close` 递归比较浮点容差，同时记录原始位是否相同，见 [容差比较](docs/TREE_CLOSE.md)。
 - `diff-tree` 按结构化路径定位 cell、struct、char、数值及 CSC 的精确变化，见 [混合树比较](docs/TREE_DIFF.md)。
@@ -23,7 +23,7 @@ MAT 递归 cell/struct/char/legacy object、密集/CSC 稀疏读写、数值编�
 
 ## 支持范围
 
-| 能力 | v0.0.21 |
+| 能力 | v0.0.22 |
 | --- | --- |
 | MAT Level 5 读取 | 小端、大端；标准标签与小数据标签；多变量 |
 | 压缩读取 | `miCOMPRESSED`；MoonBit 解码 stored/fixed/dynamic DEFLATE，验证 Adler-32 |
@@ -46,7 +46,7 @@ MAT 递归 cell/struct/char/legacy object、密集/CSC 稀疏读写、数值编�
 
 完整格式与边界见[兼容范围](docs/COMPATIBILITY.md)。`info/roundtrip/compress/select`、`snapshot-tree/restore-tree` 与 `diff-tree` 使用完整混合树；原有 JSON、NPY、数组变换、数值快照和 `diff` 沿用数值/CSC 输入域。遇到未覆盖类别会返回明确错误。
 
-混合类型案例：[三个可下载 MAT 文件及复现步骤](examples/mixed/README.md)，含 13 个根变量及嵌套 cell/struct/char/CSC，保留精确 uint64、复数和 legacy 类名。真实 GNU Octave 流程由 CI 执行，实际结果见各版 `verification/reports/octave-v*.json`；MATLAB 执行尚无回执，兼容缺口见读写矩阵。
+混合类型案例：[三个可下载 MAT 文件及复现步骤](examples/mixed/README.md)，含 13 个根变量及嵌套 cell/struct/char/CSC，保留精确 uint64、复数和 legacy 类名。真实 GNU Octave 流程由 CI 执行，实际结果见各版 `verification/reports/octave-v*.json`；UTF16 非 BMP 的真实生产案例见 [Unicode 文件](examples/unicode/README.md)，工具与格式边界见读写矩阵。
 
 ## 直接运行 Windows 程序
 
@@ -84,10 +84,10 @@ JS 适配器只读写文件；格式处理使用编译后的 MoonBit。
 
 ## MoonBit API
 
-发布模块名为 [`WeiR-h/moonmatbridge`](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.0.21)。在已有 MoonBit 项目中安装：
+发布模块名为 [`WeiR-h/moonmatbridge`](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.0.22)。在已有 MoonBit 项目中安装：
 
 ```powershell
-moon add WeiR-h/moonmatbridge@0.0.21
+moon add WeiR-h/moonmatbridge@0.0.22
 ```
 
 核心代码在 `src/`，公开接口在 `src/pkg.generated.mbti`。包内示例可直接运行：
@@ -146,7 +146,7 @@ assert temperature.shape == (2, 3)
 savemat("python.mat", {"signal": np.arange(12).reshape(3, 4)}, do_compression=True)
 ```
 
-仓库提供 [SciPy 示例](examples/python/interop_example.py) 和 [MATLAB 示例](examples/matlab/interop_example.m)。MATLAB 示例是供用户运行的脚本，尚无 MATLAB 实测回执；真实 GNU Octave v6/v7 双向执行结果见对应版本报告，其他兼容证据来自独立 SciPy/NumPy。
+仓库提供 [SciPy 示例](examples/python/interop_example.py) 和 [MATLAB 示例](examples/matlab/interop_example.m)。MATLAB 示例供用户运行；真实 GNU Octave v6/v7 双向执行结果见对应版本报告，其他兼容证据来自独立 SciPy/NumPy。
 
 ## 构建与验证
 
