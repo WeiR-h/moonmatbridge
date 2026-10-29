@@ -1,0 +1,29 @@
+{
+  "status": "ready",
+  "version": "0.1.4",
+  "evidence_version": "0.1.4",
+  "performance_version": "0.1.4",
+  "runtime_source_sha256": "832a42f8901cfd6f80504c61961cae6e639d7359b1e3ba0a55b25201b82d2637",
+  "evidence_sha256": {
+    "v0.1.4.json": "aa46fc8cc606077d0dc9a83a8761f346c22bc73ce028bd454beb3ba2d713b503",
+    "compatibility-v0.1.4.json": "3ff17f34970f900e128a0c10ce3ad49c2646af08a26377c297d7bbae0e770acf",
+    "name-encoding-v0.1.4.json": "3c8512c3f7810efe6ec642c60d0bbbda7e2f79c146bee19478083257ed23b6d6",
+    "api-contract-v0.1.4.json": "3901409ea080e7b78c86e3432c11a713c77e4611f2cfa7a946063598fb51badc",
+    "ci-v0.1.4.json": "bf6de18e71c68cb924670a13596fa90a666db59acf2888bf89fbb8ec1a9cb360",
+    "mooncakes-v0.1.4.json": "d4859cb48b223f5724377b4e9bc8c125e2bb504c638d731af0bbe9037d4cd0fa",
+    "public-downloads-v0.1.4.json": "5640b66f88bbecbd9a7349274307fbee3ab9515da50d4cca93adad3b549ec7bd",
+    "workflows-public-v0.1.4.json": "71fa7e1db1c1329d732c333de389aa762e3b697237399e198765daca25381c72",
+    "tree-operations-public-v0.1.4.json": "59357fbad1c1ddda44ca32917defe0c036ed6f5d10eeaa62be66a17c86a01785",
+    "source-operations-public-v0.1.4.json": "4f846feed05dfb01b2846f220639e988e9e277c5de011fc66d7bcfe6445a1410",
+    "tree-close-public-v0.1.4.json": "aa7e00cba87462303cde7edb37657c954765f80212453703346b9f6ad705b95f",
+    "licenses-v0.1.4.json": "611654914772523bee33b7fbb8eeb8b628ed7fbe21888d88e1d35ff1888c4091",
+    "octave-v0.1.4.json": "fdd0829aa2ccaafb1059aeffd39a7c05fa75908a080c8bb81abe6a6d4062ba73",
+    "producer-variants-v0.1.4.json": "a74b06d1be800d9626a27cd20d28b55f48c7b630be6dc00be2f299c279c92d40",
+    "compatibility-gaps-v0.1.4.json": "9ce32077cbe2d6cdf540c236445558e5a8a841ed7b7c24b3410e709b67135ac8",
+    "performance-vs-85fef84-v0.1.4.json": "c7216d54e8eacc83053acbeb6353c25393baccf1c74d8b485588feb2ba07ab1a",
+    "file-performance-v0.1.4.json": "f414422b20e5e571e4bb38201e2a1666c4ec9b7e96026de126c4ee1b547a7839",
+    "performance-core-followup-v0.1.4.json": "5f04b9f4dd862865d3071b049830679cd0bb2e088804154e30fe45bcb017a7d7"
+  },
+  "blockers": [],
+  "scope": "Public basic-class data compatibility, real Octave Unicode, fixed-runtime performance and public package/assets; MATLAB execution is not asserted."
+}
