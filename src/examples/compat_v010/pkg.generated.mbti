@@ -1,0 +1,17 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "WeiR-h/moonmatbridge/examples/compat_v010"
+
+import {
+  "WeiR-h/moonmatbridge",
+}
+
+// Values
+pub fn published_tree_info(Bytes) -> String raise @moonmatbridge.MatError
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits

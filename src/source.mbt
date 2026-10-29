@@ -2,22 +2,22 @@
 /// Host transport fills a caller-owned buffer and returns the number of bytes read.
 /// Zero is EOF; negative results indicate I/O failure. The source stays stable for the call.
 pub(all) struct MatSource {
-  size : Int
-  read_into : (Int, FixedArray[Byte], Int, Int) -> Int
+  size : Int32
+  read_into : (Int32, FixedArray[Byte], Int32, Int32) -> Int32
 }
 
 ///|
 pub(all) struct SourceLimits {
-  max_source_bytes : Int
-  max_expanded_bytes : Int
-  max_result_bytes : Int
-  max_buffered_root_bytes : Int
-  max_metadata_bytes : Int
-  chunk_bytes : Int
-  max_elements : Int
-  max_variables : Int
-  max_dimensions : Int
-  max_name_bytes : Int
+  max_source_bytes : Int32
+  max_expanded_bytes : Int32
+  max_result_bytes : Int32
+  max_buffered_root_bytes : Int32
+  max_metadata_bytes : Int32
+  chunk_bytes : Int32
+  max_elements : Int32
+  max_variables : Int32
+  max_dimensions : Int32
+  max_name_bytes : Int32
 } derive(Eq, @debug.Debug)
 
 ///|
@@ -68,11 +68,11 @@ fn source_limits(limits : SourceLimits) -> Limits raise MatError {
 ///|
 fn source_fill(
   source : MatSource,
-  offset : Int,
+  offset : Int32,
   buffer : FixedArray[Byte],
-  start : Int,
-  length : Int,
-  chunk : Int,
+  start : Int32,
+  length : Int32,
+  chunk : Int32,
 ) -> Unit raise MatError {
   if offset < 0 ||
     length < 0 ||
@@ -133,9 +133,9 @@ fn source_charge_metadata(
 ///|
 pub fn read_tree_from(
   source : MatSource,
-  limits? : SourceLimits = default_source_limits(),
-  tree_limits? : TreeLimits = default_tree_limits(),
-  name_encoding? : NameEncoding = Utf8,
+  limits~ : SourceLimits = default_source_limits(),
+  tree_limits~ : TreeLimits = default_tree_limits(),
+  name_encoding~ : NameEncoding = Utf8,
 ) -> MatTree raise MatError {
   scan_source_stream(source, None, false, limits, tree_limits, name_encoding~).0
 }
@@ -144,9 +144,9 @@ pub fn read_tree_from(
 pub fn read_selected_from(
   source : MatSource,
   names : Array[String],
-  limits? : SourceLimits = default_source_limits(),
-  tree_limits? : TreeLimits = default_tree_limits(),
-  name_encoding? : NameEncoding = Utf8,
+  limits~ : SourceLimits = default_source_limits(),
+  tree_limits~ : TreeLimits = default_tree_limits(),
+  name_encoding~ : NameEncoding = Utf8,
 ) -> MatTree raise MatError {
   scan_source_stream(
     source,
@@ -161,9 +161,9 @@ pub fn read_selected_from(
 ///|
 pub fn inspect_roots_from(
   source : MatSource,
-  limits? : SourceLimits = default_source_limits(),
-  tree_limits? : TreeLimits = default_tree_limits(),
-  name_encoding? : NameEncoding = Utf8,
+  limits~ : SourceLimits = default_source_limits(),
+  tree_limits~ : TreeLimits = default_tree_limits(),
+  name_encoding~ : NameEncoding = Utf8,
 ) -> Array[MatRootInfo] raise MatError {
   scan_source_stream(
     source,

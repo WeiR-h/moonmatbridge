@@ -67,7 +67,7 @@ test "CSC densification is explicit bounded and preserves negative zero NaN and 
 
 ///|
 test "CSC validates pointers indices ordering storage and numeric types" {
-  let make = (rows : Array[Int], cols : Array[Int]) => {
+  let make = (rows : Array[Int32], cols : Array[Int32]) => {
     ignore(
       raw_sparse_array(
         "x",

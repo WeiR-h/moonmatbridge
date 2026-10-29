@@ -1,0 +1,32 @@
+{
+  "directory": "msvc-14.44",
+  "vc_directory": "14.44.35207",
+  "source": "https://aka.ms/vs/17/release/channel",
+  "packages": [
+    {
+      "fileName": "Microsoft.VC.14.44.17.14.CRT.Headers.base.vsix",
+      "url": "https://download.visualstudio.microsoft.com/download/pr/c610cd8c-801b-44b8-a80a-82cc382aeb43/852382a9aa73502b7849c1bcadfb603ba7175c4e8b60e6aba03c7de711d4ece5/Microsoft.VC.14.44.17.14.CRT.Headers.base.vsix",
+      "sha256": "852382a9aa73502b7849c1bcadfb603ba7175c4e8b60e6aba03c7de711d4ece5"
+    },
+    {
+      "fileName": "Microsoft.VC.14.44.17.14.CRT.x64.Desktop.base.vsix",
+      "url": "https://download.visualstudio.microsoft.com/download/pr/67cf767c-5e71-47c2-a54a-cd5631e28942/f01f701a7bcd9587a340898c851424f6a52bb913a70c185ff0d5bf0288c5831a/Microsoft.VC.14.44.17.14.CRT.x64.Desktop.base.vsix",
+      "sha256": "f01f701a7bcd9587a340898c851424f6a52bb913a70c185ff0d5bf0288c5831a"
+    },
+    {
+      "fileName": "Microsoft.VC.14.44.17.14.CRT.x64.Store.base.vsix",
+      "url": "https://download.visualstudio.microsoft.com/download/pr/67cf767c-5e71-47c2-a54a-cd5631e28942/9135b03c0df53c7a0aa9bef7230a1c2ff4263a0ee7baa7e419d034f484f6bb56/Microsoft.VC.14.44.17.14.CRT.x64.Store.base.vsix",
+      "sha256": "9135b03c0df53c7a0aa9bef7230a1c2ff4263a0ee7baa7e419d034f484f6bb56"
+    },
+    {
+      "fileName": "Microsoft.VC.14.44.17.14.Tools.HostX64.TargetX64.base.vsix",
+      "url": "https://download.visualstudio.microsoft.com/download/pr/aa209763-134c-427b-9960-9ca54ccc1734/f4ad3cee4ef18e9f36382399261de27be6910ab3467178d7e687377ec841306d/Microsoft.VC.14.44.17.14.Tools.HostX64.TargetX64.base.vsix",
+      "sha256": "f4ad3cee4ef18e9f36382399261de27be6910ab3467178d7e687377ec841306d"
+    },
+    {
+      "fileName": "Microsoft.VC.14.44.17.14.Tools.HostX64.TargetX64.Res.base.enu.vsix",
+      "url": "https://download.visualstudio.microsoft.com/download/pr/aa209763-134c-427b-9960-9ca54ccc1734/603375e4d6d639bc6e0a7d0d657b17e0c3b72e52450f78eb41e987f40c3b5305/Microsoft.VC.14.44.17.14.Tools.HostX64.TargetX64.Res.base.enu.vsix",
+      "sha256": "603375e4d6d639bc6e0a7d0d657b17e0c3b72e52450f78eb41e987f40c3b5305"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 ///|
 priv struct WriteCursor {
-  mut offset : Int
-  mut node : Int
+  mut offset : Int32
+  mut node : Int32
 }
 
 ///|
@@ -27,8 +27,8 @@ fn fixed_u32(
 fn fixed_tag(
   out : FixedArray[Byte],
   cursor : WriteCursor,
-  kind : Int,
-  size : Int,
+  kind : Int32,
+  size : Int32,
 ) -> Unit {
   fixed_u32(out, cursor, kind.to_uint64())
   fixed_u32(out, cursor, size.to_uint64())
@@ -38,7 +38,7 @@ fn fixed_tag(
 fn fixed_bytes(
   out : FixedArray[Byte],
   cursor : WriteCursor,
-  kind : Int,
+  kind : Int32,
   bytes : Bytes,
 ) -> Unit {
   fixed_tag(out, cursor, kind, bytes.length())
@@ -52,7 +52,7 @@ fn fixed_bytes(
 fn fixed_ints(
   out : FixedArray[Byte],
   cursor : WriteCursor,
-  values : Array[Int],
+  values : Array[Int32],
 ) -> Unit {
   fixed_tag(out, cursor, 5, values.length() * 4)
   let start = cursor.offset
@@ -92,8 +92,8 @@ fn fixed_node(
   out : FixedArray[Byte],
   cursor : WriteCursor,
   node : MatNode,
-  planned : Array[Int],
-  name_encoding? : NameEncoding = Utf8,
+  planned : Array[Int32],
+  name_encoding~ : NameEncoding = Utf8,
 ) -> Unit raise MatError {
   let body_size = planned[cursor.node]
   cursor.node = cursor.node + 1
@@ -188,8 +188,8 @@ fn plan_tree(
   variables : Array[MatNode],
   limits : Limits,
   tree_limits : TreeLimits,
-  name_encoding? : NameEncoding = Utf8,
-) -> (Array[Int], Array[Int], Int) raise MatError {
+  name_encoding~ : NameEncoding = Utf8,
+) -> (Array[Int32], Array[Int32], Int32) raise MatError {
   validate_limits(limits)
   validate_tree_limits(tree_limits)
   if variables.length() > limits.max_variables {
@@ -233,9 +233,9 @@ fn plan_tree(
 /// Validate recursive data and cumulative budgets without constructing MAT bytes.
 pub fn validate_tree(
   variables : Array[MatNode],
-  limits? : Limits = default_limits(),
-  tree_limits? : TreeLimits = default_tree_limits(),
-  name_encoding? : NameEncoding = Utf8,
+  limits~ : Limits = default_limits(),
+  tree_limits~ : TreeLimits = default_tree_limits(),
+  name_encoding~ : NameEncoding = Utf8,
 ) -> Unit raise MatError {
   ignore(plan_tree(variables, limits, tree_limits, name_encoding~))
 }
@@ -244,10 +244,10 @@ pub fn validate_tree(
 /// Preflight all nodes, then write directly to a privately owned fixed buffer.
 pub fn write_tree(
   variables : Array[MatNode],
-  compressed? : Bool = false,
-  limits? : Limits = default_limits(),
-  tree_limits? : TreeLimits = default_tree_limits(),
-  name_encoding? : NameEncoding = Utf8,
+  compressed~ : Bool = false,
+  limits~ : Limits = default_limits(),
+  tree_limits~ : TreeLimits = default_tree_limits(),
+  name_encoding~ : NameEncoding = Utf8,
 ) -> Bytes raise MatError {
   let (planned, roots, size) = plan_tree(
     variables,

@@ -1,0 +1,15 @@
+{
+  "version": "0.1.0",
+  "commit": "a16ea9c4af060cb25254c36edac8caca853874d1",
+  "files": {
+    "src/pkg.generated.mbti": "0bbc5e7aa27d53216f516becb00c545a9a71762c5b4c86e234a84fcc7e58ecd2",
+    "src/interchange/pkg.generated.mbti": "1b4c525de642b03183d4f37637fe3947d6dd3850cde3c970a02f80d78c82d9a0",
+    "src/bridge/pkg.generated.mbti": "fea45fad0855c13bc154366ccb44fd93adaa68c75318895b6d76620d0def3f84"
+  },
+  "consumer": {
+    "file": "src/examples/compat_v010/consumer_wbtest.mbt",
+    "source": "v0.1.0:examples/registry_consumer/consumer_wbtest.mbt",
+    "adjustment": "Version equality assertion removed; moonc 0.10.16 formatter applied; published data/API calls unchanged.",
+    "sha256": "e12afe6f4913e663cd1917815f211fe8393b9a705f4f65b33a3ed640f5c92d64"
+  }
+}

@@ -97,7 +97,7 @@ test "tree snapshot rejects malformed payload unknown fields and duplicate root 
 ///|
 test "tree snapshot cumulatively bounds fields nodes elements and decoded bytes" {
   let text = to_tree_snapshot(snapshot_tree_fixture())
-  let check = fn(nodes : Int, fields : Int) {
+  let check = fn(nodes : Int32, fields : Int32) {
     ignore(
       from_tree_snapshot(text, tree_limits={
         max_depth: 64,

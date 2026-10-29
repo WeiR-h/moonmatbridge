@@ -1,5 +1,10 @@
 ///|
-fn bits_at(bytes : Bytes, offset : Int, width : Int, little : Bool) -> UInt64 {
+fn bits_at(
+  bytes : Bytes,
+  offset : Int32,
+  width : Int32,
+  little : Bool,
+) -> UInt64 {
   let mut bits = 0UL
   for i = 0; i < width; i = i + 1 {
     let index = if little { offset + i } else { offset + width - 1 - i }
@@ -9,7 +14,7 @@ fn bits_at(bytes : Bytes, offset : Int, width : Int, little : Bool) -> UInt64 {
 }
 
 ///|
-fn push_bits(out : Array[Byte], bits : UInt64, width : Int) -> Unit {
+fn push_bits(out : Array[Byte], bits : UInt64, width : Int32) -> Unit {
   for i = 0; i < width; i = i + 1 {
     out.push(((bits >> (i * 8)) & 255UL).to_byte())
   }
@@ -18,7 +23,7 @@ fn push_bits(out : Array[Byte], bits : UInt64, width : Int) -> Unit {
 ///|
 fn scalar_at(
   bytes : Bytes,
-  offset : Int,
+  offset : Int32,
   dtype : DType,
   little : Bool,
 ) -> Value {
@@ -41,7 +46,7 @@ fn signed_value(
   value : Value,
   low : Int64,
   high : Int64,
-  offset : Int,
+  offset : Int32,
 ) -> Int64 raise MatError {
   let result = match value {
     Signed(n) => n
@@ -69,7 +74,7 @@ fn signed_value(
 fn unsigned_value(
   value : Value,
   high : UInt64,
-  offset : Int,
+  offset : Int32,
 ) -> UInt64 raise MatError {
   let result = match value {
     Unsigned(n) => n
@@ -94,7 +99,7 @@ fn unsigned_value(
 }
 
 ///|
-fn floating_value(value : Value, offset : Int) -> Double raise MatError {
+fn floating_value(value : Value, offset : Int32) -> Double raise MatError {
   match value {
     Floating(n) => n
     Signed(n) => {
@@ -122,7 +127,7 @@ fn append_value(
   out : Array[Byte],
   value : Value,
   dtype : DType,
-  offset : Int,
+  offset : Int32,
 ) -> Unit raise MatError {
   let bits = match dtype {
     Float64 => floating_value(value, offset).reinterpret_as_uint64()
@@ -160,8 +165,8 @@ fn append_value(
 fn validate_name(
   name : String,
   limits : Limits,
-  allow_empty? : Bool = false,
-  name_encoding? : NameEncoding = Utf8,
+  allow_empty~ : Bool = false,
+  name_encoding~ : NameEncoding = Utf8,
 ) -> Unit raise MatError {
   let bytes = encode_name(name, name_encoding)
   if (!allow_empty && bytes.length() == 0) ||
@@ -174,7 +179,10 @@ fn validate_name(
 }
 
 ///|
-fn validate_layout(array : NumericArray, limits : Limits) -> Int raise MatError {
+fn validate_layout(
+  array : NumericArray,
+  limits : Limits,
+) -> Int32 raise MatError {
   let count = element_count(array.shape, limits, 0)
   let expected = count * array.dtype.width()
   let planes = if array.is_complex() { 2 } else { 1 }
@@ -205,9 +213,9 @@ fn validate_layout(array : NumericArray, limits : Limits) -> Int raise MatError 
 fn validate_array(
   array : NumericArray,
   limits : Limits,
-  allow_empty? : Bool = false,
-  name_encoding? : NameEncoding = Utf8,
-) -> Int raise MatError {
+  allow_empty~ : Bool = false,
+  name_encoding~ : NameEncoding = Utf8,
+) -> Int32 raise MatError {
   validate_name(array.name, limits, allow_empty~, name_encoding~)
   let count = validate_layout(array, limits)
   if array.dtype == Logical {
@@ -227,11 +235,11 @@ fn validate_array(
 pub fn numeric_array(
   name : String,
   dtype : DType,
-  shape : Array[Int],
+  shape : Array[Int32],
   values : Array[Value],
   imaginary? : Array[Value],
-  is_global? : Bool = false,
-  limits? : Limits = default_limits(),
+  is_global~ : Bool = false,
+  limits~ : Limits = default_limits(),
 ) -> NumericArray raise MatError {
   validate_limits(limits)
   validate_name(name, limits)
@@ -278,11 +286,11 @@ pub fn numeric_array(
 pub fn raw_array(
   name : String,
   dtype : DType,
-  shape : Array[Int],
+  shape : Array[Int32],
   real : Bytes,
   imag? : Bytes,
-  is_global? : Bool = false,
-  limits? : Limits = default_limits(),
+  is_global~ : Bool = false,
+  limits~ : Limits = default_limits(),
 ) -> NumericArray raise MatError {
   validate_limits(limits)
   let result : NumericArray = {
@@ -300,8 +308,8 @@ pub fn raw_array(
 ///|
 pub fn NumericArray::value(
   self : NumericArray,
-  index : Int,
-  imaginary? : Bool = false,
+  index : Int32,
+  imaginary~ : Bool = false,
 ) -> Value raise MatError {
   let count = validate_layout(self, default_limits())
   if index < 0 || index >= count {
@@ -328,8 +336,8 @@ pub fn NumericArray::value(
 /// Convert multidimensional zero-based coordinates to a column-major linear index.
 pub fn NumericArray::index(
   self : NumericArray,
-  coordinates : Array[Int],
-) -> Int raise MatError {
+  coordinates : Array[Int32],
+) -> Int32 raise MatError {
   if coordinates.length() != self.shape.length() {
     fail("index-range", 0, "Coordinate rank differs from shape")
   }

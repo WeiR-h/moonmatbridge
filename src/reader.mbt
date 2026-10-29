@@ -1,16 +1,16 @@
 ///|
 priv struct Element {
-  kind : Int
-  start : Int
-  size : Int
-  next : Int
+  kind : Int32
+  start : Int32
+  size : Int32
+  next : Int32
 }
 
 ///|
 fn tag(
   bytes : Bytes,
-  offset : Int,
-  end : Int,
+  offset : Int32,
+  end : Int32,
   little : Bool,
 ) -> Element raise MatError {
   if offset < 0 || end > bytes.length() || end - offset < 8 {
@@ -59,9 +59,9 @@ fn numeric_payload(
   bytes : Bytes,
   element : Element,
   dtype : DType,
-  count : Int,
+  count : Int32,
   little : Bool,
-  keep? : Bool = true,
+  keep~ : Bool = true,
 ) -> Bytes raise MatError {
   let storage = from_mi_type(element.kind, element.start - 8)
   if element.size != count * storage.width() {
@@ -109,10 +109,10 @@ fn numeric_matrix(
   outer : Element,
   little : Bool,
   limits : Limits,
-  nested? : Bool = false,
-  keep? : Bool = true,
-  name_encoding? : NameEncoding = Utf8,
-) -> (NumericArray?, Int) raise MatError {
+  nested~ : Bool = false,
+  keep~ : Bool = true,
+  name_encoding~ : NameEncoding = Utf8,
+) -> (NumericArray?, Int32) raise MatError {
   let end = outer.start + outer.size
   let flags = tag(bytes, outer.start, end, little)
   if flags.kind != 6 || flags.size != 8 {
@@ -214,8 +214,8 @@ fn matrix(
   outer : Element,
   little : Bool,
   limits : Limits,
-  nested? : Bool = false,
-  name_encoding? : NameEncoding = Utf8,
+  nested~ : Bool = false,
+  name_encoding~ : NameEncoding = Utf8,
 ) -> NumericArray raise MatError {
   let (value, _) = numeric_matrix(
     bytes,
@@ -232,8 +232,8 @@ fn matrix(
 /// Read dense and CSC sparse MAT Level 5. Unknown classes fail; nothing is silently skipped.
 pub fn read_document(
   bytes : Bytes,
-  limits? : Limits = default_limits(),
-  name_encoding? : NameEncoding = Utf8,
+  limits~ : Limits = default_limits(),
+  name_encoding~ : NameEncoding = Utf8,
 ) -> MatDocument raise MatError {
   validate_limits(limits)
   if bytes.length() > limits.max_file_bytes {
@@ -318,7 +318,7 @@ fn read_variable(
   outer : Element,
   little : Bool,
   limits : Limits,
-  name_encoding? : NameEncoding = Utf8,
+  name_encoding~ : NameEncoding = Utf8,
 ) -> MatVariable raise MatError {
   let flags = tag(bytes, outer.start, outer.start + outer.size, little)
   if flags.kind != 6 || flags.size != 8 {
@@ -335,8 +335,8 @@ fn read_variable(
 /// Compatibility API for dense-only consumers. Sparse variables fail explicitly; use read_document for mixed files.
 pub fn read_mat(
   bytes : Bytes,
-  limits? : Limits = default_limits(),
-  name_encoding? : NameEncoding = Utf8,
+  limits~ : Limits = default_limits(),
+  name_encoding~ : NameEncoding = Utf8,
 ) -> MatFile raise MatError {
   let document = read_document(bytes, limits~, name_encoding~)
   let arrays = document.variables.map(item => {

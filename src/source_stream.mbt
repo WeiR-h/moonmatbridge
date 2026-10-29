@@ -3,9 +3,9 @@ priv struct SourceCursor {
   source : MatSource
   producer : SourceInflater?
   buffer : FixedArray[Byte]
-  mut position : Int
-  mut start : Int
-  mut available : Int
+  mut position : Int32
+  mut start : Int32
+  mut available : Int32
 }
 
 ///|
@@ -42,7 +42,7 @@ fn SourceCursor::byte(self : SourceCursor) -> Byte raise MatError {
 ///|
 fn SourceCursor::owned(
   self : SourceCursor,
-  count : Int,
+  count : Int32,
 ) -> Bytes raise MatError {
   if count < 0 || count > self.source.size - self.position {
     fail("truncated-data", self.position, "Payload exceeds source")
@@ -67,7 +67,10 @@ fn SourceCursor::owned(
 }
 
 ///|
-fn SourceCursor::skip(self : SourceCursor, count : Int) -> Unit raise MatError {
+fn SourceCursor::skip(
+  self : SourceCursor,
+  count : Int32,
+) -> Unit raise MatError {
   if count < 0 || count > self.source.size - self.position {
     fail("truncated-data", self.position, "Payload exceeds source")
   }
@@ -86,17 +89,17 @@ fn SourceCursor::skip(self : SourceCursor, count : Int) -> Unit raise MatError {
 
 ///|
 priv struct SourceTag {
-  kind : Int
-  size : Int
-  start : Int
-  next : Int
+  kind : Int32
+  size : Int32
+  start : Int32
+  next : Int32
   inline_data : Bytes?
 }
 
 ///|
 fn SourceCursor::tag(
   self : SourceCursor,
-  end : Int,
+  end : Int32,
   little : Bool,
 ) -> SourceTag raise MatError {
   let offset = self.position
@@ -167,12 +170,15 @@ priv struct SourceScan {
   tree : TreeLimits
   budget : TreeBudget
   wanted : Map[String, Bool]?
-  mut result_size : Int
-  mut expanded : Int
+  mut result_size : Int32
+  mut expanded : Int32
 }
 
 ///|
-fn SourceScan::metadata(self : SourceScan, count : Int) -> Unit raise MatError {
+fn SourceScan::metadata(
+  self : SourceScan,
+  count : Int32,
+) -> Unit raise MatError {
   if count > self.limits.max_metadata_bytes - self.budget.metadata {
     fail("metadata-limit", 0, "Cumulative source metadata exceeds quota")
   }
@@ -182,7 +188,7 @@ fn SourceScan::metadata(self : SourceScan, count : Int) -> Unit raise MatError {
 ///|
 fn SourceScan::result(
   self : SourceScan,
-  count : Int,
+  count : Int32,
   keep : Bool,
 ) -> Unit raise MatError {
   if !keep {
@@ -199,7 +205,7 @@ fn source_text_value(
   raw : Bytes,
   limits : Limits,
   empty : Bool,
-  name_encoding? : NameEncoding = Utf8,
+  name_encoding~ : NameEncoding = Utf8,
 ) -> String raise MatError {
   tree_text(
     raw,
@@ -214,7 +220,7 @@ fn source_text_value(
 fn source_plane(
   cursor : SourceCursor,
   tag : SourceTag,
-  count : Int,
+  count : Int32,
   dtype : DType,
   little : Bool,
   keep : Bool,
@@ -283,11 +289,11 @@ fn source_indices(
   cursor : SourceCursor,
   tag : SourceTag,
   keep : Bool,
-  row_bound : Int,
-  slots : Int,
+  row_bound : Int32,
+  slots : Int32,
   pointers : Bool,
   little : Bool,
-) -> (Array[Int], Int) raise MatError {
+) -> (Array[Int32], Int32) raise MatError {
   let count = tag.size / 4
   let out = if keep { Array::make(count, 0) } else { [] }
   let mut first_bad = -1
@@ -319,7 +325,7 @@ fn source_character(
   cursor : SourceCursor,
   tag : SourceTag,
   encoding : CharEncoding,
-  count : Int,
+  count : Int32,
   little : Bool,
   keep : Bool,
 ) -> Bytes raise MatError {
@@ -412,7 +418,7 @@ fn source_stream_node(
   outer : SourceTag,
   little : Bool,
   state : SourceScan,
-  depth : Int,
+  depth : Int32,
   keep_parent : Bool,
 ) -> (MatNode?, MatRootInfo) raise MatError {
   charge_node(state.budget, depth, state.tree)
@@ -805,7 +811,7 @@ fn scan_source_stream(
   collect : Bool,
   limits : SourceLimits,
   tree : TreeLimits,
-  name_encoding? : NameEncoding = Utf8,
+  name_encoding~ : NameEncoding = Utf8,
 ) -> (MatTree, Array[MatRootInfo]) raise MatError {
   let basic = source_limits(limits)
   validate_tree_limits(tree)

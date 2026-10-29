@@ -10,12 +10,20 @@ export function toolchain() {
   const config = existsSync(configPath) ? JSON.parse(readFileSync(configPath, 'utf8')) : {};
   const moonHome = process.env.MOON_HOME || config.moonHome;
   const executable = process.env.MOONMAT_MOON || (moonHome ? join(moonHome, 'bin', process.platform === 'win32' ? 'moon.exe' : 'moon') : 'moon');
-  const env = {...process.env, ...(moonHome ? {MOON_HOME: moonHome} : {})};
+  const env = {...process.env, ...(moonHome ? {MOON_HOME: moonHome} : {}), MOONBIT_NEW_NATIVE: '0'};
   const pathKey = Object.keys(env).find(key => key.toLowerCase() === 'path');
   const inheritedPath = pathKey ? env[pathKey] : '';
   if (pathKey) delete env[pathKey];
   const separator = process.platform === 'win32' ? ';' : ':';
   env.PATH = [moonHome ? join(moonHome, 'bin') : '', dirname(process.execPath), inheritedPath].filter(Boolean).join(separator);
+  if (process.platform === 'win32' && config.msvc) {
+    const m = config.msvc;
+    env.PATH = m.bin + separator + env.PATH;
+    env.INCLUDE = [join(m.vcRoot,'include'), ...['ucrt','shared','um','winrt'].map(x=>join(m.sdkRoot,'Include',m.sdkVersion,x))].join(';');
+    env.LIB = [join(m.vcRoot,'lib','x64'), ...['ucrt','um'].map(x=>join(m.sdkRoot,'Lib',m.sdkVersion,x,'x64'))].join(';');
+    env.MOON_CC = join(m.bin,'cl.exe');
+    env.MOON_AR = join(m.bin,'lib.exe');
+  }
   return {executable, env, config};
 }
 export function runMoon(args, extraEnv = {}) {

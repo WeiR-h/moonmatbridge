@@ -1,8 +1,8 @@
 ///|
 fn remap_array(
   source : NumericArray,
-  shape : Array[Int],
-  source_index : (Int) -> Int,
+  shape : Array[Int32],
+  source_index : (Int32) -> Int32,
   limits : Limits,
 ) -> NumericArray raise MatError {
   let count = element_count(shape, limits, 0)
@@ -35,10 +35,10 @@ fn remap_array(
 /// Zero-based strided slicing. Counts are output dimensions; positive steps retain raw bits.
 pub fn NumericArray::slice(
   self : NumericArray,
-  starts : Array[Int],
-  counts : Array[Int],
-  steps? : Array[Int],
-  limits? : Limits = default_limits(),
+  starts : Array[Int32],
+  counts : Array[Int32],
+  steps? : Array[Int32],
+  limits~ : Limits = default_limits(),
 ) -> NumericArray raise MatError {
   validate_limits(limits)
   let input_count = validate_array(self, limits)
@@ -95,9 +95,9 @@ pub fn NumericArray::slice(
 /// Gather one axis in caller-specified order, including repeated indices, without numeric conversion.
 pub fn NumericArray::gather_axis(
   self : NumericArray,
-  axis : Int,
-  indices : Array[Int],
-  limits? : Limits = default_limits(),
+  axis : Int32,
+  indices : Array[Int32],
+  limits~ : Limits = default_limits(),
 ) -> NumericArray raise MatError {
   validate_limits(limits)
   let input_count = validate_array(self, limits)

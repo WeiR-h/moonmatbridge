@@ -1,5 +1,5 @@
 ///|
-fn test_source(bytes : Bytes, maximum : Int) -> MatSource {
+fn test_source(bytes : Bytes, maximum : Int32) -> MatSource {
   {
     size: bytes.length(),
     read_into: fn(offset, target, start, length) {

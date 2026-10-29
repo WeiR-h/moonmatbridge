@@ -2,18 +2,18 @@
 extern "C" fn host_init() -> Unit = "moonmat_init"
 
 ///|
-extern "C" fn host_arg_count(fallback : Int) -> Int = "moonmat_arg_count"
+extern "C" fn host_arg_count(fallback : Int32) -> Int32 = "moonmat_arg_count"
 
 ///|
 #borrow(fallback)
-extern "C" fn host_arg(index : Int, fallback : String) -> String = "moonmat_arg"
+extern "C" fn host_arg(index : Int32, fallback : String) -> String = "moonmat_arg"
 
 ///|
 #borrow(path)
-extern "C" fn host_read(path : Bytes, limit : Int) -> Bytes = "moonmat_read"
+extern "C" fn host_read(path : Bytes, limit : Int32) -> Bytes = "moonmat_read"
 
 ///|
-extern "C" fn host_error() -> Int = "moonmat_error"
+extern "C" fn host_error() -> Int32 = "moonmat_error"
 
 ///|
 extern "C" fn now() -> Double = "moonmat_now"
@@ -26,7 +26,7 @@ fn execute(
   mode : String,
   bytes : Bytes,
   prepared : Array[@mat.MatNode],
-) -> Int raise @mat.MatError {
+) -> Int32 raise @mat.MatError {
   match mode {
     "read" => @mat.read_tree(bytes).variables.length()
     "write" => @mat.write_tree(prepared).length()

@@ -26,7 +26,7 @@ pub(all) enum Value {
 ///|
 /// Error offsets refer to the current MAT stream, or the expanded stream for compressed data.
 pub(all) suberror MatError {
-  MatError(String, Int, String)
+  MatError(String, Int32, String)
 } derive(Eq, @debug.Debug)
 
 ///|
@@ -36,7 +36,7 @@ pub fn MatError::code(self : MatError) -> String {
 }
 
 ///|
-pub fn MatError::offset(self : MatError) -> Int {
+pub fn MatError::offset(self : MatError) -> Int32 {
   let MatError(_, offset, _) = self
   offset
 }
@@ -50,12 +50,12 @@ pub fn MatError::message(self : MatError) -> String {
 ///|
 /// Limits are validated before reading or allocating according to file-controlled lengths.
 pub(all) struct Limits {
-  max_file_bytes : Int
-  max_expanded_bytes : Int
-  max_elements : Int
-  max_variables : Int
-  max_dimensions : Int
-  max_name_bytes : Int
+  max_file_bytes : Int32
+  max_expanded_bytes : Int32
+  max_elements : Int32
+  max_variables : Int32
+  max_dimensions : Int32
+  max_name_bytes : Int32
 } derive(Eq, @debug.Debug)
 
 ///|
@@ -75,7 +75,7 @@ pub fn default_limits() -> Limits {
 pub(all) struct NumericArray {
   name : String
   dtype : DType
-  shape : Array[Int]
+  shape : Array[Int32]
   real : Bytes
   imag : Bytes?
   is_global : Bool
@@ -90,7 +90,7 @@ pub(all) struct MatFile {
 } derive(@debug.Debug)
 
 ///|
-fn fail(code : String, offset : Int, message : String) -> Unit raise MatError {
+fn fail(code : String, offset : Int32, message : String) -> Unit raise MatError {
   raise MatError(code, offset, message)
 }
 
@@ -153,7 +153,7 @@ pub fn dtype_from_name(name : String) -> DType raise MatError {
 }
 
 ///|
-pub fn DType::width(self : DType) -> Int {
+pub fn DType::width(self : DType) -> Int32 {
   match self {
     Float64 | Int64 | UInt64 => 8
     Float32 | Int32 | UInt32 => 4
@@ -163,7 +163,7 @@ pub fn DType::width(self : DType) -> Int {
 }
 
 ///|
-fn DType::mat_class(self : DType) -> Int {
+fn DType::mat_class(self : DType) -> Int32 {
   match self {
     Float64 => 6
     Float32 => 7
@@ -179,7 +179,7 @@ fn DType::mat_class(self : DType) -> Int {
 }
 
 ///|
-fn DType::mi_type(self : DType) -> Int {
+fn DType::mi_type(self : DType) -> Int32 {
   match self {
     Int8 => 1
     UInt8 | Logical => 2
@@ -195,7 +195,7 @@ fn DType::mi_type(self : DType) -> Int {
 }
 
 ///|
-fn from_mi_type(tag : Int, offset : Int) -> DType raise MatError {
+fn from_mi_type(tag : Int32, offset : Int32) -> DType raise MatError {
   match tag {
     1 => Int8
     2 => UInt8
@@ -215,7 +215,7 @@ fn from_mi_type(tag : Int, offset : Int) -> DType raise MatError {
 }
 
 ///|
-fn from_mat_class(class : Int, offset : Int) -> DType raise MatError {
+fn from_mat_class(class : Int32, offset : Int32) -> DType raise MatError {
   match class {
     6 => Float64
     7 => Float32
@@ -238,10 +238,10 @@ fn from_mat_class(class : Int, offset : Int) -> DType raise MatError {
 
 ///|
 fn element_count(
-  shape : Array[Int],
+  shape : Array[Int32],
   limits : Limits,
-  offset : Int,
-) -> Int raise MatError {
+  offset : Int32,
+) -> Int32 raise MatError {
   if shape.length() < 2 || shape.length() > limits.max_dimensions {
     fail(
       "invalid-shape", offset, "MAT arrays require 2 to max_dimensions dimensions",
@@ -270,7 +270,7 @@ fn element_count(
 }
 
 ///|
-pub fn NumericArray::length(self : NumericArray) -> Int {
+pub fn NumericArray::length(self : NumericArray) -> Int32 {
   self.real.length() / self.dtype.width()
 }
 

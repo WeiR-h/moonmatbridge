@@ -2,8 +2,8 @@
 /// Unambiguous, zero-based paths. Field punctuation is data, never path syntax.
 pub(all) enum TreePathSegment {
   Root(String)
-  CellElement(Int)
-  StructElement(Int)
+  CellElement(Int32)
+  StructElement(Int32)
   Field(String)
 } derive(Eq, @debug.Debug)
 
@@ -17,8 +17,8 @@ pub extend TreePathSegment with @debug.Debug::{to_repr}
 pub(all) struct TreeDifferenceSample {
   path : Array[TreePathSegment]
   kind : String
-  index : Int
-  coordinates : Array[Int]
+  index : Int32
+  coordinates : Array[Int32]
   before : Bytes
   after : Bytes
 } derive(@debug.Debug)
@@ -30,7 +30,7 @@ pub extend TreeDifferenceSample with @debug.Debug::{to_repr}
 pub(all) struct TreeDifference {
   content_equal : Bool
   variable_order_changed : Bool
-  differences : Int
+  differences : Int32
   samples : Array[TreeDifferenceSample]
   truncated : Bool
 } derive(@debug.Debug)
@@ -41,9 +41,9 @@ pub extend TreeDifference with @debug.Debug::{to_repr}
 ///|
 priv struct TreeDiffState {
   tolerance : TreeTolerance?
-  mut exact_count : Int
-  maximum : Int
-  mut count : Int
+  mut exact_count : Int32
+  maximum : Int32
+  mut count : Int32
   samples : Array[TreeDifferenceSample]
 }
 
@@ -52,11 +52,11 @@ fn TreeDiffState::add(
   self : TreeDiffState,
   path : Array[TreePathSegment],
   kind : String,
-  index? : Int = -1,
-  coordinates? : Array[Int] = [],
-  before? : Bytes = b"",
-  after? : Bytes = b"",
-  exact? : Bool = true,
+  index~ : Int32 = -1,
+  coordinates~ : Array[Int32] = [],
+  before~ : Bytes = b"",
+  after~ : Bytes = b"",
+  exact~ : Bool = true,
 ) -> Unit {
   self.count = self.count + 1
   if exact {
@@ -97,7 +97,7 @@ fn node_global(node : MatNode) -> Bool {
 }
 
 ///|
-fn tree_coordinates(shape : Array[Int], index : Int) -> Array[Int] {
+fn tree_coordinates(shape : Array[Int32], index : Int32) -> Array[Int32] {
   let mut remainder = index
   if shape.contains(0) {
     return []
@@ -116,8 +116,8 @@ fn diff_tree_plane(
   kind : String,
   left : Bytes,
   right : Bytes,
-  width : Int,
-  shape : Array[Int],
+  width : Int32,
+  shape : Array[Int32],
   floating? : DType,
 ) -> Unit {
   if left.length() != right.length() {
@@ -170,8 +170,8 @@ fn diff_tree_imag(
   path : Array[TreePathSegment],
   left : Bytes?,
   right : Bytes?,
-  width : Int,
-  shape : Array[Int],
+  width : Int32,
+  shape : Array[Int32],
   floating? : DType,
 ) -> Unit {
   match (left, right) {
@@ -304,7 +304,7 @@ fn diff_tree_node(
       if a.fields != b.fields {
         state.add(path, "field_order")
       }
-      let fields : Map[String, Int] = Map([])
+      let fields : Map[String, Int32] = Map([])
       let left_fields : Map[String, Bool] = Map([])
       for field in a.fields {
         left_fields[field] = true
@@ -357,9 +357,9 @@ fn run_tree_comparison(
   left : MatTree,
   right : MatTree,
   tolerance : TreeTolerance?,
-  max_samples? : Int = 16,
-  limits? : Limits = default_limits(),
-  tree_limits? : TreeLimits = default_tree_limits(),
+  max_samples~ : Int32 = 16,
+  limits~ : Limits = default_limits(),
+  tree_limits~ : TreeLimits = default_tree_limits(),
 ) -> (TreeDiffState, Bool) raise MatError {
   validate_tree(left.variables, limits~, tree_limits~)
   validate_tree(right.variables, limits~, tree_limits~)
@@ -400,9 +400,9 @@ fn run_tree_comparison(
 pub fn compare_trees(
   left : MatTree,
   right : MatTree,
-  max_samples? : Int = 16,
-  limits? : Limits = default_limits(),
-  tree_limits? : TreeLimits = default_tree_limits(),
+  max_samples~ : Int32 = 16,
+  limits~ : Limits = default_limits(),
+  tree_limits~ : TreeLimits = default_tree_limits(),
 ) -> TreeDifference raise MatError {
   let (state, order) = run_tree_comparison(
     left,

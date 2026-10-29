@@ -194,7 +194,7 @@ fn bounded_parse(text : String) -> Json raise {
 ///|
 pub fn from_json(
   text : String,
-  limits? : @mat.Limits = @mat.default_limits(),
+  limits~ : @mat.Limits = @mat.default_limits(),
 ) -> Array[@mat.NumericArray] raise @mat.MatError {
   if text.length() > limits.max_file_bytes {
     invalid("JSON text exceeds configured limit")

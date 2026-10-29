@@ -2,8 +2,8 @@
 /// axes[k] identifies the source axis used for output axis k. Both planes retain raw bits.
 pub fn NumericArray::permute_axes(
   self : NumericArray,
-  axes : Array[Int],
-  limits? : Limits = default_limits(),
+  axes : Array[Int32],
+  limits~ : Limits = default_limits(),
 ) -> NumericArray raise MatError {
   validate_limits(limits)
   let count = validate_array(self, limits)

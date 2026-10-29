@@ -5,6 +5,7 @@ import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
 import {root, runMoon, version} from './moon.mjs';
 import {nativeEnv, buildNative} from './build-native.mjs';
+import {compilerIdentity} from './toolchain.mjs';
 
 export function sourceFingerprint() {
   const files = [];
@@ -25,6 +26,7 @@ export function sourceFingerprint() {
 }
 export function verify() {
 const checks = [];
+const compiler = compilerIdentity();
 function record(name, output) { checks.push({name, status: 'passed', output}); console.log(name + ': passed'); }
 function command(executable, args) {
   const result = spawnSync(executable, args, {cwd: root, encoding: 'utf8', env: {...process.env, PYTHONUTF8: '1'}, maxBuffer: 16 * 1024 * 1024, timeout: 180000});
@@ -47,6 +49,7 @@ try {
   const executable = buildNative();
   record('Native release build', relative(root, executable));
   record('JS differential and malformed input tests', command(process.execPath, ['scripts/js-checks.mjs']));
+  record('Actual compiler version guard regression', command(process.execPath, ['scripts/toolchain-checks.mjs']));
   const python = process.env.MOONMAT_PYTHON || join(root, '.venv', process.platform === 'win32' ? 'Scripts/python.exe' : 'bin/python');
   record('Independent SciPy/NumPy cross-compatibility', command(python, ['scripts/interop.py']));
   record('All public Level 5 base classes in mixed files', command(python, ['scripts/compatibility.py']));
@@ -77,7 +80,7 @@ try {
   if (changed.length) throw new Error('Source changed during verification: ' + changed.join(', '));
   const report = {
     status: 'passed', version, checked_at: new Date().toISOString(), source: fingerprint,
-    environment: {moon: sdkVersion, node: process.version, platform: process.platform, arch: process.arch}, checks,
+    environment: {moon: sdkVersion, ...compiler, node: process.version, platform: process.platform, arch: process.arch}, checks,
     native_sha256: createHash('sha256').update(readFileSync(executable)).digest('hex'),
     scope: 'Local source/build/runtime and independent SciPy/NumPy verification. Actual Octave CI receipts are separate octave reports. Public package and download checks have separate receipts.',
   };

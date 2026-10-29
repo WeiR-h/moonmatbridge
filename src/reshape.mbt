@@ -2,8 +2,8 @@
 /// Reshape in column-major order without converting or copying immutable payload bytes.
 pub fn NumericArray::reshape(
   self : NumericArray,
-  shape : Array[Int],
-  limits? : Limits = default_limits(),
+  shape : Array[Int32],
+  limits~ : Limits = default_limits(),
 ) -> NumericArray raise MatError {
   validate_limits(limits)
   let count = validate_array(self, limits)

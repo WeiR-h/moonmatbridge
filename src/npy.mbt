@@ -2,7 +2,7 @@
 /// Export one dense array as NPY v1.0 with fortran_order=True. Complex values are interleaved.
 pub fn write_npy(
   array : NumericArray,
-  limits? : Limits = default_limits(),
+  limits~ : Limits = default_limits(),
 ) -> Bytes raise MatError {
   validate_limits(limits)
   ignore(validate_array(array, limits))

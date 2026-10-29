@@ -10,7 +10,7 @@ pub(all) struct TreeCloseDifference {
   exact_equal : Bool
   within_tolerance : Bool
   variable_order_changed : Bool
-  differences : Int
+  differences : Int32
   samples : Array[TreeDifferenceSample]
   truncated : Bool
   atol : Double
@@ -34,7 +34,7 @@ fn tree_abs(n : Double) -> Double {
 fn tree_float_close(
   left : Bytes,
   right : Bytes,
-  index : Int,
+  index : Int32,
   dtype : DType,
   tolerance : TreeTolerance,
 ) -> Bool {
@@ -78,12 +78,12 @@ fn tree_float_close(
 pub fn compare_trees_close(
   left : MatTree,
   right : MatTree,
-  atol? : Double = 0.0,
-  rtol? : Double = 0.0,
-  equal_nan? : Bool = false,
-  max_samples? : Int = 16,
-  limits? : Limits = default_limits(),
-  tree_limits? : TreeLimits = default_tree_limits(),
+  atol~ : Double = 0.0,
+  rtol~ : Double = 0.0,
+  equal_nan~ : Bool = false,
+  max_samples~ : Int32 = 16,
+  limits~ : Limits = default_limits(),
+  tree_limits~ : TreeLimits = default_tree_limits(),
 ) -> TreeCloseDifference raise MatError {
   if atol.is_nan() ||
     atol.is_inf() ||

@@ -1,5 +1,5 @@
 ///|
-fn append_element(out : Array[Byte], kind : Int, data : Bytes) -> Unit {
+fn append_element(out : Array[Byte], kind : Int32, data : Bytes) -> Unit {
   push_bits(out, kind.to_uint64(), 4)
   push_bits(out, data.length().to_uint64(), 4)
   for byte in data {

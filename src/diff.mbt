@@ -1,8 +1,8 @@
 ///|
 pub(all) struct DifferenceSample {
   plane : String
-  index : Int
-  coordinates : Array[Int]
+  index : Int32
+  coordinates : Array[Int32]
   before : Bytes
   after : Bytes
 } derive(@debug.Debug)
@@ -15,8 +15,8 @@ pub(all) struct VariableDifference {
   name : String
   status : String
   metadata : Array[String]
-  real_differences : Int
-  imag_differences : Int
+  real_differences : Int32
+  imag_differences : Int32
   samples : Array[DifferenceSample]
   truncated : Bool
 } derive(@debug.Debug)
@@ -28,7 +28,7 @@ pub extend VariableDifference with @debug.Debug::{to_repr}
 pub(all) struct DocumentDifference {
   content_equal : Bool
   variable_order_changed : Bool
-  changed_variables : Int
+  changed_variables : Int32
   variables : Array[VariableDifference]
 } derive(@debug.Debug)
 
@@ -38,7 +38,7 @@ pub extend DocumentDifference with @debug.Debug::{to_repr}
 ///|
 fn variable_planes(
   item : MatVariable,
-) -> (DType, Array[Int], Bytes, Bytes?, Bool) {
+) -> (DType, Array[Int32], Bytes, Bytes?, Bool) {
   match item {
     Dense(a) => (a.dtype, a.shape, a.real, a.imag, a.is_global)
     Sparse(a) => (a.dtype, a.shape, a.real, a.imag, a.is_global)
@@ -46,7 +46,7 @@ fn variable_planes(
 }
 
 ///|
-fn difference_coordinates(item : MatVariable, index : Int) -> Array[Int] {
+fn difference_coordinates(item : MatVariable, index : Int32) -> Array[Int32] {
   match item {
     Dense(a) => {
       let mut remainder = index
@@ -79,12 +79,12 @@ fn difference_coordinates(item : MatVariable, index : Int) -> Array[Int] {
 fn compare_plane(
   before : Bytes,
   after : Bytes,
-  width : Int,
+  width : Int32,
   plane : String,
   item : MatVariable,
   samples : Array[DifferenceSample],
-  maximum : Int,
-) -> Int {
+  maximum : Int32,
+) -> Int32 {
   let mut count = 0
   for index = 0; index < before.length() / width; index = index + 1 {
     let mut different = false
@@ -113,7 +113,7 @@ fn compare_plane(
 fn compare_variable(
   left : MatVariable,
   right : MatVariable,
-  maximum : Int,
+  maximum : Int32,
 ) -> VariableDifference {
   let (ld, ls, lr, li, lg) = variable_planes(left)
   let (rd, rs, rr, ri, rg) = variable_planes(right)
@@ -193,8 +193,8 @@ fn compare_variable(
 pub fn compare_documents(
   left : MatDocument,
   right : MatDocument,
-  max_samples? : Int = 16,
-  limits? : Limits = default_limits(),
+  max_samples~ : Int32 = 16,
+  limits~ : Limits = default_limits(),
 ) -> DocumentDifference raise MatError {
   validate_document(left.variables, limits~)
   validate_document(right.variables, limits~)

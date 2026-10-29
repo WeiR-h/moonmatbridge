@@ -2,15 +2,15 @@
 package "WeiR-h/moonmatbridge/bench_bridge"
 
 // Values
-pub fn compress(Prepared) -> Int
+pub fn compress(Prepared) -> Int32
 
 pub fn prepare(Bytes) -> Prepared
 
-pub fn read(Bytes) -> Int
+pub fn read(Bytes) -> Int32
 
-pub fn select(Bytes) -> Int
+pub fn select(Bytes) -> Int32
 
-pub fn write(Prepared) -> Int
+pub fn write(Prepared) -> Int32
 
 // Errors
 

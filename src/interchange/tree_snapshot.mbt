@@ -1,16 +1,16 @@
 ///|
 priv struct SnapshotBudget {
-  mut encoded : Int
-  mut bytes : Int
-  mut nodes : Int
-  mut elements : Int
-  mut fields : Int
+  mut encoded : Int32
+  mut bytes : Int32
+  mut nodes : Int32
+  mut elements : Int32
+  mut fields : Int32
 }
 
 ///|
 fn snapshot_charge(
   budget : SnapshotBudget,
-  count : Int,
+  count : Int32,
   limits : @mat.Limits,
 ) -> Unit raise @mat.MatError {
   let maximum = if limits.max_file_bytes < limits.max_expanded_bytes {
@@ -29,7 +29,7 @@ fn snapshot_charge(
 ///|
 fn snapshot_estimate(
   budget : SnapshotBudget,
-  count : Int,
+  count : Int32,
   limits : @mat.Limits,
 ) -> Unit raise @mat.MatError {
   if count < 0 || count > limits.max_file_bytes - budget.encoded {
@@ -76,7 +76,7 @@ fn snapshot_raw(
 ///|
 fn snapshot_visit(
   budget : SnapshotBudget,
-  depth : Int,
+  depth : Int32,
   tree : @mat.TreeLimits,
 ) -> Unit raise @mat.MatError {
   if depth > tree.max_depth {
@@ -91,7 +91,7 @@ fn snapshot_visit(
 ///|
 fn snapshot_fields(
   budget : SnapshotBudget,
-  count : Int,
+  count : Int32,
   tree : @mat.TreeLimits,
 ) -> Unit raise @mat.MatError {
   if count > tree.max_fields - budget.fields {
@@ -104,7 +104,7 @@ fn snapshot_fields(
 
 ///|
 fn snapshot_shape(
-  shape : Array[Int],
+  shape : Array[Int32],
   budget : SnapshotBudget,
   limits : @mat.Limits,
   sparse : Bool,
@@ -140,7 +140,7 @@ fn snapshot_preflight(
   budget : SnapshotBudget,
   limits : @mat.Limits,
   tree : @mat.TreeLimits,
-  depth : Int,
+  depth : Int32,
 ) -> Unit raise @mat.MatError {
   snapshot_visit(budget, depth, tree)
   snapshot_raw(node, budget, limits)
@@ -258,8 +258,8 @@ fn tree_snapshot_node(node : @mat.MatNode) -> Json {
 ///|
 pub fn to_tree_snapshot(
   variables : Array[@mat.MatNode],
-  limits? : @mat.Limits = @mat.default_limits(),
-  tree_limits? : @mat.TreeLimits = @mat.default_tree_limits(),
+  limits~ : @mat.Limits = @mat.default_limits(),
+  tree_limits~ : @mat.TreeLimits = @mat.default_tree_limits(),
 ) -> String raise @mat.MatError {
   @mat.validate_tree(variables, limits~, tree_limits~)
   let budget : SnapshotBudget = {
@@ -321,7 +321,7 @@ fn snapshot_decode_node(
   budget : SnapshotBudget,
   limits : @mat.Limits,
   tree : @mat.TreeLimits,
-  depth : Int,
+  depth : Int32,
 ) -> @mat.MatNode raise @mat.MatError {
   snapshot_visit(budget, depth, tree)
   let fields = object(value)
@@ -489,15 +489,15 @@ fn snapshot_decode_node(
 
 ///|
 #warnings("-deprecated")
-fn bounded_tree_parse(text : String, depth : Int) -> Json raise {
+fn bounded_tree_parse(text : String, depth : Int32) -> Json raise {
   @json.parse(text[:], max_nesting_depth=depth * 2 + 8)
 }
 
 ///|
 pub fn from_tree_snapshot(
   text : String,
-  limits? : @mat.Limits = @mat.default_limits(),
-  tree_limits? : @mat.TreeLimits = @mat.default_tree_limits(),
+  limits~ : @mat.Limits = @mat.default_limits(),
+  tree_limits~ : @mat.TreeLimits = @mat.default_tree_limits(),
 ) -> Array[@mat.MatNode] raise @mat.MatError {
   @mat.validate_tree([], limits~, tree_limits~)
   if text.length() > limits.max_file_bytes ||

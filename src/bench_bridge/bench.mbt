@@ -14,7 +14,7 @@ pub fn prepare(bytes : Bytes) -> Prepared {
 
 ///|
 #export_name("read")
-pub fn read(bytes : Bytes) -> Int {
+pub fn read(bytes : Bytes) -> Int32 {
   @mat.read_tree(bytes).variables.length() catch {
     _ => abort("Benchmark read failed")
   }
@@ -22,7 +22,7 @@ pub fn read(bytes : Bytes) -> Int {
 
 ///|
 #export_name("write")
-pub fn write(value : Prepared) -> Int {
+pub fn write(value : Prepared) -> Int32 {
   @mat.write_tree(value.variables).length() catch {
     _ => abort("Benchmark write failed")
   }
@@ -30,7 +30,7 @@ pub fn write(value : Prepared) -> Int {
 
 ///|
 #export_name("compress")
-pub fn compress(value : Prepared) -> Int {
+pub fn compress(value : Prepared) -> Int32 {
   @mat.write_tree(value.variables, compressed=true).length() catch {
     _ => abort("Benchmark compression failed")
   }
@@ -38,7 +38,7 @@ pub fn compress(value : Prepared) -> Int {
 
 ///|
 #export_name("select")
-pub fn select(bytes : Bytes) -> Int {
+pub fn select(bytes : Bytes) -> Int32 {
   @mat.write_tree(@mat.read_selected(bytes, ["v00"]).variables).length() catch {
     _ => abort("Benchmark selection failed")
   }

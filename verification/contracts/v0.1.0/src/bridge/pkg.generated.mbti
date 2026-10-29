@@ -1,0 +1,112 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "WeiR-h/moonmatbridge/bridge"
+
+import {
+  "WeiR-h/moonmatbridge",
+}
+
+// Values
+pub fn compare_mat(Bytes, Bytes) -> String
+
+pub fn compare_mat_trees(Bytes, Bytes, Int) -> String
+
+pub fn compare_mat_trees_close(Bytes, Bytes, String) -> String
+
+pub fn compare_mat_trees_close_with_options(Bytes, Bytes, String, String) -> String
+
+pub fn compare_mat_trees_with_options(Bytes, Bytes, Int, String) -> String
+
+pub fn compare_mat_with_options(Bytes, Bytes, String) -> String
+
+pub fn compress_mat(Bytes) -> BinaryResult
+
+pub fn compress_mat_with_options(Bytes, String) -> BinaryResult
+
+pub fn convert_storage(Bytes, String, Bool) -> BinaryResult
+
+pub fn convert_storage_with_options(Bytes, String, Bool, String) -> BinaryResult
+
+pub fn deflate_zlib(Bytes, Int) -> BinaryResult
+
+pub fn inflate_zlib(Bytes, Int) -> BinaryResult
+
+pub fn inspect_mat(Bytes) -> String
+
+pub fn inspect_mat_with_options(Bytes, String) -> String
+
+pub fn inspect_roots(Bytes) -> String
+
+pub fn inspect_roots_source(@moonmatbridge.MatSource) -> String
+
+pub fn inspect_roots_source_with_options(@moonmatbridge.MatSource, String) -> String
+
+pub fn inspect_roots_with_options(Bytes, String) -> String
+
+pub fn json_to_mat(String) -> BinaryResult
+
+pub fn json_to_mat_with_options(String, String) -> BinaryResult
+
+pub fn make_source(Int, (Int, FixedArray[Byte], Int, Int) -> Int) -> @moonmatbridge.MatSource
+
+pub fn mat_to_json(Bytes) -> String
+
+pub fn mat_to_json_with_options(Bytes, String) -> String
+
+pub fn mat_to_npy(Bytes, String) -> BinaryResult
+
+pub fn mat_to_npy_with_options(Bytes, String, String) -> BinaryResult
+
+pub fn mat_to_snapshot(Bytes) -> String
+
+pub fn mat_to_snapshot_with_options(Bytes, String) -> String
+
+pub fn mat_to_tree_snapshot(Bytes) -> String
+
+pub fn mat_to_tree_snapshot_with_options(Bytes, String) -> String
+
+pub fn npy_to_mat(Bytes, String) -> BinaryResult
+
+pub fn npy_to_mat_with_options(Bytes, String, String) -> BinaryResult
+
+pub fn result_bytes(BinaryResult) -> Bytes
+
+pub fn result_status(BinaryResult) -> String
+
+pub fn roundtrip_mat(Bytes) -> BinaryResult
+
+pub fn roundtrip_mat_with_options(Bytes, String) -> BinaryResult
+
+pub fn sample_mat() -> BinaryResult
+
+pub fn sample_mat_with_options(String) -> BinaryResult
+
+pub fn select_mat(Bytes, Array[String]) -> BinaryResult
+
+pub fn select_mat_with_options(Bytes, Array[String], String) -> BinaryResult
+
+pub fn select_source_mat(@moonmatbridge.MatSource, Array[String]) -> BinaryResult
+
+pub fn select_source_mat_with_options(@moonmatbridge.MatSource, Array[String], String) -> BinaryResult
+
+pub fn snapshot_to_mat(String) -> BinaryResult
+
+pub fn snapshot_to_mat_with_options(String, String) -> BinaryResult
+
+pub fn transform_mat(Bytes, String) -> BinaryResult
+
+pub fn transform_mat_with_options(Bytes, String, String) -> BinaryResult
+
+pub fn tree_snapshot_to_mat(String) -> BinaryResult
+
+pub fn tree_snapshot_to_mat_with_options(String, String) -> BinaryResult
+
+// Errors
+
+// Types and methods
+pub struct BinaryResult {
+  // private fields
+}
+
+// Type aliases
+
+// Traits

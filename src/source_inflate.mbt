@@ -2,17 +2,17 @@
 priv struct SourceBits {
   cursor : SourceCursor
   data : FixedArray[Byte]
-  mut block_start : Int
-  mut block_end : Int
-  end : Int
-  mut position : Int
-  mut buffer : Int
-  mut available : Int
+  mut block_start : Int32
+  mut block_end : Int32
+  end : Int32
+  mut position : Int32
+  mut buffer : Int32
+  mut available : Int32
 }
 
 ///|
 #inline
-fn SourceBits::fill(self : SourceBits, count : Int) -> Bool raise MatError {
+fn SourceBits::fill(self : SourceBits, count : Int32) -> Bool raise MatError {
   while self.available < count && self.position < self.end {
     if self.position >= self.block_end {
       self.cursor.position = self.position
@@ -34,7 +34,7 @@ fn SourceBits::fill(self : SourceBits, count : Int) -> Bool raise MatError {
 
 ///|
 #inline
-fn SourceBits::take(self : SourceBits, count : Int) -> Int raise MatError {
+fn SourceBits::take(self : SourceBits, count : Int32) -> Int32 raise MatError {
   if !self.fill(count) {
     fail("invalid-zlib", self.position, "Truncated DEFLATE stream")
   }
@@ -56,7 +56,7 @@ fn SourceBits::align(self : SourceBits) -> Unit {
 fn Huffman::decode_source(
   self : Huffman,
   reader : SourceBits,
-) -> Int raise MatError {
+) -> Int32 raise MatError {
   // At stream end, a valid short symbol may have fewer than nine bits left.
   if reader.fill(9) {
     let entry = self.fast[reader.buffer & 511]
@@ -98,7 +98,7 @@ fn source_dynamic_trees(
     code_lengths[order[i]] = reader.take(3)
   }
   let codes = huffman(code_lengths, reader.position)
-  let lengths : Array[Int] = []
+  let lengths : Array[Int32] = []
   let count = literal_count + distance_count
   while lengths.length() < count {
     let symbol = codes.decode_source(reader)
@@ -145,31 +145,31 @@ fn source_dynamic_trees(
 priv struct SourceInflater {
   reader : SourceBits
   history : FixedArray[Byte]
-  window : Int
-  maximum : Int
-  mut produced : Int
-  mut s1 : UInt
-  mut s2 : UInt
-  mut adler_count : Int
+  window : Int32
+  maximum : Int32
+  mut produced : Int32
+  mut s1 : UInt32
+  mut s2 : UInt32
+  mut adler_count : Int32
   mut checksum_verified : Bool
-  mut mode : Int
+  mut mode : Int32
   mut last : Bool
-  mut stored : Int
-  mut copy : Int
-  mut distance : Int
+  mut stored : Int32
+  mut copy : Int32
+  mut distance : Int32
   mut literals : Huffman?
   mut distances : Huffman?
-  length_base : Array[Int]
-  length_extra : Array[Int]
-  distance_base : Array[Int]
-  distance_extra : Array[Int]
+  length_base : Array[Int32]
+  length_extra : Array[Int32]
+  distance_base : Array[Int32]
+  distance_extra : Array[Int32]
 }
 
 ///|
 fn make_source_inflater(
   cursor : SourceCursor,
-  end : Int,
-  maximum : Int,
+  end : Int32,
+  maximum : Int32,
 ) -> SourceInflater raise MatError {
   if end - cursor.position < 6 {
     fail("invalid-zlib", cursor.position, "Truncated zlib stream")
@@ -257,7 +257,7 @@ fn SourceInflater::emit(
 fn SourceInflater::adler_block(
   self : SourceInflater,
   bytes : FixedArray[Byte],
-  count : Int,
+  count : Int32,
 ) -> Unit {
   let mut s1 = self.s1
   let mut s2 = self.s2
@@ -315,7 +315,7 @@ fn SourceInflater::verify_checksum(
 ///|
 fn SourceInflater::start_copy(
   self : SourceInflater,
-  symbol : Int,
+  symbol : Int32,
 ) -> Unit raise MatError {
   if symbol > 285 {
     fail("invalid-zlib", self.reader.position, "Reserved length code")
@@ -447,7 +447,7 @@ fn SourceInflater::next(self : SourceInflater) -> Byte? raise MatError {
 fn SourceInflater::fill(
   self : SourceInflater,
   output : FixedArray[Byte],
-  count : Int,
+  count : Int32,
 ) -> Unit raise MatError {
   if count > self.maximum - self.produced {
     fail("expanded-limit", self.reader.position, "Expanded block exceeds quota")

@@ -94,7 +94,7 @@ Open PowerShell in this folder:
   powershell -ExecutionPolicy Bypass -File examples\workflows\demo.ps1
 
 The executable requires no MoonBit, C compiler, Python or Node installation.
-Only Windows system KERNEL32.dll and msvcrt.dll are imported in this build.
+Only Windows system KERNEL32.dll, dbghelp.dll, SHELL32.dll and bcrypt.dll are imported in this MSVC build.
 Output paths must be NEW; existing files are never overwritten.
 Core: MAT Level 5 recursive cell/struct/char/legacy object, dense numeric/logical arrays, complex float32/64,
 CSC double/logical/complex double, little/big endian, deterministic compressed/uncompressed writing,

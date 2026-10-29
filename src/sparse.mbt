@@ -3,12 +3,12 @@
 pub(all) struct SparseArray {
   name : String
   dtype : DType
-  shape : Array[Int]
-  row_indices : Array[Int]
-  col_ptrs : Array[Int]
+  shape : Array[Int32]
+  row_indices : Array[Int32]
+  col_ptrs : Array[Int32]
   real : Bytes
   imag : Bytes?
-  nzmax : Int
+  nzmax : Int32
   is_global : Bool
 } derive(@debug.Debug)
 
@@ -43,7 +43,7 @@ pub fn MatVariable::name(self : MatVariable) -> String {
 }
 
 ///|
-pub fn MatVariable::stored_elements(self : MatVariable) -> Int {
+pub fn MatVariable::stored_elements(self : MatVariable) -> Int32 {
   match self {
     Dense(a) => a.length()
     Sparse(a) => a.row_indices.length()
@@ -52,7 +52,7 @@ pub fn MatVariable::stored_elements(self : MatVariable) -> Int {
 
 ///|
 /// Number of used CSC entries, including explicit zeros; differs from allocated capacity.
-pub fn SparseArray::nnz(self : SparseArray) -> Int {
+pub fn SparseArray::nnz(self : SparseArray) -> Int32 {
   self.col_ptrs.get(self.col_ptrs.length() - 1).unwrap_or(0)
 }
 
@@ -92,7 +92,7 @@ pub fn MatDocument::convert_storage(
   self : MatDocument,
   name : String,
   sparse : Bool,
-  limits? : Limits = default_limits(),
+  limits~ : Limits = default_limits(),
 ) -> Array[MatVariable] raise MatError {
   let out = self.variables.copy()
   for i, item in self.variables {
@@ -112,9 +112,9 @@ pub fn MatDocument::convert_storage(
 fn validate_sparse(
   a : SparseArray,
   limits : Limits,
-  allow_empty? : Bool = false,
-  name_encoding? : NameEncoding = Utf8,
-) -> Int raise MatError {
+  allow_empty~ : Bool = false,
+  name_encoding~ : NameEncoding = Utf8,
+) -> Int32 raise MatError {
   validate_name(a.name, limits, allow_empty~, name_encoding~)
   if a.dtype != Float64 && a.dtype != Logical {
     fail(
@@ -189,14 +189,14 @@ fn validate_sparse(
 pub fn raw_sparse_array(
   name : String,
   dtype : DType,
-  shape : Array[Int],
-  row_indices : Array[Int],
-  col_ptrs : Array[Int],
+  shape : Array[Int32],
+  row_indices : Array[Int32],
+  col_ptrs : Array[Int32],
   real : Bytes,
   imag? : Bytes,
-  nzmax? : Int,
-  is_global? : Bool = false,
-  limits? : Limits = default_limits(),
+  nzmax? : Int32,
+  is_global~ : Bool = false,
+  limits~ : Limits = default_limits(),
 ) -> SparseArray raise MatError {
   validate_limits(limits)
   let a : SparseArray = {
@@ -224,7 +224,7 @@ pub fn raw_sparse_array(
 /// Explicit densification is bounded by shape product; huge sparse shapes never expand implicitly.
 pub fn SparseArray::to_dense(
   self : SparseArray,
-  limits? : Limits = default_limits(),
+  limits~ : Limits = default_limits(),
 ) -> NumericArray raise MatError {
   validate_limits(limits)
   ignore(validate_sparse(self, limits))
@@ -291,7 +291,7 @@ pub fn SparseArray::to_dense(
 /// Only all-zero byte patterns are omitted. Signed zero, NaN payloads and complex data survive.
 pub fn NumericArray::to_sparse(
   self : NumericArray,
-  limits? : Limits = default_limits(),
+  limits~ : Limits = default_limits(),
 ) -> SparseArray raise MatError {
   validate_limits(limits)
   ignore(validate_array(self, limits))
@@ -357,7 +357,7 @@ pub fn NumericArray::to_sparse(
 /// True when active row indexes increase strictly in every column.
 pub fn SparseArray::is_canonical(
   self : SparseArray,
-  limits? : Limits = default_limits(),
+  limits~ : Limits = default_limits(),
 ) -> Bool raise MatError {
   validate_limits(limits)
   ignore(validate_sparse(self, limits))

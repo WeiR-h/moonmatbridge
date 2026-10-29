@@ -2,8 +2,8 @@
 /// Validated root metadata; offsets are intentionally not exposed or cached.
 pub(all) struct MatRootInfo {
   name : String
-  class_id : Int
-  shape : Array[Int]
+  class_id : Int32
+  shape : Array[Int32]
   is_global : Bool
   is_complex : Bool
   is_logical : Bool
@@ -20,7 +20,7 @@ fn root_info(
   little : Bool,
   limits : Limits,
   compressed : Bool,
-  name_encoding? : NameEncoding = Utf8,
+  name_encoding~ : NameEncoding = Utf8,
 ) -> MatRootInfo raise MatError {
   let end = outer.start + outer.size
   let flags = tag(bytes, outer.start, end, little)
@@ -66,7 +66,7 @@ fn scan_tree(
   collect_roots : Bool,
   limits : Limits,
   tree_limits : TreeLimits,
-  name_encoding? : NameEncoding = Utf8,
+  name_encoding~ : NameEncoding = Utf8,
 ) -> (MatTree, Array[MatRootInfo]) raise MatError {
   validate_limits(limits)
   validate_tree_limits(tree_limits)
@@ -211,9 +211,9 @@ fn scan_tree(
 pub fn read_selected(
   bytes : Bytes,
   names : Array[String],
-  limits? : Limits = default_limits(),
-  tree_limits? : TreeLimits = default_tree_limits(),
-  name_encoding? : NameEncoding = Utf8,
+  limits~ : Limits = default_limits(),
+  tree_limits~ : TreeLimits = default_tree_limits(),
+  name_encoding~ : NameEncoding = Utf8,
 ) -> MatTree raise MatError {
   let (file, _) = scan_tree(
     bytes,
@@ -230,9 +230,9 @@ pub fn read_selected(
 /// Full validation with no persistent data trees; compressed roots are decoded.
 pub fn inspect_roots(
   bytes : Bytes,
-  limits? : Limits = default_limits(),
-  tree_limits? : TreeLimits = default_tree_limits(),
-  name_encoding? : NameEncoding = Utf8,
+  limits~ : Limits = default_limits(),
+  tree_limits~ : TreeLimits = default_tree_limits(),
+  name_encoding~ : NameEncoding = Utf8,
 ) -> Array[MatRootInfo] raise MatError {
   let (_, roots) = scan_tree(
     bytes,
@@ -248,9 +248,9 @@ pub fn inspect_roots(
 ///|
 pub fn read_tree(
   bytes : Bytes,
-  limits? : Limits = default_limits(),
-  tree_limits? : TreeLimits = default_tree_limits(),
-  name_encoding? : NameEncoding = Utf8,
+  limits~ : Limits = default_limits(),
+  tree_limits~ : TreeLimits = default_tree_limits(),
+  name_encoding~ : NameEncoding = Utf8,
 ) -> MatTree raise MatError {
   let (file, _) = scan_tree(
     bytes,

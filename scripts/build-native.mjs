@@ -5,7 +5,13 @@ import {spawnSync} from 'node:child_process';
 import {root, toolchain, runMoon} from './moon.mjs';
 
 export function nativeEnv() {
-  const config = toolchain().config;
+  const t = toolchain();
+  const config = t.config;
+  if (process.platform === 'win32' && (config.msvc || process.env.VCToolsInstallDir || process.env.INCLUDE && process.env.LIB)) {
+    return {...t.env, MOON_CC:config.msvc ? join(config.msvc.bin,'cl.exe') : 'cl.exe',
+      MOON_AR:config.msvc ? join(config.msvc.bin,'lib.exe') : 'lib.exe'};
+  }
+  if (process.platform === 'win32') throw new Error('Windows native builds require MSVC; run python scripts/setup-msvc.py --configure or use an MSVC developer prompt');
   const compiler = process.env.MOONMAT_GCC || config.gcc || process.env.MOON_CC || (process.platform === 'win32' ? 'gcc.exe' : 'cc');
   const env = {...process.env, MOON_CC: compiler};
   if (process.platform === 'win32') {

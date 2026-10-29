@@ -9,7 +9,7 @@ fn hex(bytes : Bytes) -> String {
 }
 
 ///|
-fn hex_digit(code : Int) -> Int raise @mat.MatError {
+fn hex_digit(code : Int32) -> Int32 raise @mat.MatError {
   if code >= 48 && code <= 57 {
     code - 48
   } else if code >= 97 && code <= 102 {
@@ -23,7 +23,7 @@ fn hex_digit(code : Int) -> Int raise @mat.MatError {
 }
 
 ///|
-fn unhex(value : Json, limit : Int) -> Bytes raise @mat.MatError {
+fn unhex(value : Json, limit : Int32) -> Bytes raise @mat.MatError {
   let text = string(value)
   if text.length() % 2 != 0 || text.length() / 2 > limit {
     invalid("Hex payload length exceeds bounds or has odd digits")
@@ -40,8 +40,8 @@ fn unhex(value : Json, limit : Int) -> Bytes raise @mat.MatError {
 ///|
 fn bounded_integers(
   value : Json,
-  maximum : Int,
-) -> Array[Int] raise @mat.MatError {
+  maximum : Int32,
+) -> Array[Int32] raise @mat.MatError {
   let values = array(value)
   if values.length() > maximum {
     invalid("Integer vector exceeds configured limit")
@@ -54,7 +54,7 @@ fn bounded_integers(
 /// This archives array content and flags, not original MAT header text or compression bytes.
 pub fn to_snapshot(
   variables : Array[@mat.MatVariable],
-  limits? : @mat.Limits = @mat.default_limits(),
+  limits~ : @mat.Limits = @mat.default_limits(),
 ) -> String raise @mat.MatError {
   @mat.validate_document(variables, limits~)
   let mut estimate = 128
@@ -130,7 +130,7 @@ pub fn to_snapshot(
 ///|
 pub fn from_snapshot(
   text : String,
-  limits? : @mat.Limits = @mat.default_limits(),
+  limits~ : @mat.Limits = @mat.default_limits(),
 ) -> Array[@mat.MatVariable] raise @mat.MatError {
   @mat.validate_document([], limits~)
   if text.length() > limits.max_file_bytes ||

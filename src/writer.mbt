@@ -3,8 +3,8 @@
 fn document_size(
   arrays : Array[MatVariable],
   limits : Limits,
-  name_encoding? : NameEncoding = Utf8,
-) -> Int raise MatError {
+  name_encoding~ : NameEncoding = Utf8,
+) -> Int32 raise MatError {
   validate_limits(limits)
   if arrays.length() > limits.max_variables {
     fail("variable-limit", 0, "Too many variables")
@@ -68,8 +68,8 @@ fn document_size(
 /// Validate public variable fields, duplicate names and aggregate resource limits without output allocation.
 pub fn validate_document(
   arrays : Array[MatVariable],
-  limits? : Limits = default_limits(),
-  name_encoding? : NameEncoding = Utf8,
+  limits~ : Limits = default_limits(),
+  name_encoding~ : NameEncoding = Utf8,
 ) -> Unit raise MatError {
   ignore(document_size(arrays, limits, name_encoding~))
 }
@@ -78,9 +78,9 @@ pub fn validate_document(
 /// Write deterministic little-endian dense/CSC MAT Level 5, optionally compressed.
 pub fn write_document(
   arrays : Array[MatVariable],
-  compressed? : Bool = false,
-  limits? : Limits = default_limits(),
-  name_encoding? : NameEncoding = Utf8,
+  compressed~ : Bool = false,
+  limits~ : Limits = default_limits(),
+  name_encoding~ : NameEncoding = Utf8,
 ) -> Bytes raise MatError {
   validate_document(arrays, limits~, name_encoding~)
   let nodes = arrays.map(fn(item) {
@@ -102,9 +102,9 @@ pub fn write_document(
 /// Backwards-compatible dense writer; write_document handles mixed dense/CSC data.
 pub fn write_mat(
   arrays : Array[NumericArray],
-  compressed? : Bool = false,
-  limits? : Limits = default_limits(),
-  name_encoding? : NameEncoding = Utf8,
+  compressed~ : Bool = false,
+  limits~ : Limits = default_limits(),
+  name_encoding~ : NameEncoding = Utf8,
 ) -> Bytes raise MatError {
   write_document(
     arrays.map(fn(a) { Dense(a) }),

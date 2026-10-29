@@ -6,13 +6,13 @@ import {
 }
 
 // Values
-pub fn compare_documents(MatDocument, MatDocument, max_samples? : Int, limits? : Limits) -> DocumentDifference raise MatError
+pub fn compare_documents(MatDocument, MatDocument, max_samples? : Int32, limits? : Limits) -> DocumentDifference raise MatError
 
-pub fn compare_trees(MatTree, MatTree, max_samples? : Int, limits? : Limits, tree_limits? : TreeLimits) -> TreeDifference raise MatError
+pub fn compare_trees(MatTree, MatTree, max_samples? : Int32, limits? : Limits, tree_limits? : TreeLimits) -> TreeDifference raise MatError
 
-pub fn compare_trees_close(MatTree, MatTree, atol? : Double, rtol? : Double, equal_nan? : Bool, max_samples? : Int, limits? : Limits, tree_limits? : TreeLimits) -> TreeCloseDifference raise MatError
+pub fn compare_trees_close(MatTree, MatTree, atol? : Double, rtol? : Double, equal_nan? : Bool, max_samples? : Int32, limits? : Limits, tree_limits? : TreeLimits) -> TreeCloseDifference raise MatError
 
-pub fn concat_arrays(String, Array[NumericArray], Int, limits? : Limits) -> NumericArray raise MatError
+pub fn concat_arrays(String, Array[NumericArray], Int32, limits? : Limits) -> NumericArray raise MatError
 
 pub fn default_limits() -> Limits
 
@@ -20,21 +20,21 @@ pub fn default_source_limits() -> SourceLimits
 
 pub fn default_tree_limits() -> TreeLimits
 
-pub fn deflate_zlib(Bytes, max_bytes? : Int) -> Bytes raise MatError
+pub fn deflate_zlib(Bytes, max_bytes? : Int32) -> Bytes raise MatError
 
 pub fn dtype_from_name(String) -> DType raise MatError
 
-pub fn inflate_zlib(Bytes, max_bytes? : Int) -> Bytes raise MatError
+pub fn inflate_zlib(Bytes, max_bytes? : Int32) -> Bytes raise MatError
 
 pub fn inspect_roots(Bytes, limits? : Limits, tree_limits? : TreeLimits, name_encoding? : NameEncoding) -> Array[MatRootInfo] raise MatError
 
 pub fn inspect_roots_from(MatSource, limits? : SourceLimits, tree_limits? : TreeLimits, name_encoding? : NameEncoding) -> Array[MatRootInfo] raise MatError
 
-pub fn numeric_array(String, DType, Array[Int], Array[Value], imaginary? : Array[Value], is_global? : Bool, limits? : Limits) -> NumericArray raise MatError
+pub fn numeric_array(String, DType, Array[Int32], Array[Value], imaginary? : Array[Value], is_global? : Bool, limits? : Limits) -> NumericArray raise MatError
 
-pub fn raw_array(String, DType, Array[Int], Bytes, imag? : Bytes, is_global? : Bool, limits? : Limits) -> NumericArray raise MatError
+pub fn raw_array(String, DType, Array[Int32], Bytes, imag? : Bytes, is_global? : Bool, limits? : Limits) -> NumericArray raise MatError
 
-pub fn raw_sparse_array(String, DType, Array[Int], Array[Int], Array[Int], Bytes, imag? : Bytes, nzmax? : Int, is_global? : Bool, limits? : Limits) -> SparseArray raise MatError
+pub fn raw_sparse_array(String, DType, Array[Int32], Array[Int32], Array[Int32], Bytes, imag? : Bytes, nzmax? : Int32, is_global? : Bool, limits? : Limits) -> SparseArray raise MatError
 
 pub fn read_document(Bytes, limits? : Limits, name_encoding? : NameEncoding) -> MatDocument raise MatError
 
@@ -50,7 +50,7 @@ pub fn read_tree(Bytes, limits? : Limits, tree_limits? : TreeLimits, name_encodi
 
 pub fn read_tree_from(MatSource, limits? : SourceLimits, tree_limits? : TreeLimits, name_encoding? : NameEncoding) -> MatTree raise MatError
 
-pub fn utf8_char_array(String, Array[Int], String, is_global? : Bool, limits? : Limits) -> CharArray raise MatError
+pub fn utf8_char_array(String, Array[Int32], String, is_global? : Bool, limits? : Limits) -> CharArray raise MatError
 
 pub fn validate_document(Array[MatVariable], limits? : Limits, name_encoding? : NameEncoding) -> Unit raise MatError
 
@@ -68,19 +68,19 @@ pub fn write_tree(Array[MatNode], compressed? : Bool, limits? : Limits, tree_lim
 
 // Errors
 pub(all) suberror MatError {
-  MatError(String, Int, String)
+  MatError(String, Int32, String)
 } derive(Eq, @debug.Debug)
 pub fn MatError::code(Self) -> String
 pub fn MatError::equal(Self, Self) -> Bool
 pub fn MatError::message(Self) -> String
 pub fn MatError::not_equal(Self, Self) -> Bool
-pub fn MatError::offset(Self) -> Int
+pub fn MatError::offset(Self) -> Int32
 pub fn MatError::to_repr(Self) -> @debug.Repr
 
 // Types and methods
 pub(all) struct CellArray {
   name : String
-  shape : Array[Int]
+  shape : Array[Int32]
   values : Array[MatNode]
   is_global : Bool
 } derive(@debug.Debug)
@@ -88,7 +88,7 @@ pub fn CellArray::to_repr(Self) -> @debug.Repr
 
 pub(all) struct CharArray {
   name : String
-  shape : Array[Int]
+  shape : Array[Int32]
   encoding : CharEncoding
   data : Bytes
   is_global : Bool
@@ -125,12 +125,12 @@ pub fn DType::equal(Self, Self) -> Bool
 pub fn DType::name(Self) -> String
 pub fn DType::not_equal(Self, Self) -> Bool
 pub fn DType::to_repr(Self) -> @debug.Repr
-pub fn DType::width(Self) -> Int
+pub fn DType::width(Self) -> Int32
 
 pub(all) struct DifferenceSample {
   plane : String
-  index : Int
-  coordinates : Array[Int]
+  index : Int32
+  coordinates : Array[Int32]
   before : Bytes
   after : Bytes
 } derive(@debug.Debug)
@@ -139,18 +139,18 @@ pub fn DifferenceSample::to_repr(Self) -> @debug.Repr
 pub(all) struct DocumentDifference {
   content_equal : Bool
   variable_order_changed : Bool
-  changed_variables : Int
+  changed_variables : Int32
   variables : Array[VariableDifference]
 } derive(@debug.Debug)
 pub fn DocumentDifference::to_repr(Self) -> @debug.Repr
 
 pub(all) struct Limits {
-  max_file_bytes : Int
-  max_expanded_bytes : Int
-  max_elements : Int
-  max_variables : Int
-  max_dimensions : Int
-  max_name_bytes : Int
+  max_file_bytes : Int32
+  max_expanded_bytes : Int32
+  max_elements : Int32
+  max_variables : Int32
+  max_dimensions : Int32
+  max_name_bytes : Int32
 } derive(Eq, @debug.Debug)
 pub fn Limits::equal(Self, Self) -> Bool
 pub fn Limits::not_equal(Self, Self) -> Bool
@@ -183,13 +183,13 @@ pub(all) enum MatNode {
   Structure(StructArray)
 } derive(@debug.Debug)
 pub fn MatNode::name(Self) -> String
-pub fn MatNode::shape(Self) -> Array[Int]
+pub fn MatNode::shape(Self) -> Array[Int32]
 pub fn MatNode::to_repr(Self) -> @debug.Repr
 
 pub(all) struct MatRootInfo {
   name : String
-  class_id : Int
-  shape : Array[Int]
+  class_id : Int32
+  shape : Array[Int32]
   is_global : Bool
   is_complex : Bool
   is_logical : Bool
@@ -198,8 +198,8 @@ pub(all) struct MatRootInfo {
 pub fn MatRootInfo::to_repr(Self) -> @debug.Repr
 
 pub(all) struct MatSource {
-  size : Int
-  read_into : (Int, FixedArray[Byte], Int, Int) -> Int
+  size : Int32
+  read_into : (Int32, FixedArray[Byte], Int32, Int32) -> Int32
 }
 
 pub(all) struct MatTree {
@@ -216,7 +216,7 @@ pub(all) enum MatVariable {
   Sparse(SparseArray)
 } derive(@debug.Debug)
 pub fn MatVariable::name(Self) -> String
-pub fn MatVariable::stored_elements(Self) -> Int
+pub fn MatVariable::stored_elements(Self) -> Int32
 pub fn MatVariable::to_repr(Self) -> @debug.Repr
 
 pub(all) enum NameEncoding {
@@ -230,33 +230,33 @@ pub fn NameEncoding::to_repr(Self) -> @debug.Repr
 pub(all) struct NumericArray {
   name : String
   dtype : DType
-  shape : Array[Int]
+  shape : Array[Int32]
   real : Bytes
   imag : Bytes?
   is_global : Bool
 } derive(@debug.Debug)
-pub fn NumericArray::gather_axis(Self, Int, Array[Int], limits? : Limits) -> Self raise MatError
-pub fn NumericArray::index(Self, Array[Int]) -> Int raise MatError
+pub fn NumericArray::gather_axis(Self, Int32, Array[Int32], limits? : Limits) -> Self raise MatError
+pub fn NumericArray::index(Self, Array[Int32]) -> Int32 raise MatError
 pub fn NumericArray::is_complex(Self) -> Bool
-pub fn NumericArray::length(Self) -> Int
-pub fn NumericArray::permute_axes(Self, Array[Int], limits? : Limits) -> Self raise MatError
-pub fn NumericArray::reshape(Self, Array[Int], limits? : Limits) -> Self raise MatError
-pub fn NumericArray::slice(Self, Array[Int], Array[Int], steps? : Array[Int], limits? : Limits) -> Self raise MatError
+pub fn NumericArray::length(Self) -> Int32
+pub fn NumericArray::permute_axes(Self, Array[Int32], limits? : Limits) -> Self raise MatError
+pub fn NumericArray::reshape(Self, Array[Int32], limits? : Limits) -> Self raise MatError
+pub fn NumericArray::slice(Self, Array[Int32], Array[Int32], steps? : Array[Int32], limits? : Limits) -> Self raise MatError
 pub fn NumericArray::to_repr(Self) -> @debug.Repr
 pub fn NumericArray::to_sparse(Self, limits? : Limits) -> SparseArray raise MatError
-pub fn NumericArray::value(Self, Int, imaginary? : Bool) -> Value raise MatError
+pub fn NumericArray::value(Self, Int32, imaginary? : Bool) -> Value raise MatError
 
 pub(all) struct SourceLimits {
-  max_source_bytes : Int
-  max_expanded_bytes : Int
-  max_result_bytes : Int
-  max_buffered_root_bytes : Int
-  max_metadata_bytes : Int
-  chunk_bytes : Int
-  max_elements : Int
-  max_variables : Int
-  max_dimensions : Int
-  max_name_bytes : Int
+  max_source_bytes : Int32
+  max_expanded_bytes : Int32
+  max_result_bytes : Int32
+  max_buffered_root_bytes : Int32
+  max_metadata_bytes : Int32
+  chunk_bytes : Int32
+  max_elements : Int32
+  max_variables : Int32
+  max_dimensions : Int32
+  max_name_bytes : Int32
 } derive(Eq, @debug.Debug)
 pub fn SourceLimits::equal(Self, Self) -> Bool
 pub fn SourceLimits::not_equal(Self, Self) -> Bool
@@ -265,22 +265,22 @@ pub fn SourceLimits::to_repr(Self) -> @debug.Repr
 pub(all) struct SparseArray {
   name : String
   dtype : DType
-  shape : Array[Int]
-  row_indices : Array[Int]
-  col_ptrs : Array[Int]
+  shape : Array[Int32]
+  row_indices : Array[Int32]
+  col_ptrs : Array[Int32]
   real : Bytes
   imag : Bytes?
-  nzmax : Int
+  nzmax : Int32
   is_global : Bool
 } derive(@debug.Debug)
 pub fn SparseArray::is_canonical(Self, limits? : Limits) -> Bool raise MatError
-pub fn SparseArray::nnz(Self) -> Int
+pub fn SparseArray::nnz(Self) -> Int32
 pub fn SparseArray::to_dense(Self, limits? : Limits) -> NumericArray raise MatError
 pub fn SparseArray::to_repr(Self) -> @debug.Repr
 
 pub(all) struct StructArray {
   name : String
-  shape : Array[Int]
+  shape : Array[Int32]
   fields : Array[String]
   values : Array[MatNode]
   class_name : String?
@@ -292,7 +292,7 @@ pub(all) struct TreeCloseDifference {
   exact_equal : Bool
   within_tolerance : Bool
   variable_order_changed : Bool
-  differences : Int
+  differences : Int32
   samples : Array[TreeDifferenceSample]
   truncated : Bool
   atol : Double
@@ -304,7 +304,7 @@ pub fn TreeCloseDifference::to_repr(Self) -> @debug.Repr
 pub(all) struct TreeDifference {
   content_equal : Bool
   variable_order_changed : Bool
-  differences : Int
+  differences : Int32
   samples : Array[TreeDifferenceSample]
   truncated : Bool
 } derive(@debug.Debug)
@@ -313,17 +313,17 @@ pub fn TreeDifference::to_repr(Self) -> @debug.Repr
 pub(all) struct TreeDifferenceSample {
   path : Array[TreePathSegment]
   kind : String
-  index : Int
-  coordinates : Array[Int]
+  index : Int32
+  coordinates : Array[Int32]
   before : Bytes
   after : Bytes
 } derive(@debug.Debug)
 pub fn TreeDifferenceSample::to_repr(Self) -> @debug.Repr
 
 pub(all) struct TreeLimits {
-  max_depth : Int
-  max_nodes : Int
-  max_fields : Int
+  max_depth : Int32
+  max_nodes : Int32
+  max_fields : Int32
 } derive(Eq, @debug.Debug)
 pub fn TreeLimits::equal(Self, Self) -> Bool
 pub fn TreeLimits::not_equal(Self, Self) -> Bool
@@ -331,8 +331,8 @@ pub fn TreeLimits::to_repr(Self) -> @debug.Repr
 
 pub(all) enum TreePathSegment {
   Root(String)
-  CellElement(Int)
-  StructElement(Int)
+  CellElement(Int32)
+  StructElement(Int32)
   Field(String)
 } derive(Eq, @debug.Debug)
 pub fn TreePathSegment::equal(Self, Self) -> Bool
@@ -351,8 +351,8 @@ pub(all) struct VariableDifference {
   name : String
   status : String
   metadata : Array[String]
-  real_differences : Int
-  imag_differences : Int
+  real_differences : Int32
+  imag_differences : Int32
   samples : Array[DifferenceSample]
   truncated : Bool
 } derive(@debug.Debug)

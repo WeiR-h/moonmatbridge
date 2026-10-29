@@ -2,15 +2,15 @@
 /// Original bounded RFC 1950 / RFC 1951 decoder. No platform decompression calls.
 priv struct BitReader {
   bytes : Bytes
-  end : Int
-  mut position : Int
-  mut buffer : Int
-  mut available : Int
+  end : Int32
+  mut position : Int32
+  mut buffer : Int32
+  mut available : Int32
 }
 
 ///|
 // Never refill beyond the compressed window or into the Adler checksum.
-fn BitReader::fill(self : BitReader, count : Int) -> Bool {
+fn BitReader::fill(self : BitReader, count : Int32) -> Bool {
   while self.available < count && self.position < self.end {
     self.buffer = self.buffer |
       (self.bytes[self.position].to_int() << self.available)
@@ -21,7 +21,7 @@ fn BitReader::fill(self : BitReader, count : Int) -> Bool {
 }
 
 ///|
-fn BitReader::take(self : BitReader, count : Int) -> Int raise MatError {
+fn BitReader::take(self : BitReader, count : Int32) -> Int32 raise MatError {
   if !self.fill(count) {
     fail("invalid-zlib", self.position, "Truncated DEFLATE bit stream")
   }
@@ -42,8 +42,8 @@ fn BitReader::align(self : BitReader) -> Unit {
 ///|
 priv struct InflateOutput {
   mut data : FixedArray[Byte]
-  mut used : Int
-  limit : Int
+  mut used : Int32
+  limit : Int32
   matrix_little : Bool?
   mut hinted : Bool
 }
@@ -51,8 +51,8 @@ priv struct InflateOutput {
 ///|
 fn InflateOutput::reserve(
   self : InflateOutput,
-  additional : Int,
-  offset : Int,
+  additional : Int32,
+  offset : Int32,
 ) -> Unit raise MatError {
   if additional > self.limit - self.used {
     fail("expanded-limit", offset, "Expanded bytes exceed configured limit")
@@ -105,7 +105,7 @@ fn InflateOutput::matrix_hint(self : InflateOutput) -> Unit {
 fn InflateOutput::push(
   self : InflateOutput,
   byte : Byte,
-  offset : Int,
+  offset : Int32,
 ) -> Unit raise MatError {
   self.reserve(1, offset)
   self.data[self.used] = byte
@@ -117,14 +117,14 @@ fn InflateOutput::push(
 
 ///|
 priv struct Huffman {
-  left : Array[Int]
-  right : Array[Int]
-  symbol : Array[Int]
-  fast : FixedArray[Int]
+  left : Array[Int32]
+  right : Array[Int32]
+  symbol : Array[Int32]
+  fast : FixedArray[Int32]
 }
 
 ///|
-fn huffman(lengths : Array[Int], offset : Int) -> Huffman raise MatError {
+fn huffman(lengths : Array[Int32], offset : Int32) -> Huffman raise MatError {
   let counts = Array::make(16, 0)
   for length in lengths {
     if length < 0 || length > 15 {
@@ -198,7 +198,7 @@ fn huffman(lengths : Array[Int], offset : Int) -> Huffman raise MatError {
 }
 
 ///|
-fn Huffman::decode(self : Huffman, reader : BitReader) -> Int raise MatError {
+fn Huffman::decode(self : Huffman, reader : BitReader) -> Int32 raise MatError {
   // At stream end, a valid short symbol may have fewer than nine bits left.
   if reader.fill(9) {
     let entry = self.fast[reader.buffer & 511]
@@ -254,7 +254,7 @@ fn dynamic_trees(reader : BitReader) -> (Huffman, Huffman) raise MatError {
     code_lengths[order[i]] = reader.take(3)
   }
   let codes = huffman(code_lengths, reader.position)
-  let lengths : Array[Int] = []
+  let lengths : Array[Int32] = []
   let count = literal_count + distance_count
   while lengths.length() < count {
     let symbol = codes.decode(reader)
@@ -303,7 +303,7 @@ fn inflate_codes(
   out : InflateOutput,
   literals : Huffman,
   distances : Huffman,
-  window : Int,
+  window : Int32,
 ) -> Unit raise MatError {
   let length_base = [
     3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31, 35, 43, 51, 59, 67,
@@ -362,7 +362,7 @@ fn inflate_codes(
 /// Decode a single complete zlib stream. Verifies header, block lengths, stream end and Adler-32.
 pub fn inflate_zlib(
   bytes : Bytes,
-  max_bytes? : Int = 64 * 1024 * 1024,
+  max_bytes~ : Int32 = 64 * 1024 * 1024,
 ) -> Bytes raise MatError {
   inflate_window(bytes, 0, bytes.length(), max_bytes, None)
 }
@@ -370,9 +370,9 @@ pub fn inflate_zlib(
 ///|
 fn inflate_window(
   bytes : Bytes,
-  start : Int,
-  size : Int,
-  max_bytes : Int,
+  start : Int32,
+  size : Int32,
+  max_bytes : Int32,
   matrix_little : Bool?,
 ) -> Bytes raise MatError {
   if max_bytes < 0 || max_bytes > 1073741824 {
@@ -451,8 +451,8 @@ fn inflate_window(
     fail("invalid-zlib", reader.position, "Trailing bytes in zlib stream")
   }
   // 5552 bytes keep both Adler accumulators within unsigned 32-bit range.
-  let mut s1 : UInt = 1
-  let mut s2 : UInt = 0
+  let mut s1 : UInt32 = 1
+  let mut s2 : UInt32 = 0
   let mut begin = 0
   while begin < out.used {
     let end = if out.used - begin > 5552 { begin + 5552 } else { out.used }

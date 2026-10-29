@@ -94,7 +94,7 @@ pub fn sample_mat() -> BinaryResult {
 
 ///|
 #export_name("inflate_zlib")
-pub fn inflate_zlib(bytes : Bytes, limit : Int) -> BinaryResult {
+pub fn inflate_zlib(bytes : Bytes, limit : Int32) -> BinaryResult {
   binary(() => @mat.inflate_zlib(bytes, max_bytes=limit))
 }
 
@@ -128,7 +128,7 @@ pub fn compress_mat(bytes : Bytes) -> BinaryResult {
 
 ///|
 #export_name("deflate_zlib")
-pub fn deflate_zlib(bytes : Bytes, limit : Int) -> BinaryResult {
+pub fn deflate_zlib(bytes : Bytes, limit : Int32) -> BinaryResult {
   binary(() => @mat.deflate_zlib(bytes, max_bytes=limit))
 }
 
@@ -173,7 +173,7 @@ pub fn compare_mat(left : Bytes, right : Bytes) -> String {
 pub fn compare_mat_trees(
   left : Bytes,
   right : Bytes,
-  max_samples : Int,
+  max_samples : Int32,
 ) -> String {
   @wire.tree_diff_json(
     @mat.compare_trees(
@@ -203,8 +203,8 @@ pub fn tree_snapshot_to_mat(text : String) -> BinaryResult {
 ///|
 #export_name("make_source")
 pub fn make_source(
-  size : Int,
-  reader : (Int, FixedArray[Byte], Int, Int) -> Int,
+  size : Int32,
+  reader : (Int32, FixedArray[Byte], Int32, Int32) -> Int32,
 ) -> @mat.MatSource {
   { size, read_into: reader, }
 }
@@ -483,7 +483,7 @@ pub fn compare_mat_with_options(
 pub fn compare_mat_trees_with_options(
   left : Bytes,
   right : Bytes,
-  max_samples : Int,
+  max_samples : Int32,
   name_options : String,
 ) -> String {
   try {

@@ -1,8 +1,8 @@
 ///|
 priv struct NpyHeaderCursor {
   bytes : Bytes
-  end : Int
-  mut position : Int
+  end : Int32
+  mut position : Int32
 }
 
 ///|
@@ -77,8 +77,8 @@ fn NpyHeaderCursor::string(self : NpyHeaderCursor) -> String raise MatError {
 ///|
 fn NpyHeaderCursor::dimensions(
   self : NpyHeaderCursor,
-  max_rank : Int,
-) -> Array[Int] raise MatError {
+  max_rank : Int32,
+) -> Array[Int32] raise MatError {
   self.expect(b'(')
   self.space()
   let shape = []
@@ -137,7 +137,7 @@ fn NpyHeaderCursor::dimensions(
 pub fn read_npy(
   bytes : Bytes,
   name : String,
-  limits? : Limits = default_limits(),
+  limits~ : Limits = default_limits(),
 ) -> NumericArray raise MatError {
   validate_limits(limits)
   validate_name(name, limits)
@@ -173,7 +173,7 @@ pub fn read_npy(
   let seen : Map[String, Bool] = Map([])
   let mut descriptor : String? = None
   let mut fortran : Bool? = None
-  let mut dimensions : Array[Int]? = None
+  let mut dimensions : Array[Int32]? = None
   cursor.space()
   while cursor.peek() != b'}' {
     let key = cursor.string()

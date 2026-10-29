@@ -3,49 +3,49 @@
 extern "C" fn host_init() -> Unit = "moonmat_init"
 
 ///|
-extern "C" fn host_arg_count(fallback : Int) -> Int = "moonmat_arg_count"
+extern "C" fn host_arg_count(fallback : Int32) -> Int32 = "moonmat_arg_count"
 
 ///|
 #borrow(fallback)
-extern "C" fn host_arg(index : Int, fallback : String) -> String = "moonmat_arg"
+extern "C" fn host_arg(index : Int32, fallback : String) -> String = "moonmat_arg"
 
 ///|
 #borrow(path)
-extern "C" fn host_read(path : Bytes, limit : Int) -> Bytes = "moonmat_read"
+extern "C" fn host_read(path : Bytes, limit : Int32) -> Bytes = "moonmat_read"
 
 ///|
 #borrow(path, data)
-extern "C" fn host_save(path : Bytes, data : Bytes, length : Int) -> Int = "moonmat_save"
+extern "C" fn host_save(path : Bytes, data : Bytes, length : Int32) -> Int32 = "moonmat_save"
 
 ///|
-extern "C" fn host_error() -> Int = "moonmat_error"
+extern "C" fn host_error() -> Int32 = "moonmat_error"
 
 ///|
 #borrow(data)
-extern "C" fn host_emit(data : Bytes, length : Int) -> Int = "moonmat_emit_error"
+extern "C" fn host_emit(data : Bytes, length : Int32) -> Int32 = "moonmat_emit_error"
 
 ///|
-extern "C" fn exit_process(code : Int) -> Unit = "exit"
+extern "C" fn exit_process(code : Int32) -> Unit = "exit"
 
 ///|
 #borrow(path)
-extern "C" fn source_open(path : Bytes, limit : Int) -> Int = "moonmat_source_open"
+extern "C" fn source_open(path : Bytes, limit : Int32) -> Int32 = "moonmat_source_open"
 
 ///|
-extern "C" fn source_size(handle : Int) -> Int = "moonmat_source_size"
+extern "C" fn source_size(handle : Int32) -> Int32 = "moonmat_source_size"
 
 ///|
 #borrow(buffer)
 extern "C" fn source_read(
-  handle : Int,
-  offset : Int,
+  handle : Int32,
+  offset : Int32,
   buffer : FixedArray[Byte],
-  start : Int,
-  length : Int,
-) -> Int = "moonmat_source_read"
+  start : Int32,
+  length : Int32,
+) -> Int32 = "moonmat_source_read"
 
 ///|
-extern "C" fn source_close(handle : Int) -> Int = "moonmat_source_close"
+extern "C" fn source_close(handle : Int32) -> Int32 = "moonmat_source_close"
 
 ///|
 fn[T] from_file(

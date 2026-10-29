@@ -3,7 +3,7 @@
 pub fn MatFile::select(
   self : MatFile,
   names : Array[String],
-  limits? : Limits = default_limits(),
+  limits~ : Limits = default_limits(),
 ) -> Array[NumericArray] raise MatError {
   validate_limits(limits)
   if self.arrays.length() > limits.max_variables ||

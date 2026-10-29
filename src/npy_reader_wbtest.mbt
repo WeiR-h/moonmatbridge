@@ -1,5 +1,5 @@
 ///|
-fn test_npy(header : String, data : Bytes, major : Int) -> Bytes {
+fn test_npy(header : String, data : Bytes, major : Int32) -> Bytes {
   let prefix = if major == 1 { 10 } else { 12 }
   let body = @utf8.encode(header[:])
   let padding = (64 - (prefix + body.length() + 1) % 64) % 64

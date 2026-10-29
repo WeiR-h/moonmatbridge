@@ -194,10 +194,10 @@ def main():
  cases=fixtures();(LOCAL/'driver.mjs').write_text(DRIVER,encoding='utf-8',newline='\n')
  baseline,bsha,bhash,_=prepare(args.baseline_ref);candidate,csha,chash,version=prepare(args.candidate_ref)
  report={'version':version,'status':'running','baseline_commit':bsha,'candidate_commit':csha,'baseline_runtime_source_sha256':bhash,'candidate_runtime_source_sha256':chash,'protocol':{'warmup_per_batch':5,'batches':3,'samples_per_batch':10,'memory_processes':3,'timing':'open, read, validate, select, close and serialize; process startup excluded; generated input excluded; warm OS cache; JS GC outside timing'},'results':[]}
- report['environment']={'platform':platform.platform(),'architecture':platform.machine(),'node':perf.command(['node','--version']),'moon':perf.command(['node',ROOT/'scripts/moon.mjs','version']),'build':'same toolchain, release mode, one compiler job'}
+ report['environment']={'toolchain':json.loads(perf.command(['node',ROOT/'scripts/toolchain.mjs'])),'platform':platform.platform(),'architecture':platform.machine(),'node':perf.command(['node','--version']),'moon':perf.command(['node',ROOT/'scripts/moon.mjs','version']),'build':'same toolchain, release mode, one compiler job'}
  config=ROOT/'.local-toolchain.json'
  toolchain=json.loads(config.read_bytes()) if config.exists() else {}
- report['environment']['compiler']=perf.command([toolchain.get('gcc','cc'),'--version']).splitlines()[0]
+ report['environment']['compiler']=report['environment']['toolchain']['c_compiler']
  for case in cases:
   if args.case and case['name'] not in args.case:continue
   if tuple(map(int,version.split('-')[0].split('.')))<tuple(case['minimum_version']):continue

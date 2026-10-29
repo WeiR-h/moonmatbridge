@@ -1,6 +1,6 @@
 ///|
 /// RFC 3629 scalar validation/counting without allocating a decoded String.
-fn utf8_scalar_count(data : BytesView) -> Int raise MatError {
+fn utf8_scalar_count(data : BytesView) -> Int32 raise MatError {
   let mut offset = 0
   let mut count = 0
   while offset < data.length() {

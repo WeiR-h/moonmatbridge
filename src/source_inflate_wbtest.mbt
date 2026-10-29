@@ -1,8 +1,8 @@
 ///|
 fn source_inflate_test(
   bytes : Bytes,
-  maximum : Int,
-  chunk : Int,
+  maximum : Int32,
+  chunk : Int32,
 ) -> Bytes raise MatError {
   let cursor : SourceCursor = {
     source: test_source(bytes, 3),

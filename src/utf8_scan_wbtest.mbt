@@ -18,7 +18,7 @@ test "UTF8 scalar scan agrees with independent standard decoder at boundaries an
     )
   }
   for bytes in cases {
-    let expected : Int? = Some(@utf8.decode(bytes[:]).iter().count()) catch {
+    let expected : Int32? = Some(@utf8.decode(bytes[:]).iter().count()) catch {
       _ => None
     }
     match expected {

@@ -32,7 +32,7 @@ fn encode_name(text : String, encoding : NameEncoding) -> Bytes raise MatError {
 fn decode_name(
   bytes : BytesView,
   encoding : NameEncoding,
-  offset : Int,
+  offset : Int32,
 ) -> String raise MatError {
   match encoding {
     Utf8 =>

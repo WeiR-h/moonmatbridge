@@ -5,6 +5,7 @@ Product code is original MoonBit implementation under Apache-2.0, except the sma
 | Component/reference | Role | License/credit |
 | --- | --- | --- |
 | [MoonBit core](https://github.com/moonbitlang/core) and compiler runtime | Standard library, generated JS/native/Wasm runtime | Apache-2.0; MoonBit contributors. The native executable embeds runtime code. |
+| [Microsoft C/C++ Build Tools](https://visualstudio.microsoft.com/license-terms/) | Windows C compiler and static C runtime; existing Windows SDK supplies platform interfaces | Microsoft license terms; compiler/SDK packages are development tools and are excluded from source and Mooncakes archives. Native distribution uses the supported static CRT configuration. |
 | Local MoonMMDB `scripts/native-cc.c` | Adapted MinGW compiler argument quoting / `_CRT_RAND_S` build launcher | Apache-2.0; user's MoonMMDB tooling. Development only, no file-format logic. |
 | [MathWorks MAT-file format](https://www.mathworks.com/help/pdf_doc/matlab/matfile_format.pdf) | MAT Level 5 specification reference | MathWorks documentation. No documentation text or proprietary code bundled. |
 | [SciPy MATLAB I/O](https://github.com/scipy/scipy/tree/v1.15.3/scipy/io/matlab) | Independent fixture producer and consumer; format behavior reference | BSD-3-Clause; SciPy developers. Installed only in optional verification environment; no source copied. |

@@ -3,8 +3,8 @@
 pub fn concat_arrays(
   name : String,
   arrays : Array[NumericArray],
-  axis : Int,
-  limits? : Limits = default_limits(),
+  axis : Int32,
+  limits~ : Limits = default_limits(),
 ) -> NumericArray raise MatError {
   validate_limits(limits)
   validate_name(name, limits)

@@ -8,13 +8,13 @@ import {
 // Values
 pub fn compare_mat(Bytes, Bytes) -> String
 
-pub fn compare_mat_trees(Bytes, Bytes, Int) -> String
+pub fn compare_mat_trees(Bytes, Bytes, Int32) -> String
 
 pub fn compare_mat_trees_close(Bytes, Bytes, String) -> String
 
 pub fn compare_mat_trees_close_with_options(Bytes, Bytes, String, String) -> String
 
-pub fn compare_mat_trees_with_options(Bytes, Bytes, Int, String) -> String
+pub fn compare_mat_trees_with_options(Bytes, Bytes, Int32, String) -> String
 
 pub fn compare_mat_with_options(Bytes, Bytes, String) -> String
 
@@ -26,9 +26,9 @@ pub fn convert_storage(Bytes, String, Bool) -> BinaryResult
 
 pub fn convert_storage_with_options(Bytes, String, Bool, String) -> BinaryResult
 
-pub fn deflate_zlib(Bytes, Int) -> BinaryResult
+pub fn deflate_zlib(Bytes, Int32) -> BinaryResult
 
-pub fn inflate_zlib(Bytes, Int) -> BinaryResult
+pub fn inflate_zlib(Bytes, Int32) -> BinaryResult
 
 pub fn inspect_mat(Bytes) -> String
 
@@ -46,7 +46,7 @@ pub fn json_to_mat(String) -> BinaryResult
 
 pub fn json_to_mat_with_options(String, String) -> BinaryResult
 
-pub fn make_source(Int, (Int, FixedArray[Byte], Int, Int) -> Int) -> @moonmatbridge.MatSource
+pub fn make_source(Int32, (Int32, FixedArray[Byte], Int32, Int32) -> Int32) -> @moonmatbridge.MatSource
 
 pub fn mat_to_json(Bytes) -> String
 

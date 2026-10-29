@@ -1,7 +1,7 @@
 ///|
 fn close_tree(
   values : Array[Double],
-  dtype? : DType = Float64,
+  dtype~ : DType = Float64,
 ) -> MatTree raise MatError {
   let a = numeric_array(
     "values",

@@ -1,5 +1,5 @@
 ///|
-fn integer(value : Json) -> Int raise @mat.MatError {
+fn integer(value : Json) -> Int32 raise @mat.MatError {
   match value {
     Number(n, ..) => {
       if n.is_nan() ||
@@ -19,7 +19,7 @@ fn integer(value : Json) -> Int raise @mat.MatError {
 }
 
 ///|
-fn integers(value : Json) -> Array[Int] raise @mat.MatError {
+fn integers(value : Json) -> Array[Int32] raise @mat.MatError {
   array(value).map(integer)
 }
 
@@ -27,7 +27,7 @@ fn integers(value : Json) -> Array[Int] raise @mat.MatError {
 fn lookup(
   arrays : Array[@mat.NumericArray],
   name : String,
-) -> Int raise @mat.MatError {
+) -> Int32 raise @mat.MatError {
   for i, item in arrays {
     if item.name == name {
       return i
@@ -41,7 +41,7 @@ fn lookup(
 pub fn transform(
   arrays : Array[@mat.NumericArray],
   plan : String,
-  limits? : @mat.Limits = @mat.default_limits(),
+  limits~ : @mat.Limits = @mat.default_limits(),
 ) -> Array[@mat.NumericArray] raise @mat.MatError {
   if plan.length() > limits.max_file_bytes {
     invalid("Transform plan exceeds byte limit")
@@ -140,7 +140,7 @@ pub fn transform(
 pub fn transform_document(
   variables : Array[@mat.MatVariable],
   plan : String,
-  limits? : @mat.Limits = @mat.default_limits(),
+  limits~ : @mat.Limits = @mat.default_limits(),
 ) -> Array[@mat.MatVariable] raise @mat.MatError {
   @mat.validate_document(variables, limits~)
   let dense = []

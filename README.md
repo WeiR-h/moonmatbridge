@@ -1,4 +1,4 @@
-# MoonMatBridge v0.1.0
+# MoonMatBridge v0.1.1
 
 支持显式 UTF-8 / Latin1 名称编解码，覆盖变量名、字段名和 legacy 类名。两个命令行宿主使用前置 `--name-encoding=latin1`；默认调用保持 UTF-8。[名称编码说明](docs/NAME_ENCODING.md)。
 
@@ -8,7 +8,7 @@ MAT 递归 cell/struct/char/legacy object、密集/CSC 稀疏读写、数值编�
 
 未压缩和压缩文件均支持分块读取 256 MiB 未选变量并提取所选结果；压缩读取保留 32 KiB 历史窗口，无需完整展开缓冲。详情见 [文件数据源](docs/SOURCES.md)。
 
-当前源码版本为 v0.1.0，GitHub 与 Mooncakes 使用统一版本号；发布模块名为 `WeiR-h/moonmatbridge`。
+当前源码版本为 v0.1.1，GitHub 与 Mooncakes 使用统一版本号；发布模块名为 `WeiR-h/moonmatbridge`。
 
 - 压缩读取采用位缓冲、Huffman 短码表与有界输入窗口，减少临时复制和展开缓冲扩容。
 - 完整递归混合数据读写；预检尺寸后写入固定缓冲，保留字符单位、精确整数、复数和 CSC 容量。
@@ -23,7 +23,7 @@ MAT 递归 cell/struct/char/legacy object、密集/CSC 稀疏读写、数值编�
 
 ## 支持范围
 
-| 能力 | v0.1.0 |
+| 能力 | v0.1.1 |
 | --- | --- |
 | MAT Level 5 读取 | 小端、大端；标准标签与小数据标签；多变量 |
 | 压缩读取 | `miCOMPRESSED`；MoonBit 解码 stored/fixed/dynamic DEFLATE，验证 Adler-32 |
@@ -72,7 +72,7 @@ MAT 递归 cell/struct/char/legacy object、密集/CSC 稀疏读写、数值编�
 .\moonmat.exe densify sparse.mat temperature dense.mat
 ```
 
-输出文件必须是新文件；重复路径会报 `output-exists`，不会覆盖已有数据。正常命令返回 JSON，`version`、`help` 返回文字。错误输出到 stderr，退出码为 1。`diff` 内容相同返回 0，内容变化返回 2，输入或输出错误返回 1；变化是有效比较结果。中文及带空格路径已测试。程序只依赖 Windows 系统自带的 `KERNEL32.dll`、`msvcrt.dll`。
+输出文件必须是新文件；重复路径会报 `output-exists`，不会覆盖已有数据。正常命令返回 JSON，`version`、`help` 返回文字。错误输出到 stderr，退出码为 1。`diff` 内容相同返回 0，内容变化返回 2，输入或输出错误返回 1；变化是有效比较结果。中文及带空格路径已测试。程序只依赖 Windows 系统自带的 `KERNEL32.dll`、`dbghelp.dll`、`SHELL32.dll`、`bcrypt.dll`。
 
 仓库构建后也可以运行：
 
@@ -84,10 +84,10 @@ JS 适配器只读写文件；格式处理使用编译后的 MoonBit。
 
 ## MoonBit API
 
-发布模块名为 [`WeiR-h/moonmatbridge`](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.1.0)。在已有 MoonBit 项目中安装：
+发布模块名为 [`WeiR-h/moonmatbridge`](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.1.1)。在已有 MoonBit 项目中安装：
 
 ```powershell
-moon add WeiR-h/moonmatbridge@0.1.0
+moon add WeiR-h/moonmatbridge@0.1.1
 ```
 
 核心代码在 `src/`，公开接口在 `src/pkg.generated.mbti`。包内示例可直接运行：
@@ -150,7 +150,7 @@ savemat("python.mat", {"signal": np.arange(12).reshape(3, 4)}, do_compression=Tr
 
 ## 构建与验证
 
-使用已安装的 MoonBit、Node.js 22+，native 目标还需要 C 编译器。开发验证另外需要 Python 3.12+：
+使用 moonc 0.10.16 或更高版本、Node.js 22+，native 目标在 Windows 使用 MSVC 与 Windows SDK，Linux 使用 C 编译器。Windows 可先运行 `python scripts/setup-msvc.py --configure` 将固定 MSVC 安装到项目目录，复用已有 Windows SDK。开发验证另外需要 Python 3.12+：
 
 ```powershell
 python -m venv .venv
@@ -168,7 +168,7 @@ npm run package
 
 `npm run verify:registry` 创建独立项目，使用固定版本的 `moon add` 下载依赖；禁止本地 workspace/path 替代，核对已下载源码，并在 JS、wasm-gc、native 上验证六个完整消费者场景。示例位于 [examples/registry_consumer](examples/registry_consumer/)。发布时使用 `.moonignore` 的明确文件范围，并通过 `moon package --list` 核对；开发工具、构建输出、个人报名材料及验证工作目录不进入 Mooncakes 包。
 
-本地验证使用 MoonBit `0.1.20260920 (914d7da)`、Node `v24.13.0`、GCC `16.2.0`、Python `3.12.5`、SciPy `1.15.3`、NumPy `2.2.6`。`scripts/verify.mjs` 执行三目标测试、直接示例、构建、压缩差分测试和真实文件互通，并记录源文件指纹。
+当前工具链固定于 `toolchain.lock.json`，通过 `python scripts/setup-toolchain.py --configure` 安装；验证入口检查实际 moonc 版本。历史性能环境记录为 MoonBit `0.1.20260920 (914d7da)`、Node `v24.13.0`、GCC `16.2.0`、Python `3.12.5`、SciPy `1.15.3`、NumPy `2.2.6`。`scripts/verify.mjs` 执行三目标测试、直接示例、构建、压缩差分测试和真实文件互通，并记录源文件指纹。
 
 - 68 项 MoonBit 测试（v0.0.9 基准记录；当前数量以对应版本报告为准），各在 JS / wasm-gc / native 执行一次。
 - 62 项独立 SciPy/NumPy 验证分组：21 个密集科研数组、两宿主各 72 个 NPY 导入文件，以及递归混合类型、六种字符存储标签、稀疏、压缩写入、转换流程、快照、精确差异和失败原子性。
@@ -177,6 +177,6 @@ npm run package
 
 ## 许可与后续
 
-Apache-2.0，详见 [LICENSE](LICENSE)、[NOTICE](NOTICE)、[第三方与参考来源](THIRD_PARTY.md)。实现由 AI 辅助完成；关键格式逻辑可在 MoonBit 源码中直接审查，使用独立实现做验证。
+Apache-2.0，详见 [LICENSE](LICENSE)、[NOTICE](NOTICE)、[第三方与参考来源](THIRD_PARTY.md)。关键格式逻辑可在 MoonBit 源码中直接审查，使用独立实现做验证。
 
-后续优先评估结构化科研数据与扫描/流式接口。当前无损快照保存数组内容和存储元数据，不承诺恢复原始 MAT 头部或压缩字节；精确差异不提供浮点容差比较。各版本的实现范围与验证证据见 [CHANGELOG](CHANGELOG.md)。
+后续优先评估结构化科研数据与扫描/流式接口。当前无损快照保存数组内容和存储元数据，不承诺恢复原始 MAT 头部或压缩字节；精确比较与浮点容差比较分别提供独立报告。各版本的实现范围与验证证据见 [CHANGELOG](CHANGELOG.md)。

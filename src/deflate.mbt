@@ -1,13 +1,13 @@
 ///|
 priv struct BitWriter {
   out : Array[Byte]
-  mut pending : Int
-  mut count : Int
-  limit : Int
+  mut pending : Int32
+  mut count : Int32
+  limit : Int32
 }
 
 ///|
-fn smaller(a : Int, b : Int) -> Int {
+fn smaller(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -18,8 +18,8 @@ fn smaller(a : Int, b : Int) -> Int {
 ///|
 fn BitWriter::put(
   self : BitWriter,
-  value : Int,
-  count : Int,
+  value : Int32,
+  count : Int32,
 ) -> Unit raise MatError {
   self.pending = self.pending | (value << self.count)
   self.count = self.count + count
@@ -34,7 +34,7 @@ fn BitWriter::put(
 }
 
 ///|
-fn reverse_code(code : Int, count : Int) -> Int {
+fn reverse_code(code : Int32, count : Int32) -> Int32 {
   let mut result = 0
   for i = 0; i < count; i = i + 1 {
     result = (result << 1) | ((code >> i) & 1)
@@ -43,7 +43,7 @@ fn reverse_code(code : Int, count : Int) -> Int {
 }
 
 ///|
-fn BitWriter::literal(self : BitWriter, symbol : Int) -> Unit raise MatError {
+fn BitWriter::literal(self : BitWriter, symbol : Int32) -> Unit raise MatError {
   let (code, count) = if symbol <= 143 {
     (48 + symbol, 8)
   } else if symbol <= 255 {
@@ -59,8 +59,8 @@ fn BitWriter::literal(self : BitWriter, symbol : Int) -> Unit raise MatError {
 ///|
 fn BitWriter::match_code(
   self : BitWriter,
-  length : Int,
-  distance : Int,
+  length : Int32,
+  distance : Int32,
 ) -> Unit raise MatError {
   let length_base = [
     3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31, 35, 43, 51, 59, 67,
@@ -93,7 +93,7 @@ fn BitWriter::match_code(
 }
 
 ///|
-fn adler32(bytes : Bytes) -> UInt {
+fn adler32(bytes : Bytes) -> UInt32 {
   let mut s1 = 1
   let mut s2 = 0
   for byte in bytes {
@@ -112,7 +112,7 @@ fn append_adler(out : Array[Byte], bytes : Bytes) -> Unit {
 }
 
 ///|
-fn stored_zlib(bytes : Bytes, limit : Int) -> Bytes raise MatError {
+fn stored_zlib(bytes : Bytes, limit : Int32) -> Bytes raise MatError {
   let blocks = if bytes.length() == 0 {
     1
   } else {
@@ -138,7 +138,7 @@ fn stored_zlib(bytes : Bytes, limit : Int) -> Bytes raise MatError {
 }
 
 ///|
-fn fixed_zlib(bytes : Bytes, limit : Int) -> Bytes raise MatError {
+fn fixed_zlib(bytes : Bytes, limit : Int32) -> Bytes raise MatError {
   let writer : BitWriter = {
     out: [b'\x78', b'\x01'],
     pending: 0,
@@ -148,14 +148,14 @@ fn fixed_zlib(bytes : Bytes, limit : Int) -> Bytes raise MatError {
   writer.put(3, 3) // final block, fixed Huffman coding
   let heads = Array::make(32768, -1)
   let previous = Array::make(32768, -1)
-  let hash = fn(offset : Int) {
+  let hash = fn(offset : Int32) {
     (
       (bytes[offset].to_int() * 251 + bytes[offset + 1].to_int()) * 251 +
       bytes[offset + 2].to_int()
     ) &
     32767
   }
-  let insert = fn(position : Int) {
+  let insert = fn(position : Int32) {
     if position + 2 < bytes.length() {
       let key = hash(position)
       previous[position & 32767] = heads[key]
@@ -219,7 +219,7 @@ fn fixed_zlib(bytes : Bytes, limit : Int) -> Bytes raise MatError {
 /// Input is bounded to 64 MiB; no external compressor, dictionaries, timestamps or platform variation.
 pub fn deflate_zlib(
   bytes : Bytes,
-  max_bytes? : Int = 64 * 1024 * 1024,
+  max_bytes~ : Int32 = 64 * 1024 * 1024,
 ) -> Bytes raise MatError {
   if max_bytes < 6 || max_bytes > 1073741824 {
     fail("invalid-limits", 0, "Invalid compressed output limit")

@@ -14,7 +14,7 @@ fn tiny() -> Bytes raise MatError {
 }
 
 ///|
-fn changed(bytes : Bytes, offset : Int, value : Byte) -> Bytes {
+fn changed(bytes : Bytes, offset : Int32, value : Byte) -> Bytes {
   let out = bytes.to_array()
   out[offset] = value
   Bytes::from_array(out)

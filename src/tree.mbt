@@ -28,7 +28,7 @@ pub fn CharEncoding::name(self : CharEncoding) -> String {
 }
 
 ///|
-fn CharEncoding::tag_id(self : CharEncoding) -> Int {
+fn CharEncoding::tag_id(self : CharEncoding) -> Int32 {
   match self {
     Int8Text => 1
     UInt8Text => 2
@@ -40,7 +40,7 @@ fn CharEncoding::tag_id(self : CharEncoding) -> Int {
 }
 
 ///|
-fn CharEncoding::width(self : CharEncoding) -> Int {
+fn CharEncoding::width(self : CharEncoding) -> Int32 {
   match self {
     UInt16Text | Utf16 => 2
     Utf32 => 4
@@ -51,7 +51,7 @@ fn CharEncoding::width(self : CharEncoding) -> Int {
 ///|
 pub(all) struct CharArray {
   name : String
-  shape : Array[Int]
+  shape : Array[Int32]
   encoding : CharEncoding
   data : Bytes
   is_global : Bool
@@ -64,7 +64,7 @@ pub extend CharArray with @debug.Debug::{to_repr}
 /// Children are in column-major order. Nested matrices may have an empty name.
 pub(all) struct CellArray {
   name : String
-  shape : Array[Int]
+  shape : Array[Int32]
   values : Array[MatNode]
   is_global : Bool
 } derive(@debug.Debug)
@@ -77,7 +77,7 @@ pub extend CellArray with @debug.Debug::{to_repr}
 /// Some(class_name) represents the documented legacy mxOBJECT class, as data only.
 pub(all) struct StructArray {
   name : String
-  shape : Array[Int]
+  shape : Array[Int32]
   fields : Array[String]
   values : Array[MatNode]
   class_name : String?
@@ -111,9 +111,9 @@ pub extend MatTree with @debug.Debug::{to_repr}
 
 ///|
 pub(all) struct TreeLimits {
-  max_depth : Int
-  max_nodes : Int
-  max_fields : Int
+  max_depth : Int32
+  max_nodes : Int32
+  max_fields : Int32
 } derive(Eq, @debug.Debug)
 
 ///|
@@ -129,10 +129,10 @@ pub fn default_tree_limits() -> TreeLimits {
 
 ///|
 priv struct TreeBudget {
-  mut nodes : Int
-  mut elements : Int
-  mut metadata : Int
-  metadata_limit : Int
+  mut nodes : Int32
+  mut elements : Int32
+  mut metadata : Int32
+  metadata_limit : Int32
 }
 
 ///|
@@ -152,7 +152,7 @@ fn validate_tree_limits(tree : TreeLimits) -> Unit raise MatError {
 ///|
 fn charge_node(
   budget : TreeBudget,
-  depth : Int,
+  depth : Int32,
   tree : TreeLimits,
 ) -> Unit raise MatError {
   if depth > tree.max_depth {
@@ -167,7 +167,7 @@ fn charge_node(
 ///|
 fn charge_elements(
   budget : TreeBudget,
-  count : Int,
+  count : Int32,
   limits : Limits,
 ) -> Unit raise MatError {
   if count > limits.max_elements - budget.elements {
@@ -188,7 +188,7 @@ pub fn MatNode::name(self : MatNode) -> String {
 }
 
 ///|
-pub fn MatNode::shape(self : MatNode) -> Array[Int] {
+pub fn MatNode::shape(self : MatNode) -> Array[Int32] {
   match self {
     Numeric(a) => a.shape.copy()
     Csc(a) => a.shape.copy()
@@ -233,8 +233,8 @@ fn validate_char(
   a : CharArray,
   limits : Limits,
   nested : Bool,
-  name_encoding? : NameEncoding = Utf8,
-) -> Int raise MatError {
+  name_encoding~ : NameEncoding = Utf8,
+) -> Int32 raise MatError {
   validate_name(a.name, limits, allow_empty=nested, name_encoding~)
   let count = element_count(a.shape, limits, 0)
   if a.data.length() > limits.max_file_bytes {
@@ -249,7 +249,7 @@ fn validate_char(
 fn validate_char_units(
   data : BytesView,
   encoding : CharEncoding,
-  count : Int,
+  count : Int32,
   little : Bool,
 ) -> Unit raise MatError {
   if encoding == Utf8 {
@@ -281,10 +281,10 @@ fn validate_char_units(
 /// UTF-8 dimensions count Unicode scalars, following SciPy's UTF-8 MAT representation.
 pub fn utf8_char_array(
   name : String,
-  shape : Array[Int],
+  shape : Array[Int32],
   text : String,
-  is_global? : Bool = false,
-  limits? : Limits = default_limits(),
+  is_global~ : Bool = false,
+  limits~ : Limits = default_limits(),
 ) -> CharArray raise MatError {
   validate_limits(limits)
   let result : CharArray = {
@@ -304,7 +304,7 @@ fn tree_text(
   item : Element,
   limits : Limits,
   empty : Bool,
-  name_encoding? : NameEncoding = Utf8,
+  name_encoding~ : NameEncoding = Utf8,
 ) -> String raise MatError {
   if item.kind != 1 || item.size > limits.max_name_bytes {
     fail("invalid-name", item.start, "Expected bounded miINT8 name")
@@ -326,9 +326,9 @@ fn visit_node(
   limits : Limits,
   tree : TreeLimits,
   budget : TreeBudget,
-  depth : Int,
+  depth : Int32,
   keep : Bool,
-  name_encoding? : NameEncoding = Utf8,
+  name_encoding~ : NameEncoding = Utf8,
 ) -> MatNode? raise MatError {
   charge_node(budget, depth, tree)
   if outer.kind != 14 {
@@ -557,7 +557,7 @@ fn visit_node(
 }
 
 ///|
-fn element_size(length : Int) -> Int {
+fn element_size(length : Int32) -> Int32 {
   8 + length + (8 - length % 8) % 8
 }
 
@@ -567,10 +567,10 @@ fn node_size(
   limits : Limits,
   tree : TreeLimits,
   budget : TreeBudget,
-  depth : Int,
-  planned : Array[Int],
-  name_encoding? : NameEncoding = Utf8,
-) -> Int raise MatError {
+  depth : Int32,
+  planned : Array[Int32],
+  name_encoding~ : NameEncoding = Utf8,
+) -> Int32 raise MatError {
   let plan_index = planned.length()
   planned.push(0)
   charge_node(budget, depth, tree)
