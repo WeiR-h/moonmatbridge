@@ -55,3 +55,7 @@
 !/docs/SOURCES.md
 
 !/docs/TREE_CLOSE.md
+
+!/docs/NAME_ENCODING.md
+!/examples/unicode/
+!/examples/unicode/**

@@ -9,12 +9,12 @@ ROOT = Path(__file__).resolve().parents[1]
 version = json.loads((ROOT / 'package.json').read_text(encoding='utf-8'))['version']
 archive = ROOT / '_build/publish' / f'WeiR-h-moonmatbridge-{version}.zip'
 allowed = {'.moonignore', 'moon.mod', 'README.md', 'CHANGELOG.md', 'LICENSE', 'NOTICE', 'THIRD_PARTY.md', 'benchmarks/manifest.json'}
-allowed.update('docs/' + name for name in ['TREE_CLOSE.md', 'SOURCES.md', 'TREE_SNAPSHOT.md', 'TREE_DIFF.md', 'ACCEPTANCE.md', 'API.md', 'FORMAT.md', 'JSON.md', 'RECIPES.md',
+allowed.update('docs/' + name for name in ['NAME_ENCODING.md', 'TREE_CLOSE.md', 'SOURCES.md', 'TREE_SNAPSHOT.md', 'TREE_DIFF.md', 'ACCEPTANCE.md', 'API.md', 'FORMAT.md', 'JSON.md', 'RECIPES.md',
                                          'DIFFERENTIATION.md', 'ITERATIONS-v0.0.3.md', 'COMPATIBILITY.md',
                                          'COMPATIBILITY_MATRIX.md', 'NEXT_RELEASES.md', 'PERFORMANCE.md',
                                          'SCIENTIFIC_WORKFLOWS.md', 'REVIEW_EVIDENCE-v0.0.9.md'])
 allowed.update('examples/' + name for name in ['sample.mat', 'sample.json', 'transform-plan.json'])
-for directory in ['src', 'examples/python', 'examples/matlab', 'examples/octave', 'examples/registry_consumer', 'examples/mixed', 'examples/workflows', 'examples/compatibility']:
+for directory in ['src', 'examples/python', 'examples/matlab', 'examples/octave', 'examples/registry_consumer', 'examples/mixed', 'examples/workflows', 'examples/compatibility', 'examples/unicode']:
     allowed.update(path.relative_to(ROOT).as_posix() for path in (ROOT / directory).rglob('*') if path.is_file() and '__pycache__' not in path.parts)
 entries = []
 seen = set()
