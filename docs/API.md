@@ -1,4 +1,4 @@
-# MoonBit API v0.0.19
+# MoonBit API v0.0.20
 
 The core package is `WeiR-h/moonmatbridge`. The executable, JSON adapter and JS ABI are separate packages; core parsing performs no host I/O.
 
@@ -59,11 +59,11 @@ console.log(JSON.parse(api.inspect_mat(bytes)));
 
 Exports: `npy_to_mat`, `select_mat`, `inspect_mat`, `mat_to_json`, `json_to_mat`, `roundtrip_mat`, `mat_to_npy`, `sample_mat`, `inflate_zlib`, `deflate_zlib`, `compress_mat`, `transform_mat`, `convert_storage`, `mat_to_snapshot`, `snapshot_to_mat`, `compare_mat`, `result_status`, `result_bytes`. Functions returning `BinaryResult` require a status check before consuming bytes. String results contain structured JSON errors on failure. Host-neutral JS exports have no filesystem or Python dependency; Node tests validate them, but a browser UI has not been shipped or tested.
 
-`SparseArray` fields: `name`, `dtype`, two-dimensional `shape`, `row_indices`, `col_ptrs`, `real`, `imag`, `nzmax`, `is_global`. `nnz()` is the final column pointer, including explicit zeros; the slot count can exceed it. Active rows strictly increase within each column. `nzmax` is >= stored slots. Unused row/value slots survive read/write and snapshots. Only float64/logical and complex float64 are supported. `MatDocument` contains `description`, `little_endian`, `variables`. Header text/endian/compression are normalized on write.
+`SparseArray` fields: `name`, `dtype`, two-dimensional `shape`, `row_indices`, `col_ptrs`, `real`, `imag`, `nzmax`, `is_global`. `nnz()` is the final column pointer, including explicit zeros; the slot count can exceed it. Active row order and duplicate slots are preserved within each column. `nzmax` is >= stored slots. Unused row/value slots survive read/write and snapshots. Only float64/logical and complex float64 are supported. `MatDocument` contains `description`, `little_endian`, `variables`. Header text/endian/compression are normalized on write.
 
 `DocumentDifference` reports `content_equal`, `variable_order_changed`, `changed_variables`, `variables`. Metadata differences list dtype, shape, global/complex, storage or CSC pointers/rows/capacity. Comparable value changes are counted separately per real/imaginary plane; samples contain a zero-based linear/CSC-slot index, coordinates and exact before/after bytes. Inactive CSC slots have empty coordinates. Shape/type/storage/index-mapping changes are metadata differences, not fabricated element-by-element matches. File descriptions/endian/compression are excluded, while CSC storage metadata is included. No floating tolerance is applied.
 
-`src/pkg.generated.mbti` and the interfaces under `src/interchange` and `src/bridge` contain the complete compiler-generated signatures. Install the exact registry version with `moon add WeiR-h/moonmatbridge@0.0.13`, then import the core and/or interchange package. `examples/registry_consumer` contains a consumer that uses only these public interfaces; the registry verification script resolves a fresh copy and checks its source bytes before running all three targets.
+`src/pkg.generated.mbti` and the interfaces under `src/interchange` and `src/bridge` contain the complete compiler-generated signatures. Install the exact registry version with `moon add WeiR-h/moonmatbridge@0.0.20`, then import the core and/or interchange package. `examples/registry_consumer` contains a consumer that uses only these public interfaces; the registry verification script resolves a fresh copy and checks its source bytes before running all three targets.
 
 NPY input supports primitive float32/64, complex64/128, signed/unsigned integers and bool. Header strings must be plain ASCII, the header fits 64 KiB and no duplicate/unknown keys or trailing payload are accepted. Structured, object/pickle, string, datetime, float16 and ambiguous native-endian descriptors are rejected. NPY scalars become `[1,1]` and vectors become `[n,1]`; multidimensional shape is unchanged. Nonzero bool bytes normalize to canonical 1. All numerical bytes, including nonfinite payloads and exact 64-bit integers, are copied without scalar conversion.
 
@@ -94,3 +94,7 @@ CLI info/roundtrip/compress/select and corresponding JS exports use this API. Ol
 ## 对称浮点容差比较
 
 `compare_trees_close(left, right, atol?, rtol?, equal_nan?, max_samples?, limits?, tree_limits?) -> TreeCloseDifference`。独立报告、CLI 参数文件和 JS 导出见 [TREE_CLOSE.md](TREE_CLOSE.md)。精确比较接口和格式保持兼容。
+
+## Explicit MAT name codecs
+
+MAT read/write families accept optional `name_encoding`, default `NameEncoding::Utf8`; use `NameEncoding::Latin1` explicitly for legacy 8-bit names. It applies to variable, field and legacy class names, separately from character payload encoding. See [NAME_ENCODING.md](NAME_ENCODING.md).

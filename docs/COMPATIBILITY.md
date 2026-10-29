@@ -41,7 +41,7 @@
 
 UTF8 数组以 Unicode scalar 数计维度，遵循本版独立 SciPy 案例；UINT16/UTF16 保存 16 位单位（包括代理项），UTF32 保存合法 scalar。非 BMP 字符在不同生产工具中的维度差异尚需 MATLAB 实测，当前不宣称跨工具所有 Unicode 变体已经验证。
 
-CSC 保留活动行索引顺序、重复槽位及容量；`is_canonical()` 单独判断排序与重复状态。显式 densify 按原顺序累加重复数值，logical 使用逻辑或。旧名称编码继续由独立案例跟踪。读取只接受 UTF-8 名称，根变量名非空；容器内空名可保留。文件描述、大小端和压缩布局在写回时规范化。
+CSC 保留活动行索引顺序、重复槽位及容量；`is_canonical()` 单独判断排序与重复状态。显式 densify 按原顺序累加重复数值，logical 使用逻辑或。旧名称字节通过显式 Latin1 策略读写，独立检查见 name-encoding 版本报告。读取默认严格 UTF-8，可显式指定 Latin1 名称策略，根变量名非空；容器内空名可保留。文件描述、大小端和压缩布局在写回时规范化。
 
 MAT v4 与 HDF5 MAT v7.3 属于不同格式，不属于 Level 5 终点。MATLAB 私有运行时扩展（function handle、mxOPAQUE/MCOS、子系统 workspace）也不等同于公开基本类；当前明确返回错误。若赛事要求这些扩展，也将列为额外交付项并取得真实案例，不能声称“支持所有 MATLAB 对象”。legacy mxOBJECT 基本类的数据级支持不代表能够执行 MATLAB 对象。流式 I/O 与 NPY object/pickle 不属于此 Level 5 读写兼容目标。
 

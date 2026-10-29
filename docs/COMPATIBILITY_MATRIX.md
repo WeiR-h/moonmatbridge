@@ -31,7 +31,7 @@ Octave 的空格 subsystem 字段与 nonsparse 保留字 1 现已接受，写回
 | --- | --- |
 | UTF16 / 非 BMP 的生产者维度差异 | 原始单位保留；继续追踪真实生产文件，不能用 UTF8 样例代替 |
 | 非规范 CSC 行顺序或重复项 | v0.0.15 支持原始存储读写；显式 densify 累加重复项 |
-| 非 UTF-8 的旧名称字节 | 当前拒绝；不猜测未知编码后静默改名 |
+| 非 UTF-8 的旧名称字节 | 显式 Latin1 策略已实现；UTF-8 默认仍严格拒绝；不自动猜测编码 |
 | legacy object 的 MATLAB 类恢复 | SciPy 数据级验证；实际 MATLAB 类行为未验证 |
 
 最终范围与 v1.0 门槛仍以 [COMPATIBILITY.md](COMPATIBILITY.md) 为准。上述缺口未消除前保持 0.x，不以矩阵的基本类数量冒充所有标准变体都已兼容。

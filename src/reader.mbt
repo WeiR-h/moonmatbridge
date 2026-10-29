@@ -111,6 +111,7 @@ fn numeric_matrix(
   limits : Limits,
   nested? : Bool = false,
   keep? : Bool = true,
+  name_encoding? : NameEncoding = Utf8,
 ) -> (NumericArray?, Int) raise MatError {
   let end = outer.start + outer.size
   let flags = tag(bytes, outer.start, end, little)
@@ -166,13 +167,12 @@ fn numeric_matrix(
       "Expected bounded nonempty miINT8 variable name",
     )
   }
-  let name_text = @utf8.decode(bytes[name.start:name.start + name.size]) catch {
-    _ => {
-      fail("invalid-name", name.start, "Variable name must be valid UTF-8")
-      ""
-    }
-  }
-  validate_name(name_text, limits, allow_empty=nested)
+  let name_text = decode_name(
+    bytes[name.start:name.start + name.size].to_owned(),
+    name_encoding,
+    name.start,
+  )
+  validate_name(name_text, limits, allow_empty=nested, name_encoding~)
   let real_tag = tag(bytes, name.next, end, little)
   let real = numeric_payload(bytes, real_tag, dtype, count, little, keep~)
   let (imag, next) = if complex {
@@ -204,7 +204,7 @@ fn numeric_matrix(
     imag,
     is_global: (bits & 1024U) != 0,
   }
-  ignore(validate_array(result, limits, allow_empty=nested))
+  ignore(validate_array(result, limits, allow_empty=nested, name_encoding~))
   (Some(result), count)
 }
 
@@ -215,8 +215,16 @@ fn matrix(
   little : Bool,
   limits : Limits,
   nested? : Bool = false,
+  name_encoding? : NameEncoding = Utf8,
 ) -> NumericArray raise MatError {
-  let (value, _) = numeric_matrix(bytes, outer, little, limits, nested~)
+  let (value, _) = numeric_matrix(
+    bytes,
+    outer,
+    little,
+    limits,
+    nested~,
+    name_encoding~,
+  )
   value.unwrap()
 }
 
@@ -225,6 +233,7 @@ fn matrix(
 pub fn read_document(
   bytes : Bytes,
   limits? : Limits = default_limits(),
+  name_encoding? : NameEncoding = Utf8,
 ) -> MatDocument raise MatError {
   validate_limits(limits)
   if bytes.length() > limits.max_file_bytes {
@@ -266,7 +275,7 @@ pub fn read_document(
     }
     let outer = tag(bytes, offset, bytes.length(), little)
     let array = if outer.kind == 14 {
-      read_variable(bytes, outer, little, limits)
+      read_variable(bytes, outer, little, limits, name_encoding~)
     } else if outer.kind == 15 {
       let unpacked = inflate_window(
         bytes,
@@ -282,12 +291,12 @@ pub fn read_document(
           "invalid-compressed", offset, "Compressed element must contain exactly one miMATRIX",
         )
       }
-      read_variable(unpacked, inner, little, limits)
+      read_variable(unpacked, inner, little, limits, name_encoding~)
     } else {
       fail(
         "unsupported-element", offset, "Expected miMATRIX or miCOMPRESSED at file level",
       )
-      read_variable(bytes, outer, little, limits)
+      read_variable(bytes, outer, little, limits, name_encoding~)
     }
     if names.contains(array.name()) {
       fail("duplicate-name", offset, "Duplicate variable name: " + array.name())
@@ -309,15 +318,16 @@ fn read_variable(
   outer : Element,
   little : Bool,
   limits : Limits,
+  name_encoding? : NameEncoding = Utf8,
 ) -> MatVariable raise MatError {
   let flags = tag(bytes, outer.start, outer.start + outer.size, little)
   if flags.kind != 6 || flags.size != 8 {
     fail("invalid-flags", outer.start, "Expected array flags")
   }
   if (bits_at(bytes, flags.start, 4, little).to_uint() & 255U) == 5U {
-    Sparse(sparse_matrix(bytes, outer, little, limits))
+    Sparse(sparse_matrix(bytes, outer, little, limits, name_encoding~))
   } else {
-    Dense(matrix(bytes, outer, little, limits))
+    Dense(matrix(bytes, outer, little, limits, name_encoding~))
   }
 }
 
@@ -326,8 +336,9 @@ fn read_variable(
 pub fn read_mat(
   bytes : Bytes,
   limits? : Limits = default_limits(),
+  name_encoding? : NameEncoding = Utf8,
 ) -> MatFile raise MatError {
-  let document = read_document(bytes, limits~)
+  let document = read_document(bytes, limits~, name_encoding~)
   let arrays = document.variables.map(item => {
     match item {
       Dense(a) => a

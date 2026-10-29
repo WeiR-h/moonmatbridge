@@ -50,7 +50,9 @@ try {
   const python = process.env.MOONMAT_PYTHON || join(root, '.venv', process.platform === 'win32' ? 'Scripts/python.exe' : 'bin/python');
   record('Independent SciPy/NumPy cross-compatibility', command(python, ['scripts/interop.py']));
   record('All public Level 5 base classes in mixed files', command(python, ['scripts/compatibility.py']));
+  record('Published API compatibility', command(python, ['scripts/api-contract.py']));
   record('Compatibility gap characterization', command(python, ['scripts/compatibility-gaps.py']));
+  record('Explicit name codecs and independent mixed metadata checks', command(python, ['scripts/name-checks.py']));
   record('Performance evidence invalidation guards', command(python, ['scripts/test-evidence.py']));
   record('Strict selected reads and root metadata independent checks', command(python, ['scripts/selection-checks.py']));
   record('Large file sources and lifetime checks', command(python, ['scripts/source-checks.py']));

@@ -97,8 +97,10 @@ Output paths must be NEW; existing files are never overwritten.
 Core: MAT Level 5 recursive cell/struct/char/legacy object, dense numeric/logical arrays, complex float32/64,
 CSC double/logical/complex double, little/big endian, deterministic compressed/uncompressed writing,
 primitive NPY, raw-byte slice/gather/concat/reshape/permutation, exact recursive tree snapshot/restore and diff.
-Unsupported: private MCOS/opaque/function workspace, MAT v4/v7.3, noncanonical or non-double numerical CSC,
-structured/object/string NPY, NPZ, floating tolerance and file streaming.
+Boundary: private MCOS/opaque/function workspace, MAT v4/v7.3, non-double numerical CSC,
+structured/object/string NPY and NPZ. roots/select use bounded 1 GiB file sources; other commands use 64 MiB memory input.
+Mixed-tree exact/tolerance comparison, raw CSC order/duplicates and tree snapshots are supported.
+Use --name-encoding=latin1 before the command for explicit legacy name read/write.
 
 Use examples/sample.json as a fresh pack input, or examples/sample.mat for info.
 JSON values are column-major; int64/uint64 use decimal strings.
@@ -116,7 +118,7 @@ with zipfile.ZipFile(native_zip, "w", compression=zipfile.ZIP_DEFLATED, compress
         add(z, path, native_name)
     for path in sorted((ROOT / "examples/workflows").glob("*")):
         add(z, path, native_name)
-    for name in ["docs/SCIENTIFIC_WORKFLOWS.md", "docs/REVIEW_EVIDENCE-v0.0.9.md", "docs/ACCEPTANCE.md", "docs/TREE_DIFF.md", "docs/TREE_SNAPSHOT.md", "docs/TREE_CLOSE.md", "docs/SOURCES.md"]:
+    for name in ["docs/SCIENTIFIC_WORKFLOWS.md", "docs/REVIEW_EVIDENCE-v0.0.9.md", "docs/ACCEPTANCE.md", "docs/TREE_DIFF.md", "docs/TREE_SNAPSHOT.md", "docs/TREE_CLOSE.md", "docs/SOURCES.md", "docs/NAME_ENCODING.md"]:
         add(z, ROOT / name, native_name)
     for name in ["docs/COMPATIBILITY_MATRIX.md", "docs/PERFORMANCE.md", "benchmarks/manifest.json"]:
         add(z, ROOT / name, native_name)

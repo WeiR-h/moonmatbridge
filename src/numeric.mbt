@@ -161,8 +161,9 @@ fn validate_name(
   name : String,
   limits : Limits,
   allow_empty? : Bool = false,
+  name_encoding? : NameEncoding = Utf8,
 ) -> Unit raise MatError {
-  let bytes = @utf8.encode(name[:])
+  let bytes = encode_name(name, name_encoding)
   if (!allow_empty && bytes.length() == 0) ||
     bytes.length() > limits.max_name_bytes ||
     name.contains("\u{0000}") {
@@ -205,8 +206,9 @@ fn validate_array(
   array : NumericArray,
   limits : Limits,
   allow_empty? : Bool = false,
+  name_encoding? : NameEncoding = Utf8,
 ) -> Int raise MatError {
-  validate_name(array.name, limits, allow_empty~)
+  validate_name(array.name, limits, allow_empty~, name_encoding~)
   let count = validate_layout(array, limits)
   if array.dtype == Logical {
     for value in array.real {

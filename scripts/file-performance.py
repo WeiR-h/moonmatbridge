@@ -190,9 +190,9 @@ def measure(folder,host,case,kind):
  start=time.perf_counter();r=json.loads(perf.command(args));r['process_wall_ms']=(time.perf_counter()-start)*1000;assert r['checksum']>0 and r['peak_bytes']>0;return r
 
 def main():
- parser=argparse.ArgumentParser();parser.add_argument('--candidate-ref',default='HEAD');parser.add_argument('--case',action='append');args=parser.parse_args()
+ parser=argparse.ArgumentParser();parser.add_argument('--baseline-ref',default='v0.0.14');parser.add_argument('--candidate-ref',default='HEAD');parser.add_argument('--case',action='append');args=parser.parse_args()
  cases=fixtures();(LOCAL/'driver.mjs').write_text(DRIVER,encoding='utf-8',newline='\n')
- baseline,bsha,bhash,_=prepare('v0.0.14');candidate,csha,chash,version=prepare(args.candidate_ref)
+ baseline,bsha,bhash,_=prepare(args.baseline_ref);candidate,csha,chash,version=prepare(args.candidate_ref)
  report={'version':version,'status':'running','baseline_commit':bsha,'candidate_commit':csha,'baseline_runtime_source_sha256':bhash,'candidate_runtime_source_sha256':chash,'protocol':{'warmup_per_batch':5,'batches':3,'samples_per_batch':10,'memory_processes':3,'timing':'open, read, validate, select, close and serialize; process startup excluded; generated input excluded; warm OS cache; JS GC outside timing'},'results':[]}
  report['environment']={'platform':platform.platform(),'architecture':platform.machine(),'node':perf.command(['node','--version']),'moon':perf.command(['node',ROOT/'scripts/moon.mjs','version']),'build':'same toolchain, release mode, one compiler job'}
  config=ROOT/'.local-toolchain.json'

@@ -157,11 +157,14 @@ fn usage() -> String {
   "  moonmat diff LEFT.mat RIGHT.mat [REPORT.json]\n" +
   "  moonmat sample OUTPUT.mat\n" +
   "  moonmat version\n" +
-  "Output files must be new. MAT/NPY data remains column-major."
+  "Optional prefix: --name-encoding=utf8|latin1\nOutput files must be new. MAT/NPY data remains column-major."
 }
 
 ///|
-fn run(args : Array[String]) -> Unit raise @mat.MatError {
+fn run_command(
+  args : Array[String],
+  name_encoding : @mat.NameEncoding,
+) -> Unit raise @mat.MatError {
   if args.length() == 1 ||
     (args.length() == 2 && (args[1] == "help" || args[1] == "--help")) {
     println(usage())
@@ -171,19 +174,25 @@ fn run(args : Array[String]) -> Unit raise @mat.MatError {
   if command == "version" && args.length() == 2 {
     println("MoonMatBridge v" + @mat.version())
   } else if command == "sample" && args.length() == 3 {
-    save(args[2], @mat.write_mat(@wire.sample()))
+    save(args[2], @mat.write_mat(@wire.sample(), name_encoding~))
   } else if command == "info" && args.length() == 3 {
-    println(@wire.tree_info(@mat.read_tree(read(args[2]))).stringify(indent=2))
+    println(
+      @wire.tree_info(@mat.read_tree(read(args[2]), name_encoding~)).stringify(
+        indent=2,
+      ),
+    )
   } else if command == "roots" && args.length() == 3 {
     println(
       @wire.roots_info(
-        from_file(args[2], source => @mat.inspect_roots_from(source)),
+        from_file(args[2], source => {
+          @mat.inspect_roots_from(source, name_encoding~)
+        }),
       ).stringify(indent=2),
     )
   } else if command == "dump" && args.length() == 4 {
-    let document = @wire.to_json(@mat.read_mat(read(args[2])).arrays).stringify(
-        indent=2,
-      ) +
+    let document = @wire.to_json(
+        @mat.read_mat(read(args[2]), name_encoding~).arrays,
+      ).stringify(indent=2) +
       "\n"
     save(args[3], @utf8.encode(document[:]))
   } else if command == "pack" && args.length() == 4 {
@@ -191,25 +200,35 @@ fn run(args : Array[String]) -> Unit raise @mat.MatError {
       _ =>
         raise @mat.MatError("invalid-utf8", 0, "JSON input must be valid UTF-8")
     }
-    save(args[3], @mat.write_mat(@wire.from_json(text)))
+    save(args[3], @mat.write_mat(@wire.from_json(text), name_encoding~))
   } else if command == "snapshot-tree" && args.length() == 4 {
-    let text = @wire.to_tree_snapshot(@mat.read_tree(read(args[2])).variables) +
+    let text = @wire.to_tree_snapshot(
+        @mat.read_tree(read(args[2]), name_encoding~).variables,
+      ) +
       "\n"
     save(args[3], @utf8.encode(text[:]))
   } else if command == "restore-tree" && args.length() == 4 {
     let text = @utf8.decode(read(args[2])[:]) catch {
       _ => raise @mat.MatError("invalid-utf8", 0, "Tree snapshot must be UTF-8")
     }
-    save(args[3], @mat.write_tree(@wire.from_tree_snapshot(text)))
+    save(
+      args[3],
+      @mat.write_tree(@wire.from_tree_snapshot(text), name_encoding~),
+    )
   } else if command == "snapshot" && args.length() == 4 {
-    let text = @wire.to_snapshot(@mat.read_document(read(args[2])).variables) +
+    let text = @wire.to_snapshot(
+        @mat.read_document(read(args[2]), name_encoding~).variables,
+      ) +
       "\n"
     save(args[3], @utf8.encode(text[:]))
   } else if command == "restore" && args.length() == 4 {
     let text = @utf8.decode(read(args[2])[:]) catch {
       _ => raise @mat.MatError("invalid-utf8", 0, "Snapshot must be UTF-8")
     }
-    save(args[3], @mat.write_document(@wire.from_snapshot(text)))
+    save(
+      args[3],
+      @mat.write_document(@wire.from_snapshot(text), name_encoding~),
+    )
   } else if command == "diff-tree-close" &&
     (args.length() == 5 || args.length() == 6) {
     let options = if args.length() == 6 {
@@ -223,8 +242,8 @@ fn run(args : Array[String]) -> Unit raise @mat.MatError {
       "{}"
     }
     let report = @wire.compare_tree_text(
-      @mat.read_tree(read(args[2])),
-      @mat.read_tree(read(args[3])),
+      @mat.read_tree(read(args[2]), name_encoding~),
+      @mat.read_tree(read(args[3]), name_encoding~),
       options,
     )
     let text = @wire.tree_close_json(report).stringify() + "\n"
@@ -234,8 +253,8 @@ fn run(args : Array[String]) -> Unit raise @mat.MatError {
     }
   } else if command == "diff-tree" && args.length() == 5 {
     let report = @mat.compare_trees(
-      @mat.read_tree(read(args[2])),
-      @mat.read_tree(read(args[3])),
+      @mat.read_tree(read(args[2]), name_encoding~),
+      @mat.read_tree(read(args[3]), name_encoding~),
     )
     let text = @wire.tree_diff_json(report).stringify() + "\n"
     save(args[4], @utf8.encode(text[:]))
@@ -244,8 +263,8 @@ fn run(args : Array[String]) -> Unit raise @mat.MatError {
     }
   } else if command == "diff" && (args.length() == 4 || args.length() == 5) {
     let report = @mat.compare_documents(
-      @mat.read_document(read(args[2])),
-      @mat.read_document(read(args[3])),
+      @mat.read_document(read(args[2]), name_encoding~),
+      @mat.read_document(read(args[3]), name_encoding~),
     )
     let text = @wire.diff_json(report).stringify() + "\n"
     if args.length() == 5 {
@@ -257,25 +276,39 @@ fn run(args : Array[String]) -> Unit raise @mat.MatError {
       exit_process(2)
     }
   } else if command == "roundtrip" && args.length() == 4 {
-    save(args[3], @mat.write_tree(@mat.read_tree(read(args[2])).variables))
+    save(
+      args[3],
+      @mat.write_tree(
+        @mat.read_tree(read(args[2]), name_encoding~).variables,
+        name_encoding~,
+      ),
+    )
   } else if command == "compress" && args.length() == 4 {
     save(
       args[3],
-      @mat.write_tree(@mat.read_tree(read(args[2])).variables, compressed=true),
+      @mat.write_tree(
+        @mat.read_tree(read(args[2]), name_encoding~).variables,
+        compressed=true,
+        name_encoding~,
+      ),
     )
   } else if (command == "sparsify" || command == "densify") &&
     args.length() == 5 {
     save(
       args[4],
       @mat.write_document(
-        @mat.read_document(read(args[2])).convert_storage(
+        @mat.read_document(read(args[2]), name_encoding~).convert_storage(
           args[3],
           command == "sparsify",
         ),
+        name_encoding~,
       ),
     )
   } else if command == "from-npy" && args.length() == 5 {
-    save(args[4], @mat.write_mat([@mat.read_npy(read(args[2]), args[3])]))
+    save(
+      args[4],
+      @mat.write_mat([@mat.read_npy(read(args[2]), args[3])], name_encoding~),
+    )
   } else if command == "transform" && args.length() == 5 {
     let plan = @utf8.decode(read(args[3])[:]) catch {
       _ =>
@@ -285,9 +318,10 @@ fn run(args : Array[String]) -> Unit raise @mat.MatError {
       args[4],
       @mat.write_document(
         @wire.transform_document(
-          @mat.read_document(read(args[2])).variables,
+          @mat.read_document(read(args[2]), name_encoding~).variables,
           plan,
         ),
+        name_encoding~,
       ),
     )
   } else if command == "select" && args.length() >= 5 {
@@ -295,15 +329,18 @@ fn run(args : Array[String]) -> Unit raise @mat.MatError {
     save(
       args[3],
       @mat.write_tree(
-        from_file(args[2], source => @mat.read_selected_from(source, names)).variables,
+        from_file(args[2], source => {
+          @mat.read_selected_from(source, names, name_encoding~)
+        }).variables,
         limits={
           ..@mat.default_limits(),
           max_elements: @mat.default_source_limits().max_elements,
         },
+        name_encoding~,
       ),
     )
   } else if command == "npy" && args.length() == 5 {
-    let file = @mat.read_document(read(args[2]))
+    let file = @mat.read_document(read(args[2]), name_encoding~)
     match file.get(args[3]) {
       Some(Dense(array)) => save(args[4], @mat.write_npy(array))
       Some(Sparse(_)) =>
@@ -336,5 +373,27 @@ fn main {
       ignore(host_emit(bytes, bytes.length()))
       exit_process(1)
     }
+  }
+}
+
+///|
+fn run(args : Array[String]) -> Unit raise @mat.MatError {
+  if args.length() > 1 && args[1].has_prefix("--name-encoding=") {
+    let name_encoding : @mat.NameEncoding = match args[1] {
+      "--name-encoding=utf8" => @mat.Utf8
+      "--name-encoding=latin1" => @mat.Latin1
+      _ =>
+        raise @mat.MatError("usage", 0, "Expected --name-encoding=utf8|latin1")
+    }
+    let rest = Array::makei(args.length() - 1, i => {
+      if i == 0 {
+        args[0]
+      } else {
+        args[i + 1]
+      }
+    })
+    run_command(rest, name_encoding)
+  } else {
+    run_command(args, @mat.Utf8)
   }
 }

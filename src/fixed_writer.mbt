@@ -85,7 +85,8 @@ fn fixed_node(
   cursor : WriteCursor,
   node : MatNode,
   planned : Array[Int],
-) -> Unit {
+  name_encoding? : NameEncoding = Utf8,
+) -> Unit raise MatError {
   let body_size = planned[cursor.node]
   cursor.node = cursor.node + 1
   fixed_tag(out, cursor, 14, body_size)
@@ -125,7 +126,7 @@ fn fixed_node(
   )
   fixed_u32(out, cursor, capacity.to_uint64())
   fixed_ints(out, cursor, node.shape())
-  fixed_bytes(out, cursor, 1, @utf8.encode(node.name()[:]))
+  fixed_bytes(out, cursor, 1, encode_name(node.name(), name_encoding))
   match node {
     Numeric(a) => {
       fixed_bytes(out, cursor, a.dtype.mi_type(), a.real)
@@ -144,15 +145,15 @@ fn fixed_node(
     Character(a) => fixed_bytes(out, cursor, a.encoding.tag_id(), a.data)
     Cell(a) =>
       for child in a.values {
-        fixed_node(out, cursor, child, planned)
+        fixed_node(out, cursor, child, planned, name_encoding~)
       }
     Structure(a) => {
       if a.class_name is Some(name) {
-        fixed_bytes(out, cursor, 1, @utf8.encode(name[:]))
+        fixed_bytes(out, cursor, 1, encode_name(name, name_encoding))
       }
       let mut width = 1
       for field in a.fields {
-        let count = @utf8.encode(field[:]).length() + 1
+        let count = encode_name(field, name_encoding).length() + 1
         if count > width {
           width = count
         }
@@ -162,13 +163,13 @@ fn fixed_node(
       let table_size = width * a.fields.length()
       fixed_tag(out, cursor, 1, table_size)
       for field in a.fields {
-        let bytes = @utf8.encode(field[:])
+        let bytes = encode_name(field, name_encoding)
         out.blit_from_bytes(cursor.offset, bytes, 0, bytes.length())
         cursor.offset = cursor.offset + width
       }
       cursor.offset = cursor.offset + (8 - table_size % 8) % 8
       for child in a.values {
-        fixed_node(out, cursor, child, planned)
+        fixed_node(out, cursor, child, planned, name_encoding~)
       }
     }
   }
@@ -179,6 +180,7 @@ fn plan_tree(
   variables : Array[MatNode],
   limits : Limits,
   tree_limits : TreeLimits,
+  name_encoding? : NameEncoding = Utf8,
 ) -> (Array[Int], Array[Int], Int) raise MatError {
   validate_limits(limits)
   validate_tree_limits(tree_limits)
@@ -201,7 +203,16 @@ fn plan_tree(
     }
     names[node.name()] = true
     roots.push(planned.length())
-    let length = node_size(node, limits, tree_limits, budget, 1, planned) + 8
+    let length = node_size(
+        node,
+        limits,
+        tree_limits,
+        budget,
+        1,
+        planned,
+        name_encoding~,
+      ) +
+      8
     if length > limits.max_file_bytes - size {
       fail("file-limit", 0, "Encoded tree exceeds byte limit")
     }
@@ -216,8 +227,9 @@ pub fn validate_tree(
   variables : Array[MatNode],
   limits? : Limits = default_limits(),
   tree_limits? : TreeLimits = default_tree_limits(),
+  name_encoding? : NameEncoding = Utf8,
 ) -> Unit raise MatError {
-  ignore(plan_tree(variables, limits, tree_limits))
+  ignore(plan_tree(variables, limits, tree_limits, name_encoding~))
 }
 
 ///|
@@ -227,15 +239,21 @@ pub fn write_tree(
   compressed? : Bool = false,
   limits? : Limits = default_limits(),
   tree_limits? : TreeLimits = default_tree_limits(),
+  name_encoding? : NameEncoding = Utf8,
 ) -> Bytes raise MatError {
-  let (planned, roots, size) = plan_tree(variables, limits, tree_limits)
+  let (planned, roots, size) = plan_tree(
+    variables,
+    limits,
+    tree_limits,
+    name_encoding~,
+  )
   let header = canonical_header()
   if !compressed {
     let out = FixedArray::make(size, b'\x00')
     out.blit_from_bytes(0, header, 0, 128)
     let cursor : WriteCursor = { offset: 128, node: 0, }
     for node in variables {
-      fixed_node(out, cursor, node, planned)
+      fixed_node(out, cursor, node, planned, name_encoding~)
     }
     guard! cursor.offset == size
     return finish_owned_buffer(out)
@@ -251,7 +269,7 @@ pub fn write_tree(
     expanded = expanded + length
     let raw = FixedArray::make(length, b'\x00')
     let cursor : WriteCursor = { offset: 0, node: roots[i], }
-    fixed_node(raw, cursor, variables[i], planned)
+    fixed_node(raw, cursor, variables[i], planned, name_encoding~)
     guard! cursor.offset == length
     let available = limits.max_file_bytes - total - 8
     if available < 6 {

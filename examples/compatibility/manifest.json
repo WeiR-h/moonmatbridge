@@ -60,8 +60,8 @@
       "sha256": "6de75380f35d3905348e912fb0033817927065c8413dbd8e13119ebe752d3b6c",
       "bytes": 264,
       "expected_error": "invalid-name",
-      "compatibility_state": "unresolved",
-      "note": "Explicit Latin1 name bytes; no guessed decoding or silent rename",
+      "compatibility_state": "verified_explicit_codec",
+      "note": "UTF8 default rejects; explicit Latin1 read/write verified separately; no guessed decoding",
       "scipy": "readable"
     },
     {

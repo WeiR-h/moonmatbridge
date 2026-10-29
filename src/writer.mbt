@@ -3,6 +3,7 @@
 fn document_size(
   arrays : Array[MatVariable],
   limits : Limits,
+  name_encoding? : NameEncoding = Utf8,
 ) -> Int raise MatError {
   validate_limits(limits)
   if arrays.length() > limits.max_variables {
@@ -14,8 +15,8 @@ fn document_size(
   // Validate and calculate every matrix size before allocating output.
   for variable in arrays {
     let count = match variable {
-      Dense(a) => validate_array(a, limits)
-      Sparse(a) => validate_sparse(a, limits)
+      Dense(a) => validate_array(a, limits, name_encoding~)
+      Sparse(a) => validate_sparse(a, limits, name_encoding~)
     }
     if count > limits.max_elements - elements {
       fail("element-limit", 0, "Total file elements exceed max_elements")
@@ -25,7 +26,7 @@ fn document_size(
       fail("duplicate-name", 0, "Duplicate variable name: " + variable.name())
     }
     names[variable.name()] = true
-    let name_length = @utf8.encode(variable.name()[:]).length()
+    let name_length = encode_name(variable.name(), name_encoding).length()
     let (rank, payload_length, complex, extra) = match variable {
       Dense(a) => (a.shape.length(), a.real.length(), a.is_complex(), 0)
       Sparse(a) => {
@@ -68,8 +69,9 @@ fn document_size(
 pub fn validate_document(
   arrays : Array[MatVariable],
   limits? : Limits = default_limits(),
+  name_encoding? : NameEncoding = Utf8,
 ) -> Unit raise MatError {
-  ignore(document_size(arrays, limits))
+  ignore(document_size(arrays, limits, name_encoding~))
 }
 
 ///|
@@ -78,18 +80,22 @@ pub fn write_document(
   arrays : Array[MatVariable],
   compressed? : Bool = false,
   limits? : Limits = default_limits(),
+  name_encoding? : NameEncoding = Utf8,
 ) -> Bytes raise MatError {
-  validate_document(arrays, limits~)
+  validate_document(arrays, limits~, name_encoding~)
   let nodes = arrays.map(fn(item) {
     match item {
       Dense(a) => Numeric(a)
       Sparse(a) => Csc(a)
     }
   })
-  write_tree(nodes, compressed~, limits~, tree_limits={
-    ..default_tree_limits(),
-    max_nodes: limits.max_variables,
-  })
+  write_tree(
+    nodes,
+    compressed~,
+    limits~,
+    tree_limits={ ..default_tree_limits(), max_nodes: limits.max_variables, },
+    name_encoding~,
+  )
 }
 
 ///|
@@ -98,6 +104,12 @@ pub fn write_mat(
   arrays : Array[NumericArray],
   compressed? : Bool = false,
   limits? : Limits = default_limits(),
+  name_encoding? : NameEncoding = Utf8,
 ) -> Bytes raise MatError {
-  write_document(arrays.map(fn(a) { Dense(a) }), compressed~, limits~)
+  write_document(
+    arrays.map(fn(a) { Dense(a) }),
+    compressed~,
+    limits~,
+    name_encoding~,
+  )
 }

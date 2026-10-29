@@ -26,6 +26,7 @@ fn sparse_matrix_read(
   limits : Limits,
   nested? : Bool = false,
   keep? : Bool = true,
+  name_encoding? : NameEncoding = Utf8,
 ) -> (SparseArray?, Int) raise MatError {
   let end = outer.start + outer.size
   let flags = tag(bytes, outer.start, end, little)
@@ -65,13 +66,12 @@ fn sparse_matrix_read(
     name.size > limits.max_name_bytes {
     fail("invalid-name", name.start, "Expected bounded sparse variable name")
   }
-  let text = @utf8.decode(bytes[name.start:name.start + name.size]) catch {
-    _ => {
-      fail("invalid-name", name.start, "Sparse name must be UTF-8")
-      ""
-    }
-  }
-  validate_name(text, limits, allow_empty=nested)
+  let text = decode_name(
+    bytes[name.start:name.start + name.size].to_owned(),
+    name_encoding,
+    name.start,
+  )
+  validate_name(text, limits, allow_empty=nested, name_encoding~)
   let ir = tag(bytes, name.next, end, little)
   let jc = tag(bytes, ir.next, end, little)
   if ir.kind != 5 ||
@@ -169,7 +169,7 @@ fn sparse_matrix_read(
     nzmax: capacity.to_int(),
     is_global: (bits & 1024U) != 0U,
   }
-  ignore(validate_sparse(result, limits, allow_empty=nested))
+  ignore(validate_sparse(result, limits, allow_empty=nested, name_encoding~))
   (Some(result), slots)
 }
 
@@ -180,7 +180,15 @@ fn sparse_matrix(
   little : Bool,
   limits : Limits,
   nested? : Bool = false,
+  name_encoding? : NameEncoding = Utf8,
 ) -> SparseArray raise MatError {
-  let (value, _) = sparse_matrix_read(bytes, outer, little, limits, nested~)
+  let (value, _) = sparse_matrix_read(
+    bytes,
+    outer,
+    little,
+    limits,
+    nested~,
+    name_encoding~,
+  )
   value.unwrap()
 }

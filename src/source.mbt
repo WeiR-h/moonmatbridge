@@ -135,8 +135,9 @@ pub fn read_tree_from(
   source : MatSource,
   limits? : SourceLimits = default_source_limits(),
   tree_limits? : TreeLimits = default_tree_limits(),
+  name_encoding? : NameEncoding = Utf8,
 ) -> MatTree raise MatError {
-  scan_source_stream(source, None, false, limits, tree_limits).0
+  scan_source_stream(source, None, false, limits, tree_limits, name_encoding~).0
 }
 
 ///|
@@ -145,8 +146,16 @@ pub fn read_selected_from(
   names : Array[String],
   limits? : SourceLimits = default_source_limits(),
   tree_limits? : TreeLimits = default_tree_limits(),
+  name_encoding? : NameEncoding = Utf8,
 ) -> MatTree raise MatError {
-  scan_source_stream(source, Some(names), false, limits, tree_limits).0
+  scan_source_stream(
+    source,
+    Some(names),
+    false,
+    limits,
+    tree_limits,
+    name_encoding~,
+  ).0
 }
 
 ///|
@@ -154,8 +163,16 @@ pub fn inspect_roots_from(
   source : MatSource,
   limits? : SourceLimits = default_source_limits(),
   tree_limits? : TreeLimits = default_tree_limits(),
+  name_encoding? : NameEncoding = Utf8,
 ) -> Array[MatRootInfo] raise MatError {
-  scan_source_stream(source, Some([]), true, limits, tree_limits).1
+  scan_source_stream(
+    source,
+    Some([]),
+    true,
+    limits,
+    tree_limits,
+    name_encoding~,
+  ).1
 }
 
 ///|

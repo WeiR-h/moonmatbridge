@@ -52,7 +52,7 @@ def ensure_release(tag, assets, notes):
     if release is None:
         try:
             release = api('POST',f'{API}/releases', {'tag_name':tag,'name':f'MoonMatBridge {tag}',
-                'body':notes.read_text(encoding='utf-8'),'draft':True,'prerelease':False}, retry=False)
+                'body':notes.read_text(encoding='utf-8'),'draft':True,'prerelease':'-' in tag}, retry=False)
         except RuntimeError:
             release = find_release(tag)
             if release is None:

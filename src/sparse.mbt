@@ -113,8 +113,9 @@ fn validate_sparse(
   a : SparseArray,
   limits : Limits,
   allow_empty? : Bool = false,
+  name_encoding? : NameEncoding = Utf8,
 ) -> Int raise MatError {
-  validate_name(a.name, limits, allow_empty~)
+  validate_name(a.name, limits, allow_empty~, name_encoding~)
   if a.dtype != Float64 && a.dtype != Logical {
     fail(
       "unsupported-sparse-dtype", 0, "Sparse MAT supports float64 and logical",

@@ -20,6 +20,7 @@ fn root_info(
   little : Bool,
   limits : Limits,
   compressed : Bool,
+  name_encoding? : NameEncoding = Utf8,
 ) -> MatRootInfo raise MatError {
   let end = outer.start + outer.size
   let flags = tag(bytes, outer.start, end, little)
@@ -46,7 +47,7 @@ fn root_info(
     bits_at(bytes, dims.start + i * 4, 4, little).to_uint().reinterpret_as_int()
   })
   let name = tag(bytes, dims.next, end, little)
-  let name = tree_text(bytes, name, limits, false)
+  let name = tree_text(bytes, name, limits, false, name_encoding~)
   {
     name,
     class_id,
@@ -65,6 +66,7 @@ fn scan_tree(
   collect_roots : Bool,
   limits : Limits,
   tree_limits : TreeLimits,
+  name_encoding? : NameEncoding = Utf8,
 ) -> (MatTree, Array[MatRootInfo]) raise MatError {
   validate_limits(limits)
   validate_tree_limits(tree_limits)
@@ -141,10 +143,25 @@ fn scan_tree(
       fail("unsupported-element", offset, "Expected miMATRIX or miCOMPRESSED")
       abort("unreachable")
     }
-    let info = root_info(source, inner, little, limits, compressed)
+    let info = root_info(
+      source,
+      inner,
+      little,
+      limits,
+      compressed,
+      name_encoding~,
+    )
     let keep = selection is None || wanted.contains(info.name)
     let value = visit_node(
-      source, inner, little, limits, tree_limits, budget, 1, keep,
+      source,
+      inner,
+      little,
+      limits,
+      tree_limits,
+      budget,
+      1,
+      keep,
+      name_encoding~,
     )
     if seen.contains(info.name) {
       fail("duplicate-name", offset, "Duplicate root variable")
@@ -196,8 +213,16 @@ pub fn read_selected(
   names : Array[String],
   limits? : Limits = default_limits(),
   tree_limits? : TreeLimits = default_tree_limits(),
+  name_encoding? : NameEncoding = Utf8,
 ) -> MatTree raise MatError {
-  let (file, _) = scan_tree(bytes, Some(names), false, limits, tree_limits)
+  let (file, _) = scan_tree(
+    bytes,
+    Some(names),
+    false,
+    limits,
+    tree_limits,
+    name_encoding~,
+  )
   file
 }
 
@@ -207,8 +232,16 @@ pub fn inspect_roots(
   bytes : Bytes,
   limits? : Limits = default_limits(),
   tree_limits? : TreeLimits = default_tree_limits(),
+  name_encoding? : NameEncoding = Utf8,
 ) -> Array[MatRootInfo] raise MatError {
-  let (_, roots) = scan_tree(bytes, Some([]), true, limits, tree_limits)
+  let (_, roots) = scan_tree(
+    bytes,
+    Some([]),
+    true,
+    limits,
+    tree_limits,
+    name_encoding~,
+  )
   roots
 }
 
@@ -217,7 +250,15 @@ pub fn read_tree(
   bytes : Bytes,
   limits? : Limits = default_limits(),
   tree_limits? : TreeLimits = default_tree_limits(),
+  name_encoding? : NameEncoding = Utf8,
 ) -> MatTree raise MatError {
-  let (file, _) = scan_tree(bytes, None, false, limits, tree_limits)
+  let (file, _) = scan_tree(
+    bytes,
+    None,
+    false,
+    limits,
+    tree_limits,
+    name_encoding~,
+  )
   file
 }

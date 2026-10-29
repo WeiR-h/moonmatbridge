@@ -19,7 +19,7 @@ function withSource(path, work) {
   try {
     const before = fstatSync(fd, {bigint: true});
     if (!before.isFile() || before.size > 1073741824n) throw Object.assign(new Error('Input must be a regular file within 1 GiB'), {diagnostic: {status:'error',code:'file-limit',offset:0,message:'Source exceeds input quota'}});
-    const source = api.make_source(Number(before.size), (offset, target, start, length) => {
+    const source = codecApi.make_source(Number(before.size), (offset, target, start, length) => {
       try { return readSync(fd, target, start, length, offset); } catch { return -1; }
     });
     const result = work(source);
@@ -34,49 +34,57 @@ function checkedJSON(text) {
   return text;
 }
 function bytes(result) {
-  checkedJSON(api.result_status(result));
-  return api.result_bytes(result);
+  checkedJSON(codecApi.result_status(result));
+  return codecApi.result_bytes(result);
 }
 function save(path, data) {
   writeFileSync(path, data, {flag: 'wx'});
   console.log(JSON.stringify({status: 'ok', output: path, bytes: Buffer.byteLength(data), version}));
 }
-const [command = 'help', ...args] = process.argv.slice(2);
+const argv = process.argv.slice(2);
+let nameEncoding = 'utf8';
+if (argv[0]?.startsWith('--name-encoding=')) nameEncoding = argv.shift().slice('--name-encoding='.length);
+const codecApi = new Proxy(api, {get(target, key) {
+  const enhanced = target[`${String(key)}_with_options`];
+  return enhanced ? (...values) => enhanced(...values, JSON.stringify({name_encoding:nameEncoding})) : target[key];
+}});
+const [command = 'help', ...args] = argv;
 try {
+  if (!['utf8','latin1'].includes(nameEncoding)) throw Object.assign(new Error('Expected --name-encoding=utf8|latin1'), {diagnostic:{status:'error',code:'usage',offset:0,message:'Expected --name-encoding=utf8|latin1'}});
   if (command === 'version' && args.length === 0) console.log(`MoonMatBridge v${version}`);
-  else if (command === 'info' && args.length === 1) console.log(checkedJSON(api.inspect_mat(read(args[0]))));
-  else if (command === 'roots' && args.length === 1) console.log(checkedJSON(withSource(args[0], source => api.inspect_roots_source(source))));
-  else if (command === 'dump' && args.length === 2) save(args[1], checkedJSON(api.mat_to_json(read(args[0]))) + '\n');
-  else if (command === 'pack' && args.length === 2) save(args[1], bytes(api.json_to_mat(new TextDecoder('utf-8', {fatal: true}).decode(read(args[0])))));
-  else if (command === 'snapshot-tree' && args.length === 2) save(args[1], checkedJSON(api.mat_to_tree_snapshot(read(args[0]))) + '\n');
-  else if (command === 'restore-tree' && args.length === 2) save(args[1], bytes(api.tree_snapshot_to_mat(new TextDecoder('utf-8', {fatal: true}).decode(read(args[0])))));
-  else if (command === 'snapshot' && args.length === 2) save(args[1], checkedJSON(api.mat_to_snapshot(read(args[0]))) + '\n');
-  else if (command === 'restore' && args.length === 2) save(args[1], bytes(api.snapshot_to_mat(new TextDecoder('utf-8', {fatal: true}).decode(read(args[0])))));
+  else if (command === 'info' && args.length === 1) console.log(checkedJSON(codecApi.inspect_mat(read(args[0]))));
+  else if (command === 'roots' && args.length === 1) console.log(checkedJSON(withSource(args[0], source => codecApi.inspect_roots_source(source))));
+  else if (command === 'dump' && args.length === 2) save(args[1], checkedJSON(codecApi.mat_to_json(read(args[0]))) + '\n');
+  else if (command === 'pack' && args.length === 2) save(args[1], bytes(codecApi.json_to_mat(new TextDecoder('utf-8', {fatal: true}).decode(read(args[0])))));
+  else if (command === 'snapshot-tree' && args.length === 2) save(args[1], checkedJSON(codecApi.mat_to_tree_snapshot(read(args[0]))) + '\n');
+  else if (command === 'restore-tree' && args.length === 2) save(args[1], bytes(codecApi.tree_snapshot_to_mat(new TextDecoder('utf-8', {fatal: true}).decode(read(args[0])))));
+  else if (command === 'snapshot' && args.length === 2) save(args[1], checkedJSON(codecApi.mat_to_snapshot(read(args[0]))) + '\n');
+  else if (command === 'restore' && args.length === 2) save(args[1], bytes(codecApi.snapshot_to_mat(new TextDecoder('utf-8', {fatal: true}).decode(read(args[0])))));
   else if (command === 'diff-tree-close' && (args.length === 3 || args.length === 4)) {
     const options = args.length === 4 ? new TextDecoder('utf-8', {fatal: true}).decode(read(args[3])) : '{}';
-    const report = checkedJSON(api.compare_mat_trees_close(read(args[0]), read(args[1]), options));
+    const report = checkedJSON(codecApi.compare_mat_trees_close(read(args[0]), read(args[1]), options));
     save(args[2], report + '\n');
     process.exitCode = JSON.parse(report).within_tolerance ? 0 : 2;
   }
   else if (command === 'diff-tree' && args.length === 3) {
-    const report = checkedJSON(api.compare_mat_trees(read(args[0]), read(args[1]), 16));
+    const report = checkedJSON(codecApi.compare_mat_trees(read(args[0]), read(args[1]), 16));
     save(args[2], report + '\n');
     process.exitCode = JSON.parse(report).content_equal ? 0 : 2;
   }
   else if (command === 'diff' && (args.length === 2 || args.length === 3)) {
-    const report = checkedJSON(api.compare_mat(read(args[0]), read(args[1])));
+    const report = checkedJSON(codecApi.compare_mat(read(args[0]), read(args[1])));
     if (args.length === 3) save(args[2], report + '\n'); else console.log(report);
     process.exitCode = JSON.parse(report).content_equal ? 0 : 2;
   }
-  else if (command === 'roundtrip' && args.length === 2) save(args[1], bytes(api.roundtrip_mat(read(args[0]))));
-  else if (command === 'compress' && args.length === 2) save(args[1], bytes(api.compress_mat(read(args[0]))));
-  else if (['sparsify', 'densify'].includes(command) && args.length === 3) save(args[2], bytes(api.convert_storage(read(args[0]), args[1], command === 'sparsify')));
-  else if (command === 'npy' && args.length === 3) save(args[2], bytes(api.mat_to_npy(read(args[0]), args[1])));
-  else if (command === 'from-npy' && args.length === 3) save(args[2], bytes(api.npy_to_mat(read(args[0]), args[1])));
-  else if (command === 'select' && args.length >= 3) save(args[1], bytes(withSource(args[0], source => api.select_source_mat(source, args.slice(2)))));
-  else if (command === 'transform' && args.length === 3) save(args[2], bytes(api.transform_mat(read(args[0]), new TextDecoder('utf-8', {fatal: true}).decode(read(args[1])))));
-  else if (command === 'sample' && args.length === 1) save(args[0], bytes(api.sample_mat()));
-  else if (command === 'help' || command === '--help') console.log(`MoonMatBridge v${version}\ninfo INPUT.mat\nroots INPUT.mat\ndump INPUT.mat OUTPUT.json\npack INPUT.json OUTPUT.mat\nroundtrip INPUT.mat OUTPUT.mat\ncompress INPUT.mat OUTPUT.mat\nnpy INPUT.mat VARIABLE OUTPUT.npy\nfrom-npy INPUT.npy VARIABLE OUTPUT.mat\nselect INPUT.mat OUTPUT.mat VARIABLE...\ntransform INPUT.mat PLAN.json OUTPUT.mat\nsparsify INPUT.mat VARIABLE OUTPUT.mat\ndensify INPUT.mat VARIABLE OUTPUT.mat\nsnapshot-tree INPUT.mat OUTPUT.json\nrestore-tree SNAPSHOT.json OUTPUT.mat\nsnapshot INPUT.mat OUTPUT.json\nrestore SNAPSHOT.json OUTPUT.mat\ndiff-tree-close LEFT.mat RIGHT.mat REPORT.json [OPTIONS.json]\ndiff-tree LEFT.mat RIGHT.mat REPORT.json\ndiff LEFT.mat RIGHT.mat [REPORT.json]\nsample OUTPUT.mat\nversion\nOutput files must be new. Diff exits: 0 equal, 2 changed, 1 error.`);
+  else if (command === 'roundtrip' && args.length === 2) save(args[1], bytes(codecApi.roundtrip_mat(read(args[0]))));
+  else if (command === 'compress' && args.length === 2) save(args[1], bytes(codecApi.compress_mat(read(args[0]))));
+  else if (['sparsify', 'densify'].includes(command) && args.length === 3) save(args[2], bytes(codecApi.convert_storage(read(args[0]), args[1], command === 'sparsify')));
+  else if (command === 'npy' && args.length === 3) save(args[2], bytes(codecApi.mat_to_npy(read(args[0]), args[1])));
+  else if (command === 'from-npy' && args.length === 3) save(args[2], bytes(codecApi.npy_to_mat(read(args[0]), args[1])));
+  else if (command === 'select' && args.length >= 3) save(args[1], bytes(withSource(args[0], source => codecApi.select_source_mat(source, args.slice(2)))));
+  else if (command === 'transform' && args.length === 3) save(args[2], bytes(codecApi.transform_mat(read(args[0]), new TextDecoder('utf-8', {fatal: true}).decode(read(args[1])))));
+  else if (command === 'sample' && args.length === 1) save(args[0], bytes(codecApi.sample_mat()));
+  else if (command === 'help' || command === '--help') console.log(`MoonMatBridge v${version}\ninfo INPUT.mat\nroots INPUT.mat\ndump INPUT.mat OUTPUT.json\npack INPUT.json OUTPUT.mat\nroundtrip INPUT.mat OUTPUT.mat\ncompress INPUT.mat OUTPUT.mat\nnpy INPUT.mat VARIABLE OUTPUT.npy\nfrom-npy INPUT.npy VARIABLE OUTPUT.mat\nselect INPUT.mat OUTPUT.mat VARIABLE...\ntransform INPUT.mat PLAN.json OUTPUT.mat\nsparsify INPUT.mat VARIABLE OUTPUT.mat\ndensify INPUT.mat VARIABLE OUTPUT.mat\nsnapshot-tree INPUT.mat OUTPUT.json\nrestore-tree SNAPSHOT.json OUTPUT.mat\nsnapshot INPUT.mat OUTPUT.json\nrestore SNAPSHOT.json OUTPUT.mat\ndiff-tree-close LEFT.mat RIGHT.mat REPORT.json [OPTIONS.json]\ndiff-tree LEFT.mat RIGHT.mat REPORT.json\ndiff LEFT.mat RIGHT.mat [REPORT.json]\nsample OUTPUT.mat\nversion\nOptional prefix: --name-encoding=utf8|latin1\nOutput files must be new. Diff exits: 0 equal, 2 changed, 1 error.`);
   else throw new Error('Invalid command or arguments. Run help.');
 } catch (error) {
   console.error(JSON.stringify(error.diagnostic || {status: 'error', code: error.code === 'EEXIST' ? 'output-exists' : 'host-error', message: error.message}));

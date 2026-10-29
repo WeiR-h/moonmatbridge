@@ -161,6 +161,7 @@ fn SourceCursor::finish(
 
 ///|
 priv struct SourceScan {
+  name_encoding : NameEncoding
   limits : SourceLimits
   basic : Limits
   tree : TreeLimits
@@ -198,12 +199,14 @@ fn source_text_value(
   raw : Bytes,
   limits : Limits,
   empty : Bool,
+  name_encoding? : NameEncoding = Utf8,
 ) -> String raise MatError {
   tree_text(
     raw,
     { kind: 1, start: 0, size: raw.length(), next: raw.length(), },
     limits,
     empty,
+    name_encoding~,
   )
 }
 
@@ -512,7 +515,12 @@ fn source_stream_node(
     fail("invalid-name", name_tag.start, "Invalid matrix name")
   }
   state.metadata(name_tag.size)
-  let name = source_text_value(cursor.payload(name_tag), state.basic, depth > 1)
+  let name = source_text_value(
+    cursor.payload(name_tag),
+    state.basic,
+    depth > 1,
+    name_encoding=state.name_encoding,
+  )
   let keep = if depth == 1 {
     match state.wanted {
       None => true
@@ -668,7 +676,14 @@ fn source_stream_node(
       }
       state.metadata(tag.size)
       state.result(element_size(tag.size), keep)
-      Some(source_text_value(cursor.payload(tag), state.basic, false))
+      Some(
+        source_text_value(
+          cursor.payload(tag),
+          state.basic,
+          false,
+          name_encoding=state.name_encoding,
+        ),
+      )
     } else {
       None
     }
@@ -720,6 +735,7 @@ fn source_stream_node(
           data[start:start + length].to_owned(),
           state.basic,
           false,
+          name_encoding=state.name_encoding,
         )
         if seen.contains(field) {
           fail("duplicate-field", table.start + start, "Duplicate field")
@@ -789,6 +805,7 @@ fn scan_source_stream(
   collect : Bool,
   limits : SourceLimits,
   tree : TreeLimits,
+  name_encoding? : NameEncoding = Utf8,
 ) -> (MatTree, Array[MatRootInfo]) raise MatError {
   let basic = source_limits(limits)
   validate_tree_limits(tree)
@@ -817,6 +834,7 @@ fn scan_source_stream(
     map
   })
   let state : SourceScan = {
+    name_encoding,
     limits,
     basic,
     tree,

@@ -22,6 +22,8 @@ pub fn from_tree_snapshot(String, limits? : @moonmatbridge.Limits, tree_limits? 
 
 pub fn info(@moonmatbridge.MatFile) -> Json
 
+pub fn name_encoding_options(String) -> @moonmatbridge.NameEncoding raise @moonmatbridge.MatError
+
 pub fn roots_info(Array[@moonmatbridge.MatRootInfo]) -> Json
 
 pub fn sample() -> Array[@moonmatbridge.NumericArray] raise @moonmatbridge.MatError

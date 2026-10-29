@@ -73,7 +73,7 @@ def main():
     add('legacy-object-data', mixed.deterministic_mat({'good': np.array([[1.]]), 'record': mixed.all_base_values()['legacy_record']}),
         None, 'verified_data_only', 'Legacy class name and fields; MATLAB runtime behavior unverified')
     add('legacy-latin1-name', good + character(b'caf\xe9', b'A\x00', [1, 1]), 'invalid-name',
-        'unresolved', 'Explicit Latin1 name bytes; no guessed decoding or silent rename')
+        'verified_explicit_codec', 'UTF8 default rejects; explicit Latin1 read/write verified separately; no guessed decoding')
     checks = []
     for case in cases:
         source = OUT / case['file']
@@ -118,6 +118,16 @@ def main():
                     np.testing.assert_array_equal(loadmat(dense)['s'],before.toarray())
                 checks.append({'case': case['file'], 'host': host, 'operation': 'roundtrip', 'actual': 'storage_verified',
                                'compatibility_state': case['compatibility_state']})
+            if case['file']=='legacy-latin1-name.mat':
+                for operation in ('info','roots','select','roundtrip'):
+                    output=ROOT/'verification/local'/f'latin1-{host}-{operation}.mat'
+                    output.unlink(missing_ok=True)
+                    args=[operation,str(source)] + ([str(output),'café'] if operation=='select' else [str(output)] if operation=='roundtrip' else [])
+                    result=subprocess.run(prefix+['--name-encoding=latin1']+args,cwd=ROOT,capture_output=True,text=True,encoding='utf-8',timeout=60)
+                    assert result.returncode==0,(host,operation,result.stderr)
+                    if operation in ('select','roundtrip'):
+                        assert 'café' in loadmat(output,chars_as_strings=False)
+                    checks.append({'case':case['file'],'host':host,'operation':operation,'name_encoding':'latin1','actual':'accepted','compatibility_state':'verified_explicit_codec'})
     for path in sorted((ROOT / 'examples/octave/variants').glob('producer-*.mat')):
         cases.append({'file': '../octave/variants/' + path.name, 'sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
                       'compatibility_state': 'unresolved_producer_variant', 'note': 'Current execution is recorded separately by real Octave CI'})

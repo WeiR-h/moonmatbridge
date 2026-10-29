@@ -10,7 +10,7 @@ The zlib implementation is MoonBit code, independent of Node/Python/C zlib. It h
 
 The v0.0.3 encoder uses a 32 KiB LZ77 window, at most 32 hash-chain probes per position, matches up to 258 bytes and fixed Huffman coding. If fixed output exceeds the stored-block size, it falls back to stored blocks. Input is capped at 64 MiB even with larger custom Limits. Compression is deterministic and useful for repetitive data; no optimal ratio or throughput claim is made. Compressed writes also enforce cumulative expanded size, and may reject an output whose compressed bytes would fit when the conservative uncompressed budget would not.
 
-CSC sparse Level 5 uses class 5, two dimensions, miINT32 row indices/column pointers, numerical or logical real data and optional double imaginary data. Column pointers start at zero, are monotone, and end at used entries <= stored slots <= nzmax. Active row indices must be strictly increasing per column; noncanonical order/duplicates fail explicitly. Float64, logical and complex float64 are supported. Inactive capacity slots and nzmax are preserved. Shape product is not charged as dense elements during sparse read/write: column pointers, indices, stored values and bytes are bounded. Only explicit densification validates the full shape product and allocates dense storage. NPY export of a sparse variable returns `explicit-densification-required`.
+CSC sparse Level 5 uses class 5, two dimensions, miINT32 row indices/column pointers, numerical or logical real data and optional double imaginary data. Column pointers start at zero, are monotone, and end at used entries <= stored slots <= nzmax. Active row order and duplicate slots are preserved; is_canonical() checks sorted, duplicate-free active indices separately. Float64, logical and complex float64 are supported. Inactive capacity slots and nzmax are preserved. Shape product is not charged as dense elements during sparse read/write: column pointers, indices, stored values and bytes are bounded. Only explicit densification validates the full shape product and allocates dense storage. NPY export of a sparse variable returns `explicit-densification-required`.
 
 | Default limit | Value |
 | --- | --- |
@@ -21,7 +21,7 @@ CSC sparse Level 5 uses class 5, two dimensions, miINT32 row indices/column poin
 | Dimensions | 32 |
 | UTF-8 variable-name bytes | 1,024 |
 
-These are bounds, not measured peak memory guarantees. Decoded arrays and expanded streams coexist, and JSON representations can be substantially larger than binary data. CLI loads whole files; very large datasets and streaming are deferred. User-supplied Limits are also bounded (file/expanded bytes <= 1 GiB, elements <= 134,217,728, variables <= 65,536, rank <= 128, name bytes <= 65,536), so signed size arithmetic remains controlled.
+These are bounds, not measured peak memory guarantees. Decoded arrays and expanded streams coexist, and JSON representations can be substantially larger than binary data. CLI roots/select use bounded file sources up to 1 GiB. Other commands use the 64 MiB memory interface; returned selected data is bounded separately. See SOURCES.md. User-supplied Limits are also bounded (file/expanded bytes <= 1 GiB, elements <= 134,217,728, variables <= 65,536, rank <= 128, name bytes <= 65,536), so signed size arithmetic remains controlled.
 
 Representative error codes: `invalid-header`, `unsupported-version`, `unsupported-v7.3`, `unsupported-subsystem`, `unsupported-class`, `unsupported-flags`, `unsupported-complex`, `truncated-tag`, `truncated-data`, `truncated-padding`, `invalid-small-tag`, `invalid-shape`, `payload-size`, `invalid-name`, `duplicate-name`, `value-type`, `value-range`, `precision-loss`, `file-limit`, `element-limit`, `expanded-limit`, `variable-limit`, `invalid-limits`, `invalid-zlib`, `invalid-json`, `output-exists`.
 
@@ -51,3 +51,7 @@ DEFLATE 位缓冲按需从受限区间补入字节。9 位前缀表直接处理�
 MAT 压缩根解码直接引用已验证标签的输入区间，不复制压缩负载。解出 miMATRIX 头后，只在声明尺寸满足累计展开额度时预分配私有固定缓冲；其余数据使用有界扩容。公开数值与字符结果拥有自身数据。Adler-32 使用最多 5552 字节的无符号累计批次，距离和声明窗口、块长度、截断、累计解压额度及未选变量校验继续执行。
 
 格式依据：[RFC 1950](https://www.rfc-editor.org/rfc/rfc1950)、[RFC 1951](https://www.rfc-editor.org/rfc/rfc1951)。
+
+## Explicit MAT name codecs
+
+MAT read/write families accept optional `name_encoding`, default `NameEncoding::Utf8`; use `NameEncoding::Latin1` explicitly for legacy 8-bit names. It applies to variable, field and legacy class names, separately from character payload encoding. See [NAME_ENCODING.md](NAME_ENCODING.md).

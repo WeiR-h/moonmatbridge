@@ -233,8 +233,9 @@ fn validate_char(
   a : CharArray,
   limits : Limits,
   nested : Bool,
+  name_encoding? : NameEncoding = Utf8,
 ) -> Int raise MatError {
-  validate_name(a.name, limits, allow_empty=nested)
+  validate_name(a.name, limits, allow_empty=nested, name_encoding~)
   let count = element_count(a.shape, limits, 0)
   if a.data.length() > limits.max_file_bytes {
     fail("file-limit", 0, "Character payload exceeds byte limit")
@@ -303,17 +304,17 @@ fn tree_text(
   item : Element,
   limits : Limits,
   empty : Bool,
+  name_encoding? : NameEncoding = Utf8,
 ) -> String raise MatError {
   if item.kind != 1 || item.size > limits.max_name_bytes {
     fail("invalid-name", item.start, "Expected bounded miINT8 name")
   }
-  let text = @utf8.decode(bytes[item.start:item.start + item.size]) catch {
-    _ => {
-      fail("invalid-name", item.start, "Name must be UTF-8")
-      ""
-    }
-  }
-  validate_name(text, limits, allow_empty=empty)
+  let text = decode_name(
+    bytes[item.start:item.start + item.size].to_owned(),
+    name_encoding,
+    item.start,
+  )
+  validate_name(text, limits, allow_empty=empty, name_encoding~)
   text
 }
 
@@ -327,6 +328,7 @@ fn visit_node(
   budget : TreeBudget,
   depth : Int,
   keep : Bool,
+  name_encoding? : NameEncoding = Utf8,
 ) -> MatNode? raise MatError {
   charge_node(budget, depth, tree)
   if outer.kind != 14 {
@@ -365,6 +367,7 @@ fn visit_node(
       limits,
       nested=depth > 1,
       keep~,
+      name_encoding~,
     )
     charge_elements(budget, count, limits)
     return value.map(fn(a) { Numeric(a) })
@@ -377,6 +380,7 @@ fn visit_node(
       limits,
       nested=depth > 1,
       keep~,
+      name_encoding~,
     )
     charge_elements(budget, count, limits)
     return value.map(fn(a) { Csc(a) })
@@ -409,7 +413,7 @@ fn visit_node(
   let count = element_count(shape, limits, dims.start)
   charge_elements(budget, count, limits)
   let name_tag = tag(bytes, dims.next, end, little)
-  let name = tree_text(bytes, name_tag, limits, depth > 1)
+  let name = tree_text(bytes, name_tag, limits, depth > 1, name_encoding~)
   let is_global = (bits & 1024U) != 0U
   let mut pos = name_tag.next
   if class == 4 {
@@ -459,7 +463,7 @@ fn visit_node(
   let class_name = if class == 3 {
     let item = tag(bytes, pos, end, little)
     pos = item.next
-    Some(tree_text(bytes, item, limits, false))
+    Some(tree_text(bytes, item, limits, false, name_encoding~))
   } else {
     None
   }
@@ -504,6 +508,7 @@ fn visit_node(
         { kind: 1, start, size: length, next: start + width, },
         limits,
         false,
+        name_encoding~,
       )
       if seen.contains(field) {
         fail("duplicate-field", start, "Duplicate struct field")
@@ -529,6 +534,7 @@ fn visit_node(
       budget,
       depth + 1,
       keep,
+      name_encoding~,
     )
     if value is Some(node) {
       values.push(node)
@@ -563,26 +569,27 @@ fn node_size(
   budget : TreeBudget,
   depth : Int,
   planned : Array[Int],
+  name_encoding? : NameEncoding = Utf8,
 ) -> Int raise MatError {
   let plan_index = planned.length()
   planned.push(0)
   charge_node(budget, depth, tree)
-  validate_name(node.name(), limits, allow_empty=depth > 1)
+  validate_name(node.name(), limits, allow_empty=depth > 1, name_encoding~)
   let shape = node.shape()
   let mut size = 16 +
     element_size(shape.length() * 4) +
-    element_size(@utf8.encode(node.name()[:]).length())
+    element_size(encode_name(node.name(), name_encoding).length())
   let mut count = 0
   match node {
     Numeric(a) => {
-      count = validate_array(a, limits, allow_empty=depth > 1)
+      count = validate_array(a, limits, allow_empty=depth > 1, name_encoding~)
       size = size + element_size(a.real.length())
       if a.imag is Some(imag) {
         size = size + element_size(imag.length())
       }
     }
     Csc(a) => {
-      count = validate_sparse(a, limits, allow_empty=depth > 1)
+      count = validate_sparse(a, limits, allow_empty=depth > 1, name_encoding~)
       size = size +
         element_size(a.row_indices.length() * 4) +
         element_size(a.col_ptrs.length() * 4) +
@@ -592,7 +599,7 @@ fn node_size(
       }
     }
     Character(a) => {
-      count = validate_char(a, limits, depth > 1)
+      count = validate_char(a, limits, depth > 1, name_encoding~)
       size = size + element_size(a.data.length())
     }
     Cell(a) => {
@@ -601,7 +608,15 @@ fn node_size(
         fail("payload-size", 0, "Cell child count differs from dimensions")
       }
       for child in a.values {
-        let bytes = node_size(child, limits, tree, budget, depth + 1, planned) +
+        let bytes = node_size(
+            child,
+            limits,
+            tree,
+            budget,
+            depth + 1,
+            planned,
+            name_encoding~,
+          ) +
           8
         if bytes > limits.max_file_bytes - size {
           fail("file-limit", 0, "Encoded tree exceeds byte limit")
@@ -625,12 +640,12 @@ fn node_size(
       let seen : Map[String, Bool] = Map([])
       let mut width = 1
       for field in a.fields {
-        validate_name(field, limits)
+        validate_name(field, limits, name_encoding~)
         if seen.contains(field) {
           fail("duplicate-field", 0, "Duplicate struct field")
         }
         seen[field] = true
-        let required = @utf8.encode(field[:]).length() + 1
+        let required = encode_name(field, name_encoding).length() + 1
         if required > width {
           width = required
         }
@@ -642,11 +657,20 @@ fn node_size(
       // Canonical field-name length uses the 8-byte small data element.
       size = size + 8 + element_size(width * a.fields.length())
       if a.class_name is Some(class_name) {
-        validate_name(class_name, limits)
-        size = size + element_size(@utf8.encode(class_name[:]).length())
+        validate_name(class_name, limits, name_encoding~)
+        size = size +
+          element_size(encode_name(class_name, name_encoding).length())
       }
       for child in a.values {
-        let bytes = node_size(child, limits, tree, budget, depth + 1, planned) +
+        let bytes = node_size(
+            child,
+            limits,
+            tree,
+            budget,
+            depth + 1,
+            planned,
+            name_encoding~,
+          ) +
           8
         if bytes > limits.max_file_bytes - size {
           fail("file-limit", 0, "Encoded tree exceeds byte limit")
