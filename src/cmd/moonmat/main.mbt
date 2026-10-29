@@ -74,7 +74,7 @@ fn[T] from_file(
     },
   }
   let mut closed = false
-  defer if !closed { ignore(source_close(handle)) }
+  defer (if !closed { ignore(source_close(handle)) })
   let result = work(source)
   let status = source_close(handle)
   closed = true
@@ -83,7 +83,6 @@ fn[T] from_file(
   }
   result
 }
-
 
 ///|
 fn path_bytes(path : String) -> Bytes raise @mat.MatError {
