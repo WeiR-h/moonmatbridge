@@ -61,3 +61,5 @@
 !/examples/unicode/**
 
 !/docs/HISTORY.md
+
+!/docs/SINKS.md

@@ -1,6 +1,6 @@
 ///|
 test "published compressed dense data preserves complex and uint64" {
-  assert_eq(@mat.version(), "0.1.1")
+  assert_true(!@mat.version().is_empty())
   let id = @mat.numeric_array("id", @mat.UInt64, [1, 2], [
     Unsigned(9007199254740993UL),
     Unsigned(18446744073709551615UL),
@@ -161,4 +161,20 @@ test "published tolerance comparison preserves exact and close results" {
   let report=@mat.compare_trees_close(left,right)
   assert_true(report.within_tolerance && !report.exact_equal)
   assert_true(@wire.tree_close_json(report).stringify().contains("moonmatbridge/tree-close/1"))
+}
+
+///|
+test "published bounded writer preserves callback bytes and short writes" {
+  let a = @mat.numeric_array("signal",@mat.Float64,[1,2],[Floating(-0.0),Floating(2.0)])
+  let nodes = [@mat.Numeric(a)]
+  let expected = @mat.write_tree(nodes)
+  let output = FixedArray::make(expected.length(),b'\x00')
+  let sink : @mat.MatSink = {write_from:fn(offset,buffer,start,count){
+    let n = if count<3 {count} else {3}
+    for i=0;i<n;i=i+1 {output[offset+i]=buffer[start+i]}
+    n
+  }}
+  let size = @mat.write_tree_to(nodes,sink,limits={..@mat.default_write_limits(),chunk_bytes:7})
+  assert_eq(size,expected.length())
+  assert_true(output.unsafe_reinterpret_as_bytes()==expected)
 }

@@ -193,3 +193,134 @@ int32_t moonmat_source_close(int32_t slot) {
   s->active = 0;
   return changed;
 }
+
+/* Append to native io.c: bounded positional output transport, no format logic. */
+#include <time.h>
+typedef struct { int active, fd, created, error; char *target, *temp; } SinkSlot;
+static SinkSlot sink_slots[16];
+static unsigned int sink_serial;
+#ifdef _WIN32
+/* Extended absolute paths also keep temporary suffixes within Win32 semantics. */
+static wchar_t *sink_wide_path(const char *path) {
+  wchar_t *wide = wide_path(path);
+  if (!wide) return NULL;
+  if (!wcsncmp(wide, L"\\\\?\\", 4)) return wide;
+  DWORD size = GetFullPathNameW(wide, 0, NULL, NULL);
+  if (!size || size > 32700) { free(wide); return NULL; }
+  wchar_t *absolute = malloc(((size_t)size + 1) * sizeof(wchar_t));
+  if (!absolute) { free(wide); return NULL; }
+  DWORD actual = GetFullPathNameW(wide, size + 1, absolute, NULL);
+  free(wide);
+  if (!actual || actual > size) { free(absolute); return NULL; }
+  for (DWORD i = 0; i < actual; ++i) if (absolute[i] == L'/') absolute[i] = L'\\';
+  int unc = !wcsncmp(absolute, L"\\\\", 2);
+  size_t prefix = unc ? 8 : 4, skip = unc ? 2 : 0;
+  wchar_t *result = malloc((prefix + actual - skip + 1) * sizeof(wchar_t));
+  if (result) {
+    memcpy(result, unc ? L"\\\\?\\UNC\\" : L"\\\\?\\", prefix * sizeof(wchar_t));
+    memcpy(result + prefix, absolute + skip, (actual - skip + 1) * sizeof(wchar_t));
+  }
+  free(absolute); return result;
+}
+#endif
+
+int32_t moonmat_sink_begin(moonbit_bytes_t path) {
+  int slot = 0; while (slot < 16 && sink_slots[slot].active) ++slot;
+  if (slot == 16) return -1;
+  size_t length = strlen((const char *)path);
+  if (!length || length > SIZE_MAX - 128) return -1;
+  SinkSlot *s = &sink_slots[slot];
+  memset(s, 0, sizeof(*s)); s->fd = -1;
+  s->target = malloc(length + 1); s->temp = malloc(length + 128);
+  if (!s->target || !s->temp) { free(s->target); free(s->temp); memset(s,0,sizeof(*s)); return -1; }
+  memcpy(s->target, path, length + 1); s->temp[0] = 0; s->active = 1;
+  return slot;
+}
+
+static int sink_lazy_open(SinkSlot *s) {
+#ifdef _WIN32
+  wchar_t *target = sink_wide_path(s->target);
+  if (!target) { s->error = 1; return -1; }
+  DWORD attributes = GetFileAttributesW(target); free(target);
+  if (attributes != INVALID_FILE_ATTRIBUTES) { s->error = 3; return -1; }
+  unsigned long pid = GetCurrentProcessId();
+#else
+  struct stat status;
+  if (!lstat(s->target, &status)) { s->error = 3; return -1; }
+  if (errno != ENOENT) { s->error = 1; return -1; }
+  unsigned long pid = (unsigned long)getpid();
+#endif
+  for (int attempt = 0; attempt < 64; ++attempt) {
+    const char *slash = strrchr(s->target, '/');
+#ifdef _WIN32
+    const char *backslash = strrchr(s->target, '\\');
+    if (backslash && (!slash || backslash > slash)) slash = backslash;
+    size_t prefix = slash ? (size_t)(slash - s->target + 1) : (strlen(s->target) >= 2 && s->target[1] == ':' ? 2 : 0);
+#else
+    size_t prefix = slash ? (size_t)(slash - s->target + 1) : 0;
+#endif
+    snprintf(s->temp, strlen(s->target) + 128, "%.*s.mmb-%lu-%llu-%u.tmp", (int)prefix, s->target, pid, (unsigned long long)time(NULL), ++sink_serial);
+#ifdef _WIN32
+    wchar_t *temp = sink_wide_path(s->temp);
+    int fd = temp ? _wopen(temp, _O_RDWR | _O_CREAT | _O_EXCL | _O_BINARY | _O_NOINHERIT, _S_IREAD | _S_IWRITE) : -1;
+    free(temp);
+#else
+    int fd = open(s->temp, O_RDWR | O_CREAT | O_EXCL | O_CLOEXEC, 0666);
+#endif
+    if (fd >= 0) { s->fd = fd; s->created = 1; return fd; }
+    if (errno != EEXIST) { s->error = 1; return -1; }
+  }
+  s->error = 1; return -1;
+}
+
+int32_t moonmat_sink_write(int32_t slot, int32_t offset, moonbit_bytes_t buffer, int32_t start, int32_t length) {
+  if (slot < 0 || slot >= 16 || !sink_slots[slot].active || offset < 0 || start < 0 || length <= 0 || length > 8388608 || offset > 1073741824 - length) return -1;
+  SinkSlot *s = &sink_slots[slot];
+  if (s->error) return -1;
+  if (s->fd < 0 && sink_lazy_open(s) < 0) return -1;
+#ifdef _WIN32
+  if (_lseeki64(s->fd, offset, SEEK_SET) < 0) { s->error = 1; return -1; }
+  int count = _write(s->fd, buffer + start, (unsigned int)length);
+#else
+  ssize_t count;
+  do { count = pwrite(s->fd, buffer + start, (size_t)length, offset); } while (count < 0 && errno == EINTR);
+#endif
+  if (count <= 0) s->error = 1;
+  return (int32_t)count;
+}
+
+int32_t moonmat_sink_error(int32_t slot) {
+  return slot >= 0 && slot < 16 && sink_slots[slot].active ? sink_slots[slot].error : 1;
+}
+
+int32_t moonmat_sink_finish(int32_t slot, int32_t commit, int32_t expected_size) {
+  if (slot < 0 || slot >= 16 || !sink_slots[slot].active) return 0;
+  SinkSlot *s = &sink_slots[slot];
+  if (s->fd >= 0) {
+    SourceStat status;
+    if (commit && (expected_size < 128 || FSTAT(s->fd, &status) || status.st_size != expected_size)) s->error = 1;
+    int fd = s->fd; s->fd = -1;
+    if (CLOSE(fd) && !s->error) s->error = 1;
+  } else if (commit && !s->error) s->error = 1;
+  if (commit && !s->error) {
+#ifdef _WIN32
+    wchar_t *temp = sink_wide_path(s->temp), *target = sink_wide_path(s->target);
+    if (temp && target && MoveFileW(temp, target)) s->created = 0;
+    else { DWORD code = temp && target ? GetLastError() : ERROR_INVALID_NAME; s->error = code == ERROR_ALREADY_EXISTS || code == ERROR_FILE_EXISTS ? 3 : 1; }
+    free(temp); free(target);
+#else
+    if (link(s->temp, s->target)) s->error = errno == EEXIST ? 3 : 1;
+    /* Final output is committed; cleanup of the extra name is best effort. */
+#endif
+  }
+  if (s->created) {
+#ifdef _WIN32
+    wchar_t *temp = sink_wide_path(s->temp); if (temp) { DeleteFileW(temp); free(temp); }
+#else
+    unlink(s->temp);
+#endif
+  }
+  int error = s->error;
+  free(s->target); free(s->temp); memset(s, 0, sizeof(*s));
+  return error;
+}

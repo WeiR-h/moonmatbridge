@@ -46,6 +46,8 @@ pub fn json_to_mat(String) -> BinaryResult
 
 pub fn json_to_mat_with_options(String, String) -> BinaryResult
 
+pub fn make_sink((Int32, FixedArray[Byte], Int32, Int32) -> Int32) -> @moonmatbridge.MatSink
+
 pub fn make_source(Int32, (Int32, FixedArray[Byte], Int32, Int32) -> Int32) -> @moonmatbridge.MatSource
 
 pub fn mat_to_json(Bytes) -> String
@@ -74,6 +76,10 @@ pub fn result_status(BinaryResult) -> String
 
 pub fn roundtrip_mat(Bytes) -> BinaryResult
 
+pub fn roundtrip_mat_to(Bytes, @moonmatbridge.MatSink) -> String
+
+pub fn roundtrip_mat_to_with_options(Bytes, @moonmatbridge.MatSink, String) -> String
+
 pub fn roundtrip_mat_with_options(Bytes, String) -> BinaryResult
 
 pub fn sample_mat() -> BinaryResult
@@ -85,6 +91,10 @@ pub fn select_mat(Bytes, Array[String]) -> BinaryResult
 pub fn select_mat_with_options(Bytes, Array[String], String) -> BinaryResult
 
 pub fn select_source_mat(@moonmatbridge.MatSource, Array[String]) -> BinaryResult
+
+pub fn select_source_mat_to(@moonmatbridge.MatSource, Array[String], @moonmatbridge.MatSink) -> String
+
+pub fn select_source_mat_to_with_options(@moonmatbridge.MatSource, Array[String], @moonmatbridge.MatSink, String) -> String
 
 pub fn select_source_mat_with_options(@moonmatbridge.MatSource, Array[String], String) -> BinaryResult
 
@@ -99,6 +109,10 @@ pub fn transform_mat_with_options(Bytes, String, String) -> BinaryResult
 pub fn tree_snapshot_to_mat(String) -> BinaryResult
 
 pub fn tree_snapshot_to_mat_with_options(String, String) -> BinaryResult
+
+pub fn tree_snapshot_to_sink(String, @moonmatbridge.MatSink) -> String
+
+pub fn tree_snapshot_to_sink_with_options(String, @moonmatbridge.MatSink, String) -> String
 
 // Errors
 

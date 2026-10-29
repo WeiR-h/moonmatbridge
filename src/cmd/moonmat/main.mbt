@@ -1,4 +1,89 @@
 ///|
+#borrow(path)
+extern "C" fn sink_begin(path : Bytes) -> Int32 = "moonmat_sink_begin"
+
+///|
+#borrow(buffer)
+extern "C" fn sink_write(
+  slot : Int32,
+  offset : Int32,
+  buffer : FixedArray[Byte],
+  start : Int32,
+  length : Int32,
+) -> Int32 = "moonmat_sink_write"
+
+///|
+extern "C" fn sink_error(slot : Int32) -> Int32 = "moonmat_sink_error"
+
+///|
+extern "C" fn sink_finish(slot : Int32, commit : Int32, size : Int32) -> Int32 = "moonmat_sink_finish"
+
+///|
+fn save_tree(
+  path : String,
+  nodes : Array[@mat.MatNode],
+  selected~ : Bool = false,
+  name_encoding~ : @mat.NameEncoding = @mat.Utf8,
+) -> Unit raise @mat.MatError {
+  let slot = sink_begin(path_bytes(path))
+  if slot < 0 {
+    raise @mat.MatError("io-error", 0, "Cannot initialize output")
+  }
+  let mut closed = false
+  defer (if !closed { ignore(sink_finish(slot, 0, 0)) })
+  let sink : @mat.MatSink = {
+    write_from: fn(offset, buffer, start, length) {
+      sink_write(slot, offset, buffer, start, length)
+    },
+  }
+  let old = @mat.default_limits()
+  let limits : @mat.WriteLimits = {
+    ..@mat.default_write_limits(),
+    max_output_bytes: old.max_file_bytes,
+    max_uncompressed_bytes: old.max_file_bytes,
+    max_metadata_bytes: old.max_file_bytes,
+    max_elements: if selected {
+      @mat.default_source_limits().max_elements
+    } else {
+      old.max_elements
+    },
+    max_variables: old.max_variables,
+    max_dimensions: old.max_dimensions,
+    max_name_bytes: old.max_name_bytes,
+  }
+  let size = @mat.write_tree_to(nodes, sink, limits~, name_encoding~) catch {
+    error =>
+      if sink_error(slot) == 3 {
+        raise @mat.MatError("output-exists", 0, "Output already exists")
+      } else {
+        raise error
+      }
+  }
+  let status = sink_finish(slot, 1, size)
+  closed = true
+  if status != 0 {
+    raise @mat.MatError(
+      if status == 3 {
+        "output-exists"
+      } else {
+        "io-error"
+      },
+      0,
+      "Cannot finalize output",
+    )
+  }
+  println(
+    (
+      {
+        "status": "ok",
+        "output": path,
+        "bytes": size,
+        "version": @mat.version(),
+      } : Json).stringify(),
+  )
+}
+
+///|
 /// Host transport is limited to argv and file I/O. All formats and conversions execute in MoonBit.
 extern "C" fn host_init() -> Unit = "moonmat_init"
 
@@ -214,10 +299,7 @@ fn run_command(
     let text = @utf8.decode(read(args[2])[:]) catch {
       _ => raise @mat.MatError("invalid-utf8", 0, "Tree snapshot must be UTF-8")
     }
-    save(
-      args[3],
-      @mat.write_tree(@wire.from_tree_snapshot(text), name_encoding~),
-    )
+    save_tree(args[3], @wire.from_tree_snapshot(text), name_encoding~)
   } else if command == "snapshot" && args.length() == 4 {
     let text = @wire.to_snapshot(
         @mat.read_document(read(args[2]), name_encoding~).variables,
@@ -279,12 +361,10 @@ fn run_command(
       exit_process(2)
     }
   } else if command == "roundtrip" && args.length() == 4 {
-    save(
+    save_tree(
       args[3],
-      @mat.write_tree(
-        @mat.read_tree(read(args[2]), name_encoding~).variables,
-        name_encoding~,
-      ),
+      @mat.read_tree(read(args[2]), name_encoding~).variables,
+      name_encoding~,
     )
   } else if command == "compress" && args.length() == 4 {
     save(
@@ -329,19 +409,10 @@ fn run_command(
     )
   } else if command == "select" && args.length() >= 5 {
     let names = Array::makei(args.length() - 4, fn(i) { args[i + 4] })
-    save(
-      args[3],
-      @mat.write_tree(
-        from_file(args[2], source => {
-          @mat.read_selected_from(source, names, name_encoding~)
-        }).variables,
-        limits={
-          ..@mat.default_limits(),
-          max_elements: @mat.default_source_limits().max_elements,
-        },
-        name_encoding~,
-      ),
-    )
+    let tree = from_file(args[2], source => {
+      @mat.read_selected_from(source, names, name_encoding~)
+    })
+    save_tree(args[3], tree.variables, selected=true, name_encoding~)
   } else if command == "npy" && args.length() == 5 {
     let file = @mat.read_document(read(args[2]), name_encoding~)
     match file.get(args[3]) {

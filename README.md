@@ -1,4 +1,4 @@
-# MoonMatBridge v0.1.2
+# MoonMatBridge v0.1.3
 
 支持显式 UTF-8 / Latin1 名称编解码，覆盖变量名、字段名和 legacy 类名。两个命令行宿主使用前置 `--name-encoding=latin1`；默认调用保持 UTF-8。[名称编码说明](docs/NAME_ENCODING.md)。
 
@@ -6,9 +6,11 @@
 
 MAT 递归 cell/struct/char/legacy object、密集/CSC 稀疏读写、数值编码、zlib/DEFLATE 解压与压缩、JSON/无损快照、NPY 互通和精确、容差差异检查都由 MoonBit 实现。运行核心库和 Windows 命令行程序不需要 MATLAB、Python、SciPy、Node.js 或第三方压缩库。Node.js 仅用于开发脚本与可选 JS 命令行；SciPy/NumPy 仅用作独立兼容性验证。
 
+未压缩输出支持 `MatSink` / `write_tree_to` 分块写入，完成整树预检后使用有界工作缓冲；输入数据树仍驻留内存。`roundtrip/select/restore-tree` 两宿主使用新路径，详见 [文件写出](docs/SINKS.md)。
+
 未压缩和压缩文件均支持分块读取 256 MiB 未选变量并提取所选结果；压缩读取保留 32 KiB 历史窗口，无需完整展开缓冲。详情见 [文件数据源](docs/SOURCES.md)。
 
-当前源码版本为 v0.1.2，GitHub 与 Mooncakes 使用统一版本号；发布模块名为 `WeiR-h/moonmatbridge`。
+当前源码版本为 v0.1.3，GitHub 与 Mooncakes 使用统一版本号；发布模块名为 `WeiR-h/moonmatbridge`。
 
 - 压缩读取采用位缓冲、Huffman 短码表与有界输入窗口，减少临时复制和展开缓冲扩容。
 - 完整递归混合数据读写；预检尺寸后写入固定缓冲，保留字符单位、精确整数、复数和 CSC 容量。
@@ -23,7 +25,7 @@ MAT 递归 cell/struct/char/legacy object、密集/CSC 稀疏读写、数值编�
 
 ## 支持范围
 
-| 能力 | v0.1.2 |
+| 能力 | v0.1.3 |
 | --- | --- |
 | MAT Level 5 读取 | 小端、大端；标准标签与小数据标签；多变量 |
 | 压缩读取 | `miCOMPRESSED`；MoonBit 解码 stored/fixed/dynamic DEFLATE，验证 Adler-32 |
@@ -84,10 +86,10 @@ JS 适配器只读写文件；格式处理使用编译后的 MoonBit。
 
 ## MoonBit API
 
-发布模块名为 [`WeiR-h/moonmatbridge`](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.1.2)。在已有 MoonBit 项目中安装：
+发布模块名为 [`WeiR-h/moonmatbridge`](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.1.3)。在已有 MoonBit 项目中安装：
 
 ```powershell
-moon add WeiR-h/moonmatbridge@0.1.2
+moon add WeiR-h/moonmatbridge@0.1.3
 ```
 
 核心代码在 `src/`，公开接口在 `src/pkg.generated.mbti`。包内示例可直接运行：
@@ -169,7 +171,7 @@ npm run package
 
 `npm run verify:registry` 创建独立项目，使用固定版本的 `moon add` 下载依赖；禁止本地 workspace/path 替代，核对已下载源码，并在 JS、wasm-gc、native 上验证六个完整消费者场景。示例位于 [examples/registry_consumer](examples/registry_consumer/)。发布时使用 `.moonignore` 的明确文件范围，并通过 `moon package --list` 核对；开发工具、构建输出、个人报名材料及验证工作目录不进入 Mooncakes 包。
 
-当前工具链固定于 `toolchain.lock.json`，通过 `python scripts/setup-toolchain.py --configure` 安装；验证入口检查实际 moonc 版本。历史性能环境记录为 MoonBit `0.1.20260920 (914d7da)`、Node `v24.13.0`、GCC `16.2.0`、Python `3.12.5`、SciPy `1.15.3`、NumPy `2.2.6`。`scripts/verify.mjs` 执行三目标测试、直接示例、构建、压缩差分测试和真实文件互通，并记录源文件指纹。
+当前工具链固定于 `toolchain.lock.json`，通过 `python scripts/setup-toolchain.py --configure` 安装；验证入口检查实际 moonc 版本。历史性能环境记录为 MoonBit `0.1.30260920 (914d7da)`、Node `v24.13.0`、GCC `16.2.0`、Python `3.12.5`、SciPy `1.15.3`、NumPy `2.2.6`。`scripts/verify.mjs` 执行三目标测试、直接示例、构建、压缩差分测试和真实文件互通，并记录源文件指纹。
 
 三目标检查、构建、测试与示例由同一验证入口执行；Windows/Linux 的实际 CI 地址及当前测试数量见对应版本报告。`npm run coverage` 生成核心源码覆盖报告、未覆盖行清单和本地 HTML；该指标是编译器插桩的源码行覆盖，不代表分支覆盖。
 

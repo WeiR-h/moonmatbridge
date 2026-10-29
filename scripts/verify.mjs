@@ -52,6 +52,8 @@ try {
   const executable = buildNative();
   record('Native release build', relative(root, executable));
   record('JS differential and malformed input tests', command(process.execPath, ['scripts/js-checks.mjs']));
+  record('Bounded sink callback and Node file failures', command(process.execPath, ['scripts/sink-checks.mjs']));
+  record('Native sink close, size and atomic publish failures', command(process.execPath, ['scripts/sink-native-checks.mjs']));
   record('Actual compiler version guard regression', command(process.execPath, ['scripts/toolchain-checks.mjs']));
   const python = process.env.MOONMAT_PYTHON || join(root, '.venv', process.platform === 'win32' ? 'Scripts/python.exe' : 'bin/python');
   record('Independent SciPy/NumPy cross-compatibility', command(python, ['scripts/interop.py']));

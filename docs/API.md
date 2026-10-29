@@ -104,3 +104,7 @@ MAT read/write families accept optional `name_encoding`, default `NameEncoding::
 1.x 保持已有调用、公共字段及既有 JSON 格式的含义。类型或参数的不兼容变更、公开枚举分支造成的穷举变化采用大版本；兼容功能采用次版本，修复采用补丁版本。错误码含义稳定，诊断文字与具体偏移不作为可缓存文件定位接口。精确树比较单独报告根顺序；容差比较将根顺序计为元数据差异，两者保持各自既有语义。
 
 内存、文件、比较和快照接口分别执行 Limits/SourceLimits/TreeLimits。名称转为 Unicode 文本后，UTF-8 体积可能大于旧编码；组合接口时可显式设置适合结果的资源额度。资源额度与峰值内存分别衡量。
+
+## Bounded output
+
+`MatSink`、`WriteLimits`、`default_write_limits()` 和 `write_tree_to` 见 [文件写出](SINKS.md)。已有内存接口与 JS BinaryResult 导出保持兼容；新增 JS `make_sink`、`roundtrip_mat_to`、`select_source_mat_to`、`tree_snapshot_to_sink` 及对应 `*_with_options`，返回含最终字节数的状态 JSON。

@@ -27,8 +27,13 @@ def run(args, timeout=600, ok=True):
 
 
 def manifest():
-    with urllib.request.urlopen(MANIFEST, timeout=30) as response:
-        return json.load(response)
+    for attempt in range(5):
+        try:
+            with urllib.request.urlopen(MANIFEST, timeout=30) as response:
+                return json.load(response)
+        except (OSError, TimeoutError):
+            if attempt == 4: raise
+            time.sleep(3)
 
 
 def write_report(name, value):
@@ -142,7 +147,7 @@ def github():
     assets += [ROOT / "examples/mixed/manifest.json"]
     all_classes = ROOT / "examples/workflows/all-base-classes.mat"
     if all_classes.exists(): assets.append(all_classes)
-    assets += [p for p in REPORTS.glob(f"*-v{VERSION}.json") if "-public-" not in p.name and p.name.startswith(("octave-", "compatibility-", "performance-", "file-performance-", "mooncakes-", "selection-", "workflows-", "licenses-", "source-snapshot-", "source-operations-", "ci-", "tree-operations-", "tree-close-", "name-encoding-", "api-contract-", "producer-variants-", "stable-gate-"))]
+    assets += [p for p in REPORTS.glob(f"*-v{VERSION}.json") if "-public-" not in p.name and p.name.startswith(("sink-operations-", "coverage-", "octave-", "compatibility-", "performance-", "file-performance-", "mooncakes-", "selection-", "workflows-", "licenses-", "source-snapshot-", "source-operations-", "ci-", "tree-operations-", "tree-close-", "name-encoding-", "api-contract-", "producer-variants-", "stable-gate-"))]
     assets.extend(ROOT / "docs" / name for name in ("TREE_DIFF.md", "TREE_SNAPSHOT.md", "TREE_CLOSE.md") if (ROOT / "docs" / name).exists())
     review = ROOT / f"docs/REVIEW_EVIDENCE-v{VERSION}.md"
     if review.exists(): assets.append(review)

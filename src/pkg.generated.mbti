@@ -20,6 +20,8 @@ pub fn default_source_limits() -> SourceLimits
 
 pub fn default_tree_limits() -> TreeLimits
 
+pub fn default_write_limits() -> WriteLimits
+
 pub fn deflate_zlib(Bytes, max_bytes? : Int32) -> Bytes raise MatError
 
 pub fn dtype_from_name(String) -> DType raise MatError
@@ -65,6 +67,8 @@ pub fn write_mat(Array[NumericArray], compressed? : Bool, limits? : Limits, name
 pub fn write_npy(NumericArray, limits? : Limits) -> Bytes raise MatError
 
 pub fn write_tree(Array[MatNode], compressed? : Bool, limits? : Limits, tree_limits? : TreeLimits, name_encoding? : NameEncoding) -> Bytes raise MatError
+
+pub fn write_tree_to(Array[MatNode], MatSink, limits? : WriteLimits, tree_limits? : TreeLimits, name_encoding? : NameEncoding) -> Int32 raise MatError
 
 // Errors
 pub(all) suberror MatError {
@@ -196,6 +200,10 @@ pub(all) struct MatRootInfo {
   compressed : Bool
 } derive(@debug.Debug)
 pub fn MatRootInfo::to_repr(Self) -> @debug.Repr
+
+pub(all) struct MatSink {
+  write_from : (Int32, FixedArray[Byte], Int32, Int32) -> Int32
+}
 
 pub(all) struct MatSource {
   size : Int32
@@ -357,6 +365,20 @@ pub(all) struct VariableDifference {
   truncated : Bool
 } derive(@debug.Debug)
 pub fn VariableDifference::to_repr(Self) -> @debug.Repr
+
+pub(all) struct WriteLimits {
+  max_output_bytes : Int32
+  max_uncompressed_bytes : Int32
+  max_metadata_bytes : Int32
+  chunk_bytes : Int32
+  max_elements : Int32
+  max_variables : Int32
+  max_dimensions : Int32
+  max_name_bytes : Int32
+} derive(Eq, @debug.Debug)
+pub fn WriteLimits::equal(Self, Self) -> Bool
+pub fn WriteLimits::not_equal(Self, Self) -> Bool
+pub fn WriteLimits::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 
