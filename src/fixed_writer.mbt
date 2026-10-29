@@ -55,10 +55,18 @@ fn fixed_ints(
   values : Array[Int],
 ) -> Unit {
   fixed_tag(out, cursor, 5, values.length() * 4)
-  for value in values {
-    fixed_u32(out, cursor, value.reinterpret_as_uint().to_uint64())
+  let start = cursor.offset
+  for i = 0; i < values.length(); i = i + 1 {
+    let value = values[i].reinterpret_as_uint()
+    let position = start + i * 4
+    out[position] = value.to_byte()
+    out[position + 1] = (value >> 8).to_byte()
+    out[position + 2] = (value >> 16).to_byte()
+    out[position + 3] = (value >> 24).to_byte()
   }
-  cursor.offset = cursor.offset + (if values.length() % 2 == 0 { 0 } else { 4 })
+  cursor.offset = start +
+    values.length() * 4 +
+    (if values.length() % 2 == 0 { 0 } else { 4 })
 }
 
 ///|
