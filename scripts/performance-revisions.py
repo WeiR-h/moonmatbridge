@@ -39,7 +39,7 @@ def prepare(ref):
         for name in ('src/bench_bridge','src/cmd/bench'):
             if not (directory/name).exists(): shutil.copytree(ROOT/name,directory/name)
         version=json.loads((directory/'package.json').read_bytes())['version']
-        if tuple(map(int,version.split('.'))) < (0,0,8):
+        if tuple(map(int,version.split('-')[0].split('.'))) < (0,0,8):
             for name in ('src/bench_bridge/bench.mbt','src/cmd/bench/main.mbt'):
                 p=directory/name
                 p.write_text(p.read_text(encoding='utf-8').replace('@mat.read_selected(bytes, ["v00"]).variables','@mat.read_tree(bytes).select(["v00"])'),encoding='utf-8',newline='\n')

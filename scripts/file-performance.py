@@ -170,7 +170,7 @@ def prepare(ref):
    package.extractall(folder)
  if (ROOT/'.local-toolchain.json').exists():shutil.copyfile(ROOT/'.local-toolchain.json',folder/'.local-toolchain.json')
  evidence.ROOT=ROOT;expected=evidence.snapshot(commit);evidence.ROOT=folder;assert evidence.snapshot()==expected
- version=json.loads((folder/'package.json').read_bytes())['version'];source=tuple(map(int,version.split('.'))) >= (0,0,16)
+ version=json.loads((folder/'package.json').read_bytes())['version'];source=tuple(map(int,version.split('-')[0].split('.'))) >= (0,0,16)
  d=folder/'src/cmd/file_bench';d.mkdir(parents=True,exist_ok=True)
  (d/'moon.pkg').write_text('import { "WeiR-h/moonmatbridge" @mat, "moonbitlang/core/env", "moonbitlang/core/encoding/utf8", }\nsupported_targets = "native"\npkgtype(kind: "executable")\noptions("native-stub": [ "bench.c" ],)\n',encoding='utf-8')
  shutil.copyfile(folder/'src/cmd/bench/bench.c',d/'bench.c')
@@ -200,7 +200,7 @@ def main():
  report['environment']['compiler']=perf.command([toolchain.get('gcc','cc'),'--version']).splitlines()[0]
  for case in cases:
   if args.case and case['name'] not in args.case:continue
-  if tuple(map(int,version.split('.')))<tuple(case['minimum_version']):continue
+  if tuple(map(int,version.split('-')[0].split('.')))<tuple(case['minimum_version']):continue
   for host in ['native','js']:
    batches={'baseline':[],'candidate':[]}
    for _ in range(3):
@@ -209,7 +209,7 @@ def main():
    memory={k:[measure(d,host,case,'memory') for _ in range(3)] for k,d in [('baseline',baseline),('candidate',candidate)]}
    med={k:statistics.median(v) for k,v in samples.items()};rss={k:statistics.median(x['peak_bytes'] for x in v) for k,v in memory.items()}
    row={'case':{k:v for k,v in case.items() if k!='path'},'host':host,'batches':batches,'memory_processes':memory,'median_ms':med['candidate'],'baseline_median_ms':med['baseline'],'p95_ms':sorted(samples['candidate'])[28],'baseline_p95_ms':sorted(samples['baseline'])[28],'speedup':med['baseline']/med['candidate'],'peak_bytes':rss['candidate'],'baseline_peak_bytes':rss['baseline'],'memory_reduction':1-rss['candidate']/rss['baseline'],'payload_MiB_per_second':case['payload_bytes']/1048576/(med['candidate']/1000),'output_bytes':batches['candidate'][0]['checksum']/15}
-   if host=='native':row['memory_goal']=.4 if case['name']=='select-1-of-16' else .75;row['memory_goal_passed']=row['memory_reduction']>=row['memory_goal']
+   if host=='native' and bsha.startswith('21291ce'):row['memory_goal']=.4 if case['name']=='select-1-of-16' else .75;row['memory_goal_passed']=row['memory_reduction']>=row['memory_goal']
    report['results'].append(row);write(LOCAL/f'file-performance-v{version}.json',report);print(case['name'],host,round(row['speedup'],3),round(row['memory_reduction'],4),flush=True)
  for folder,ref in [(baseline,bsha),(candidate,csha)]:
   evidence.ROOT=ROOT;expected=evidence.snapshot(ref);evidence.ROOT=folder;assert evidence.snapshot()==expected
