@@ -1,0 +1,476 @@
+{
+  "status": "passed",
+  "version": "0.0.21",
+  "passed": 78,
+  "checks": [
+    {
+      "host": "native",
+      "case": "scalar-0",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "native",
+      "case": "reverse-0",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "native",
+      "case": "scalar-1",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "native",
+      "case": "reverse-1",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "native",
+      "case": "scalar-2",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "native",
+      "case": "reverse-2",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "native",
+      "case": "scalar-3",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "native",
+      "case": "reverse-3",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "native",
+      "case": "scalar-4",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "native",
+      "case": "reverse-4",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "native",
+      "case": "scalar-5",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "native",
+      "case": "reverse-5",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "native",
+      "case": "scalar-6",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "native",
+      "case": "reverse-6",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "native",
+      "case": "scalar-7",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "native",
+      "case": "reverse-7",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "native",
+      "case": "scalar-8",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "native",
+      "case": "reverse-8",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "native",
+      "case": "scalar-9",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "native",
+      "case": "reverse-9",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "native",
+      "case": "scalar-10",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "native",
+      "case": "reverse-10",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "native",
+      "case": "scalar-11",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "native",
+      "case": "reverse-11",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "native",
+      "case": "scalar-12",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "native",
+      "case": "reverse-12",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "native",
+      "case": "nan-False",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "native",
+      "case": "nan-True",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "native",
+      "case": "mixed-close",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "native",
+      "case": "mixed-truncated",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "native",
+      "case": "integer-strict",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "native",
+      "case": "root-order",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "native",
+      "case": "invalid-options-0",
+      "status": "passed",
+      "no_partial_output": true
+    },
+    {
+      "host": "native",
+      "case": "invalid-options-1",
+      "status": "passed",
+      "no_partial_output": true
+    },
+    {
+      "host": "native",
+      "case": "invalid-options-2",
+      "status": "passed",
+      "no_partial_output": true
+    },
+    {
+      "host": "native",
+      "case": "invalid-options-3",
+      "status": "passed",
+      "no_partial_output": true
+    },
+    {
+      "host": "native",
+      "case": "invalid-options-4",
+      "status": "passed",
+      "no_partial_output": true
+    },
+    {
+      "host": "native",
+      "case": "invalid-options-5",
+      "status": "passed",
+      "no_partial_output": true
+    },
+    {
+      "host": "native",
+      "case": "invalid-right-file",
+      "status": "passed",
+      "no_partial_output": true
+    },
+    {
+      "host": "js",
+      "case": "scalar-0",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "js",
+      "case": "reverse-0",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "js",
+      "case": "scalar-1",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "js",
+      "case": "reverse-1",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "js",
+      "case": "scalar-2",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "js",
+      "case": "reverse-2",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "js",
+      "case": "scalar-3",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "js",
+      "case": "reverse-3",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "js",
+      "case": "scalar-4",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "js",
+      "case": "reverse-4",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "js",
+      "case": "scalar-5",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "js",
+      "case": "reverse-5",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "js",
+      "case": "scalar-6",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "js",
+      "case": "reverse-6",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "js",
+      "case": "scalar-7",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "js",
+      "case": "reverse-7",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "js",
+      "case": "scalar-8",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "js",
+      "case": "reverse-8",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "js",
+      "case": "scalar-9",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "js",
+      "case": "reverse-9",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "js",
+      "case": "scalar-10",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "js",
+      "case": "reverse-10",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "js",
+      "case": "scalar-11",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "js",
+      "case": "reverse-11",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "js",
+      "case": "scalar-12",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "js",
+      "case": "reverse-12",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "js",
+      "case": "nan-False",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "js",
+      "case": "nan-True",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "js",
+      "case": "mixed-close",
+      "status": "passed",
+      "exit": 0
+    },
+    {
+      "host": "js",
+      "case": "mixed-truncated",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "js",
+      "case": "integer-strict",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "js",
+      "case": "root-order",
+      "status": "passed",
+      "exit": 2
+    },
+    {
+      "host": "js",
+      "case": "invalid-options-0",
+      "status": "passed",
+      "no_partial_output": true
+    },
+    {
+      "host": "js",
+      "case": "invalid-options-1",
+      "status": "passed",
+      "no_partial_output": true
+    },
+    {
+      "host": "js",
+      "case": "invalid-options-2",
+      "status": "passed",
+      "no_partial_output": true
+    },
+    {
+      "host": "js",
+      "case": "invalid-options-3",
+      "status": "passed",
+      "no_partial_output": true
+    },
+    {
+      "host": "js",
+      "case": "invalid-options-4",
+      "status": "passed",
+      "no_partial_output": true
+    },
+    {
+      "host": "js",
+      "case": "invalid-options-5",
+      "status": "passed",
+      "no_partial_output": true
+    },
+    {
+      "host": "js",
+      "case": "invalid-right-file",
+      "status": "passed",
+      "no_partial_output": true
+    }
+  ],
+  "oracle": "SciPy MAT production, NumPy raw storage and 1200-digit Decimal symmetric scalar oracle"
+}

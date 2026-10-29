@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "version": "0.0.21",
+  "runtime_source_sha256": "533ddf4f1cb995bec868ab8752b7dd97ec3cbce9fddc958915c545f4690fc507",
+  "baseline": "v0.0.19",
+  "core_report": "performance-vs-8a1f479-v0.0.21.json",
+  "file_report": "file-performance-v0.0.21.json",
+  "followup_reports": [
+    "performance-vs-8a1f479-partial-316c05d9-v0.0.21.json"
+  ],
+  "core_rows": 24,
+  "file_rows": 6,
+  "repeatable_regressions_over_10_percent": [],
+  "scope": "Full fixed cohorts retained; native sparse read first flagged and later same-protocol follow-up is within threshold. Earlier runtime cohorts remain separate historical evidence."
+}

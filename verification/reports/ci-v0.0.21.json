@@ -1,0 +1,8 @@
+{
+  "status": "passed",
+  "version": "0.0.21",
+  "run_id": 40821379475,
+  "commit": "657145091d480a7e07b1cb640ff14d468e7fd0b2",
+  "url": "https://github.com/WeiR-h/moonmatbridge/actions/runs/40821379475",
+  "scope": "Actual Linux three-target, independent interop and real Octave UTF16 non-BMP producer/consumer execution."
+}

@@ -1,0 +1,72 @@
+{
+  "status": "passed",
+  "version": "0.0.21",
+  "producer": "SciPy 1.15.3; equal-length independent miINT8 class/field patches; Python zlib compression",
+  "checks": [
+    {
+      "host": "native",
+      "compressed": false,
+      "operations": [
+        "roots",
+        "info-default-rejection",
+        "roundtrip",
+        "compress",
+        "snapshot-tree",
+        "restore-tree",
+        "diff-tree",
+        "select"
+      ],
+      "source_sha256": "8fef6357910a09d4c170a9d06931d3c675e113ee8232a09fc631213e087411db",
+      "output_sha256": "2c1687154a20e614d063cc5ce67a5606e8971f9a2bb1e66e0b377514bcfaad6c"
+    },
+    {
+      "host": "native",
+      "compressed": true,
+      "operations": [
+        "roots",
+        "info-default-rejection",
+        "roundtrip",
+        "compress",
+        "snapshot-tree",
+        "restore-tree",
+        "diff-tree",
+        "select"
+      ],
+      "source_sha256": "07065c28de6e57431c2b6e1c432b94a09354fd1baa9ae57443c1ee1bb79995b6",
+      "output_sha256": "2c1687154a20e614d063cc5ce67a5606e8971f9a2bb1e66e0b377514bcfaad6c"
+    },
+    {
+      "host": "js",
+      "compressed": false,
+      "operations": [
+        "roots",
+        "info-default-rejection",
+        "roundtrip",
+        "compress",
+        "snapshot-tree",
+        "restore-tree",
+        "diff-tree",
+        "select"
+      ],
+      "source_sha256": "8fef6357910a09d4c170a9d06931d3c675e113ee8232a09fc631213e087411db",
+      "output_sha256": "2c1687154a20e614d063cc5ce67a5606e8971f9a2bb1e66e0b377514bcfaad6c"
+    },
+    {
+      "host": "js",
+      "compressed": true,
+      "operations": [
+        "roots",
+        "info-default-rejection",
+        "roundtrip",
+        "compress",
+        "snapshot-tree",
+        "restore-tree",
+        "diff-tree",
+        "select"
+      ],
+      "source_sha256": "07065c28de6e57431c2b6e1c432b94a09354fd1baa9ae57443c1ee1bb79995b6",
+      "output_sha256": "2c1687154a20e614d063cc5ce67a5606e8971f9a2bb1e66e0b377514bcfaad6c"
+    }
+  ],
+  "scope": "Independent raw Latin1 metadata checks; SciPy consumes an equal-length ASCII metadata projection because its field reader requires UTF8. Both CLI hosts check UTF8 defaults, exact uint64, negative zero, compression, snapshots, selection order and atomic failure."
+}

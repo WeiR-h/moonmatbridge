@@ -1,0 +1,3760 @@
+{
+  "status": "passed",
+  "version": "0.0.21",
+  "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+  "checks": [
+    {
+      "host": "native",
+      "format": "v6",
+      "operation": "roundtrip",
+      "status": "passed",
+      "receipt": "Octave 8.4.0 verified 34 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/native-v6-roundtrip.mat",
+      "output_sha256": "41a29c17ef7fd5e9e6979f28d9bd6102935317e203885271ec138c71d2440a24",
+      "source_backend_receipt": "Octave 8.4.0 verified 34 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/native-v6-roundtrip-source-selected.mat",
+      "source_selection_sha256": "41a29c17ef7fd5e9e6979f28d9bd6102935317e203885271ec138c71d2440a24",
+      "source_roots": [
+        {
+          "name": "char_matrix",
+          "class_id": 4,
+          "shape": [
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "cross_nested",
+          "class_id": 1,
+          "shape": [
+            1,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "empty_cell",
+          "class_id": 1,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "empty_char",
+          "class_id": 4,
+          "shape": [
+            0,
+            0
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "empty_double",
+          "class_id": 6,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "empty_int16",
+          "class_id": 10,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "empty_int32",
+          "class_id": 12,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "empty_int64",
+          "class_id": 14,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "empty_int8",
+          "class_id": 8,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "empty_single",
+          "class_id": 7,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "empty_struct",
+          "class_id": 2,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "empty_uint16",
+          "class_id": 11,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "empty_uint32",
+          "class_id": 13,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "empty_uint64",
+          "class_id": 15,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "empty_uint8",
+          "class_id": 9,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "ids",
+          "class_id": 15,
+          "shape": [
+            1,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "mask",
+          "class_id": 9,
+          "shape": [
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": true,
+          "compressed": false
+        },
+        {
+          "name": "measurements",
+          "class_id": 1,
+          "shape": [
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "nd_double",
+          "class_id": 6,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "nd_int16",
+          "class_id": 10,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "nd_int32",
+          "class_id": 12,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "nd_int64",
+          "class_id": 14,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "nd_int8",
+          "class_id": 8,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "nd_single",
+          "class_id": 7,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "nd_uint16",
+          "class_id": 11,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "nd_uint32",
+          "class_id": 13,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "nd_uint64",
+          "class_id": 15,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "nd_uint8",
+          "class_id": 9,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "records",
+          "class_id": 2,
+          "shape": [
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "sparse_complex",
+          "class_id": 5,
+          "shape": [
+            4,
+            3
+          ],
+          "global": false,
+          "complex": true,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "sparse_signal",
+          "class_id": 5,
+          "shape": [
+            4,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "title",
+          "class_id": 4,
+          "shape": [
+            1,
+            13
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "unicode_title",
+          "class_id": 4,
+          "shape": [
+            1,
+            4
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "wave",
+          "class_id": 6,
+          "shape": [
+            1,
+            3
+          ],
+          "global": false,
+          "complex": true,
+          "logical": false,
+          "compressed": false
+        }
+      ]
+    },
+    {
+      "host": "native",
+      "format": "v6",
+      "operation": "compress",
+      "status": "passed",
+      "receipt": "Octave 8.4.0 verified 34 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/native-v6-compress.mat",
+      "output_sha256": "56ace76af7ce698265ae0a59496e81f7f28696c3a8d4444007b0f4de958d412e",
+      "source_backend_receipt": "Octave 8.4.0 verified 34 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/native-v6-compress-source-selected.mat",
+      "source_selection_sha256": "41a29c17ef7fd5e9e6979f28d9bd6102935317e203885271ec138c71d2440a24",
+      "source_roots": [
+        {
+          "name": "char_matrix",
+          "class_id": 4,
+          "shape": [
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "cross_nested",
+          "class_id": 1,
+          "shape": [
+            1,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_cell",
+          "class_id": 1,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_char",
+          "class_id": 4,
+          "shape": [
+            0,
+            0
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_double",
+          "class_id": 6,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_int16",
+          "class_id": 10,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_int32",
+          "class_id": 12,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_int64",
+          "class_id": 14,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_int8",
+          "class_id": 8,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_single",
+          "class_id": 7,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_struct",
+          "class_id": 2,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_uint16",
+          "class_id": 11,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_uint32",
+          "class_id": 13,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_uint64",
+          "class_id": 15,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_uint8",
+          "class_id": 9,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "ids",
+          "class_id": 15,
+          "shape": [
+            1,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "mask",
+          "class_id": 9,
+          "shape": [
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": true,
+          "compressed": true
+        },
+        {
+          "name": "measurements",
+          "class_id": 1,
+          "shape": [
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_double",
+          "class_id": 6,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_int16",
+          "class_id": 10,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_int32",
+          "class_id": 12,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_int64",
+          "class_id": 14,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_int8",
+          "class_id": 8,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_single",
+          "class_id": 7,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_uint16",
+          "class_id": 11,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_uint32",
+          "class_id": 13,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_uint64",
+          "class_id": 15,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_uint8",
+          "class_id": 9,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "records",
+          "class_id": 2,
+          "shape": [
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "sparse_complex",
+          "class_id": 5,
+          "shape": [
+            4,
+            3
+          ],
+          "global": false,
+          "complex": true,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "sparse_signal",
+          "class_id": 5,
+          "shape": [
+            4,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "title",
+          "class_id": 4,
+          "shape": [
+            1,
+            13
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "unicode_title",
+          "class_id": 4,
+          "shape": [
+            1,
+            4
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "wave",
+          "class_id": 6,
+          "shape": [
+            1,
+            3
+          ],
+          "global": false,
+          "complex": true,
+          "logical": false,
+          "compressed": true
+        }
+      ]
+    },
+    {
+      "host": "js",
+      "format": "v6",
+      "operation": "roundtrip",
+      "status": "passed",
+      "receipt": "Octave 8.4.0 verified 34 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/js-v6-roundtrip.mat",
+      "output_sha256": "41a29c17ef7fd5e9e6979f28d9bd6102935317e203885271ec138c71d2440a24",
+      "source_backend_receipt": "Octave 8.4.0 verified 34 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/js-v6-roundtrip-source-selected.mat",
+      "source_selection_sha256": "41a29c17ef7fd5e9e6979f28d9bd6102935317e203885271ec138c71d2440a24",
+      "source_roots": [
+        {
+          "name": "char_matrix",
+          "class_id": 4,
+          "shape": [
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "cross_nested",
+          "class_id": 1,
+          "shape": [
+            1,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "empty_cell",
+          "class_id": 1,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "empty_char",
+          "class_id": 4,
+          "shape": [
+            0,
+            0
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "empty_double",
+          "class_id": 6,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "empty_int16",
+          "class_id": 10,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "empty_int32",
+          "class_id": 12,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "empty_int64",
+          "class_id": 14,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "empty_int8",
+          "class_id": 8,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "empty_single",
+          "class_id": 7,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "empty_struct",
+          "class_id": 2,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "empty_uint16",
+          "class_id": 11,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "empty_uint32",
+          "class_id": 13,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "empty_uint64",
+          "class_id": 15,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "empty_uint8",
+          "class_id": 9,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "ids",
+          "class_id": 15,
+          "shape": [
+            1,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "mask",
+          "class_id": 9,
+          "shape": [
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": true,
+          "compressed": false
+        },
+        {
+          "name": "measurements",
+          "class_id": 1,
+          "shape": [
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "nd_double",
+          "class_id": 6,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "nd_int16",
+          "class_id": 10,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "nd_int32",
+          "class_id": 12,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "nd_int64",
+          "class_id": 14,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "nd_int8",
+          "class_id": 8,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "nd_single",
+          "class_id": 7,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "nd_uint16",
+          "class_id": 11,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "nd_uint32",
+          "class_id": 13,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "nd_uint64",
+          "class_id": 15,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "nd_uint8",
+          "class_id": 9,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "records",
+          "class_id": 2,
+          "shape": [
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "sparse_complex",
+          "class_id": 5,
+          "shape": [
+            4,
+            3
+          ],
+          "global": false,
+          "complex": true,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "sparse_signal",
+          "class_id": 5,
+          "shape": [
+            4,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "title",
+          "class_id": 4,
+          "shape": [
+            1,
+            13
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "unicode_title",
+          "class_id": 4,
+          "shape": [
+            1,
+            4
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": false
+        },
+        {
+          "name": "wave",
+          "class_id": 6,
+          "shape": [
+            1,
+            3
+          ],
+          "global": false,
+          "complex": true,
+          "logical": false,
+          "compressed": false
+        }
+      ]
+    },
+    {
+      "host": "js",
+      "format": "v6",
+      "operation": "compress",
+      "status": "passed",
+      "receipt": "Octave 8.4.0 verified 34 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/js-v6-compress.mat",
+      "output_sha256": "56ace76af7ce698265ae0a59496e81f7f28696c3a8d4444007b0f4de958d412e",
+      "source_backend_receipt": "Octave 8.4.0 verified 34 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/js-v6-compress-source-selected.mat",
+      "source_selection_sha256": "41a29c17ef7fd5e9e6979f28d9bd6102935317e203885271ec138c71d2440a24",
+      "source_roots": [
+        {
+          "name": "char_matrix",
+          "class_id": 4,
+          "shape": [
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "cross_nested",
+          "class_id": 1,
+          "shape": [
+            1,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_cell",
+          "class_id": 1,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_char",
+          "class_id": 4,
+          "shape": [
+            0,
+            0
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_double",
+          "class_id": 6,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_int16",
+          "class_id": 10,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_int32",
+          "class_id": 12,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_int64",
+          "class_id": 14,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_int8",
+          "class_id": 8,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_single",
+          "class_id": 7,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_struct",
+          "class_id": 2,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_uint16",
+          "class_id": 11,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_uint32",
+          "class_id": 13,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_uint64",
+          "class_id": 15,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_uint8",
+          "class_id": 9,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "ids",
+          "class_id": 15,
+          "shape": [
+            1,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "mask",
+          "class_id": 9,
+          "shape": [
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": true,
+          "compressed": true
+        },
+        {
+          "name": "measurements",
+          "class_id": 1,
+          "shape": [
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_double",
+          "class_id": 6,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_int16",
+          "class_id": 10,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_int32",
+          "class_id": 12,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_int64",
+          "class_id": 14,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_int8",
+          "class_id": 8,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_single",
+          "class_id": 7,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_uint16",
+          "class_id": 11,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_uint32",
+          "class_id": 13,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_uint64",
+          "class_id": 15,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_uint8",
+          "class_id": 9,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "records",
+          "class_id": 2,
+          "shape": [
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "sparse_complex",
+          "class_id": 5,
+          "shape": [
+            4,
+            3
+          ],
+          "global": false,
+          "complex": true,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "sparse_signal",
+          "class_id": 5,
+          "shape": [
+            4,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "title",
+          "class_id": 4,
+          "shape": [
+            1,
+            13
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "unicode_title",
+          "class_id": 4,
+          "shape": [
+            1,
+            4
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "wave",
+          "class_id": 6,
+          "shape": [
+            1,
+            3
+          ],
+          "global": false,
+          "complex": true,
+          "logical": false,
+          "compressed": true
+        }
+      ]
+    },
+    {
+      "host": "native",
+      "format": "v7",
+      "operation": "roundtrip",
+      "status": "passed",
+      "receipt": "Octave 8.4.0 verified 34 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/native-v7-roundtrip.mat",
+      "output_sha256": "41a29c17ef7fd5e9e6979f28d9bd6102935317e203885271ec138c71d2440a24",
+      "source_backend_receipt": "Octave 8.4.0 verified 34 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/native-v7-roundtrip-source-selected.mat",
+      "source_selection_sha256": "41a29c17ef7fd5e9e6979f28d9bd6102935317e203885271ec138c71d2440a24",
+      "source_roots": [
+        {
+          "name": "char_matrix",
+          "class_id": 4,
+          "shape": [
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "cross_nested",
+          "class_id": 1,
+          "shape": [
+            1,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_cell",
+          "class_id": 1,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_char",
+          "class_id": 4,
+          "shape": [
+            0,
+            0
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_double",
+          "class_id": 6,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_int16",
+          "class_id": 10,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_int32",
+          "class_id": 12,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_int64",
+          "class_id": 14,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_int8",
+          "class_id": 8,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_single",
+          "class_id": 7,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_struct",
+          "class_id": 2,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_uint16",
+          "class_id": 11,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_uint32",
+          "class_id": 13,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_uint64",
+          "class_id": 15,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_uint8",
+          "class_id": 9,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "ids",
+          "class_id": 15,
+          "shape": [
+            1,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "mask",
+          "class_id": 9,
+          "shape": [
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": true,
+          "compressed": true
+        },
+        {
+          "name": "measurements",
+          "class_id": 1,
+          "shape": [
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_double",
+          "class_id": 6,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_int16",
+          "class_id": 10,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_int32",
+          "class_id": 12,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_int64",
+          "class_id": 14,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_int8",
+          "class_id": 8,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_single",
+          "class_id": 7,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_uint16",
+          "class_id": 11,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_uint32",
+          "class_id": 13,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_uint64",
+          "class_id": 15,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_uint8",
+          "class_id": 9,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "records",
+          "class_id": 2,
+          "shape": [
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "sparse_complex",
+          "class_id": 5,
+          "shape": [
+            4,
+            3
+          ],
+          "global": false,
+          "complex": true,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "sparse_signal",
+          "class_id": 5,
+          "shape": [
+            4,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "title",
+          "class_id": 4,
+          "shape": [
+            1,
+            13
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "unicode_title",
+          "class_id": 4,
+          "shape": [
+            1,
+            4
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "wave",
+          "class_id": 6,
+          "shape": [
+            1,
+            3
+          ],
+          "global": false,
+          "complex": true,
+          "logical": false,
+          "compressed": true
+        }
+      ]
+    },
+    {
+      "host": "native",
+      "format": "v7",
+      "operation": "compress",
+      "status": "passed",
+      "receipt": "Octave 8.4.0 verified 34 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/native-v7-compress.mat",
+      "output_sha256": "56ace76af7ce698265ae0a59496e81f7f28696c3a8d4444007b0f4de958d412e",
+      "source_backend_receipt": "Octave 8.4.0 verified 34 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/native-v7-compress-source-selected.mat",
+      "source_selection_sha256": "41a29c17ef7fd5e9e6979f28d9bd6102935317e203885271ec138c71d2440a24",
+      "source_roots": [
+        {
+          "name": "char_matrix",
+          "class_id": 4,
+          "shape": [
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "cross_nested",
+          "class_id": 1,
+          "shape": [
+            1,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_cell",
+          "class_id": 1,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_char",
+          "class_id": 4,
+          "shape": [
+            0,
+            0
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_double",
+          "class_id": 6,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_int16",
+          "class_id": 10,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_int32",
+          "class_id": 12,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_int64",
+          "class_id": 14,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_int8",
+          "class_id": 8,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_single",
+          "class_id": 7,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_struct",
+          "class_id": 2,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_uint16",
+          "class_id": 11,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_uint32",
+          "class_id": 13,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_uint64",
+          "class_id": 15,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_uint8",
+          "class_id": 9,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "ids",
+          "class_id": 15,
+          "shape": [
+            1,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "mask",
+          "class_id": 9,
+          "shape": [
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": true,
+          "compressed": true
+        },
+        {
+          "name": "measurements",
+          "class_id": 1,
+          "shape": [
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_double",
+          "class_id": 6,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_int16",
+          "class_id": 10,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_int32",
+          "class_id": 12,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_int64",
+          "class_id": 14,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_int8",
+          "class_id": 8,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_single",
+          "class_id": 7,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_uint16",
+          "class_id": 11,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_uint32",
+          "class_id": 13,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_uint64",
+          "class_id": 15,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_uint8",
+          "class_id": 9,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "records",
+          "class_id": 2,
+          "shape": [
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "sparse_complex",
+          "class_id": 5,
+          "shape": [
+            4,
+            3
+          ],
+          "global": false,
+          "complex": true,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "sparse_signal",
+          "class_id": 5,
+          "shape": [
+            4,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "title",
+          "class_id": 4,
+          "shape": [
+            1,
+            13
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "unicode_title",
+          "class_id": 4,
+          "shape": [
+            1,
+            4
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "wave",
+          "class_id": 6,
+          "shape": [
+            1,
+            3
+          ],
+          "global": false,
+          "complex": true,
+          "logical": false,
+          "compressed": true
+        }
+      ]
+    },
+    {
+      "host": "js",
+      "format": "v7",
+      "operation": "roundtrip",
+      "status": "passed",
+      "receipt": "Octave 8.4.0 verified 34 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/js-v7-roundtrip.mat",
+      "output_sha256": "41a29c17ef7fd5e9e6979f28d9bd6102935317e203885271ec138c71d2440a24",
+      "source_backend_receipt": "Octave 8.4.0 verified 34 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/js-v7-roundtrip-source-selected.mat",
+      "source_selection_sha256": "41a29c17ef7fd5e9e6979f28d9bd6102935317e203885271ec138c71d2440a24",
+      "source_roots": [
+        {
+          "name": "char_matrix",
+          "class_id": 4,
+          "shape": [
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "cross_nested",
+          "class_id": 1,
+          "shape": [
+            1,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_cell",
+          "class_id": 1,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_char",
+          "class_id": 4,
+          "shape": [
+            0,
+            0
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_double",
+          "class_id": 6,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_int16",
+          "class_id": 10,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_int32",
+          "class_id": 12,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_int64",
+          "class_id": 14,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_int8",
+          "class_id": 8,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_single",
+          "class_id": 7,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_struct",
+          "class_id": 2,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_uint16",
+          "class_id": 11,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_uint32",
+          "class_id": 13,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_uint64",
+          "class_id": 15,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_uint8",
+          "class_id": 9,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "ids",
+          "class_id": 15,
+          "shape": [
+            1,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "mask",
+          "class_id": 9,
+          "shape": [
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": true,
+          "compressed": true
+        },
+        {
+          "name": "measurements",
+          "class_id": 1,
+          "shape": [
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_double",
+          "class_id": 6,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_int16",
+          "class_id": 10,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_int32",
+          "class_id": 12,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_int64",
+          "class_id": 14,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_int8",
+          "class_id": 8,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_single",
+          "class_id": 7,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_uint16",
+          "class_id": 11,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_uint32",
+          "class_id": 13,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_uint64",
+          "class_id": 15,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_uint8",
+          "class_id": 9,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "records",
+          "class_id": 2,
+          "shape": [
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "sparse_complex",
+          "class_id": 5,
+          "shape": [
+            4,
+            3
+          ],
+          "global": false,
+          "complex": true,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "sparse_signal",
+          "class_id": 5,
+          "shape": [
+            4,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "title",
+          "class_id": 4,
+          "shape": [
+            1,
+            13
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "unicode_title",
+          "class_id": 4,
+          "shape": [
+            1,
+            4
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "wave",
+          "class_id": 6,
+          "shape": [
+            1,
+            3
+          ],
+          "global": false,
+          "complex": true,
+          "logical": false,
+          "compressed": true
+        }
+      ]
+    },
+    {
+      "host": "js",
+      "format": "v7",
+      "operation": "compress",
+      "status": "passed",
+      "receipt": "Octave 8.4.0 verified 34 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/js-v7-compress.mat",
+      "output_sha256": "56ace76af7ce698265ae0a59496e81f7f28696c3a8d4444007b0f4de958d412e",
+      "source_backend_receipt": "Octave 8.4.0 verified 34 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/js-v7-compress-source-selected.mat",
+      "source_selection_sha256": "41a29c17ef7fd5e9e6979f28d9bd6102935317e203885271ec138c71d2440a24",
+      "source_roots": [
+        {
+          "name": "char_matrix",
+          "class_id": 4,
+          "shape": [
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "cross_nested",
+          "class_id": 1,
+          "shape": [
+            1,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_cell",
+          "class_id": 1,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_char",
+          "class_id": 4,
+          "shape": [
+            0,
+            0
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_double",
+          "class_id": 6,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_int16",
+          "class_id": 10,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_int32",
+          "class_id": 12,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_int64",
+          "class_id": 14,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_int8",
+          "class_id": 8,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_single",
+          "class_id": 7,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_struct",
+          "class_id": 2,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_uint16",
+          "class_id": 11,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_uint32",
+          "class_id": 13,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_uint64",
+          "class_id": 15,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "empty_uint8",
+          "class_id": 9,
+          "shape": [
+            0,
+            2,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "ids",
+          "class_id": 15,
+          "shape": [
+            1,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "mask",
+          "class_id": 9,
+          "shape": [
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": true,
+          "compressed": true
+        },
+        {
+          "name": "measurements",
+          "class_id": 1,
+          "shape": [
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_double",
+          "class_id": 6,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_int16",
+          "class_id": 10,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_int32",
+          "class_id": 12,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_int64",
+          "class_id": 14,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_int8",
+          "class_id": 8,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_single",
+          "class_id": 7,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_uint16",
+          "class_id": 11,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_uint32",
+          "class_id": 13,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_uint64",
+          "class_id": 15,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "nd_uint8",
+          "class_id": 9,
+          "shape": [
+            2,
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "records",
+          "class_id": 2,
+          "shape": [
+            2,
+            2
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "sparse_complex",
+          "class_id": 5,
+          "shape": [
+            4,
+            3
+          ],
+          "global": false,
+          "complex": true,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "sparse_signal",
+          "class_id": 5,
+          "shape": [
+            4,
+            3
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "title",
+          "class_id": 4,
+          "shape": [
+            1,
+            13
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "unicode_title",
+          "class_id": 4,
+          "shape": [
+            1,
+            4
+          ],
+          "global": false,
+          "complex": false,
+          "logical": false,
+          "compressed": true
+        },
+        {
+          "name": "wave",
+          "class_id": 6,
+          "shape": [
+            1,
+            3
+          ],
+          "global": false,
+          "complex": true,
+          "logical": false,
+          "compressed": true
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "file": "octave-v6.mat",
+      "bytes": 8048,
+      "sha256": "111780a5fb75d2a4243f211170a8ed563c937b5106c9bbc53d6075c312597893"
+    },
+    {
+      "file": "octave-v7.mat",
+      "bytes": 3060,
+      "sha256": "46be561d87fb4b0256c01df3276eba269e3140493f376ec8d9a655de62aae25a"
+    }
+  ],
+  "producer_variants": [
+    {
+      "file": "producer-small_char_matrix-v6.mat",
+      "sha256": "1454e9bdb943f9b7785d0569bbcc344a9e23f26e274b734a2792a0eece7e6192",
+      "hosts": [
+        {
+          "host": "native",
+          "returncode": 1,
+          "diagnostic": "{\"status\":\"error\",\"code\":\"truncated-data\",\"offset\":128,\"message\":\"Data element payload exceeds enclosing stream\"}"
+        },
+        {
+          "host": "js",
+          "returncode": 1,
+          "diagnostic": "{\"status\":\"error\",\"code\":\"truncated-data\",\"offset\":128,\"message\":\"Data element payload exceeds enclosing stream\"}"
+        }
+      ],
+      "format_analysis": {
+        "file": "producer-small_char_matrix-v6.mat",
+        "sha256": "1454e9bdb943f9b7785d0569bbcc344a9e23f26e274b734a2792a0eece7e6192",
+        "classification": "nonconforming_producer_variant",
+        "evidence": {
+          "declared_body_bytes": 76,
+          "actual_body_bytes": 72,
+          "class_id": 4,
+          "logical": false,
+          "second_flags_word": 1,
+          "shape": [
+            2,
+            2
+          ],
+          "name": "small_char_matrix",
+          "violation": "miMATRIX declares four more body bytes than are present; small UTF8 element itself is complete.",
+          "format_section": "MAT-File Format: Data Element Format / Number of Bytes"
+        },
+        "reference": "https://www.mathworks.com/help/pdf_doc/matlab/matfile_format.pdf",
+        "producer_source": "https://github.com/gnu-octave/octave/blob/release-8-4-0/libinterp/corefcn/ls-mat5.cc"
+      },
+      "scipy": "passed",
+      "octave_self_load": "Octave 8.4.0 verified 1 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/producer-small_char_matrix-v6.mat",
+      "status": "unresolved_producer_variant"
+    },
+    {
+      "file": "producer-small_char_matrix-v7.mat",
+      "sha256": "16fa8a093feb58a49b1d56fca4f329cbc78586bd8e42f6b80b6f551d9589f871",
+      "hosts": [
+        {
+          "host": "native",
+          "returncode": 1,
+          "diagnostic": "{\"status\":\"error\",\"code\":\"truncated-data\",\"offset\":0,\"message\":\"Data element payload exceeds enclosing stream\"}"
+        },
+        {
+          "host": "js",
+          "returncode": 1,
+          "diagnostic": "{\"status\":\"error\",\"code\":\"truncated-data\",\"offset\":0,\"message\":\"Data element payload exceeds enclosing stream\"}"
+        }
+      ],
+      "format_analysis": {
+        "file": "producer-small_char_matrix-v7.mat",
+        "sha256": "16fa8a093feb58a49b1d56fca4f329cbc78586bd8e42f6b80b6f551d9589f871",
+        "classification": "nonconforming_producer_variant",
+        "evidence": {
+          "declared_body_bytes": 76,
+          "actual_body_bytes": 72,
+          "class_id": 4,
+          "logical": false,
+          "second_flags_word": 1,
+          "shape": [
+            2,
+            2
+          ],
+          "name": "small_char_matrix",
+          "violation": "miMATRIX declares four more body bytes than are present; small UTF8 element itself is complete.",
+          "format_section": "MAT-File Format: Data Element Format / Number of Bytes"
+        },
+        "reference": "https://www.mathworks.com/help/pdf_doc/matlab/matfile_format.pdf",
+        "producer_source": "https://github.com/gnu-octave/octave/blob/release-8-4-0/libinterp/corefcn/ls-mat5.cc"
+      },
+      "scipy": "passed",
+      "octave_self_load": "Octave 8.4.0 verified 1 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/producer-small_char_matrix-v7.mat",
+      "status": "unresolved_producer_variant"
+    },
+    {
+      "file": "producer-sparse_logical-v6.mat",
+      "sha256": "dd6e3313a008774f960daaf3e5d94e4c06828e81034bb6ee187cb5dbe69b93b2",
+      "hosts": [
+        {
+          "host": "native",
+          "returncode": 1,
+          "diagnostic": "{\"status\":\"error\",\"code\":\"unsupported-flags\",\"offset\":144,\"message\":\"Unknown flags or nonstandard dense reserved metadata\"}"
+        },
+        {
+          "host": "js",
+          "returncode": 1,
+          "diagnostic": "{\"status\":\"error\",\"code\":\"unsupported-flags\",\"offset\":144,\"message\":\"Unknown flags or nonstandard dense reserved metadata\"}"
+        }
+      ],
+      "format_analysis": {
+        "file": "producer-sparse_logical-v6.mat",
+        "sha256": "dd6e3313a008774f960daaf3e5d94e4c06828e81034bb6ee187cb5dbe69b93b2",
+        "classification": "nonconforming_producer_variant",
+        "evidence": {
+          "declared_body_bytes": 120,
+          "actual_body_bytes": 120,
+          "class_id": 9,
+          "logical": true,
+          "second_flags_word": 2,
+          "shape": [
+            4,
+            3
+          ],
+          "name": "sparse_logical",
+          "payload_tags": [
+            [
+              5,
+              8
+            ],
+            [
+              5,
+              16
+            ],
+            [
+              9,
+              16
+            ]
+          ],
+          "violation": "mxUINT8 logical dense class has CSC ir/jc/value subelements and a capacity word; this is not a valid dense payload or mxSPARSE class.",
+          "format_section": "MAT-File Format: Array Flags Class / Sparse Array Subelements"
+        },
+        "reference": "https://www.mathworks.com/help/pdf_doc/matlab/matfile_format.pdf",
+        "producer_source": "https://github.com/gnu-octave/octave/blob/release-8-4-0/libinterp/corefcn/ls-mat5.cc"
+      },
+      "scipy": "ValueError: cannot reshape array of size 2 into shape (3,4)",
+      "octave_self_load": "Octave 8.4.0 verified 1 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/producer-sparse_logical-v6.mat",
+      "status": "unresolved_producer_variant"
+    },
+    {
+      "file": "producer-sparse_logical-v7.mat",
+      "sha256": "546377442fd095bf5e1f28a91476a8c134a4fbd56e7a95bf63ae584b94f4a3cb",
+      "hosts": [
+        {
+          "host": "native",
+          "returncode": 1,
+          "diagnostic": "{\"status\":\"error\",\"code\":\"unsupported-flags\",\"offset\":16,\"message\":\"Unknown flags or nonstandard dense reserved metadata\"}"
+        },
+        {
+          "host": "js",
+          "returncode": 1,
+          "diagnostic": "{\"status\":\"error\",\"code\":\"unsupported-flags\",\"offset\":16,\"message\":\"Unknown flags or nonstandard dense reserved metadata\"}"
+        }
+      ],
+      "format_analysis": {
+        "file": "producer-sparse_logical-v7.mat",
+        "sha256": "546377442fd095bf5e1f28a91476a8c134a4fbd56e7a95bf63ae584b94f4a3cb",
+        "classification": "nonconforming_producer_variant",
+        "evidence": {
+          "declared_body_bytes": 120,
+          "actual_body_bytes": 120,
+          "class_id": 9,
+          "logical": true,
+          "second_flags_word": 2,
+          "shape": [
+            4,
+            3
+          ],
+          "name": "sparse_logical",
+          "payload_tags": [
+            [
+              5,
+              8
+            ],
+            [
+              5,
+              16
+            ],
+            [
+              9,
+              16
+            ]
+          ],
+          "violation": "mxUINT8 logical dense class has CSC ir/jc/value subelements and a capacity word; this is not a valid dense payload or mxSPARSE class.",
+          "format_section": "MAT-File Format: Array Flags Class / Sparse Array Subelements"
+        },
+        "reference": "https://www.mathworks.com/help/pdf_doc/matlab/matfile_format.pdf",
+        "producer_source": "https://github.com/gnu-octave/octave/blob/release-8-4-0/libinterp/corefcn/ls-mat5.cc"
+      },
+      "scipy": "ValueError: cannot reshape array of size 2 into shape (3,4)",
+      "octave_self_load": "Octave 8.4.0 verified 1 variables: /home/runner/work/moonmatbridge/moonmatbridge/verification/local/octave/producer-sparse_logical-v7.mat",
+      "status": "unresolved_producer_variant"
+    }
+  ],
+  "scope": "Actual GNU Octave v6/v7 producer and consumer; not a MATLAB execution claim. Legacy objects and global flags are verified separately.",
+  "tool": "8.4.0",
+  "production": "Octave 8.4.0 produced 34 variables in v6/v7 formats",
+  "unicode_storage": {
+    "status": "passed",
+    "shape": [
+      1,
+      4
+    ],
+    "storage_tag": 17,
+    "utf16_units": 4,
+    "unicode_scalars": 3,
+    "source_sha256": "111780a5fb75d2a4243f211170a8ed563c937b5106c9bbc53d6075c312597893",
+    "scope": "Actual Octave producer uses four UTF16 units for three scalars; both hosts and Octave consumer verify the complete file."
+  }
+}

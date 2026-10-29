@@ -1,0 +1,119 @@
+{
+  "status": "classified",
+  "version": "0.0.21",
+  "cases": [
+    {
+      "file": "producer-small_char_matrix-v6.mat",
+      "sha256": "d23d83890f497af58962c53a7061a0fd322b8f933656a2fc9d35a020f072f68a",
+      "classification": "nonconforming_producer_variant",
+      "evidence": {
+        "declared_body_bytes": 76,
+        "actual_body_bytes": 72,
+        "class_id": 4,
+        "logical": false,
+        "second_flags_word": 1,
+        "shape": [
+          2,
+          2
+        ],
+        "name": "small_char_matrix",
+        "violation": "miMATRIX declares four more body bytes than are present; small UTF8 element itself is complete.",
+        "format_section": "MAT-File Format: Data Element Format / Number of Bytes"
+      },
+      "reference": "https://www.mathworks.com/help/pdf_doc/matlab/matfile_format.pdf",
+      "producer_source": "https://github.com/gnu-octave/octave/blob/release-8-4-0/libinterp/corefcn/ls-mat5.cc"
+    },
+    {
+      "file": "producer-small_char_matrix-v7.mat",
+      "sha256": "3bb116fec5e28f4c4d6f6ba2823dcc98ee1864d412e0ef82e26760176fc41ecb",
+      "classification": "nonconforming_producer_variant",
+      "evidence": {
+        "declared_body_bytes": 76,
+        "actual_body_bytes": 72,
+        "class_id": 4,
+        "logical": false,
+        "second_flags_word": 1,
+        "shape": [
+          2,
+          2
+        ],
+        "name": "small_char_matrix",
+        "violation": "miMATRIX declares four more body bytes than are present; small UTF8 element itself is complete.",
+        "format_section": "MAT-File Format: Data Element Format / Number of Bytes"
+      },
+      "reference": "https://www.mathworks.com/help/pdf_doc/matlab/matfile_format.pdf",
+      "producer_source": "https://github.com/gnu-octave/octave/blob/release-8-4-0/libinterp/corefcn/ls-mat5.cc"
+    },
+    {
+      "file": "producer-sparse_logical-v6.mat",
+      "sha256": "5c760b3fa57eb59e28dbf9b000dbd055bc15d12d84b66b3bdc9d5429dfab1209",
+      "classification": "nonconforming_producer_variant",
+      "evidence": {
+        "declared_body_bytes": 120,
+        "actual_body_bytes": 120,
+        "class_id": 9,
+        "logical": true,
+        "second_flags_word": 2,
+        "shape": [
+          4,
+          3
+        ],
+        "name": "sparse_logical",
+        "payload_tags": [
+          [
+            5,
+            8
+          ],
+          [
+            5,
+            16
+          ],
+          [
+            9,
+            16
+          ]
+        ],
+        "violation": "mxUINT8 logical dense class has CSC ir/jc/value subelements and a capacity word; this is not a valid dense payload or mxSPARSE class.",
+        "format_section": "MAT-File Format: Array Flags Class / Sparse Array Subelements"
+      },
+      "reference": "https://www.mathworks.com/help/pdf_doc/matlab/matfile_format.pdf",
+      "producer_source": "https://github.com/gnu-octave/octave/blob/release-8-4-0/libinterp/corefcn/ls-mat5.cc"
+    },
+    {
+      "file": "producer-sparse_logical-v7.mat",
+      "sha256": "9da49c15b4629c7edee4f41261195ce4f77130be3af4fc26e7d6b2ff1c60b543",
+      "classification": "nonconforming_producer_variant",
+      "evidence": {
+        "declared_body_bytes": 120,
+        "actual_body_bytes": 120,
+        "class_id": 9,
+        "logical": true,
+        "second_flags_word": 2,
+        "shape": [
+          4,
+          3
+        ],
+        "name": "sparse_logical",
+        "payload_tags": [
+          [
+            5,
+            8
+          ],
+          [
+            5,
+            16
+          ],
+          [
+            9,
+            16
+          ]
+        ],
+        "violation": "mxUINT8 logical dense class has CSC ir/jc/value subelements and a capacity word; this is not a valid dense payload or mxSPARSE class.",
+        "format_section": "MAT-File Format: Array Flags Class / Sparse Array Subelements"
+      },
+      "reference": "https://www.mathworks.com/help/pdf_doc/matlab/matfile_format.pdf",
+      "producer_source": "https://github.com/gnu-octave/octave/blob/release-8-4-0/libinterp/corefcn/ls-mat5.cc"
+    }
+  ],
+  "scope": "Independent length/class evidence for fixed fixture hashes. Octave/SciPy consumption remains recorded separately; accepting malformed input is not standard conformance."
+}
