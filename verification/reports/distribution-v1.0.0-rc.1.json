@@ -1,0 +1,11 @@
+{
+  "status": "partial",
+  "version": "1.0.0-rc.1",
+  "github": "https://github.com/WeiR-h/moonmatbridge/releases/tag/v1.0.0-rc.1",
+  "github_public_status": "passed",
+  "public_assets": 32,
+  "mooncakes_status": "blocked",
+  "mooncakes_http_status": 403,
+  "latest_public_mooncakes_version": "0.0.22",
+  "scope": "Actual GitHub candidate consumption passed; the registry version constraint prevents dual-channel completion."
+}

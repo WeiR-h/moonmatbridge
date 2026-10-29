@@ -1,0 +1,17 @@
+{
+  "status": "blocked",
+  "version": "1.0.0-rc.1",
+  "latest_public_mooncakes_version": "0.0.22",
+  "checked_at": "2026-10-29T08:05:25.515150+00:00",
+  "official_sdk_url": "https://cli.moonbitlang.com/binaries/latest/moonbit-windows-x86_64.zip",
+  "publisher_version": "moon 0.1.20261028 (e1e1f15 2026-10-28)",
+  "http_status": 403,
+  "server_detail": "In this very early stage, the major version must be '0'. The version should follow the format of `0.x.y`",
+  "old_publisher_result": "Fixed 20260920 publisher rejects the same major version.",
+  "new_publisher_result": "Official 20261028 moon/mooncake complete original and extracted-package checks, then server returns 403 on publish --dry-run.",
+  "binaries_sha256": {
+    "moon.exe": "a0dacebba5082d20dfc9ca22d65cfb4effe714d5745deec4d7e0598389ff425a",
+    "mooncake.exe": "a13786a619a6753f44ad11c73a67f67ec14ebb1df5fd0af36c8ec1461e7f4d8f"
+  },
+  "scope": "No candidate uploaded to Mooncakes. GitHub candidate publication is independent. Formal v1.0 dual-channel gate remains closed."
+}

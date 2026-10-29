@@ -1,0 +1,30 @@
+{
+  "status": "blocked",
+  "version": "1.0.0-rc.1",
+  "evidence_version": "1.0.0-rc.1",
+  "performance_version": "0.0.21",
+  "runtime_source_sha256": "533ddf4f1cb995bec868ab8752b7dd97ec3cbce9fddc958915c545f4690fc507",
+  "evidence_sha256": {
+    "v1.0.0-rc.1.json": "146d3659e9ca5e416d6d15211dbeef48ddf51e5abab7d5d95b40f25ae374123c",
+    "compatibility-v1.0.0-rc.1.json": "677f1eab57651f46d9ece6a660f33674ef1ffb919d4e0829205df2daf402174b",
+    "name-encoding-v1.0.0-rc.1.json": "8a5ab147924ed1bb57c421ab15e8b7b400fb75fce74cda2e4bdb124d6ff9bc74",
+    "api-contract-v1.0.0-rc.1.json": "13ac052e65d430075c0d4d85c8d34d3069bebf62abc7d2e1d63a2f6f16e6bc31",
+    "ci-v1.0.0-rc.1.json": "51c55d40bd6185c8c99893ade7a027303b47749a960b1b50a2474290da2c5fcc",
+    "public-downloads-v1.0.0-rc.1.json": "d835fbcc8b029bcd99cf450276f5c2023135005d3e67ec675fa5cee20b81eff1",
+    "workflows-public-v1.0.0-rc.1.json": "a4970053539194d97c9eabc0c753b8fd19ec834a53874cfd59976178a971e5b5",
+    "tree-operations-public-v1.0.0-rc.1.json": "4268699a25f0827bfb6efd4926097247a58d9287088d9917b0a5a07bb64db3ed",
+    "source-operations-public-v1.0.0-rc.1.json": "5b5537f19a1d93b3bb2359737534e529dcf3c9adda02f41dd10e1230b26614f8",
+    "tree-close-public-v1.0.0-rc.1.json": "4f0cbcabcc9bbdc2afa3afa43df68820bd06ee6f20a0ddd13281b232d126929a",
+    "licenses-v1.0.0-rc.1.json": "0e50d9efdd427d84774582347aac0df0c129f8735df38927e4b491001b48ff23",
+    "octave-v1.0.0-rc.1.json": "0b891c90f0e51ecf934b9cd45492f716d9995c9bfe701a3a41f397c00723199a",
+    "producer-variants-v1.0.0-rc.1.json": "c9f31897d153434f513ea086b39a4580b6e7cf7418b3f971fe9944dc6962b57b",
+    "compatibility-gaps-v1.0.0-rc.1.json": "7eb1901c37787ccab7adba63dd9223ceb0d9b0fb5fc51a8de23bd38a726e1f1f",
+    "performance-vs-8a1f479-v0.0.21.json": "e2b0ed37934282e2d205df3178cbe4f6f510cd5c6f3991a531f7875e1c33415f",
+    "file-performance-v0.0.21.json": "3bf6a811306b435aff10204e8a8d5b12bb3df0fba421669049b2f288469b35c2",
+    "performance-vs-8a1f479-partial-316c05d9-v0.0.21.json": "81a8837bb522da0bc78dcec25860f06e90c9a80e2112f3dabeed2fddb4d7634c"
+  },
+  "blockers": [
+    "missing:mooncakes-v1.0.0-rc.1.json"
+  ],
+  "scope": "Public basic-class data compatibility, real Octave Unicode, fixed-runtime performance and public package/assets; MATLAB execution is not asserted."
+}
