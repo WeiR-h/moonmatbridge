@@ -7,7 +7,7 @@ from scipy.io import savemat, loadmat
 from scipy.io.matlab import MatlabObject
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = json.loads((ROOT/'package.json').read_text())['version']
+VERSION = json.loads((ROOT/'package.json').read_text(encoding="utf-8"))['version']
 
 def main():
     out = ROOT/'verification/local/names'
@@ -63,7 +63,7 @@ def main():
             run(['snapshot-tree',path,snapshot]);run(['restore-tree',snapshot,restored])
             report=out/f'{host}-{compressed}-diff.json';report.unlink(missing_ok=True)
             run(['diff-tree',path,restored,report])
-            assert json.loads(report.read_text())['content_equal']
+            assert json.loads(report.read_text(encoding="utf-8"))['content_equal']
             selected=out/f'{host}-{compressed}-selected.mat';selected.unlink(missing_ok=True)
             run(['select',path,selected,'résumé','café'])
             selected_roots=json.loads(run(['roots',selected]).stdout)

@@ -13,7 +13,7 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = json.loads((ROOT / "package.json").read_text())["version"]
+VERSION = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))["version"]
 REPO = "WeiR-h/moonmatbridge"
 REPORTS = ROOT / "verification/reports"
 MANIFEST = "https://mooncakes.io/api/v0/manifest/WeiR-h/moonmatbridge"
@@ -37,7 +37,7 @@ def write_report(name, value):
 
 def mooncakes():
     fingerprint = run(["node", "--input-type=module", "-e", "import {sourceFingerprint} from './scripts/verify.mjs'; console.log(sourceFingerprint().sha256);"]).stdout.strip()
-    verified = json.loads((REPORTS / f"v{VERSION}.json").read_text())
+    verified = json.loads((REPORTS / f"v{VERSION}.json").read_text(encoding="utf-8"))
     assert verified["status"] == "passed" and fingerprint == verified["source"]["sha256"], "Source changed after verification"
     current = manifest()
     already_registered = any(v["version"] == VERSION for v in current["versions"])
@@ -66,8 +66,8 @@ def mooncakes():
         time.sleep(10)
     else: raise RuntimeError("Public build is not confirmed; do not mark publication complete")
     print(run(["node", "scripts/registry-verify.mjs"]).stdout.strip(), flush=True)
-    installed = json.loads((REPORTS / f"registry-v{VERSION}.json").read_text())
-    audit = json.loads((REPORTS / f"mooncake-audit-v{VERSION}.json").read_text())
+    installed = json.loads((REPORTS / f"registry-v{VERSION}.json").read_text(encoding="utf-8"))
+    audit = json.loads((REPORTS / f"mooncake-audit-v{VERSION}.json").read_text(encoding="utf-8"))
     assert installed["status"] == "passed"
     assert current["metadata"]["checksum"] == audit["archive_sha256"], "Registry archive differs from audited archive"
     write_report("mooncakes", {"status": "passed", "version": VERSION, "module": REPO,
@@ -130,8 +130,8 @@ def public_workflows(directory, exe):
 
 
 def github():
-    local = json.loads((REPORTS / f"v{VERSION}.json").read_text())
-    release = json.loads((ROOT / f"dist/release-v{VERSION}.json").read_text())
+    local = json.loads((REPORTS / f"v{VERSION}.json").read_text(encoding="utf-8"))
+    release = json.loads((ROOT / f"dist/release-v{VERSION}.json").read_text(encoding="utf-8"))
     assert local["source"]["sha256"] == release["source_sha256"]
     tag = f"v{VERSION}"
     assets = [ROOT / "dist" / row["file"] for row in release["archives"]]

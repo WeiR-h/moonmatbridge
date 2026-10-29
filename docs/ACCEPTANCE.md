@@ -1,26 +1,25 @@
-# MoonMatBridge v0.0.11 验收索引
+# MoonMatBridge 项目检查索引
 
-本轮保持 MAT Level 5 公开基本类及递归混合数据级读写方向。报名初审通过依据参赛者提供的通知记录；最终验收材料尚待提交和正式回执。
+当前版本：**v0.1.2**。核心格式处理、压缩、比较、快照和资源校验由 MoonBit 实现，宿主负责文件与进程适配。本页对应项目的九项检查入口；持续更新公开仓库，无需另行提交表格。
 
-## 安装和复现
+| 检查项 | 仓库入口与复现方式 |
+| --- | --- |
+| MoonBit 主要实现、moonc ≥ 0.10.16 | [源码](../src/)、[固定工具链](../toolchain.lock.json)；`python scripts/setup-toolchain.py --configure` 后运行 `node scripts/toolchain.mjs`，核对实际 moonc |
+| 公开仓库与提交记录 | [GitHub](https://github.com/WeiR-h/moonmatbridge)、[提交记录](https://github.com/WeiR-h/moonmatbridge/commits/main)、[版本记录](../CHANGELOG.md) |
+| 结构清晰、核心功能可运行 | [API](API.md)、[格式与额度](FORMAT.md)、[兼容矩阵](COMPATIBILITY_MATRIX.md)；核心包、interchange 和宿主分开维护 |
+| README 包含目标、安装、用法和示例 | [README](../README.md)、[文件源](SOURCES.md)、[名称编码](NAME_ENCODING.md)、[容差比较](TREE_CLOSE.md) |
+| CI 覆盖检查、构建、测试 | [Windows/Linux 工作流](../.github/workflows/ci.yml)、[验证入口](../scripts/verify.mjs)；Linux 额外执行真实 GNU Octave |
+| 至少一个可运行最小样例 | [MoonBit 示例](../src/examples/main/)、[公开包消费者](../examples/registry_consumer/)、[三个科研流程](SCIENTIFIC_WORKFLOWS.md) |
+| 核心路径测试 | [核心测试](../src/)、[独立 SciPy/NumPy 检查](../scripts/interop.py)、[覆盖报告入口](../scripts/coverage.py)；`npm run verify` 和 `npm run coverage` |
+| 发布到 Mooncakes | [WeiR-h/moonmatbridge@0.1.2](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.1.2)；`moon add WeiR-h/moonmatbridge@0.1.2`，`npm run verify:registry` 核对公开包实际字节并执行三目标消费者 |
+| OSI 开源许可证与第三方说明 | [Apache-2.0](../LICENSE)、[NOTICE](../NOTICE)、[第三方与参考来源](../THIRD_PARTY.md)；发行包许可文件逐字节核对 |
 
-- [Mooncakes 0.0.11](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.0.11)：`moon add WeiR-h/moonmatbridge@0.0.11`。
-- [固定发行资产](https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.0.11)：解压 Windows 包，运行 `powershell -NoProfile -ExecutionPolicy Bypass -File examples/workflows/demo.ps1`。
-- [三个科研流程](SCIENTIFIC_WORKFLOWS.md)：混合实验归档、稀疏仿真交换、NumPy 转换和精确差异。
-- [兼容矩阵](COMPATIBILITY_MATRIX.md)和[最小案例](../examples/compatibility/README.md)保留成功行为与未完成项。
+## 完整流程
 
-## 证据
+从 [v0.1.2 发行页](https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.1.2) 获取 Windows、JS、源码或科研流程包。运行 Windows 包内的 `examples/workflows/demo.ps1`，或按 [科研流程说明](SCIENTIFIC_WORKFLOWS.md) 重现混合实验归档、稀疏仿真交换及 NumPy 转换与比较。
 
-`verification/reports` 中对应 v0.0.11 的报告分别记录三目标、基本类矩阵、兼容缺口、真实 Octave、公开 Mooncakes 消费者、GitHub 下载、三个科研流程、许可证、源码快照和最终交付。报告绑定实际版本、源码指纹、工具环境及文件哈希；CI 报告给出真实执行地址和提交。
+`verification/reports` 按版本保存实际验证结果。`v*.json` 包含检查分组、工具版本、源码指纹和 native 哈希；`ci-*` 记录真实执行地址；`octave-*` 记录双向互操作；`mooncakes-*`、`public-downloads-*`、`workflows-public-*` 记录公开消费；`licenses-*` 校验发行包许可。测试数量与覆盖率取自实际报告，不在此固定维护。
 
-三目标核心测试各 69 项；15 类混合往返 16 组；最小兼容案例行为和写回 50 项；Octave v6/v7 双向流程 8 组；三个科研场景在 native、JS 共 6 组。本地验证、公开复验与主办方验收分别记录。
+兼容范围包括 MAT Level 5 基本类 1—15、递归混合数据、字符存储单位和显式名称编码、CSC 原始索引及容量。legacy object 提供类名、字段和数据互操作。实际独立消费使用 SciPy/NumPy 与 GNU Octave；工具和具体文件结果见兼容矩阵。
 
-验收 CI 固定官方编译器 `moonc 0.10.14+7d59c7ec9`，与本地验收工具链一致。源码快照检查覆盖自动生成的接口文件；编译器升级需要重新核验，不能沿用验收指纹。
-
-## 质量、许可和边界
-
-核心解析、压缩、转换和核验均为 MoonBit 实现；宿主负责文件及进程接口。Apache-2.0，发行包附 LICENSE、NOTICE 和 THIRD_PARTY.md，并校验其与仓库原件一致。参赛者应能解释资源预算、递归混合模型、字节保真及独立验证方法。
-
-Unicode 生产者维度、CSC 乱序和重复项、旧编码名称及 MATLAB 类行为仍有未完成或未验证项，完整兼容终点不缩减。未有 MATLAB 实测回执时保持明确说明。性能只引用经过生产代码一致性检查的历史测量；没有新增实测则不宣称新加速。原 native 选择读取 40% 内存改善目标仍未达。
-
-完整兼容条件未全部通过前保持 0.x。后续混合树 diff、快照及性能增强不计作本次已完成成果。
+[当前路线](NEXT_RELEASES.md) 与历史记录分开维护；[性能报告](PERFORMANCE.md) 区分固定工具链基线、历史测量和新增功能的测量。当前 0.1.x 保持已有接口与报告格式兼容。

@@ -12,7 +12,7 @@ from scipy.io import loadmat
 from scipy.sparse import csc_matrix
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = json.loads((ROOT / 'package.json').read_text())['version']
+VERSION = json.loads((ROOT / 'package.json').read_text(encoding="utf-8"))['version']
 spec = importlib.util.spec_from_file_location('mixed', ROOT / 'examples/python/mixed_types.py')
 mixed = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mixed)

@@ -12,7 +12,7 @@ from scipy.io import loadmat
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "verification/local/octave"
-VERSION = json.loads((ROOT / "package.json").read_text())["version"]
+VERSION = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))["version"]
 
 def verify_unicode_storage(source):
     """Independent raw-unit check of the actual Octave UTF16 producer."""

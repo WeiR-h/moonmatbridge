@@ -38,6 +38,9 @@ try {
   const sdkVersion = runMoon(['version']);
   if (!readFileSync(join(root, 'moon.mod'), 'utf8').includes(`version = "${version}"`)) throw new Error('Manifest versions differ');
   record('MoonBit JS checks', runMoon(['check', '--target', 'js', '--deny-warn']));
+  record('MoonBit wasm-gc checks', runMoon(['check', '--target', 'wasm-gc', '--deny-warn']));
+  record('MoonBit native checks', runMoon(['check', '--target', 'native', '--deny-warn'], nativeEnv()));
+  record('MoonBit wasm-gc release example build', runMoon(['build', 'src/examples/main', '--target', 'wasm-gc', '--release', '--deny-warn']));
   record('MoonBit JS unit tests', runMoon(['test', '--target', 'js', '--deny-warn']));
   record('MoonBit wasm-gc unit tests', runMoon(['test', '--target', 'wasm-gc', '--deny-warn']));
   const env = nativeEnv();

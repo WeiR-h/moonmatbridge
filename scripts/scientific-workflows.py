@@ -17,7 +17,7 @@ sys.path.insert(0, str(ROOT / "examples/python"))
 from mixed_types import assert_file_equal, assert_tree_equal, deterministic_mat
 from workflow_inputs import generate
 
-VERSION = json.loads((ROOT / "package.json").read_text())["version"]
+VERSION = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))["version"]
 OUT = ROOT / "verification/local/workflows"
 OUT.mkdir(parents=True, exist_ok=True)
 INPUTS = ROOT / "examples/workflows"
@@ -91,7 +91,7 @@ def main():
         after = loadmat(sparse_restored, spmatrix=False)["system"]
         assert_tree_equal(after, before)
         assert after.nnz == 3 and np.signbit(after.data[1])
-        archived = json.loads(snapshot.read_text())["variables"][0]
+        archived = json.loads(snapshot.read_text(encoding="utf-8"))["variables"][0]
         assert archived["nzmax"] == 3 and archived["row_indices"] == [0, 2, 999999]
         denied = fresh(f"{host}-too-large-dense.mat")
         assert invoke(host, "densify", selected, "system", denied, exit_code=1)["code"] == "element-limit"

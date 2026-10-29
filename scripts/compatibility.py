@@ -16,7 +16,7 @@ mixed = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mixed)
 OUT = ROOT / "verification/local/compatibility"
 OUT.mkdir(parents=True, exist_ok=True)
-VERSION = json.loads((ROOT / "package.json").read_text())["version"]
+VERSION = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))["version"]
 
 
 def values():

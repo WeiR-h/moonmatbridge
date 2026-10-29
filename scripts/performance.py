@@ -153,10 +153,10 @@ def main():
     manifest = fixtures()
     build_baseline()
     if not args.baseline_only: command(["node", ROOT / "scripts/build-bench.mjs", ROOT])
-    version = json.loads((ROOT / "package.json").read_text())["version"]
-    config = json.loads((ROOT / ".local-toolchain.json").read_text())
+    version = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))["version"]
+    config = json.loads((ROOT / ".local-toolchain.json").read_text(encoding="utf-8"))
     baseline_file = LOCAL / "baseline-v0.0.5.json"
-    baseline = json.loads(baseline_file.read_text()) if baseline_file.exists() else {"version": "0.0.5", "commit": BASE_SHA, "measurements": {}}
+    baseline = json.loads(baseline_file.read_text(encoding="utf-8")) if baseline_file.exists() else {"version": "0.0.5", "commit": BASE_SHA, "measurements": {}}
     report = {"version": version, "status": "running", "baseline_commit": BASE_SHA,
               "codec_source_sha256": source_hash(),
               "environment": {"platform": platform.platform(), "processor": platform.processor(), "node": command(["node", "--version"]),
