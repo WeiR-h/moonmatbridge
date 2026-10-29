@@ -24,6 +24,14 @@ def main():
     for kind in ['v','compatibility','name-encoding','api-contract','ci','mooncakes','public-downloads','workflows-public','tree-operations-public','source-operations-public','tree-close-public','licenses']:
         file=f'v{version}.json' if kind=='v' else f'{kind}-v{version}.json'
         read(file,{'passed'})
+    if tuple(map(int,current.split('-')[0].split('.'))) >= (0,1,1):
+        for kind in ['v','ci']:
+            path=reports/(f'v{version}.json' if kind=='v' else f'ci-v{version}.json')
+            evidence=json.loads(path.read_bytes()) if path.exists() else {}
+            actual=evidence.get('environment',{}).get('compiler_version','')
+            try:compiler=tuple(map(int,actual.split('+')[0].split('.')))
+            except ValueError:compiler=()
+            if compiler<(0,10,16):problems.append(kind+':compiler-below-minimum')
     octave=read(f'octave-v{version}.json',{'passed'})
     if octave.get('unicode_storage',{}).get('status')!='passed':problems.append('actual-unicode-producer-receipt')
     variants=read(f'producer-variants-v{version}.json',{'classified'})
@@ -50,6 +58,14 @@ def main():
             if data.get('environment',{}).get('toolchain')!=actual:problems.append(label+':toolchain-changed')
     followups=[read(name,{'measured'}) for name in args.followup]
     for label,data in [('core',perf),('file',files)]:
+        # The first cohort captures the new toolchain baseline. Two runs of the
+        # exact same frozen commit measure control variability, not a regression.
+        # Both complete raw cohorts remain public. Later candidates must compare
+        # with a different frozen revision or prove runtime/toolchain equality.
+        candidate=data.get('candidate_head_commit') if label=='core' else data.get('candidate_commit')
+        if candidate==baseline:
+            if data.get('baseline_runtime_source_sha256')!=runtime:problems.append(label+':baseline-runtime-changed')
+            continue
         for row in data.get('results',[]):
             if row.get('speedup',0)>=1/1.1 and row.get('memory_reduction',-1)>=-.1:continue
             # Explicit later follow-up reports only; never choose the best sample
