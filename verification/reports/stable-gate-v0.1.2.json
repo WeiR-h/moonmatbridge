@@ -1,0 +1,28 @@
+{
+  "status": "ready",
+  "version": "0.1.2",
+  "evidence_version": "0.1.2",
+  "performance_version": "0.1.1",
+  "runtime_source_sha256": "ea0b4ec745f6598edf68d5f6a2fbd63373646c3d49727e4709ba629b94b6c6f1",
+  "evidence_sha256": {
+    "v0.1.2.json": "f5406ca799bfb92d61647d1b18c7c7d5e22c16cb5cc48cf000006c63f65942d4",
+    "compatibility-v0.1.2.json": "065ef3d54c9a021bf574fd3d72c3821695cb4cfd2695bab51458223a01f4ede0",
+    "name-encoding-v0.1.2.json": "036333e8bff9aee38a5dc1b15f00827f2af6f1003b9f72a0e9b75d8e8d625fd9",
+    "api-contract-v0.1.2.json": "741ddbfbd251fdf656977c1b582d8f6f00174309102bb79f08d072b5c86ba1c3",
+    "ci-v0.1.2.json": "edb5fd0b8d1d96a584b2f5bf700d037fbf5095fb745e463d140d01f80cc919c4",
+    "mooncakes-v0.1.2.json": "6e036cc2077d41bc561e9ffc51b729539d4a06d0f1f3b4d49ad6825e3a3dd063",
+    "public-downloads-v0.1.2.json": "461325130a0a786dcdc4890789f1500464dfc2ed635e9b043af1abb6b9c82c7c",
+    "workflows-public-v0.1.2.json": "032a3afe01ef38268c2a6a45dcf8a2b49839147d3db6d631e332ca15c4215e93",
+    "tree-operations-public-v0.1.2.json": "c89a136d915be729e1cc80716da544ec110264ef39b1a6e7d07400db1f31660f",
+    "source-operations-public-v0.1.2.json": "3fe72171ffa914ec6417bc893680240da7f2597c38b946f931fc80cb58d5d503",
+    "tree-close-public-v0.1.2.json": "6e8e11e831c5e70aca999e16f92ab8b717ec4ea5e4a7ede4d44c00d542caab21",
+    "licenses-v0.1.2.json": "09c24498685c50547d147a4ba8e16177d9ab33e17036ee2b3232ef6ab765b6fd",
+    "octave-v0.1.2.json": "e7ef59da255f2be660a2e35d1c5103b5fd27bc9d6a0c317b4d1ff90a0e96ad58",
+    "producer-variants-v0.1.2.json": "292bbce0623329c05b3f10b0774710585ef3e76d5cd2103be66f7c18231866b2",
+    "compatibility-gaps-v0.1.2.json": "91e4112f7ce8563439c9b9aae2aab2ebdcac59540db908f553f641a9e629b449",
+    "performance-vs-85fef84-v0.1.1.json": "d471916254147355c893bdbfb459c28bcba7ee03a42c173ccef6f908af0ae9b2",
+    "file-performance-v0.1.1.json": "787f47816b8f69e4decb5f612a021ab6a89607adaeee78dfe7e4da4fbc923afd"
+  },
+  "blockers": [],
+  "scope": "Public basic-class data compatibility, real Octave Unicode, fixed-runtime performance and public package/assets; MATLAB execution is not asserted."
+}

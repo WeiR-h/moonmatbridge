@@ -1,0 +1,36 @@
+{
+  "status": "passed",
+  "version": "0.1.2",
+  "module": "WeiR-h/moonmatbridge",
+  "url": "https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.1.2",
+  "public_manifest_url": "https://mooncakes.io/api/v0/manifest/WeiR-h/moonmatbridge",
+  "build_status": "success",
+  "archive_sha256": "763b2501f977ef1d04da02ef3dbac22b3a29a86949ab233bc5fb2ab4e332403d",
+  "source_sha256": "2a818de8305918cb5e6ec645d345ec2b3a457f6b058ed3ed334a6904e006b4b0",
+  "installed_source_files": 90,
+  "targets": [
+    "js",
+    "wasm-gc",
+    "native"
+  ],
+  "scope": "Actual public package, audited checksum and fresh consumers; source hashes are checked.",
+  "consumer_version_expectation": {
+    "original": "0.1.1",
+    "verified": "0.1.2",
+    "scope": "Version assertion changed only in isolated caller; downloaded module and examples remain byte-exact. Original failing receipt preserved in registry-template-diagnostic-v0.1.2.json."
+  },
+  "unmodified_package_examples": [
+    {
+      "target": "js",
+      "status": "passed"
+    },
+    {
+      "target": "wasm-gc",
+      "status": "passed"
+    },
+    {
+      "target": "native",
+      "status": "passed"
+    }
+  ]
+}
