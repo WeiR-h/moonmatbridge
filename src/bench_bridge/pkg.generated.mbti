@@ -10,6 +10,12 @@ pub fn read(Bytes) -> Int32
 
 pub fn select(Bytes) -> Int32
 
+pub fn sink_large() -> Prepared
+
+pub fn sink_prepare(Bytes) -> Prepared
+
+pub fn sink_run(Prepared, Bool, Bool, (Int32, FixedArray[Byte], Int32, Int32) -> Int32, (Int32, Bytes, Int32, Int32) -> Int32) -> String
+
 pub fn write(Prepared) -> Int32
 
 // Errors

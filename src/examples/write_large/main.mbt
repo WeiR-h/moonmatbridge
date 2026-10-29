@@ -30,7 +30,11 @@ extern "C" fn finish_output(
 extern "C" fn stop(code : Int32) -> Unit = "exit"
 
 ///|
-fn create(path : String, small : Bool) -> Int32 raise @mat.MatError {
+fn create(
+  path : String,
+  small : Bool,
+  compressed : Bool,
+) -> Int32 raise @mat.MatError {
   if path.is_empty() || path.contains("\u{0000}") {
     raise @mat.MatError("invalid-path", 0, "Expected a new output path")
   }
@@ -61,7 +65,7 @@ fn create(path : String, small : Bool) -> Int32 raise @mat.MatError {
       write_output(slot, offset, bytes, start, count)
     },
   }
-  let size = @mat.write_tree_to([@mat.Numeric(array)], sink)
+  let size = @mat.write_tree_to([@mat.Numeric(array)], sink, compressed~)
   let status = finish_output(slot, 1, size)
   closed = true
   if status != 0 {
@@ -82,18 +86,26 @@ fn create(path : String, small : Bool) -> Int32 raise @mat.MatError {
 fn main {
   init_host()
   let args = @env.args()
-  if args.length() < 2 || args.length() > 3 {
-    println("write_large OUTPUT.mat [--small]")
+  if args.length() < 2 || args.length() > 4 {
+    println("write_large OUTPUT.mat [--small] [--compressed]")
     stop(1)
   }
   let path = argument(1, args[1])
-  let small = args.length() == 3 && argument(2, args[2]) == "--small"
-  if args.length() == 3 && !small {
-    println("Expected --small")
-    stop(1)
+  let mut small = false
+  let mut compressed = false
+  for i = 2; i < args.length(); i = i + 1 {
+    let option = argument(i, args[i])
+    if option == "--small" && !small {
+      small = true
+    } else if option == "--compressed" && !compressed {
+      compressed = true
+    } else {
+      println("Expected distinct --small / --compressed options")
+      stop(1)
+    }
   }
   try {
-    let count = create(path, small)
+    let count = create(path, small, compressed)
     println(
       (
         {
@@ -102,6 +114,7 @@ fn main {
           "bytes": count,
           "input_tree_resident": true,
           "chunk_bytes": 1048576,
+          "compressed": compressed,
         } : Json).stringify(),
     )
   } catch {

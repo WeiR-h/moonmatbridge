@@ -40,6 +40,10 @@ fn execute(
 ///|
 fn main {
   host_init()
+  if host_arg_count(0) == 8 && host_arg(1, "") == "sink-write" {
+    sink_bench_main()
+    return
+  }
   if host_arg_count(0) != 4 {
     abort("bench INPUT OP timing|memory")
   }

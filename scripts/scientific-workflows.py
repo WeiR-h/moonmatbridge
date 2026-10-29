@@ -74,7 +74,14 @@ def main():
         assert_file_equal(compressed, archive)
         assert_file_equal(restored, archive)
         assert all(r["compressed"] for r in invoke(host, "roots", compressed)["roots"])
-        record(host, "mixed experimental archive", ["13 roots and recursive containers", "additional downloadable file covers every base class 1 through 15", "independent SciPy deep type/shape/field and raw numeric byte equality", "UTF8 labels and exact uint64", "compressed roots decoded then rewritten"], [compressed, restored, classes_copy])
+        tree_snapshot = fresh(f"{host}-archive-tree.json")
+        tree_restored = fresh(f"{host}-archive-tree-restored.mat")
+        tree_diff = fresh(f"{host}-archive-tree-diff.json")
+        invoke(host, "snapshot-tree", archive, tree_snapshot)
+        invoke(host, "restore-tree", tree_snapshot, tree_restored)
+        invoke(host, "diff-tree", archive, tree_restored, tree_diff)
+        assert_file_equal(tree_restored, archive)
+        record(host, "mixed experimental archive", ["13 roots and recursive containers", "additional downloadable file covers every base class 1 through 15", "independent SciPy deep type/shape/field and raw numeric byte equality", "UTF8 labels and exact uint64", "compressed roots decoded then rewritten", "mixed tree snapshot restored via bounded output and exact comparison"], [compressed, restored, classes_copy, tree_snapshot, tree_restored, tree_diff])
 
         source = INPUTS / "sparse-system.mat"
         selected = fresh(f"{host}-system-only.mat")

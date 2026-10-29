@@ -47,7 +47,7 @@ def main():
               "coverage": ["all public base classes in mixed files", "little/big endian", "plain/compressed", "numeric N-D and empty N-D",
                            "cell to struct to cell", "struct to cell to sparse", "legacy class name and fields", "UTF8 Chinese/nonBMP",
                            "global flag across all 15 base classes, both endians and compression modes"],
-              "remaining": ["MATLAB runtime execution not claimed", "non-UTF8 legacy names remain rejected",
+              "remaining": ["MATLAB runtime execution not claimed", "Legacy Latin1 names are verified separately with explicit NameEncoding",
                             "producer-specific UTF16/nonBMP dimensions require separate receipts"]}
     (ROOT / f"verification/reports/compatibility-v{VERSION}.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"All 15 base classes: {len(checks)} independent mixed-file host checks passed")

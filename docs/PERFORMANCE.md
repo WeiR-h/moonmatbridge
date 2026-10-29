@@ -1,5 +1,10 @@
 # 性能测量
 
+
+当前工具链的核心与文件读取对照保留在 [24 组核心测量](../verification/reports/performance-vs-85fef84-v0.1.4.json) 和 [6 组文件测量](../verification/reports/file-performance-v0.1.4.json)。v0.1.5 的生产源码、工具链及构建参数一致性由[独立摘要](../verification/reports/performance-summary-v0.1.5.json)记录，原始数据保留原版本。
+
+新增驻留树写入使用单独的 [测量方法与结果入口](WRITE_PERFORMANCE.md)，覆盖两种编码、核心与文件流程。旧内存路径的完整字节缓冲直接交给同一宿主写入器。下面保留历史测量及其环境边界。
+
 ## v0.1.1 工具链基线
 
 固定源码提交 `85fef84de68b69b7e762c3c6317266bb6674ff84`，采用 moonc `0.10.16+b1a0e846e`、配套标准库、Windows x64 MSVC `19.44.35229` C 后端、Windows SDK `10.0.22621.0` 和 Node `24.13.0`。工具链归档及标准库校验值见 `toolchain.lock.json`，构建工具包校验值见 `msvc.lock.json`。

@@ -56,6 +56,29 @@ def main():
         actual=json.loads(subprocess.check_output(['node','scripts/toolchain.mjs'],cwd=ROOT,text=True))
         for label,data in [('core',perf),('file',files)]:
             if data.get('environment',{}).get('toolchain')!=actual:problems.append(label+':toolchain-changed')
+    if tuple(map(int,current.split('-')[0].split('.'))) >= (0,1,5):
+        writes=read(f'write-performance-v{version}.json',{'measured'})
+        if writes.get('partial'):problems.append('write:partial-cohort')
+        if writes.get('candidate_runtime_source_sha256')!=runtime:problems.append('write:runtime-source-changed')
+        current_toolchain=json.loads(subprocess.check_output(['node','scripts/toolchain.mjs'],cwd=ROOT,text=True))
+        if writes.get('environment',{}).get('toolchain')!=current_toolchain:problems.append('write:toolchain-changed')
+        current_ci=json.loads((reports/f'ci-v{version}.json').read_bytes())
+        if writes.get('candidate_commit')!=current_ci.get('commit'):problems.append('write:source-commit-changed')
+        expected={(c,h,e,s) for c in ('dense-16m','nested-4m','sparse-100k','resident-256m') for h in ('native','js') for e in ('plain','compressed') for s in ('core','file')}
+        rows=writes.get('results',[])
+        keys=[(r.get('case'),r.get('host'),r.get('encoding'),r.get('scope')) for r in rows]
+        if len(keys)!=32 or set(keys)!=expected:problems.append('write:incomplete-fixed-cohort')
+        for row in rows:
+            for implementation in ('old','sink'):
+                item=row.get(implementation,{})
+                unsupported=implementation=='old' and row.get('case')=='resident-256m' and row.get('encoding')=='compressed'
+                if unsupported:
+                    if item.get('status')!='unsupported' or item.get('probe',{}).get('code')!='file-limit':problems.append('write:missing-original-quota-probe')
+                    continue
+                if item.get('status')!='measured' or len(item.get('samples_ms',[]))!=30 or len(item.get('batches',[]))!=3 or len(item.get('memory_processes',[]))!=3:problems.append('write:incomplete-samples')
+                if item.get('max_request',1048577)>1048576:problems.append('write:unbounded-request')
+                if row.get('scope')=='file' and not all(m.get('independent_consumption') for m in item.get('memory_processes',[])):problems.append('write:independent-consumption-missing')
+            if row.get('encoding')=='plain' and row.get('scope')=='file' and row.get('old',{}).get('output_sha256')!=row.get('sink',{}).get('output_sha256'):problems.append('write:plain-bytes-differ')
     followups=[read(name,{'measured'}) for name in args.followup]
     for label,data in [('core',perf),('file',files)]:
         # The first cohort captures the new toolchain baseline. Two runs of the

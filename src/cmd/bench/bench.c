@@ -26,3 +26,14 @@ double moonmat_peak(void) {
   return (double)value.ru_maxrss * 1024.0;
 }
 #endif
+
+int32_t moonmat_bench_remove(moonbit_bytes_t path) {
+#ifdef _WIN32
+  wchar_t *wide = sink_wide_path((const char *)path);
+  if (!wide) return -1;
+  int result = DeleteFileW(wide) ? 0 : -1;
+  free(wide); return result;
+#else
+  return remove((const char *)path);
+#endif
+}
