@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "version": "0.0.20",
+  "tag_commit": "18437af",
+  "source_sha256": "0a553f353ee9ce4bdc3e9281ae0d9bc15aa69e9571b60854b85130384600b784",
+  "ci_run_id": 40813520325,
+  "local_groups": 21,
+  "tests_per_target": 107,
+  "public_assets": 26,
+  "public_scientific_host_workflows": 6,
+  "public_tree_checks": 20,
+  "public_source_checks": 6,
+  "public_tolerance_checks": 78,
+  "github": "https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.0.20",
+  "mooncakes": "https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.0.20",
+  "scope": "Published archives downloaded and hashed; installed Mooncakes consumers on all three targets; actual Octave receipt retained separately."
+}
