@@ -1,0 +1,80 @@
+{
+  "status": "verified",
+  "version": "0.1.2",
+  "fixed_commit": "85fef84de68b69b7e762c3c6317266bb6674ff84",
+  "runtime_source_sha256": "ea0b4ec745f6598edf68d5f6a2fbd63373646c3d49727e4709ba629b94b6c6f1",
+  "production_files": [
+    "src/axes.mbt",
+    "src/bridge/bridge.mbt",
+    "src/bridge/moon.pkg",
+    "src/cmd/moonmat/io.c",
+    "src/cmd/moonmat/main.mbt",
+    "src/cmd/moonmat/moon.pkg",
+    "src/concat.mbt",
+    "src/deflate.mbt",
+    "src/diff.mbt",
+    "src/fixed_writer.mbt",
+    "src/inflate.mbt",
+    "src/interchange/diff.mbt",
+    "src/interchange/document.mbt",
+    "src/interchange/json.mbt",
+    "src/interchange/moon.pkg",
+    "src/interchange/name_options.mbt",
+    "src/interchange/roots.mbt",
+    "src/interchange/snapshot.mbt",
+    "src/interchange/transform.mbt",
+    "src/interchange/tree_close.mbt",
+    "src/interchange/tree_snapshot.mbt",
+    "src/moon.pkg",
+    "src/name_encoding.mbt",
+    "src/npy.mbt",
+    "src/npy_reader.mbt",
+    "src/numeric.mbt",
+    "src/reader.mbt",
+    "src/reshape.mbt",
+    "src/select.mbt",
+    "src/selected.mbt",
+    "src/slice.mbt",
+    "src/source.mbt",
+    "src/source_inflate.mbt",
+    "src/source_stream.mbt",
+    "src/sparse.mbt",
+    "src/sparse_codec.mbt",
+    "src/tree.mbt",
+    "src/tree_close.mbt",
+    "src/tree_diff.mbt",
+    "src/types.mbt",
+    "src/utf8_scan.mbt",
+    "src/writer.mbt"
+  ],
+  "environment": {
+    "compiler": "v0.10.16+b1a0e846e (2026-10-16)",
+    "compiler_version": "0.10.16+b1a0e846e",
+    "standard_library_archive_sha256": "e7db6e3c80a97af953598b374cf14f3e330918b1ca4659b141b9f550c9c0adb0",
+    "standard_library_source_sha256": "31140145ca3db92e94781c7649073922fca6ec669d04b4219119dff611dba5f5",
+    "c_compiler": "Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35229 for x64",
+    "native_backend": "c",
+    "native_environment": {
+      "MOONBIT_NEW_NATIVE": "0"
+    },
+    "node": "v24.13.0",
+    "windows_sdk_version": "10.0.22621.0",
+    "platform": "win32",
+    "architecture": "x64"
+  },
+  "cohorts": [
+    {
+      "file": "performance-vs-85fef84-v0.1.1.json",
+      "sha256": "d471916254147355c893bdbfb459c28bcba7ee03a42c173ccef6f908af0ae9b2",
+      "rows": 24,
+      "build": "same toolchain, --release, one compiler job"
+    },
+    {
+      "file": "file-performance-v0.1.1.json",
+      "sha256": "787f47816b8f69e4decb5f612a021ab6a89607adaeee78dfe7e4da4fbc923afd",
+      "rows": 6,
+      "build": "same toolchain, release mode, one compiler job"
+    }
+  ],
+  "scope": "Complete production file-set/hash, compiler, core library, native backend, C compiler/SDK and host equality with the original new-toolchain cohorts. No new timing or optimization claim."
+}
