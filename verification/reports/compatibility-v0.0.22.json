@@ -1,0 +1,162 @@
+{
+  "status": "passed",
+  "version": "0.0.22",
+  "producer": "SciPy 1.15.3 / NumPy 2.2.6",
+  "base_classes": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "checks": [
+    {
+      "case": "all-classes-little-plain.mat",
+      "host": "native",
+      "status": "passed"
+    },
+    {
+      "case": "all-classes-little-plain.mat",
+      "host": "js",
+      "status": "passed"
+    },
+    {
+      "case": "all-classes-big-plain.mat",
+      "host": "native",
+      "status": "passed"
+    },
+    {
+      "case": "all-classes-big-plain.mat",
+      "host": "js",
+      "status": "passed"
+    },
+    {
+      "case": "all-classes-little-compressed.mat",
+      "host": "native",
+      "status": "passed"
+    },
+    {
+      "case": "all-classes-little-compressed.mat",
+      "host": "js",
+      "status": "passed"
+    },
+    {
+      "case": "all-classes-big-compressed.mat",
+      "host": "native",
+      "status": "passed"
+    },
+    {
+      "case": "all-classes-big-compressed.mat",
+      "host": "js",
+      "status": "passed"
+    },
+    {
+      "case": "all-classes-global-little-plain.mat",
+      "host": "native",
+      "status": "passed"
+    },
+    {
+      "case": "all-classes-global-little-plain.mat",
+      "host": "js",
+      "status": "passed"
+    },
+    {
+      "case": "all-classes-global-big-plain.mat",
+      "host": "native",
+      "status": "passed"
+    },
+    {
+      "case": "all-classes-global-big-plain.mat",
+      "host": "js",
+      "status": "passed"
+    },
+    {
+      "case": "all-classes-global-little-compressed.mat",
+      "host": "native",
+      "status": "passed"
+    },
+    {
+      "case": "all-classes-global-little-compressed.mat",
+      "host": "js",
+      "status": "passed"
+    },
+    {
+      "case": "all-classes-global-big-compressed.mat",
+      "host": "native",
+      "status": "passed"
+    },
+    {
+      "case": "all-classes-global-big-compressed.mat",
+      "host": "js",
+      "status": "passed"
+    }
+  ],
+  "fixtures": [
+    {
+      "file": "all-classes-little-plain.mat",
+      "bytes": 7728,
+      "sha256": "7bc63d1232b4d25a36c31bd3d879c00f15257ebfb25370c3afcada75528c2e6e"
+    },
+    {
+      "file": "all-classes-big-plain.mat",
+      "bytes": 7952,
+      "sha256": "ea3c70629af0f44058156d65dfd7a56060cbb5baaa0c62737ef1e72ef7abbafa"
+    },
+    {
+      "file": "all-classes-little-compressed.mat",
+      "bytes": 3378,
+      "sha256": "b5c936580d36620a6dbee0fcc56a1951486b0e76762cdc2681c13ce634d8fafd"
+    },
+    {
+      "file": "all-classes-big-compressed.mat",
+      "bytes": 3463,
+      "sha256": "7aa3e22692d683c2e4c6a48d88957512cac32b6f4a0384657da37e5154e6e5b1"
+    },
+    {
+      "file": "all-classes-global-little-plain.mat",
+      "bytes": 7728,
+      "sha256": "0484b7425b6365a5b3e543ce52efeb7c02cf24c259e5ef241f292cc550633003"
+    },
+    {
+      "file": "all-classes-global-big-plain.mat",
+      "bytes": 7952,
+      "sha256": "985b25ca1a503d20330260f68605c2b661f944b8544ad654535dcfe1029b48e1"
+    },
+    {
+      "file": "all-classes-global-little-compressed.mat",
+      "bytes": 3451,
+      "sha256": "13c541f513c4ceb0c4c844d1cab18e10cdc45781009897066beea5feb72a0b4b"
+    },
+    {
+      "file": "all-classes-global-big-compressed.mat",
+      "bytes": 3540,
+      "sha256": "6065debf9e7bb2d729a5fa19e974ec571b8709267e70bbb6bff9d4949918e9cf"
+    }
+  ],
+  "coverage": [
+    "all public base classes in mixed files",
+    "little/big endian",
+    "plain/compressed",
+    "numeric N-D and empty N-D",
+    "cell to struct to cell",
+    "struct to cell to sparse",
+    "legacy class name and fields",
+    "UTF8 Chinese/nonBMP",
+    "global flag across all 15 base classes, both endians and compression modes"
+  ],
+  "remaining": [
+    "MATLAB runtime execution not claimed",
+    "non-UTF8 legacy names remain rejected",
+    "producer-specific UTF16/nonBMP dimensions require separate receipts"
+  ]
+}
