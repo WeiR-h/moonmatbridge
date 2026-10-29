@@ -4,3 +4,5 @@
 *.png binary
 *.jpg binary
 *.zip binary
+# Verification hashes refer to the exact generated report bytes.
+/verification/reports/*.json -text

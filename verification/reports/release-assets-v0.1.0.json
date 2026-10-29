@@ -1,0 +1,332 @@
+{
+  "status": "passed",
+  "version": "0.1.0",
+  "release_id": 427614741,
+  "published_at": "2026-10-29T09:54:26Z",
+  "url": "https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.1.0",
+  "source": "https://api.github.com/repos/WeiR-h/moonmatbridge/releases/tags/v0.1.0",
+  "assets": [
+    {
+      "file": "all-base-classes.mat",
+      "bytes": 7728,
+      "sha256": "7bc63d1232b4d25a36c31bd3d879c00f15257ebfb25370c3afcada75528c2e6e",
+      "asset_id": 688084058,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/all-base-classes.mat",
+      "local_bytes_match": [
+        "examples/workflows/all-base-classes.mat"
+      ]
+    },
+    {
+      "file": "api-contract-v0.1.0.json",
+      "bytes": 353,
+      "sha256": "d73b8e6a5b2a834169972a4fec7b7c534a183264f9f370af2cc7a748fd5a28cc",
+      "asset_id": 688084281,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/api-contract-v0.1.0.json",
+      "local_bytes_match": [
+        "verification/reports/api-contract-v0.1.0.json"
+      ]
+    },
+    {
+      "file": "ci-v0.1.0.json",
+      "bytes": 322,
+      "sha256": "ee041ebf9334b7b6b64de6e1f27f858668acaca0d1dd8bd896a9cc24bb3e97e8",
+      "asset_id": 688084544,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/ci-v0.1.0.json",
+      "local_bytes_match": [
+        "verification/reports/ci-v0.1.0.json"
+      ]
+    },
+    {
+      "file": "compatibility-gaps-v0.1.0.json",
+      "bytes": 15419,
+      "sha256": "b6f87b20ebf5c07bcf3ec8ab9860235a724adde5500962552600e41dbc7baa98",
+      "asset_id": 688084771,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/compatibility-gaps-v0.1.0.json",
+      "local_bytes_match": [
+        "verification/reports/compatibility-gaps-v0.1.0.json"
+      ]
+    },
+    {
+      "file": "compatibility-v0.1.0.json",
+      "bytes": 4074,
+      "sha256": "0e01f4cab9da5a82e7b59f2d76dd3a77d7952fc06117c7b0825227f66605db2f",
+      "asset_id": 688084912,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/compatibility-v0.1.0.json",
+      "local_bytes_match": [
+        "verification/reports/compatibility-v0.1.0.json"
+      ]
+    },
+    {
+      "file": "licenses-v0.1.0.json",
+      "bytes": 2414,
+      "sha256": "030379ad0726b40286310a2ed700848cb29869834e6a3ec5399e8e472aecc706",
+      "asset_id": 688085096,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/licenses-v0.1.0.json",
+      "local_bytes_match": [
+        "verification/reports/licenses-v0.1.0.json"
+      ]
+    },
+    {
+      "file": "manifest.json",
+      "bytes": 1132,
+      "sha256": "00187e9ac153d81ed2baca6d50cd40aad895f5867d826802f4cce9de2d68f5ea",
+      "asset_id": 688083844,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/manifest.json",
+      "local_bytes_match": [
+        "examples/mixed/manifest.json"
+      ]
+    },
+    {
+      "file": "mooncakes-v0.1.0.json",
+      "bytes": 647,
+      "sha256": "e2000de1934af2dc7e009c624bdefda60231cdf8f27ec43d5cedad031b13b738",
+      "asset_id": 688085285,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/mooncakes-v0.1.0.json",
+      "local_bytes_match": [
+        "verification/reports/mooncakes-v0.1.0.json"
+      ]
+    },
+    {
+      "file": "MoonMatBridge-v0.1.0-js.zip",
+      "bytes": 188435,
+      "sha256": "900b4af9b468278f341f35f4ca8d51422764d6b25c387a1d0d7848e6b1466b5b",
+      "asset_id": 688081443,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/MoonMatBridge-v0.1.0-js.zip",
+      "local_bytes_match": [
+        "dist/MoonMatBridge-v0.1.0-js.zip"
+      ]
+    },
+    {
+      "file": "MoonMatBridge-v0.1.0-source.zip",
+      "bytes": 2115414,
+      "sha256": "690fd2c7c51a142cf03addcdaf23e2114ff9deb878844fbaccba0884236bb7a0",
+      "asset_id": 687933205,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/MoonMatBridge-v0.1.0-source.zip",
+      "local_bytes_match": [
+        "dist/MoonMatBridge-v0.1.0-source.zip"
+      ]
+    },
+    {
+      "file": "MoonMatBridge-v0.1.0-windows-x64.zip",
+      "bytes": 2220032,
+      "sha256": "a235df89c0dcc89c820467c38ae8f5d9521aa993e7e5ac738c4c79afbc24950a",
+      "asset_id": 688074193,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/MoonMatBridge-v0.1.0-windows-x64.zip",
+      "local_bytes_match": [
+        "dist/MoonMatBridge-v0.1.0-windows-x64.zip"
+      ]
+    },
+    {
+      "file": "MoonMatBridge-v0.1.0-workflows.zip",
+      "bytes": 36865,
+      "sha256": "e4096027f3ad66a3e602d0f7da7457356c40dd6169ca1371f5c6037294f1941d",
+      "asset_id": 688082475,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/MoonMatBridge-v0.1.0-workflows.zip",
+      "local_bytes_match": [
+        "dist/MoonMatBridge-v0.1.0-workflows.zip"
+      ]
+    },
+    {
+      "file": "name-encoding-v0.1.0.json",
+      "bytes": 2331,
+      "sha256": "b37fc945b525d11c05b4cc0028cc6f9972a35ec88181fceb9822520588244e03",
+      "asset_id": 688085462,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/name-encoding-v0.1.0.json",
+      "local_bytes_match": [
+        "verification/reports/name-encoding-v0.1.0.json"
+      ]
+    },
+    {
+      "file": "octave-utf16-nonbmp.mat",
+      "bytes": 8048,
+      "sha256": "111780a5fb75d2a4243f211170a8ed563c937b5106c9bbc53d6075c312597893",
+      "asset_id": 688083442,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/octave-utf16-nonbmp.mat",
+      "local_bytes_match": [
+        "examples/unicode/octave-utf16-nonbmp.mat"
+      ]
+    },
+    {
+      "file": "octave-v0.1.0.json",
+      "bytes": 85850,
+      "sha256": "0716ce87030f173953633e8a760618a01834ade4de374431af486c3e6bccb571",
+      "asset_id": 688085665,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/octave-v0.1.0.json",
+      "local_bytes_match": [
+        "verification/reports/octave-v0.1.0.json"
+      ]
+    },
+    {
+      "file": "performance-summary-v0.1.0.json",
+      "bytes": 1730,
+      "sha256": "6d2397168aaf38035891a7851a98ffce091a7c6dad5933956189eeda0a34768e",
+      "asset_id": 688085861,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/performance-summary-v0.1.0.json",
+      "local_bytes_match": [
+        "verification/reports/performance-summary-v0.1.0.json"
+      ]
+    },
+    {
+      "file": "producer-variants-v0.1.0.json",
+      "bytes": 4362,
+      "sha256": "73e93420b51a1de53b9c530f7ac1bce3c75ec6efefb55fd689f765c2b55b32fc",
+      "asset_id": 688086121,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/producer-variants-v0.1.0.json",
+      "local_bytes_match": [
+        "verification/reports/producer-variants-v0.1.0.json"
+      ]
+    },
+    {
+      "file": "release-v0.1.0.json",
+      "bytes": 1670,
+      "sha256": "0844addb251300b68238fcd6718a42965c8e3e7ebc38753611d86b863a310eae",
+      "asset_id": 688057023,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/release-v0.1.0.json",
+      "local_bytes_match": [
+        "dist/release-v0.1.0.json"
+      ]
+    },
+    {
+      "file": "research-mixed-big-endian.mat",
+      "bytes": 3736,
+      "sha256": "85b42cb7fc511d87df425b67c79d7306cd9911b7db4567a6d29fce794d125afb",
+      "asset_id": 688082813,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/research-mixed-big-endian.mat",
+      "local_bytes_match": [
+        "examples/mixed/research-mixed-big-endian.mat"
+      ]
+    },
+    {
+      "file": "research-mixed-compressed.mat",
+      "bytes": 1570,
+      "sha256": "7439e4fe2b599d94744a491cc3c43d242f26c65850c7acc67d1e059a7304a573",
+      "asset_id": 688083092,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/research-mixed-compressed.mat",
+      "local_bytes_match": [
+        "examples/mixed/research-mixed-compressed.mat"
+      ]
+    },
+    {
+      "file": "research-mixed.mat",
+      "bytes": 3608,
+      "sha256": "e25902d8cbed12604b7aba7ae64d9a4f31a01d25d163ea378587e3b6a5f83ef2",
+      "asset_id": 688083299,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/research-mixed.mat",
+      "local_bytes_match": [
+        "examples/mixed/research-mixed.mat"
+      ]
+    },
+    {
+      "file": "selection-v0.1.0.json",
+      "bytes": 4439,
+      "sha256": "92eb6bdde24e71297703f9d0a40bf5d630cf580e7e3f5281aa6445f2d6650c1f",
+      "asset_id": 688086317,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/selection-v0.1.0.json",
+      "local_bytes_match": [
+        "verification/reports/selection-v0.1.0.json"
+      ]
+    },
+    {
+      "file": "SHA256SUMS.txt",
+      "bytes": 400,
+      "sha256": "b3713c5d44e73e8e203cb6b77b05895342967ddac67c47162aa4db7152c072d9",
+      "asset_id": 688082630,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/SHA256SUMS.txt",
+      "local_bytes_match": [
+        "dist/SHA256SUMS.txt"
+      ]
+    },
+    {
+      "file": "source-operations-v0.1.0.json",
+      "bytes": 1747,
+      "sha256": "5b46062bde83be79c4930c711e77133c9b6929af8bb8c8d01f6888d3f3f177c3",
+      "asset_id": 688086563,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/source-operations-v0.1.0.json",
+      "local_bytes_match": [
+        "verification/reports/source-operations-v0.1.0.json"
+      ]
+    },
+    {
+      "file": "source-snapshot-v0.1.0.json",
+      "bytes": 64931,
+      "sha256": "88851bb5dac94a50ad4d08202c1f3ac0f056a3d16ecaa56e1d608a7a581f971a",
+      "asset_id": 688086762,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/source-snapshot-v0.1.0.json",
+      "local_bytes_match": [
+        "verification/reports/source-snapshot-v0.1.0.json"
+      ]
+    },
+    {
+      "file": "tree-close-v0.1.0.json",
+      "bytes": 8645,
+      "sha256": "0cd09cb1438649fd05f33ed2c029164906f218c3cf19a8e24a56b4b32988201c",
+      "asset_id": 688086979,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/tree-close-v0.1.0.json",
+      "local_bytes_match": [
+        "verification/reports/tree-close-v0.1.0.json"
+      ]
+    },
+    {
+      "file": "tree-operations-v0.1.0.json",
+      "bytes": 974,
+      "sha256": "6f421bbceee237518fa01529f27f80a47a273516edb04c1759d211f30a3a5031",
+      "asset_id": 688087199,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/tree-operations-v0.1.0.json",
+      "local_bytes_match": [
+        "verification/reports/tree-operations-v0.1.0.json"
+      ]
+    },
+    {
+      "file": "TREE_CLOSE.md",
+      "bytes": 2747,
+      "sha256": "adb211e92e5cdadfd52827e4eecaba2f7b945267056b5d9bd058aa4153246e1b",
+      "asset_id": 688087976,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/TREE_CLOSE.md",
+      "local_bytes_match": [
+        "docs/TREE_CLOSE.md"
+      ]
+    },
+    {
+      "file": "TREE_DIFF.md",
+      "bytes": 1730,
+      "sha256": "7caf89b589cec2707e6d9829ae5d0699955792d32752611641a85782114ed272",
+      "asset_id": 688087693,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/TREE_DIFF.md",
+      "local_bytes_match": [
+        "docs/TREE_DIFF.md"
+      ]
+    },
+    {
+      "file": "TREE_SNAPSHOT.md",
+      "bytes": 1638,
+      "sha256": "e9186f1692314298a78e3de505677a1970a34ee84b57a37078dd0a43e9044e26",
+      "asset_id": 688087832,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/TREE_SNAPSHOT.md",
+      "local_bytes_match": [
+        "docs/TREE_SNAPSHOT.md"
+      ]
+    },
+    {
+      "file": "unicode-manifest.json",
+      "bytes": 367,
+      "sha256": "3dab34c3edf5313b5fa2fcb7fa590e8fb4a559645130a479f9f63f6133b3c0c5",
+      "asset_id": 688083669,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/unicode-manifest.json",
+      "local_bytes_match": [
+        "examples/unicode/unicode-manifest.json"
+      ]
+    },
+    {
+      "file": "workflows-v0.1.0.json",
+      "bytes": 6840,
+      "sha256": "98dcafda4fa5ae69771630bc5d59f8629299343f879b2dfb4ae88d7d61a6e818",
+      "asset_id": 688087418,
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/workflows-v0.1.0.json",
+      "local_bytes_match": [
+        "verification/reports/workflows-v0.1.0.json"
+      ]
+    }
+  ],
+  "upload_origin": "All release assets uploaded directly from the local workstation. No transfer branch or upload workflow created.",
+  "scope": "All 32 remote asset digests/sizes equal local immutable release bytes. Public distribution archive consumption is recorded separately in public-downloads-v0.1.0.json."
+}

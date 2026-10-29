@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "version": "0.1.0",
+  "tag_commit": "a16ea9c4af060cb25254c36edac8caca853874d1",
+  "source_commit": "6dcf318897cab13c52d22b5310b02f46c9fada9b",
+  "ci_run_id": 40841007735,
+  "public_assets": 32,
+  "downloaded_distribution_archives": 4,
+  "github": "https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.1.0",
+  "mooncakes": "https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.1.0",
+  "scope": "All release assets uploaded from the local workstation; 32 server digests checked, four public distribution archives and registry package consumed, scientific workflows reproduced. Standalone auxiliary attachment transport is recorded separately."
+}

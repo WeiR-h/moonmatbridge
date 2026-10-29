@@ -1,0 +1,53 @@
+{
+  "status": "passed",
+  "version": "0.1.0",
+  "assets": [
+    {
+      "file": "MoonMatBridge-v0.1.0-source.zip",
+      "sha256": "690fd2c7c51a142cf03addcdaf23e2114ff9deb878844fbaccba0884236bb7a0",
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/MoonMatBridge-v0.1.0-source.zip",
+      "origin": "Resumed complete archive from the previous verified unauthenticated public HTTPS download"
+    },
+    {
+      "file": "MoonMatBridge-v0.1.0-windows-x64.zip",
+      "sha256": "a235df89c0dcc89c820467c38ae8f5d9521aa993e7e5ac738c4c79afbc24950a",
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/MoonMatBridge-v0.1.0-windows-x64.zip",
+      "origin": "Resumed complete archive from the previous verified unauthenticated public HTTPS download"
+    },
+    {
+      "file": "MoonMatBridge-v0.1.0-js.zip",
+      "sha256": "900b4af9b468278f341f35f4ca8d51422764d6b25c387a1d0d7848e6b1466b5b",
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/MoonMatBridge-v0.1.0-js.zip",
+      "origin": "Resumed complete archive from the previous verified unauthenticated public HTTPS download"
+    },
+    {
+      "file": "MoonMatBridge-v0.1.0-workflows.zip",
+      "sha256": "e4096027f3ad66a3e602d0f7da7457356c40dd6169ca1371f5c6037294f1941d",
+      "url": "https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.0/MoonMatBridge-v0.1.0-workflows.zip",
+      "origin": "Resumed complete archive from the previous verified unauthenticated public HTTPS download"
+    }
+  ],
+  "github": "https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.1.0",
+  "downloaded_native_mixed_roots": 13,
+  "public_scientific_workflows_passed": 6,
+  "published_asset_metadata_verified": 32,
+  "downloaded_archives": 4,
+  "published_metadata_sha256": "ead87608908b1e15cb096747254955a51dddd328345042df86683a99e092cc94",
+  "previous_public_download_log_sha256": "ca3b4c7eff664ccf3dfc556b272b82e1cc8d1f49449d8bc710439ec1e9591102",
+  "bundled_inputs": [
+    {
+      "file": "research-mixed.mat",
+      "member": "examples/mixed/research-mixed.mat",
+      "archive": "MoonMatBridge-v0.1.0-source.zip",
+      "sha256": "e25902d8cbed12604b7aba7ae64d9a4f31a01d25d163ea378587e3b6a5f83ef2"
+    },
+    {
+      "file": "workflows-v0.1.0.json",
+      "member": "verification/reports/workflows-v0.1.0.json",
+      "archive": "MoonMatBridge-v0.1.0-source.zip",
+      "sha256": "98dcafda4fa5ae69771630bc5d59f8629299343f879b2dfb4ae88d7d61a6e818"
+    }
+  ],
+  "auxiliary_attachment_transport": "Separate attachment GETs encountered local TLS errors. Source/native/JS/workflow archives were publicly downloaded and verified; required duplicate inputs were extracted from that public source archive and matched to release asset hashes.",
+  "scope": "Four actual public distribution archives consumed; native and JS scientific workflows, mixed tree, large source and tolerance checks passed. All 32 server asset digests checked separately; no claim that every auxiliary standalone attachment was downloaded."
+}
