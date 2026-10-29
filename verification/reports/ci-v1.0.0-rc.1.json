@@ -1,0 +1,8 @@
+{
+  "status": "passed",
+  "version": "1.0.0-rc.1",
+  "run_id": 40837287351,
+  "commit": "e4241b490e1d9c3675e0692b01398ddab83053f2",
+  "url": "https://github.com/WeiR-h/moonmatbridge/actions/runs/40837287351",
+  "scope": "Actual Linux three-target, scientific interop and Octave Unicode producer/consumer validation."
+}
