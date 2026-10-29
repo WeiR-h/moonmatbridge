@@ -18,7 +18,7 @@ def main():
     expected=np.random.default_rng(20261017);expected.standard_normal(4096)
     wanted=expected.standard_normal(131072).reshape((256,512),order='F')
     for case in cases:
-        if case['name']=='select-1-of-16' or tuple(map(int,VERSION.split('.')))<tuple(case['minimum_version']):continue
+        if case['name']=='select-1-of-16' or tuple(map(int,VERSION.split('-')[0].split('.')))<tuple(case['minimum_version']):continue
         source=Path(case['path'])
         assert hashlib.sha256(source.read_bytes()).hexdigest()==case['sha256']
         for host,prefix in [('native',[native_executable]),('js',['node',js_cli])]:

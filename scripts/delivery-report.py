@@ -53,7 +53,7 @@ def main():
     final_measurement = performance["measurements"][-1]
     missed = [target for target in final_measurement["targets"] if not target["passed"]]
     publications = []
-    revisions = sorted((p.name.removeprefix('public-downloads-v').removesuffix('.json') for p in REPORTS.glob('public-downloads-v*.json')), key=lambda v: tuple(map(int,v.split('.'))))
+    revisions = sorted((p.name.removeprefix('public-downloads-v').removesuffix('.json') for p in REPORTS.glob('public-downloads-v*.json')), key=lambda v: tuple(map(int,v.split('-')[0].split('.'))) + (int('-' not in v), int(v.rsplit('.',1)[1]) if '-rc.' in v else 0))
     for revision in revisions:
         registry_receipt = json.loads((REPORTS / f"mooncakes-v{revision}.json").read_text(encoding="utf-8"))
         download_receipt = json.loads((REPORTS / f"public-downloads-v{revision}.json").read_text(encoding="utf-8"))

@@ -32,7 +32,7 @@ def main():
     changed = cell.copy()
     changed[0, 0] = np.array([[0.0, np.nan]], dtype=np.float64)
     right.write_bytes(mixed.deterministic_mat(fixture(changed), True))
-    snapshots = tuple(map(int,VERSION.split('.'))) >= (0,0,13)
+    snapshots = tuple(map(int,VERSION.split('-')[0].split('.'))) >= (0,0,13)
     checks = []
     def run(prefix, operation, *paths, expected=0):
         result = subprocess.run([*map(str,prefix), operation, *map(str,paths)], cwd=ROOT,
