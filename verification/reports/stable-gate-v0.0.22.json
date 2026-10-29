@@ -1,0 +1,29 @@
+{
+  "status": "ready",
+  "version": "0.0.22",
+  "evidence_version": "0.0.22",
+  "performance_version": "0.0.21",
+  "runtime_source_sha256": "533ddf4f1cb995bec868ab8752b7dd97ec3cbce9fddc958915c545f4690fc507",
+  "evidence_sha256": {
+    "v0.0.22.json": "8e1e118a3abb68c79974272ed2a172bbf97ec1b74977f5b7baa542864bcc7bb0",
+    "compatibility-v0.0.22.json": "26a7b2158942608ecc17537be1d58a59ab89c99dbbe2cf34d2d32668373da50f",
+    "name-encoding-v0.0.22.json": "e9d84661f890628ee248458e66b810046e570ae5f1d953b761a067839faa11c3",
+    "api-contract-v0.0.22.json": "8f5ec81fc002b5b5779fff29232d504985ab0deff998c2ad477849317fb28e0c",
+    "ci-v0.0.22.json": "6190d38165b81998c84273d8bb9ef1c6711cbf8e1e466ef9b409aad39052af63",
+    "mooncakes-v0.0.22.json": "8f61752ba81bb46da4a2a450999b8b0bf0064baac93283b86077995baa68c99b",
+    "public-downloads-v0.0.22.json": "b99df8cb5d8ffc709212024055378dfd572bf6a3f262e806599b5747064d201b",
+    "workflows-public-v0.0.22.json": "7e53242bf6a4dee44b5be9ea0eee64a5e5c52a5408f3f548fb0e2036aa938acd",
+    "tree-operations-public-v0.0.22.json": "82c45a4cd6019cdae9c6d73c5db0ac7c8b35be69dc46876491ed3f01223a1615",
+    "source-operations-public-v0.0.22.json": "19a5d6e0f3492908d6b02613543710a0dd3de4e3b749b7203e404176ff2c7ed8",
+    "tree-close-public-v0.0.22.json": "08168cd0e87cf5bf13b7d577d620ee99fbb0c9ab15045e1f2d4d4f8cb5241cab",
+    "licenses-v0.0.22.json": "312c2fefda03c2052060427da3bf1c31b532959436659e492b2f221231d41204",
+    "octave-v0.0.22.json": "7a732edb1ef2fa0e973d6c16fb570f2992320f06d2cd00aecabc8dca00dca9b6",
+    "producer-variants-v0.0.22.json": "ddf29eef9016c68b91f59e4e0d0f83e705353d970d92d5dba082ac0f347b5bef",
+    "compatibility-gaps-v0.0.22.json": "916b4c72bec59080d7a8c882050ae60aeee84b8bdda1d9742c1cfcf333361b42",
+    "performance-vs-8a1f479-v0.0.21.json": "e2b0ed37934282e2d205df3178cbe4f6f510cd5c6f3991a531f7875e1c33415f",
+    "file-performance-v0.0.21.json": "3bf6a811306b435aff10204e8a8d5b12bb3df0fba421669049b2f288469b35c2",
+    "performance-vs-8a1f479-partial-316c05d9-v0.0.21.json": "81a8837bb522da0bc78dcec25860f06e90c9a80e2112f3dabeed2fddb4d7634c"
+  },
+  "blockers": [],
+  "scope": "Public basic-class data compatibility, real Octave Unicode, fixed-runtime performance and public package/assets; MATLAB execution is not asserted."
+}

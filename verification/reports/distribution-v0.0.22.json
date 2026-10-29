@@ -1,0 +1,11 @@
+{
+  "status": "passed",
+  "version": "0.0.22",
+  "tag_commit": "a165b5ebef4b6ce94098de7f47b2c2f7efcb6e2b",
+  "source_commit": "7d5b368f31c11a0894d8e0ec37fa77644f8103ab",
+  "ci_run_id": 40831512199,
+  "public_assets": 32,
+  "github": "https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.0.22",
+  "mooncakes": "https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.0.22",
+  "scope": "Actual public package/assets reproduced; transport resumption reused immutable assets."
+}

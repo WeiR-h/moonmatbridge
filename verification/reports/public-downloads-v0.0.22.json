@@ -1,0 +1,138 @@
+{
+  "status": "passed",
+  "version": "0.0.22",
+  "assets": [
+    {
+      "file": "MoonMatBridge-v0.0.22-source.zip",
+      "sha256": "4aad904fec0f6d7ae999a7feb65925bf8cc4e75cb4ce36e4b047f6a54cc7b21c"
+    },
+    {
+      "file": "MoonMatBridge-v0.0.22-windows-x64.zip",
+      "sha256": "0cce3409e3e389de700a3ecb43753ff0abca5ec6cd99968a61931c43474ecb71"
+    },
+    {
+      "file": "MoonMatBridge-v0.0.22-js.zip",
+      "sha256": "d0c62306918cac271c37ebc4ffa40cd5e1f5ae956622df4ed818c228d0ead431"
+    },
+    {
+      "file": "MoonMatBridge-v0.0.22-workflows.zip",
+      "sha256": "d244d2fa25ee34f9251c9598bf13dd46815098b1f1c90d08a47dbdee1d322626"
+    },
+    {
+      "file": "SHA256SUMS.txt",
+      "sha256": "d915dfbe3f0c0984c69809430d7c7b65cf4a90b2935c71ee207a42acef218deb"
+    },
+    {
+      "file": "release-v0.0.22.json",
+      "sha256": "9b6fb9df8bec48833c24206168cdacbcee8132cbb5a0c155e80da20cb004d911"
+    },
+    {
+      "file": "research-mixed-big-endian.mat",
+      "sha256": "85b42cb7fc511d87df425b67c79d7306cd9911b7db4567a6d29fce794d125afb"
+    },
+    {
+      "file": "research-mixed-compressed.mat",
+      "sha256": "7439e4fe2b599d94744a491cc3c43d242f26c65850c7acc67d1e059a7304a573"
+    },
+    {
+      "file": "research-mixed.mat",
+      "sha256": "e25902d8cbed12604b7aba7ae64d9a4f31a01d25d163ea378587e3b6a5f83ef2"
+    },
+    {
+      "file": "octave-utf16-nonbmp.mat",
+      "sha256": "111780a5fb75d2a4243f211170a8ed563c937b5106c9bbc53d6075c312597893"
+    },
+    {
+      "file": "unicode-manifest.json",
+      "sha256": "3dab34c3edf5313b5fa2fcb7fa590e8fb4a559645130a479f9f63f6133b3c0c5"
+    },
+    {
+      "file": "manifest.json",
+      "sha256": "00187e9ac153d81ed2baca6d50cd40aad895f5867d826802f4cce9de2d68f5ea"
+    },
+    {
+      "file": "all-base-classes.mat",
+      "sha256": "7bc63d1232b4d25a36c31bd3d879c00f15257ebfb25370c3afcada75528c2e6e"
+    },
+    {
+      "file": "api-contract-v0.0.22.json",
+      "sha256": "8f5ec81fc002b5b5779fff29232d504985ab0deff998c2ad477849317fb28e0c"
+    },
+    {
+      "file": "ci-v0.0.22.json",
+      "sha256": "6190d38165b81998c84273d8bb9ef1c6711cbf8e1e466ef9b409aad39052af63"
+    },
+    {
+      "file": "compatibility-gaps-v0.0.22.json",
+      "sha256": "916b4c72bec59080d7a8c882050ae60aeee84b8bdda1d9742c1cfcf333361b42"
+    },
+    {
+      "file": "compatibility-v0.0.22.json",
+      "sha256": "26a7b2158942608ecc17537be1d58a59ab89c99dbbe2cf34d2d32668373da50f"
+    },
+    {
+      "file": "licenses-v0.0.22.json",
+      "sha256": "312c2fefda03c2052060427da3bf1c31b532959436659e492b2f221231d41204"
+    },
+    {
+      "file": "mooncakes-v0.0.22.json",
+      "sha256": "8f61752ba81bb46da4a2a450999b8b0bf0064baac93283b86077995baa68c99b"
+    },
+    {
+      "file": "name-encoding-v0.0.22.json",
+      "sha256": "e9d84661f890628ee248458e66b810046e570ae5f1d953b761a067839faa11c3"
+    },
+    {
+      "file": "octave-v0.0.22.json",
+      "sha256": "7a732edb1ef2fa0e973d6c16fb570f2992320f06d2cd00aecabc8dca00dca9b6"
+    },
+    {
+      "file": "performance-summary-v0.0.22.json",
+      "sha256": "6d73115734a17c1584a2f6bb9fafebce323292eb4ff5dc46c36a94fdf65124bd"
+    },
+    {
+      "file": "producer-variants-v0.0.22.json",
+      "sha256": "ddf29eef9016c68b91f59e4e0d0f83e705353d970d92d5dba082ac0f347b5bef"
+    },
+    {
+      "file": "selection-v0.0.22.json",
+      "sha256": "42c8bd47c9944013fe445a03819c5db6abeb14588d5c7ff5709aa814ef81f12d"
+    },
+    {
+      "file": "source-operations-v0.0.22.json",
+      "sha256": "0fdde271a677fe1ac67c438a9850bb91b2e0599ec049dc94b9f6858ef4e91ca3"
+    },
+    {
+      "file": "source-snapshot-v0.0.22.json",
+      "sha256": "07648de7fc7c1d787af3c7327bc429734c65c596d8c90dde1d7adaf2ffe52197"
+    },
+    {
+      "file": "tree-close-v0.0.22.json",
+      "sha256": "f151bdc64646fd13b0052c3d718be698fba2644ed23c9a7f29e1489745f55a5c"
+    },
+    {
+      "file": "tree-operations-v0.0.22.json",
+      "sha256": "32d6adab1a9f1315cbd8814ed28a885cabcd80e5ee6aa695ce059154e146a386"
+    },
+    {
+      "file": "workflows-v0.0.22.json",
+      "sha256": "c19020cee0f06e33d88336fa5ed7d1f8a26058e9fb0fca735ed526861b909a14"
+    },
+    {
+      "file": "TREE_DIFF.md",
+      "sha256": "7caf89b589cec2707e6d9829ae5d0699955792d32752611641a85782114ed272"
+    },
+    {
+      "file": "TREE_SNAPSHOT.md",
+      "sha256": "e9186f1692314298a78e3de505677a1970a34ee84b57a37078dd0a43e9044e26"
+    },
+    {
+      "file": "TREE_CLOSE.md",
+      "sha256": "adb211e92e5cdadfd52827e4eecaba2f7b945267056b5d9bd058aa4153246e1b"
+    }
+  ],
+  "downloaded_native_mixed_roots": 13,
+  "github": "https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.0.22",
+  "scope": "Public assets downloaded and compared byte-for-byte; downloaded executable consumes mixed file. Local archive consumers are in release receipt.",
+  "public_scientific_workflows_passed": 6
+}
