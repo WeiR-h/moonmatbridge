@@ -67,6 +67,9 @@ def main():
             if data.get('baseline_runtime_source_sha256')!=runtime:problems.append(label+':baseline-runtime-changed')
             continue
         for row in data.get('results',[]):
+            if label=='core' and row.get('cli_speedup',1)<1/1.1:
+                matching=[r for report in followups if report.get('candidate_runtime_source_sha256')==runtime and report.get('followup_of_sha256')==sources[core_name] for r in report.get('results',[]) if (r.get('case'),r.get('operation'),r.get('host'))==(row.get('case'),row.get('operation'),row.get('host')) and 'cli_speedup' in r]
+                if not matching or matching[-1]['cli_speedup']<1/1.1:problems.append('core:cli-repeat-required:'+row['case']+':'+row['host'])
             if row.get('speedup',0)>=1/1.1 and row.get('memory_reduction',-1)>=-.1:continue
             # Explicit later follow-up reports only; never choose the best sample
             # or silently replace the fixed full cohort.

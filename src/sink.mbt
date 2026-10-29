@@ -111,9 +111,26 @@ fn sink_zeros(cursor : SinkCursor, count : Int32) -> Unit raise MatError {
 }
 
 ///|
-fn sink_u32(cursor : SinkCursor, value : UInt64) -> Unit raise MatError {
-  for i = 0; i < 4; i = i + 1 {
-    sink_byte(cursor, ((value >> (i * 8)) & 255UL).to_byte())
+fn sink_u32(cursor : SinkCursor, value : UInt32) -> Unit raise MatError {
+  if 4 > cursor.limit - cursor.offset {
+    fail("file-limit", cursor.offset, "Encoded output exceeds byte limit")
+  }
+  if cursor.buffer.length() - cursor.used >= 4 {
+    // CSC indices and tags normally fit within a block. Update the cursor once.
+    let at = cursor.used
+    cursor.buffer[at] = (value & 255U).to_byte()
+    cursor.buffer[at + 1] = ((value >> 8) & 255U).to_byte()
+    cursor.buffer[at + 2] = ((value >> 16) & 255U).to_byte()
+    cursor.buffer[at + 3] = ((value >> 24) & 255U).to_byte()
+    cursor.used = cursor.used + 4
+    cursor.offset = cursor.offset + 4
+    if cursor.used == cursor.buffer.length() {
+      sink_flush(cursor)
+    }
+  } else {
+    for i = 0; i < 4; i = i + 1 {
+      sink_byte(cursor, ((value >> (i * 8)) & 255U).to_byte())
+    }
   }
 }
 
@@ -123,8 +140,8 @@ fn sink_tag(
   kind : Int32,
   size : Int32,
 ) -> Unit raise MatError {
-  sink_u32(cursor, kind.to_uint64())
-  sink_u32(cursor, size.to_uint64())
+  sink_u32(cursor, kind.reinterpret_as_uint())
+  sink_u32(cursor, size.reinterpret_as_uint())
 }
 
 ///|
@@ -143,8 +160,37 @@ fn sink_bytes(
 ///|
 fn sink_ints(cursor : SinkCursor, values : Array[Int32]) -> Unit raise MatError {
   sink_tag(cursor, 5, values.length() * 4)
-  for value in values {
-    sink_u32(cursor, value.reinterpret_as_uint().to_uint64())
+  if values.length() * 4 > cursor.limit - cursor.offset {
+    fail("file-limit", cursor.offset, "Encoded output exceeds byte limit")
+  }
+  let mut index = 0
+  while index < values.length() {
+    let room = (cursor.buffer.length() - cursor.used) / 4
+    if room == 0 {
+      sink_u32(cursor, values[index].reinterpret_as_uint())
+      index = index + 1
+    } else {
+      let count = if values.length() - index < room {
+        values.length() - index
+      } else {
+        room
+      }
+      let at = cursor.used
+      for i = 0; i < count; i = i + 1 {
+        let word = values[index + i].reinterpret_as_uint()
+        let position = at + i * 4
+        cursor.buffer[position] = word.to_byte()
+        cursor.buffer[position + 1] = (word >> 8).to_byte()
+        cursor.buffer[position + 2] = (word >> 16).to_byte()
+        cursor.buffer[position + 3] = (word >> 24).to_byte()
+      }
+      cursor.used = cursor.used + count * 4
+      cursor.offset = cursor.offset + count * 4
+      index = index + count
+      if cursor.used == cursor.buffer.length() {
+        sink_flush(cursor)
+      }
+    }
   }
   if values.length() % 2 != 0 {
     sink_zeros(cursor, 4)
@@ -331,9 +377,9 @@ fn sink_node(
     (class +
     (if logical { 512 } else { 0 }) +
     (if global { 1024 } else { 0 }) +
-    (if complex { 2048 } else { 0 })).to_uint64(),
+    (if complex { 2048 } else { 0 })).reinterpret_as_uint(),
   )
-  sink_u32(cursor, capacity.to_uint64())
+  sink_u32(cursor, capacity.reinterpret_as_uint())
   sink_ints(cursor, node.shape())
   sink_bytes(cursor, 1, encode_name(node.name(), name_encoding))
   match node {
@@ -367,8 +413,8 @@ fn sink_node(
           width = count
         }
       }
-      sink_u32(cursor, (5 + (4 << 16)).to_uint64())
-      sink_u32(cursor, width.to_uint64())
+      sink_u32(cursor, (5 + (4 << 16)).reinterpret_as_uint())
+      sink_u32(cursor, width.reinterpret_as_uint())
       let table_size = width * a.fields.length()
       sink_tag(cursor, 1, table_size)
       for field in a.fields {
