@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "version": "0.1.3",
+  "command": "node scripts/moon.mjs run src/examples/write_large --target native -- NEW.mat --small",
+  "shape": [
+    131072,
+    1
+  ],
+  "bytes": 1048776,
+  "sha256": "1b1553a8bea6d33284d86188d4a44fa58bf7fc8632ae590c57d6ea460b59f351",
+  "oracle": "scipy.io.loadmat",
+  "scope": "Resident 1 MiB data tree, same executable defaults to 256 MiB"
+}
