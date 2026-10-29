@@ -1,0 +1,90 @@
+{
+  "status": "passed",
+  "version": "0.1.0",
+  "node": "v24.13.0",
+  "platform": "win32",
+  "checks": [
+    {
+      "name": "RFC 1950/1951 differential corpus",
+      "status": "passed",
+      "detail": {
+        "streams": 704,
+        "strategies": 4,
+        "levels": 4,
+        "first_block_types": [
+          0,
+          1,
+          2
+        ],
+        "truncations": 2072,
+        "oracle": "Node built-in zlib"
+      }
+    },
+    {
+      "name": "Incremental source decoder against independent Node zlib MAT producers",
+      "status": "passed",
+      "detail": {
+        "streams": 704,
+        "strategies": 4,
+        "levels": 4,
+        "short_read_bytes": 4093,
+        "all_root_checksums_verified": true
+      }
+    },
+    {
+      "name": "Buffered Huffman and stored flush transitions",
+      "status": "passed",
+      "detail": {
+        "oracle": "Node zlib Z_SYNC_FLUSH"
+      }
+    },
+    {
+      "name": "Original deterministic zlib encoder against Node decoder",
+      "status": "passed",
+      "detail": {
+        "streams": 44,
+        "block_types": [
+          0,
+          1
+        ],
+        "repetitive_bytes": 120000,
+        "compressed_bytes": 766
+      }
+    },
+    {
+      "name": "preset dictionaries rejected explicitly",
+      "status": "passed"
+    },
+    {
+      "name": "browser-compatible JS exports",
+      "status": "passed",
+      "detail": {
+        "sample_sha256": "290d856575eb65dcd00157c6b7ef37257fd917946d03e3fa07519238d56b71d7",
+        "deterministic_roundtrip": true,
+        "data_schema": "moonmatbridge/1"
+      }
+    },
+    {
+      "name": "malformed MAT boundaries and resource limits",
+      "status": "passed",
+      "detail": [
+        "negative dimensions",
+        "oversized dimensions",
+        "oversized tag length",
+        "flags length",
+        "MAT version",
+        "subsystem metadata",
+        "unknown matrix class",
+        "missing imaginary data"
+      ]
+    },
+    {
+      "name": "strict JSON schema and absent variable diagnostics",
+      "status": "passed",
+      "detail": {
+        "invalid_documents": 6
+      }
+    }
+  ],
+  "passed": 8
+}
