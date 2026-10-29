@@ -1,0 +1,14 @@
+{
+  "status": "passed",
+  "version": "0.0.21",
+  "tag_commit": "e85d850f5d4d9888e40e33a477f48e29b511279d",
+  "source_commit": "657145091d480a7e07b1cb640ff14d468e7fd0b2",
+  "source_sha256": "eae4335aaf685b606bd0839ee9555ddd5d41aa303bddd88d8d585235c7a24382",
+  "ci_run_id": 40821379475,
+  "public_assets": 37,
+  "core_rows": 24,
+  "file_rows": 6,
+  "github": "https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.0.21",
+  "mooncakes": "https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.0.21",
+  "scope": "Actual public package/asset reproduction; full timing cohorts and linked follow-up retained."
+}
