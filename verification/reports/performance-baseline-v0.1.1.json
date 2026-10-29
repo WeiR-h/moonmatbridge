@@ -1,0 +1,51 @@
+{
+  "status": "verified",
+  "version": "0.1.1",
+  "kind": "same-revision new-toolchain baseline control",
+  "fixed_commit": "85fef84de68b69b7e762c3c6317266bb6674ff84",
+  "runtime_source_sha256": "ea0b4ec745f6598edf68d5f6a2fbd63373646c3d49727e4709ba629b94b6c6f1",
+  "environment": {
+    "compiler": "v0.10.16+b1a0e846e (2026-10-16)",
+    "compiler_version": "0.10.16+b1a0e846e",
+    "standard_library_archive_sha256": "e7db6e3c80a97af953598b374cf14f3e330918b1ca4659b141b9f550c9c0adb0",
+    "standard_library_source_sha256": "31140145ca3db92e94781c7649073922fca6ec669d04b4219119dff611dba5f5",
+    "c_compiler": "Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35229 for x64",
+    "native_backend": "c",
+    "native_environment": {
+      "MOONBIT_NEW_NATIVE": "0"
+    },
+    "node": "v24.13.0",
+    "windows_sdk_version": "10.0.22621.0",
+    "platform": "win32",
+    "architecture": "x64"
+  },
+  "cohorts": [
+    {
+      "file": "performance-vs-85fef84-v0.1.1.json",
+      "sha256": "d471916254147355c893bdbfb459c28bcba7ee03a42c173ccef6f908af0ae9b2",
+      "rows": 24,
+      "protocol": {
+        "warmup_per_batch": 5,
+        "batches": 3,
+        "samples_per_batch": 10,
+        "paired_order": "baseline then candidate, repeated three times",
+        "core_scope": "input preloaded; write tree prepared; no startup or filesystem timing; JS GC outside samples",
+        "memory": "three independent processes per revision, one operation, no warmup; full process peak working set/RSS",
+        "cli": "five warmups followed by 30 full process invocations per revision; includes startup and disk I/O"
+      }
+    },
+    {
+      "file": "file-performance-v0.1.1.json",
+      "sha256": "787f47816b8f69e4decb5f612a021ab6a89607adaeee78dfe7e4da4fbc923afd",
+      "rows": 6,
+      "protocol": {
+        "warmup_per_batch": 5,
+        "batches": 3,
+        "samples_per_batch": 10,
+        "memory_processes": 3,
+        "timing": "open, read, validate, select, close and serialize; process startup excluded; generated input excluded; warm OS cache; JS GC outside timing"
+      }
+    }
+  ],
+  "scope": "Full original cohorts, all samples retained. Both sides run the identical frozen revision: observed paired ratios describe variability and are not optimization or code-regression claims. Final file JS row was restarted in full after the original measuring process ended before producing a row; completed preceding rows are unchanged."
+}
