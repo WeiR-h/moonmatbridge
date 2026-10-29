@@ -1,0 +1,11 @@
+{
+  "status": "recorded",
+  "version": "0.1.5",
+  "captured_at": "2026-10-29T17:45:22.526515+00:00",
+  "source_commit": "272840f0feedc51ffd7a54a3213e9b4b95111f93",
+  "python": "3.12.5 (tags/v3.12.5:ff3bc82, Aug  6 2024, 20:45:27) [MSC v.1940 64 bit (AMD64)]",
+  "numpy": "2.2.6",
+  "scipy": "1.15.3",
+  "platform": "Windows-11-10.0.22000-SP0",
+  "scope": "Local Python generator and independent SciPy consumer environment for the fixed writer cohorts; compiler, native build and Node identities are recorded by the full measurement report."
+}

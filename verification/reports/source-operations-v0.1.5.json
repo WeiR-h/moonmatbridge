@@ -1,0 +1,54 @@
+{
+  "status": "passed",
+  "version": "0.1.5",
+  "checks": [
+    {
+      "host": "native",
+      "case": "large-uncompressed",
+      "status": "passed",
+      "input_sha256": "5449988fce2405229797ffde0a523627482f8527b32ffde4c53a1d0074f249d1",
+      "input_bytes": 269484288,
+      "output_sha256": "45f8a0e83fab00452ddc7344617cfa5b750b1e1a1d5ce761c217c1a2c088e971"
+    },
+    {
+      "host": "js",
+      "case": "large-uncompressed",
+      "status": "passed",
+      "input_sha256": "5449988fce2405229797ffde0a523627482f8527b32ffde4c53a1d0074f249d1",
+      "input_bytes": 269484288,
+      "output_sha256": "45f8a0e83fab00452ddc7344617cfa5b750b1e1a1d5ce761c217c1a2c088e971"
+    },
+    {
+      "host": "native",
+      "case": "large-compressed",
+      "status": "passed",
+      "input_sha256": "f0ea74d7f952ccf1e374cbf83f826f407f7df22ae7f5114cf179678670dcc45b",
+      "input_bytes": 258888169,
+      "output_sha256": "45f8a0e83fab00452ddc7344617cfa5b750b1e1a1d5ce761c217c1a2c088e971"
+    },
+    {
+      "host": "js",
+      "case": "large-compressed",
+      "status": "passed",
+      "input_sha256": "f0ea74d7f952ccf1e374cbf83f826f407f7df22ae7f5114cf179678670dcc45b",
+      "input_bytes": 258888169,
+      "output_sha256": "45f8a0e83fab00452ddc7344617cfa5b750b1e1a1d5ce761c217c1a2c088e971"
+    },
+    {
+      "host": "native",
+      "case": "source changed during full scan",
+      "status": "passed",
+      "timestamp_updates": 27
+    },
+    {
+      "host": "js",
+      "case": "source changed inside read callback",
+      "status": "passed"
+    }
+  ],
+  "passed": 6,
+  "oracle": "Fixed seed NumPy expected data and SciPy output consumption; file fixture hashes and generator retained",
+  "seed": 20261017,
+  "block_bytes": 32768,
+  "repeats": 8192
+}

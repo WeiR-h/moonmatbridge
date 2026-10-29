@@ -1,0 +1,91 @@
+{
+  "status": "passed",
+  "version": "0.1.5",
+  "input_payload_bytes": 268435456,
+  "checks": [
+    {
+      "compressed": false,
+      "command": [
+        "node",
+        "scripts/moon.mjs",
+        "run",
+        "src/examples/write_large",
+        "--target",
+        "native",
+        "--",
+        "C:\\Users\\\u4f55\u6d69\u7136\\Desktop\\Competition\\MoonBit \u9ed1\u5ba2\u677e\\MoonMatBridge\\verification\\local\\large-example-m1imu964\\plain.mat"
+      ],
+      "status": "passed",
+      "bytes": 268435656,
+      "sha256": "741a1acf8443b46de983470be59345f06de2117af637b61f25daa20a6d0b6575",
+      "shape": [
+        33554432,
+        1
+      ],
+      "oracle": "SciPy loadmat, exact float64 zeros; Node bounded roots",
+      "example_output": "{\"status\":\"ok\",\"output\":\"C:\\\\Users\\\\\u4f55\u6d69\u7136\\\\Desktop\\\\Competition\\\\MoonBit \u9ed1\u5ba2\u677e\\\\MoonMatBridge\\\\verification\\\\local\\\\large-example-m1imu964\\\\plain.mat\",\"bytes\":268435656,\"input_tree_resident\":true,\"chunk_bytes\":1048576,\"compressed\":false}",
+      "roots": {
+        "status": "ok",
+        "version": "0.1.5",
+        "format": "MAT Level 5",
+        "roots": [
+          {
+            "name": "simulation",
+            "class_id": 6,
+            "shape": [
+              33554432,
+              1
+            ],
+            "global": false,
+            "complex": false,
+            "logical": false,
+            "compressed": false
+          }
+        ]
+      }
+    },
+    {
+      "compressed": true,
+      "command": [
+        "node",
+        "scripts/moon.mjs",
+        "run",
+        "src/examples/write_large",
+        "--target",
+        "native",
+        "--",
+        "C:\\Users\\\u4f55\u6d69\u7136\\Desktop\\Competition\\MoonBit \u9ed1\u5ba2\u677e\\MoonMatBridge\\verification\\local\\large-example-m1imu964\\compressed.mat",
+        "--compressed"
+      ],
+      "status": "passed",
+      "bytes": 1702104,
+      "sha256": "0c0b2c940ebbda20e4066a57a45640f3458d505eea4d6e5e38ba2e78a2ee885f",
+      "shape": [
+        33554432,
+        1
+      ],
+      "oracle": "SciPy loadmat, exact float64 zeros; Node bounded roots",
+      "example_output": "{\"status\":\"ok\",\"output\":\"C:\\\\Users\\\\\u4f55\u6d69\u7136\\\\Desktop\\\\Competition\\\\MoonBit \u9ed1\u5ba2\u677e\\\\MoonMatBridge\\\\verification\\\\local\\\\large-example-m1imu964\\\\compressed.mat\",\"bytes\":1702104,\"input_tree_resident\":true,\"chunk_bytes\":1048576,\"compressed\":true}",
+      "roots": {
+        "status": "ok",
+        "version": "0.1.5",
+        "format": "MAT Level 5",
+        "roots": [
+          {
+            "name": "simulation",
+            "class_id": 6,
+            "shape": [
+              33554432,
+              1
+            ],
+            "global": false,
+            "complex": false,
+            "logical": false,
+            "compressed": true
+          }
+        ]
+      }
+    }
+  ],
+  "scope": "Actual shipped example at its default 256 MiB size, both encodings independently consumed; temporary outputs hashed then removed"
+}
