@@ -1,0 +1,11 @@
+{
+  "status": "passed",
+  "version": "0.1.7",
+  "module": "WeiR-h/moonmatbridge",
+  "url": "https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.1.7",
+  "build_status": "success",
+  "archive_sha256": "a64d29eafc8025a3da63f50140dcaccb208014b3f1dc5be9972ffed3205a470e",
+  "source_sha256": "8a315a6e609e481c5a311b2bcc4c19ff9f21c163f5a69f4b1f5e32f1b5cd12e9",
+  "installed_source_files": 102,
+  "scope": "Read-only exact-version manifest and fresh three-target executable/test consumer; all source files compared."
+}

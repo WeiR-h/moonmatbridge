@@ -1,0 +1,6 @@
+{
+  "status": "passed",
+  "version": "0.1.7",
+  "scope": "Publicly downloaded four archives; root LICENSE/NOTICE/THIRD_PARTY each matched byte-for-byte",
+  "checks": 12
+}

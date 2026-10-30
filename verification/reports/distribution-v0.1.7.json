@@ -1,0 +1,11 @@
+{
+  "status": "passed",
+  "version": "0.1.7",
+  "source_commit": "6f421a367f21bae9f45a743d67b2e4598a54c114",
+  "tag_commit": "bcc23e9af81c473ba01075cb0f5a923cf7c76e0c",
+  "ci_run_id": 41030477892,
+  "public_assets": 41,
+  "github": "https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.1.7",
+  "mooncakes": "https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.1.7",
+  "scope": "Both public channels, source identity, licenses and independent workflows verified. Local upload; separate post-publication evidence."
+}
