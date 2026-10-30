@@ -80,18 +80,6 @@ fn sink_byte(cursor : SinkCursor, byte : Byte) -> Unit raise MatError {
 }
 
 ///|
-#cfg(not(target="js"))
-fn sink_payload_copy(
-  buffer : FixedArray[Byte],
-  at : Int32,
-  bytes : Bytes,
-  start : Int32,
-  size : Int32,
-) -> Unit {
-  buffer.blit_from_bytes(at, bytes, start, size)
-}
-
-///|
 #cfg(target="js")
 fn sink_payload_copy(
   buffer : FixedArray[Byte],
@@ -121,6 +109,32 @@ fn sink_payload_copy(
 }
 
 ///|
+#cfg(not(target="js"))
+fn sink_copy(
+  cursor : SinkCursor,
+  bytes : Bytes,
+  start : Int32,
+  count : Int32,
+) -> Unit raise MatError {
+  if count > cursor.limit - cursor.offset {
+    fail("file-limit", cursor.offset, "Encoded output exceeds byte limit")
+  }
+  let mut done = 0
+  while done < count {
+    let room = cursor.buffer.length() - cursor.used
+    let n = if count - done < room { count - done } else { room }
+    cursor.buffer.blit_from_bytes(cursor.used, bytes, start + done, n)
+    cursor.used = cursor.used + n
+    cursor.offset = cursor.offset + n
+    done = done + n
+    if cursor.used == cursor.buffer.length() {
+      sink_flush(cursor)
+    }
+  }
+}
+
+///|
+#cfg(target="js")
 fn sink_copy(
   cursor : SinkCursor,
   bytes : Bytes,
@@ -199,6 +213,48 @@ fn sink_bytes(
 }
 
 ///|
+#cfg(not(target="js"))
+fn sink_ints(cursor : SinkCursor, values : Array[Int32]) -> Unit raise MatError {
+  sink_tag(cursor, 5, values.length() * 4)
+  if values.length() * 4 > cursor.limit - cursor.offset {
+    fail("file-limit", cursor.offset, "Encoded output exceeds byte limit")
+  }
+  let mut index = 0
+  while index < values.length() {
+    let room = (cursor.buffer.length() - cursor.used) / 4
+    if room == 0 {
+      sink_u32(cursor, values[index].reinterpret_as_uint())
+      index = index + 1
+    } else {
+      let count = if values.length() - index < room {
+        values.length() - index
+      } else {
+        room
+      }
+      let at = cursor.used
+      for i = 0; i < count; i = i + 1 {
+        let word = values[index + i].reinterpret_as_uint()
+        let position = at + i * 4
+        cursor.buffer[position] = word.to_byte()
+        cursor.buffer[position + 1] = (word >> 8).to_byte()
+        cursor.buffer[position + 2] = (word >> 16).to_byte()
+        cursor.buffer[position + 3] = (word >> 24).to_byte()
+      }
+      cursor.used = cursor.used + count * 4
+      cursor.offset = cursor.offset + count * 4
+      index = index + count
+      if cursor.used == cursor.buffer.length() {
+        sink_flush(cursor)
+      }
+    }
+  }
+  if values.length() % 2 != 0 {
+    sink_zeros(cursor, 4)
+  }
+}
+
+///|
+#cfg(target="js")
 fn sink_ints(cursor : SinkCursor, values : Array[Int32]) -> Unit raise MatError {
   sink_tag(cursor, 5, values.length() * 4)
   if values.length() * 4 > cursor.limit - cursor.offset {
