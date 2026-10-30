@@ -1,0 +1,177 @@
+{
+  "status": "passed",
+  "version": "0.1.9",
+  "github": "https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.1.9",
+  "assets": [
+    {
+      "file": "all-base-classes.mat",
+      "sha256": "7bc63d1232b4d25a36c31bd3d879c00f15257ebfb25370c3afcada75528c2e6e"
+    },
+    {
+      "file": "api-contract-v0.1.9.json",
+      "sha256": "d055066ea4d4c99aa91c1270e839618477a5eec97d65733f0b2a7759b72cb796"
+    },
+    {
+      "file": "ci-v0.1.9.json",
+      "sha256": "4c31f9ca991d90bf9a2be5a00cc998579d07c2222a0be42803a929db9ea8de87"
+    },
+    {
+      "file": "compatibility-gaps-v0.1.9.json",
+      "sha256": "9bca717ba9c1bf17862b5a34c1fb840f48268cdcc162652bf7c1b1eb64e9a09c"
+    },
+    {
+      "file": "compatibility-v0.1.9.json",
+      "sha256": "4205eb6f91fcb26d01e722ea92880eb5edb49e45b668f3c7300c310b7734f447"
+    },
+    {
+      "file": "compressed-sink-v0.1.9.json",
+      "sha256": "ea4b3b13da997eff164a1638c1bd6c87b8fca87c3a5057df636c0cfd054bb17f"
+    },
+    {
+      "file": "coverage-linux-v0.1.9.json",
+      "sha256": "3297064eb5f44ece2307def4c2d0ebd9f32a2c829bcff2d809310620e1349237"
+    },
+    {
+      "file": "coverage-v0.1.9.json",
+      "sha256": "a095429f3b125be5583cfe5838ac71e6a5e6a6761669d18127cd331ac73dcf51"
+    },
+    {
+      "file": "coverage-windows-v0.1.9.json",
+      "sha256": "44373ff46ee97c15a7ae76abe6916210b4df7d6c0f6b7ce2ea8691c5b35da55a"
+    },
+    {
+      "file": "licenses-v0.1.9.json",
+      "sha256": "888444bdef8cbff47b4ab4aaac2b821a46b4efe9de17fec939465f1866dce257"
+    },
+    {
+      "file": "manifest.json",
+      "sha256": "00187e9ac153d81ed2baca6d50cd40aad895f5867d826802f4cce9de2d68f5ea"
+    },
+    {
+      "file": "mooncakes-v0.1.9.json",
+      "sha256": "8c4987628505197fcf10b3019c246b93d2c7abaa4cb1327f67ab243aea7d5ed3"
+    },
+    {
+      "file": "MoonMatBridge-v0.1.9-js.zip",
+      "sha256": "3043e83d944e4da2e60b88d6e6c8800be149d6961bc87e4af6ba0485f1d14036"
+    },
+    {
+      "file": "MoonMatBridge-v0.1.9-source.zip",
+      "sha256": "eaf8a2cbecc92cd8abb3eef95f40e75c30d5cb37acbaf9b747805d7b0e21479f"
+    },
+    {
+      "file": "MoonMatBridge-v0.1.9-windows-x64.zip",
+      "sha256": "edafb870629e194064d3c1eae218c3b6a843355e2b978e84042839220266343b"
+    },
+    {
+      "file": "MoonMatBridge-v0.1.9-workflows.zip",
+      "sha256": "0ca4f13e607464aa40c528c6f1fa99190af1898a473430431caf9decec3ce94b"
+    },
+    {
+      "file": "name-encoding-v0.1.9.json",
+      "sha256": "4a8002a21706f159b8b83123a1ade2d46427f20a02711dadeb46a6d88fe142f7"
+    },
+    {
+      "file": "octave-utf16-nonbmp.mat",
+      "sha256": "111780a5fb75d2a4243f211170a8ed563c937b5106c9bbc53d6075c312597893"
+    },
+    {
+      "file": "octave-v0.1.9.json",
+      "sha256": "11e9693f4346e6b34a01af952d4da06c8e1a54e877db3d7cf9fa5dd1053e6775"
+    },
+    {
+      "file": "performance-binding-v0.1.9.json",
+      "sha256": "b47fd2ac990f1ea548a908e01a5a32b591730c38b6ad2b5984945391d71e78e5"
+    },
+    {
+      "file": "producer-variants-v0.1.9.json",
+      "sha256": "e8e46be7f9cdc9bc57e8387928fc76606597a0395a22d9d6c675b0621d8fac87"
+    },
+    {
+      "file": "release-v0.1.9.json",
+      "sha256": "3640dc3164395198d293bf9d4a8a9dc131af2767e5d2c7b5d7db94319a2cb678"
+    },
+    {
+      "file": "research-mixed-big-endian.mat",
+      "sha256": "85b42cb7fc511d87df425b67c79d7306cd9911b7db4567a6d29fce794d125afb"
+    },
+    {
+      "file": "research-mixed-compressed.mat",
+      "sha256": "7439e4fe2b599d94744a491cc3c43d242f26c65850c7acc67d1e059a7304a573"
+    },
+    {
+      "file": "research-mixed.mat",
+      "sha256": "e25902d8cbed12604b7aba7ae64d9a4f31a01d25d163ea378587e3b6a5f83ef2"
+    },
+    {
+      "file": "selection-v0.1.9.json",
+      "sha256": "5bbf58dcbf5de54f7b3ea8cc0123e246cae494a33df849d3a3710fab1f389b5a"
+    },
+    {
+      "file": "SHA256SUMS.txt",
+      "sha256": "e8a118444e3372b9de60e32b2d6421f9859abc62168b1a4aa2fa27020fa2748d"
+    },
+    {
+      "file": "sink-operations-v0.1.9.json",
+      "sha256": "69d0205bdd1001c9f529ca7e51d6385c7d3fbc619936654f64064ac66de3b01e"
+    },
+    {
+      "file": "SINKS.md",
+      "sha256": "44e4bbd3f2ded9b9a49f37916b14d17d2c9b7d66c404aa791f2c7f6b97493c5c"
+    },
+    {
+      "file": "source-operations-v0.1.9.json",
+      "sha256": "dec1336a29c28ccbd25e72c4cfa97dc1ecf228952bb639485d9b9cac01d748ad"
+    },
+    {
+      "file": "source-snapshot-v0.1.9.json",
+      "sha256": "44b2cae78b50c62763f4861188b400e95977e5aa173d4a2a3b3c5e36f7c92448"
+    },
+    {
+      "file": "tree-close-v0.1.9.json",
+      "sha256": "37aa74d67554259b51adbd1f02bc6729ed8bba4dad79b8c8d752647e78fba4c1"
+    },
+    {
+      "file": "tree-operations-v0.1.9.json",
+      "sha256": "595722e069318d8060944f985a6e788c4c10a4fca6fa4cfba5c3b4bfcc42bfc1"
+    },
+    {
+      "file": "TREE_CLOSE.md",
+      "sha256": "adb211e92e5cdadfd52827e4eecaba2f7b945267056b5d9bd058aa4153246e1b"
+    },
+    {
+      "file": "TREE_DIFF.md",
+      "sha256": "7caf89b589cec2707e6d9829ae5d0699955792d32752611641a85782114ed272"
+    },
+    {
+      "file": "TREE_SNAPSHOT.md",
+      "sha256": "e9186f1692314298a78e3de505677a1970a34ee84b57a37078dd0a43e9044e26"
+    },
+    {
+      "file": "unicode-manifest.json",
+      "sha256": "3dab34c3edf5313b5fa2fcb7fa590e8fb4a559645130a479f9f63f6133b3c0c5"
+    },
+    {
+      "file": "workflows-demo-v0.1.9.json",
+      "sha256": "788e3f72a1697c7f625862cf2ee85783f3b6b357b864f449643eb1f99cb09581"
+    },
+    {
+      "file": "workflows-v0.1.9.json",
+      "sha256": "9658eaa456fb871afac203e946094b54a869feb0d8ca29df23fbce5be62de7ba"
+    },
+    {
+      "file": "write-example-v0.1.9.json",
+      "sha256": "2b40ed1742a032bac478a51b978bf6df596124162593bc6d1e0b542fbc6b7159"
+    },
+    {
+      "file": "WRITE_PERFORMANCE-v0.1.9.md",
+      "sha256": "03cffe16f98e3e99244959cf049149ee8881d60a33f64cb53c36e3315a801b25"
+    },
+    {
+      "file": "WRITE_PERFORMANCE.md",
+      "sha256": "dda77dcc47d8de7a5f5e07c3aa0b78c645b99f38d27a443eeb0fbfcf1293e1c3"
+    }
+  ],
+  "public_scientific_workflows_passed": 6,
+  "scope": "Independent public download against GitHub asset digests and the published archive manifest; licenses and downloaded native/JS scientific flows verified."
+}
