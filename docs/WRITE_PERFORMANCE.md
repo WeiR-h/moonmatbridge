@@ -1,5 +1,22 @@
 # 分块写入测量
 
+
+## 固定 v0.1.5 对照（v0.1.8）
+
+当前版本分别重测 24 组核心、6 组文件读取和 32 组同一 MatSink 接口的固定版本对照。原始版本、全部样本与测量环境分别保存，新增工程目标只针对 JS 未压缩 CSC，实际达成情况以报告为准。
+
+- [24 组核心](../verification/reports/performance-vs-70f87e2-v0.1.8.json)
+- [6 组文件读取](../verification/reports/file-performance-v0.1.8.json)
+- [32 组写入对照](../verification/reports/write-regression-v0.1.8.json)
+- [可读汇总](../verification/reports/WRITE_PERFORMANCE-v0.1.8.md)
+
+```powershell
+python scripts/write-regression.py --baseline-ref v0.1.5 --candidate-ref v0.1.8
+```
+
+以下保留历史同版两接口比较及其环境边界。
+
+
 固定同一提交中的旧内存写入和新 MatSink 路径，使用相同的定点文件适配策略。旧写入实现的完整已有核心源码对照固定新工具链基线 `85fef84`，确认未修改。输入包括 16 MiB 密集数据、4 MiB 混合树、100k CSC 和驻留 256 MiB 数据树；大树由固定种子 32 KiB 块重复生成。
 
 ```powershell

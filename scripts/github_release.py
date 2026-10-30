@@ -1,4 +1,5 @@
 """Immutable GitHub REST publication and unauthenticated public downloads."""
+import os
 import hashlib
 import json
 import subprocess
@@ -13,6 +14,9 @@ REPO = 'WeiR-h/moonmatbridge'
 API = f'repos/{REPO}'
 
 def api(method, endpoint, body=None, binary=None, retry=True):
+    if os.name=='nt':
+        from github_transport import api as windows_api
+        return windows_api(method,endpoint,body,binary,retry)
     args = ['gh', 'api', '--method', method, endpoint]
     if body is not None:
         path = ROOT / 'verification/local/github-request.json'

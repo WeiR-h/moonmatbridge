@@ -1,6 +1,23 @@
 # 性能测量
 
 
+## 固定 v0.1.5 对照（v0.1.8）
+
+当前版本分别重测 24 组核心、6 组文件读取和 32 组同一 MatSink 接口的固定版本对照。原始版本、全部样本与测量环境分别保存，新增工程目标只针对 JS 未压缩 CSC，实际达成情况以报告为准。
+
+- [24 组核心](../verification/reports/performance-vs-70f87e2-v0.1.8.json)
+- [6 组文件读取](../verification/reports/file-performance-v0.1.8.json)
+- [32 组写入对照](../verification/reports/write-regression-v0.1.8.json)
+- [可读汇总](../verification/reports/WRITE_PERFORMANCE-v0.1.8.md)
+
+```powershell
+python scripts/write-regression.py --baseline-ref v0.1.5 --candidate-ref v0.1.8
+```
+
+以下保留历史同版两接口比较及其环境边界。
+
+
+
 当前工具链的核心与文件读取对照保留在 [24 组核心测量](../verification/reports/performance-vs-85fef84-v0.1.4.json) 和 [6 组文件测量](../verification/reports/file-performance-v0.1.4.json)。v0.1.5 的生产源码、工具链及构建参数一致性由[独立摘要](../verification/reports/performance-summary-v0.1.5.json)记录，原始数据保留原版本。
 
 新增驻留树写入使用单独的 [测量方法与结果入口](WRITE_PERFORMANCE.md)，覆盖两种编码、核心与文件流程。旧内存路径的完整字节缓冲直接交给同一宿主写入器。下面保留历史测量及其环境边界。

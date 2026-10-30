@@ -80,6 +80,47 @@ fn sink_byte(cursor : SinkCursor, byte : Byte) -> Unit raise MatError {
 }
 
 ///|
+#cfg(not(target="js"))
+fn sink_payload_copy(
+  buffer : FixedArray[Byte],
+  at : Int32,
+  bytes : Bytes,
+  start : Int32,
+  size : Int32,
+) -> Unit {
+  buffer.blit_from_bytes(at, bytes, start, size)
+}
+
+///|
+#cfg(target="js")
+fn sink_payload_copy(
+  buffer : FixedArray[Byte],
+  at : Int32,
+  bytes : Bytes,
+  start : Int32,
+  size : Int32,
+) -> Unit {
+  // The private output block cannot alias immutable input payloads. Forward,
+  // unrolled copying avoids generic overlap handling in this bounded hot path.
+  let mut i = 0
+  while i + 8 <= size {
+    buffer[at + i] = bytes[start + i]
+    buffer[at + i + 1] = bytes[start + i + 1]
+    buffer[at + i + 2] = bytes[start + i + 2]
+    buffer[at + i + 3] = bytes[start + i + 3]
+    buffer[at + i + 4] = bytes[start + i + 4]
+    buffer[at + i + 5] = bytes[start + i + 5]
+    buffer[at + i + 6] = bytes[start + i + 6]
+    buffer[at + i + 7] = bytes[start + i + 7]
+    i = i + 8
+  }
+  while i < size {
+    buffer[at + i] = bytes[start + i]
+    i = i + 1
+  }
+}
+
+///|
 fn sink_copy(
   cursor : SinkCursor,
   bytes : Bytes,
@@ -93,7 +134,7 @@ fn sink_copy(
   while done < count {
     let room = cursor.buffer.length() - cursor.used
     let n = if count - done < room { count - done } else { room }
-    cursor.buffer.blit_from_bytes(cursor.used, bytes, start + done, n)
+    sink_payload_copy(cursor.buffer, cursor.used, bytes, start + done, n)
     cursor.used = cursor.used + n
     cursor.offset = cursor.offset + n
     done = done + n
@@ -163,6 +204,7 @@ fn sink_ints(cursor : SinkCursor, values : Array[Int32]) -> Unit raise MatError 
   if values.length() * 4 > cursor.limit - cursor.offset {
     fail("file-limit", cursor.offset, "Encoded output exceeds byte limit")
   }
+  let buffer = cursor.buffer
   let mut index = 0
   while index < values.length() {
     let room = (cursor.buffer.length() - cursor.used) / 4
@@ -179,10 +221,10 @@ fn sink_ints(cursor : SinkCursor, values : Array[Int32]) -> Unit raise MatError 
       for i = 0; i < count; i = i + 1 {
         let word = values[index + i].reinterpret_as_uint()
         let position = at + i * 4
-        cursor.buffer[position] = word.to_byte()
-        cursor.buffer[position + 1] = (word >> 8).to_byte()
-        cursor.buffer[position + 2] = (word >> 16).to_byte()
-        cursor.buffer[position + 3] = (word >> 24).to_byte()
+        buffer[position] = word.to_byte()
+        buffer[position + 1] = (word >> 8).to_byte()
+        buffer[position + 2] = (word >> 16).to_byte()
+        buffer[position + 3] = (word >> 24).to_byte()
       }
       cursor.used = cursor.used + count * 4
       cursor.offset = cursor.offset + count * 4

@@ -26,13 +26,13 @@ def scopes(ref=None):
     names=run(['git','ls-tree','-r','--name-only',ref or 'HEAD']).splitlines() if ref else [p.relative_to(ROOT).as_posix() for folder in ['src','scripts'] for p in (ROOT/folder).rglob('*') if p.is_file()]
     prod=load('release_runtime','performance-summary.py')
     groups={'runtime':[],'hosts':[],'adapters':[],'build':[]}
-    adapters={'performance.py','performance-revisions.py','file-performance.py','write-performance.py','bench-js.mjs','bench-sink-js.mjs','build-bench.mjs'}
+    adapters={'performance.py','performance-revisions.py','file-performance.py','write-performance.py','bench-js.mjs','bench-sink-js.mjs','build-bench.mjs','write-regression.py'}
     build={'toolchain.lock.json','msvc.lock.json','scripts/build-native.mjs','scripts/moon.mjs','scripts/toolchain.mjs'}
-    if not ref:names+=['toolchain.lock.json','msvc.lock.json']
+    if not ref:names+=['toolchain.lock.json','msvc.lock.json','examples/python/mixed_types.py']
     for n in sorted(set(names)):
         if prod.production(n):groups['runtime'].append(n)
         if n=='scripts/cli.mjs':groups['hosts'].append(n)
-        if n.startswith(('src/bench_bridge/','src/cmd/bench/')) or n.startswith('scripts/') and Path(n).name in adapters:groups['adapters'].append(n)
+        if n=='examples/python/mixed_types.py' or n.startswith(('src/bench_bridge/','src/cmd/bench/')) or n.startswith('scripts/') and Path(n).name in adapters:groups['adapters'].append(n)
         if n in build:groups['build'].append(n)
     result={}
     for group,files in groups.items():
@@ -78,9 +78,11 @@ def performance_binding(version,reference='v0.1.5'):
         records.append({'file':p.name,'rows':row['rows'],'sha256':digest(p),'measured_commit':data.get('candidate_commit',data.get('candidate_head_commit'))})
     # The v0.1.5 release already bound its retained reading cohorts to v0.1.4.
     # Preserve that historical chain, including its original adapters and repeats.
-    legacy=read(REPORTS/'performance-summary-v0.1.5.json')
-    assert legacy['status']=='verified' and legacy['runtime_source_sha256']==current['runtime']['sha256']
-    result={'status':'verified','version':version,'reference':reference,'scopes':current,'toolchain':actual,'cohorts':records,'historical_chain':{'file':'performance-summary-v0.1.5.json','sha256':digest(REPORTS/'performance-summary-v0.1.5.json')},'scope':'Exact identity with the previously released reference. Retained measured cohorts keep their own commits, adapters, raw samples and original follow-ups; no new timing is claimed.'}
+    chain=base.get('historical_chain') if previous.exists() else {'file':'performance-summary-v0.1.5.json','sha256':digest(REPORTS/'performance-summary-v0.1.5.json')}
+    if not previous.exists():
+        legacy=read(REPORTS/'performance-summary-v0.1.5.json')
+        assert legacy['status']=='verified' and legacy['runtime_source_sha256']==current['runtime']['sha256']
+    result={'status':'verified','version':version,'reference':reference,'scopes':current,'toolchain':actual,'cohorts':records,'historical_chain':chain,'scope':'Exact production, host, adapter, build and toolchain identity with the released reference; original measurement versions and samples remain unchanged.'}
     save(f'performance-binding-v{version}.json',result);return result
 
 def read_toolchain():return json.loads(run(['node','scripts/toolchain.mjs']))

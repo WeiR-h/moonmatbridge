@@ -1,4 +1,4 @@
-# MoonMatBridge v0.1.7
+# MoonMatBridge v0.1.8
 
 支持显式 UTF-8 / Latin1 名称编解码，覆盖变量名、字段名和 legacy 类名。两个命令行宿主使用前置 `--name-encoding=latin1`；默认调用保持 UTF-8。[名称编码说明](docs/NAME_ENCODING.md)。
 
@@ -10,7 +10,7 @@ MAT 递归 cell/struct/char/legacy object、密集/CSC 稀疏读写、数值编�
 
 未压缩和压缩文件均支持分块读取 256 MiB 未选变量并提取所选结果；压缩读取保留 32 KiB 历史窗口，无需完整展开缓冲。详情见 [文件数据源](docs/SOURCES.md)。
 
-当前源码版本为 v0.1.7，GitHub 与 Mooncakes 使用统一版本号；发布模块名为 `WeiR-h/moonmatbridge`。
+当前源码版本为 v0.1.8，GitHub 与 Mooncakes 使用统一版本号；发布模块名为 `WeiR-h/moonmatbridge`。
 
 - 压缩读取采用位缓冲、Huffman 短码表与有界输入窗口，减少临时复制和展开缓冲扩容。
 - 完整递归混合数据读写；预检尺寸后写入固定缓冲，保留字符单位、精确整数、复数和 CSC 容量。
@@ -25,7 +25,7 @@ MAT 递归 cell/struct/char/legacy object、密集/CSC 稀疏读写、数值编�
 
 ## 支持范围
 
-| 能力 | v0.1.7 |
+| 能力 | v0.1.8 |
 | --- | --- |
 | MAT Level 5 读取 | 小端、大端；标准标签与小数据标签；多变量 |
 | 压缩读取 | `miCOMPRESSED`；MoonBit 解码 stored/fixed/dynamic DEFLATE，验证 Adler-32 |
@@ -86,16 +86,16 @@ JS 适配器只读写文件；格式处理使用编译后的 MoonBit。
 
 ## MoonBit API
 
-发布模块名为 [`WeiR-h/moonmatbridge`](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.1.7)。在已有 MoonBit 项目中安装：
+发布模块名为 [`WeiR-h/moonmatbridge`](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.1.8)。在已有 MoonBit 项目中安装：
 
 ```powershell
-moon add WeiR-h/moonmatbridge@0.1.7
+moon add WeiR-h/moonmatbridge@0.1.8
 ```
 
 核心代码在 `src/`，公开接口在 `src/pkg.generated.mbti`。库用户可复制仓库的 `examples/registry_consumer` 为独立目录，进入该目录后执行：
 
 ```powershell
-moon add WeiR-h/moonmatbridge@0.1.7
+moon add WeiR-h/moonmatbridge@0.1.8
 moon run . --target js
 moon test --target js
 ```

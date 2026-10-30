@@ -14,3 +14,11 @@ for edit in [lambda a,b:b.update(commit='0'*40),lambda a,b:b.update(version='0.1
 assert e.compiler_ok('0.10.16+b1a0e846e') and not e.compiler_ok('0.10.15') and not e.compiler_ok('date-20261020')
 assert all(e.scopes('v0.1.5')[k]['files'] for k in ['runtime','hosts','adapters','build'])
 print('Release identity: valid receipt, seven mismatch cases, compiler floor and scope identity passed')
+
+from github_transport import endpoint_url
+assert endpoint_url('repos/WeiR-h/moonmatbridge/releases').startswith('https://api.github.com/')
+for endpoint in ['https://evil.invalid/repos/WeiR-h/moonmatbridge/releases','https://api.github.com/repos/another/project/releases','https://api.github.com.evil.invalid/repos/WeiR-h/moonmatbridge/releases']:
+    try:endpoint_url(endpoint)
+    except AssertionError:continue
+    raise AssertionError('Foreign endpoint accepted')
+print('Local HTTPS transport endpoint boundaries passed without loading credentials')
