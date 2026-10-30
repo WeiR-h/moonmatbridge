@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "version": "0.1.9",
+  "baselines": [
+    "v0.0.19",
+    "v0.1.0"
+  ],
+  "checks": [
+    "src/pkg.generated.mbti",
+    "src/interchange/pkg.generated.mbti",
+    "src/bridge/pkg.generated.mbti",
+    "src/pkg.generated.mbti",
+    "src/interchange/pkg.generated.mbti",
+    "src/bridge/pkg.generated.mbti"
+  ],
+  "scope": "Existing generated functions and public struct/enum definitions; additive optional codec arguments and new declarations allowed."
+}
