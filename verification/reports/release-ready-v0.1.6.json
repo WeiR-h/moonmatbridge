@@ -1,0 +1,8 @@
+{
+  "status": "passed",
+  "version": "0.1.6",
+  "source_commit": "7a2c3cee6907a7dfcc52381c2c6826723dc51b69",
+  "package_commit": "57468a3376466649f109d1721fef81bf9309f3aa",
+  "source_sha256": "7e8706351c5a19e0c02911129cfdd426bfd7d63d32fcbe30ecee775a1cd2c292",
+  "manifest_sha256": "1a948d2717dba8f8be7df8d4f1a5df0bb2547036e3ffe145652d92ce54807c34"
+}
