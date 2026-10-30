@@ -31,7 +31,7 @@ try {
     if (existsSync(join(ancestor, 'moon.work'))) throw new Error('Ancestor workspace would override registry resolution');
     if (dirname(ancestor) === ancestor) break;
   }
-  for (const name of ['moon.mod', 'moon.pkg', 'consumer_wbtest.mbt']) {
+  for (const name of ['moon.mod', 'moon.pkg', 'consumer_wbtest.mbt', 'main.mbt']) {
     copyFileSync(join(root, 'examples/registry_consumer', name), join(directory, name));
   }
   // Ordinary source exercises both imports during non-test `moon check` too.
@@ -72,6 +72,8 @@ try {
     const output = run(['test', '--target', target, '--deny-warn'], extra);
     const expected = (readFileSync(join(root, 'examples/registry_consumer/consumer_wbtest.mbt'), 'utf8').match(/^test /gm) || []).length;
     if (!output.includes(`Total tests: ${expected}, passed: ${expected}, failed: 0`)) throw new Error('Consumer tests did not execute for ' + target);
+    const demonstration=run(['run', '.', '--target', target], extra);
+    if (!demonstration.includes(`MoonMatBridge ${version}: signal has 2 values`)) throw new Error('Published executable consumer did not run');
   }
   report.status = 'passed';
 } catch (error) {

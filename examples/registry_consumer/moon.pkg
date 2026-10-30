@@ -2,3 +2,5 @@ import {
   "WeiR-h/moonmatbridge" @mat,
   "WeiR-h/moonmatbridge/interchange" @wire,
 }
+
+pkgtype(kind: "executable")

@@ -26,10 +26,10 @@ def run(args, timeout=600, ok=True):
     return r
 
 
-def manifest():
+def manifest(version=None):
     for attempt in range(5):
         try:
-            with urllib.request.urlopen(MANIFEST, timeout=30) as response:
+            with urllib.request.urlopen(MANIFEST+('@'+version if version else ''), timeout=30) as response:
                 return json.load(response)
         except (OSError, TimeoutError):
             if attempt == 4: raise
@@ -40,12 +40,20 @@ def write_report(name, value):
     (REPORTS / f"{name}-v{VERSION}.json").write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
-def mooncakes():
+def mooncakes(verify_only=False):
     fingerprint = run(["node", "--input-type=module", "-e", "import {sourceFingerprint} from './scripts/verify.mjs'; console.log(sourceFingerprint().sha256);"]).stdout.strip()
     verified = json.loads((REPORTS / f"v{VERSION}.json").read_text(encoding="utf-8"))
     assert verified["status"] == "passed" and fingerprint == verified["source"]["sha256"], "Source changed after verification"
+    if verify_only:
+        current=manifest(VERSION)
+        assert current['version']==VERSION and current['build_status']=='success' and not current['yanked']
+        print(run(['node','scripts/registry-verify.mjs']).stdout.strip(),flush=True)
+        installed=json.loads((REPORTS/f'registry-v{VERSION}.json').read_bytes());assert installed['status']=='passed'
+        write_report('mooncakes',{'status':'passed','version':VERSION,'module':REPO,'url':f'https://mooncakes.io/docs/{REPO}@{VERSION}','build_status':current['build_status'],'archive_sha256':current['metadata']['checksum'],'source_sha256':fingerprint,'installed_source_files':installed['installed_files'],'scope':'Read-only exact-version manifest and fresh three-target executable/test consumer; all source files compared.'})
+        return
     current = manifest()
     already_registered = any(v["version"] == VERSION for v in current["versions"])
+    if verify_only: assert already_registered, 'Requested public version does not exist'
     dry = run(["node", "scripts/moon.mjs", "publish", "--dry-run"], ok=False)
     dry_text = dry.stdout + dry.stderr
     # This SDK treats the registry's successful 202 response as exit 1.
@@ -134,7 +142,9 @@ def public_workflows(directory, exe):
     return receipt["passed"]
 
 
-def github():
+def github(verify_only=False):
+    if verify_only:
+        return verify_downloads()
     local = json.loads((REPORTS / f"v{VERSION}.json").read_text(encoding="utf-8"))
     release = json.loads((ROOT / f"dist/release-v{VERSION}.json").read_text(encoding="utf-8"))
     assert local["source"]["sha256"] == release["source_sha256"]
@@ -149,6 +159,8 @@ def github():
     if all_classes.exists(): assets.append(all_classes)
     assets += [p for p in REPORTS.glob(f"*-v{VERSION}.json") if "-public-" not in p.name and p.name.startswith(("write-performance-", "write-example-", "compressed-sink-", "sink-example-", "sink-operations-", "coverage-", "octave-", "compatibility-", "performance-", "file-performance-", "mooncakes-", "selection-", "workflows-", "licenses-", "source-snapshot-", "source-operations-", "ci-", "tree-operations-", "tree-close-", "name-encoding-", "api-contract-", "producer-variants-", "stable-gate-"))]
     assets.extend(ROOT / "docs" / name for name in ("TREE_DIFF.md", "TREE_SNAPSHOT.md", "TREE_CLOSE.md", "SINKS.md", "WRITE_PERFORMANCE.md") if (ROOT / "docs" / name).exists())
+    summary=REPORTS/f'WRITE_PERFORMANCE-v{VERSION}.md'
+    if summary.exists():assets.append(summary)
     review = ROOT / f"docs/REVIEW_EVIDENCE-v{VERSION}.md"
     if review.exists(): assets.append(review)
     from github_release import ensure_release, download_release
@@ -181,6 +193,48 @@ def github():
     write_report("public-downloads", receipt)
     (directory / "public-downloads.json").write_text(json.dumps(receipt, indent=2) + "\n")
     print(json.dumps({"status": "passed", "public_assets": len(hashes), "receipt": str(directory / "public-downloads.json")}))
+
+
+def verify_downloads():
+    """Use published digests, not a possibly different local rebuild's ZIP bytes."""
+    from github_release import find_release
+    release=find_release('v'+VERSION)
+    assert release and release['published_at'] and not release['draft']
+    directory=ROOT/'verification/local'/('public-recheck-v'+VERSION+'-'+uuid.uuid4().hex)
+    directory.mkdir(parents=True)
+    hashes=[]
+    for asset in release['assets']:
+        name=asset['name'];assert Path(name).name==name and '/' not in name and chr(92) not in name
+        assert asset.get('digest','').startswith('sha256:')
+        for attempt in range(5):
+            try:
+                with urllib.request.urlopen(urllib.request.Request(asset['browser_download_url'],headers={'User-Agent':'MoonMatBridge-public-verifier'}),timeout=45) as response:data=response.read()
+                digest=hashlib.sha256(data).hexdigest()
+                assert len(data)==asset['size'] and 'sha256:'+digest==asset['digest']
+                (directory/name).write_bytes(data);hashes.append({'file':name,'sha256':digest});break
+            except (OSError,TimeoutError):
+                if attempt==4:raise
+                time.sleep(2)
+    manifest=json.loads((directory/f'release-v{VERSION}.json').read_bytes());assert manifest['version']==VERSION
+    expected={r['file']:r['sha256'] for r in hashes}
+    for row in manifest['archives']:assert expected[row['file']]==row['sha256']
+    for row in manifest['archives']:
+        with zipfile.ZipFile(directory/row['file']) as z:
+            for item in z.infolist():assert (directory/item.filename).resolve().is_relative_to(directory.resolve())
+            for name in ['LICENSE','NOTICE','THIRD_PARTY.md']:
+                member=next(n for n in z.namelist() if n.endswith('/'+name) and n.count('/')==1)
+                assert z.read(member)==(ROOT/name).read_bytes()
+    write_report('licenses',{'status':'passed','version':VERSION,'scope':'Publicly downloaded four archives; root LICENSE/NOTICE/THIRD_PARTY each matched byte-for-byte','checks':12})
+    archive=directory/f'MoonMatBridge-v{VERSION}-windows-x64.zip'
+    with zipfile.ZipFile(archive) as z:z.extractall(directory/'native')
+    exe=next((directory/'native').rglob('moonmat.exe'))
+    assert VERSION in run([exe,'version']).stdout
+    if not (ROOT/'verification/local/file-performance/manifest.json').exists():
+        import importlib.util
+        spec=importlib.util.spec_from_file_location('public_file_fixtures',ROOT/'scripts/file-performance.py')
+        module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module);module.fixtures()
+    count=public_workflows(directory,exe)
+    write_report('public-downloads',{'status':'passed','version':VERSION,'github':f'https://github.com/{REPO}/releases/tag/v{VERSION}','assets':hashes,'public_scientific_workflows_passed':count,'scope':'Independent public download against GitHub asset digests and the published archive manifest; licenses and downloaded native/JS scientific flows verified.'})
 
 
 if __name__ == "__main__":

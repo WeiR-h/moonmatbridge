@@ -65,6 +65,7 @@ try {
   record('Explicit name codecs and independent mixed metadata checks', command(python, ['scripts/name-checks.py']));
   record('Independent producer length and class diagnostics', command(python, ['scripts/variant-analysis.py']));
   record('Performance evidence invalidation guards', command(python, ['scripts/test-evidence.py']));
+  record('Release identity and measurement scope guards', command(python, ['scripts/release-checks.py']));
   record('Strict selected reads and root metadata independent checks', command(python, ['scripts/selection-checks.py']));
   record('Large file sources and lifetime checks', command(python, ['scripts/source-checks.py']));
   record('Recursive mixed tree operations', command(python, ['scripts/tree-checks.py']));
