@@ -1,0 +1,131 @@
+{
+  "status": "verified",
+  "version": "0.1.8",
+  "reference": "v0.1.5",
+  "scopes": {
+    "runtime": {
+      "files": [
+        "src/axes.mbt",
+        "src/bridge/bridge.mbt",
+        "src/bridge/moon.pkg",
+        "src/bridge/sink.mbt",
+        "src/cmd/moonmat/io.c",
+        "src/cmd/moonmat/main.mbt",
+        "src/cmd/moonmat/moon.pkg",
+        "src/concat.mbt",
+        "src/deflate.mbt",
+        "src/diff.mbt",
+        "src/fixed_writer.mbt",
+        "src/inflate.mbt",
+        "src/interchange/diff.mbt",
+        "src/interchange/document.mbt",
+        "src/interchange/json.mbt",
+        "src/interchange/moon.pkg",
+        "src/interchange/name_options.mbt",
+        "src/interchange/roots.mbt",
+        "src/interchange/snapshot.mbt",
+        "src/interchange/transform.mbt",
+        "src/interchange/tree_close.mbt",
+        "src/interchange/tree_snapshot.mbt",
+        "src/moon.pkg",
+        "src/name_encoding.mbt",
+        "src/npy.mbt",
+        "src/npy_reader.mbt",
+        "src/numeric.mbt",
+        "src/reader.mbt",
+        "src/reshape.mbt",
+        "src/select.mbt",
+        "src/selected.mbt",
+        "src/sink.mbt",
+        "src/sink_deflate.mbt",
+        "src/slice.mbt",
+        "src/source.mbt",
+        "src/source_inflate.mbt",
+        "src/source_stream.mbt",
+        "src/sparse.mbt",
+        "src/sparse_codec.mbt",
+        "src/tree.mbt",
+        "src/tree_close.mbt",
+        "src/tree_diff.mbt",
+        "src/types.mbt",
+        "src/utf8_scan.mbt",
+        "src/writer.mbt"
+      ],
+      "sha256": "99e07e3a9c6a791468f62110ad7e72e7bf8412c9c810d22c165283c65e7622e7"
+    },
+    "hosts": {
+      "files": [
+        "scripts/cli.mjs"
+      ],
+      "sha256": "67becff9edc35c4ef862a69a1733edce03c34e1a727586dea1f17f4cbc3e6abe"
+    },
+    "adapters": {
+      "files": [
+        "examples/python/mixed_types.py",
+        "scripts/bench-js.mjs",
+        "scripts/bench-sink-js.mjs",
+        "scripts/build-bench.mjs",
+        "scripts/file-performance.py",
+        "scripts/performance-revisions.py",
+        "scripts/performance.py",
+        "scripts/write-performance.py",
+        "scripts/write-regression.py",
+        "src/bench_bridge/bench.mbt",
+        "src/bench_bridge/moon.pkg",
+        "src/bench_bridge/pkg.generated.mbti",
+        "src/bench_bridge/sink_bench.mbt",
+        "src/cmd/bench/bench.c",
+        "src/cmd/bench/main.mbt",
+        "src/cmd/bench/moon.pkg",
+        "src/cmd/bench/sink_bench.mbt"
+      ],
+      "sha256": "8593d2117a9a320d164958c70ecff7e0a7fa84cb8fa4cdd35e21249fe5b7b610"
+    },
+    "build": {
+      "files": [
+        "msvc.lock.json",
+        "scripts/build-native.mjs",
+        "scripts/moon.mjs",
+        "scripts/toolchain.mjs",
+        "toolchain.lock.json"
+      ],
+      "sha256": "f5f575775479785ed718ce278d96a6ce3059d59385afa920a4bd124a805e4b53"
+    }
+  },
+  "toolchain": {
+    "compiler": "v0.10.16+b1a0e846e (2026-10-16)",
+    "compiler_version": "0.10.16+b1a0e846e",
+    "standard_library_archive_sha256": "e7db6e3c80a97af953598b374cf14f3e330918b1ca4659b141b9f550c9c0adb0",
+    "standard_library_source_sha256": "31140145ca3db92e94781c7649073922fca6ec669d04b4219119dff611dba5f5",
+    "c_compiler": "Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35229 for x64",
+    "native_backend": "c",
+    "native_environment": {
+      "MOONBIT_NEW_NATIVE": "0"
+    },
+    "node": "v24.13.0",
+    "windows_sdk_version": "10.0.22621.0",
+    "platform": "win32",
+    "architecture": "x64"
+  },
+  "cohorts": [
+    {
+      "file": "performance-vs-70f87e2-v0.1.8.json",
+      "rows": 24,
+      "sha256": "12461bb76a0b0dc8295fe1f147e9a8f606b937eee1ee31b4226cd3205fe55baa",
+      "measured_commit": "b227850062bdd1315e2e252049048fee2be22094"
+    },
+    {
+      "file": "file-performance-v0.1.8.json",
+      "rows": 6,
+      "sha256": "ee668408a458c4b0372e3a2414f41373b95bd6f7d1766b470906fe8047169ad1",
+      "measured_commit": "b227850062bdd1315e2e252049048fee2be22094"
+    },
+    {
+      "file": "write-regression-v0.1.8.json",
+      "rows": 32,
+      "sha256": "4d2db4de82cdb077093352a20663529ab89ae0a00d7b2fa069be95383861303b",
+      "measured_commit": "b227850062bdd1315e2e252049048fee2be22094"
+    }
+  ],
+  "scope": "Fresh paired fixed-revision 24 core, 6 file and 32 same-interface sink measurements. Historical memory-versus-sink results remain separate."
+}

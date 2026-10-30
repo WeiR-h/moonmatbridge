@@ -1,0 +1,20 @@
+{
+  "status": "recorded",
+  "version": "0.1.8",
+  "scope": "Initial fixed-source core cohort, same-source flag confirmation, then working-tree native-path probe. These are retained diagnostics; the final fixed-source full cohorts are measured separately.",
+  "decision": "Keep the optimized copy and cached CSC encoding in JS; retain original native/wasm sink routines. Tail tests exercise the actual sink_copy path on every target.",
+  "reports": [
+    {
+      "file": "performance-initial-6ae0180-v0.1.8.json",
+      "sha256": "a90edb57c0d4e4b4c78c22abefd7b3c54536fd10d0c39d1e386e699e8ce7b73f"
+    },
+    {
+      "file": "performance-vs-70f87e2-partial-69ce4d41-v0.1.8.json",
+      "sha256": "14baccb5ee0cd370c89ff43c9612b78e777e50109c0cc281dfb4f244e50097b3"
+    },
+    {
+      "file": "performance-vs-70f87e2-partial-e7f7c43a-v0.1.8.json",
+      "sha256": "a15b1cca7d7d9c549e9ba170e0e65bece79dc628d989bac154d237c3a722d7bf"
+    }
+  ]
+}

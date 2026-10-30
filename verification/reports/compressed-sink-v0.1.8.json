@@ -1,0 +1,184 @@
+{
+  "status": "passed",
+  "version": "0.1.8",
+  "oracle": "Python zlib, SciPy/NumPy",
+  "checks": [
+    {
+      "host": "native",
+      "case": "all-classes-big-compressed.mat",
+      "roots": 36,
+      "bytes": 3511,
+      "sha256": "a2bc3d41cd37f067bf8af495462aac598ef41bdd381e676e82d069e003ac1d47",
+      "expanded_equals_canonical": true
+    },
+    {
+      "host": "js",
+      "case": "all-classes-big-compressed.mat",
+      "roots": 36,
+      "bytes": 3511,
+      "sha256": "a2bc3d41cd37f067bf8af495462aac598ef41bdd381e676e82d069e003ac1d47",
+      "expanded_equals_canonical": true
+    },
+    {
+      "host": "native",
+      "case": "all-classes-big-plain.mat",
+      "roots": 36,
+      "bytes": 3511,
+      "sha256": "a2bc3d41cd37f067bf8af495462aac598ef41bdd381e676e82d069e003ac1d47",
+      "expanded_equals_canonical": true
+    },
+    {
+      "host": "js",
+      "case": "all-classes-big-plain.mat",
+      "roots": 36,
+      "bytes": 3511,
+      "sha256": "a2bc3d41cd37f067bf8af495462aac598ef41bdd381e676e82d069e003ac1d47",
+      "expanded_equals_canonical": true
+    },
+    {
+      "host": "native",
+      "case": "all-classes-global-big-compressed.mat",
+      "roots": 36,
+      "bytes": 3597,
+      "sha256": "00ee23423a98c11775027393386cfdae56985e241a66cfb9e8d9cde45a90d910",
+      "expanded_equals_canonical": true
+    },
+    {
+      "host": "js",
+      "case": "all-classes-global-big-compressed.mat",
+      "roots": 36,
+      "bytes": 3597,
+      "sha256": "00ee23423a98c11775027393386cfdae56985e241a66cfb9e8d9cde45a90d910",
+      "expanded_equals_canonical": true
+    },
+    {
+      "host": "native",
+      "case": "all-classes-global-big-plain.mat",
+      "roots": 36,
+      "bytes": 3597,
+      "sha256": "00ee23423a98c11775027393386cfdae56985e241a66cfb9e8d9cde45a90d910",
+      "expanded_equals_canonical": true
+    },
+    {
+      "host": "js",
+      "case": "all-classes-global-big-plain.mat",
+      "roots": 36,
+      "bytes": 3597,
+      "sha256": "00ee23423a98c11775027393386cfdae56985e241a66cfb9e8d9cde45a90d910",
+      "expanded_equals_canonical": true
+    },
+    {
+      "host": "native",
+      "case": "all-classes-global-little-compressed.mat",
+      "roots": 36,
+      "bytes": 3597,
+      "sha256": "00ee23423a98c11775027393386cfdae56985e241a66cfb9e8d9cde45a90d910",
+      "expanded_equals_canonical": true
+    },
+    {
+      "host": "js",
+      "case": "all-classes-global-little-compressed.mat",
+      "roots": 36,
+      "bytes": 3597,
+      "sha256": "00ee23423a98c11775027393386cfdae56985e241a66cfb9e8d9cde45a90d910",
+      "expanded_equals_canonical": true
+    },
+    {
+      "host": "native",
+      "case": "all-classes-global-little-plain.mat",
+      "roots": 36,
+      "bytes": 3597,
+      "sha256": "00ee23423a98c11775027393386cfdae56985e241a66cfb9e8d9cde45a90d910",
+      "expanded_equals_canonical": true
+    },
+    {
+      "host": "js",
+      "case": "all-classes-global-little-plain.mat",
+      "roots": 36,
+      "bytes": 3597,
+      "sha256": "00ee23423a98c11775027393386cfdae56985e241a66cfb9e8d9cde45a90d910",
+      "expanded_equals_canonical": true
+    },
+    {
+      "host": "native",
+      "case": "all-classes-little-compressed.mat",
+      "roots": 36,
+      "bytes": 3511,
+      "sha256": "a2bc3d41cd37f067bf8af495462aac598ef41bdd381e676e82d069e003ac1d47",
+      "expanded_equals_canonical": true
+    },
+    {
+      "host": "js",
+      "case": "all-classes-little-compressed.mat",
+      "roots": 36,
+      "bytes": 3511,
+      "sha256": "a2bc3d41cd37f067bf8af495462aac598ef41bdd381e676e82d069e003ac1d47",
+      "expanded_equals_canonical": true
+    },
+    {
+      "host": "native",
+      "case": "all-classes-little-plain.mat",
+      "roots": 36,
+      "bytes": 3511,
+      "sha256": "a2bc3d41cd37f067bf8af495462aac598ef41bdd381e676e82d069e003ac1d47",
+      "expanded_equals_canonical": true
+    },
+    {
+      "host": "js",
+      "case": "all-classes-little-plain.mat",
+      "roots": 36,
+      "bytes": 3511,
+      "sha256": "a2bc3d41cd37f067bf8af495462aac598ef41bdd381e676e82d069e003ac1d47",
+      "expanded_equals_canonical": true
+    },
+    {
+      "host": "native",
+      "case": "maximum-adler.mat",
+      "roots": 1,
+      "bytes": 603,
+      "sha256": "df440d357950588fd40284932a59e9058e3abbb8aea594266c3b74654b748a6d",
+      "expanded_equals_canonical": true
+    },
+    {
+      "host": "js",
+      "case": "maximum-adler.mat",
+      "roots": 1,
+      "bytes": 603,
+      "sha256": "df440d357950588fd40284932a59e9058e3abbb8aea594266c3b74654b748a6d",
+      "expanded_equals_canonical": true
+    },
+    {
+      "host": "native",
+      "case": "history-distance-32768.mat",
+      "roots": 1,
+      "bytes": 36413,
+      "sha256": "f3085f1ff66b2c7ba41e626926acfce9d3d10190e6a4361037838b626f3dc1e0",
+      "expanded_equals_canonical": true
+    },
+    {
+      "host": "js",
+      "case": "history-distance-32768.mat",
+      "roots": 1,
+      "bytes": 36413,
+      "sha256": "f3085f1ff66b2c7ba41e626926acfce9d3d10190e6a4361037838b626f3dc1e0",
+      "expanded_equals_canonical": true
+    },
+    {
+      "host": "native",
+      "case": "stored-boundaries.mat",
+      "roots": 1,
+      "bytes": 150229,
+      "sha256": "3e2f925d3a481faffbdbd9ac5faf91aa778b3a243e37de532613d6c2102cf471",
+      "expanded_equals_canonical": true
+    },
+    {
+      "host": "js",
+      "case": "stored-boundaries.mat",
+      "roots": 1,
+      "bytes": 150229,
+      "sha256": "3e2f925d3a481faffbdbd9ac5faf91aa778b3a243e37de532613d6c2102cf471",
+      "expanded_equals_canonical": true
+    }
+  ],
+  "scope": "All 15 public base classes, global flags, endian and compressed/plain inputs; maximum-byte Adler batches, 32 KiB match distance and stored block boundaries; independent per-root zlib checks and exact canonical expansion; both hosts byte-identical"
+}

@@ -1,0 +1,8 @@
+{
+  "status": "passed",
+  "version": "0.1.8",
+  "source_commit": "b227850062bdd1315e2e252049048fee2be22094",
+  "source_sha256": "01cea74fdae01965fbda31d58aef54352deb1b6c20696cdb3365bf515697df5b",
+  "ci_run_id": 41039842034,
+  "performance_binding_sha256": "83d9a1f04494e3a7754ee52665eef01d3823ce12528296e248c496dee1bb6035"
+}
