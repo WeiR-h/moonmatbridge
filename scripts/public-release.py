@@ -125,6 +125,16 @@ def public_workflows(directory, exe):
         print(run([python, tree_script, "--native-executable", exe, "--js-cli", cli]).stdout.strip(), flush=True)
         tree_receipt = json.loads((source / f"verification/reports/tree-operations-v{VERSION}.json").read_text(encoding="utf-8"))
         write_report("tree-operations-public", tree_receipt)
+    import shutil
+    shell=shutil.which('pwsh') or shutil.which('powershell.exe')
+    if os.name=='nt':
+        assert shell,'PowerShell is required to verify the shipped native demo'
+        demo=exe.parent/'examples/workflows/demo.ps1'
+        target=directory/('portable-demo-'+uuid.uuid4().hex)
+        print(run([shell,'-NoProfile','-File',demo,'-Executable',exe,'-OutputDirectory',target]).stdout.strip(),flush=True)
+        demonstration=json.loads((target/'demo-receipt.json').read_text(encoding='utf-8-sig'))
+        assert demonstration['status']=='passed'
+        write_report('workflows-demo-public',{'status':'passed','version':VERSION,'executable_sha256':hashlib.sha256(exe.read_bytes()).hexdigest(),'commands':len(demonstration['commands']),'files':demonstration['files'],'scope':'Actual publicly downloaded portable PowerShell demo; output directory is new'})
     receipt["released_output_hashes_match"] = True
     source_script = source / "scripts/source-checks.py"
     if source_script.exists():

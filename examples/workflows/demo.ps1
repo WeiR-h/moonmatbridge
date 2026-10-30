@@ -44,6 +44,10 @@ $null = Invoke-Moon @("compress", $mixed, (Destination "archive-compressed.mat")
 $null = Invoke-Moon @("roundtrip", (Destination "archive-compressed.mat"), (Destination "archive-restored.mat"))
 $null = Invoke-Moon @("roundtrip", (Join-Path $PSScriptRoot "all-base-classes.mat"), (Destination "all-base-classes.mat"))
 
+$null = Invoke-Moon @("snapshot-tree", $mixed, (Destination "mixed-tree.json"))
+$null = Invoke-Moon @("restore-tree", (Destination "mixed-tree.json"), (Destination "mixed-tree-restored.mat"))
+$null = Invoke-Moon @("diff-tree", $mixed, (Destination "mixed-tree-restored.mat"), (Destination "mixed-tree-diff.json"))
+
 Write-Host "2/3 Large sparse simulation exchange"
 $sparse = Join-Path $PSScriptRoot "sparse-system.mat"
 $null = Invoke-Moon @("roots", $sparse)
@@ -65,6 +69,10 @@ $null = Invoke-Moon @("from-npy", (Join-Path $PSScriptRoot "changed-signal.npy")
 $null = Invoke-Moon @("diff", (Destination "transformed.mat"), (Destination "changed.mat"), (Destination "changed-report.json")) 2
 $changed = Get-Content -LiteralPath (Destination "changed-report.json") -Raw | ConvertFrom-Json
 if ($changed.content_equal -or $changed.variables[0].samples[0].coordinates[0] -ne 0 -or $changed.variables[0].samples[0].coordinates[1] -ne 0) { throw "Changed diff coordinates failed" }
+[IO.File]::WriteAllText((Destination "tolerance.json"), '{"atol":0.25,"rtol":0,"equal_nan":true}', [Text.UTF8Encoding]::new($false))
+$null = Invoke-Moon @("diff-tree-close", (Destination "transformed.mat"), (Destination "changed.mat"), (Destination "close-report.json"), (Destination "tolerance.json"))
+$close = Get-Content -LiteralPath (Destination "close-report.json") -Raw | ConvertFrom-Json
+if (-not $close.within_tolerance -or $close.exact_equal) { throw "Tolerance comparison failed" }
 $missing = Invoke-Moon @("npy", (Destination "transformed.mat"), "missing", (Destination "missing.npy")) 1
 if ($missing.code -ne "missing-variable" -or (Test-Path -LiteralPath (Destination "missing.npy"))) { throw "Missing export check failed" }
 

@@ -130,10 +130,16 @@ def main():
         assert not diff["content_equal"] and diff["changed_variables"] == 1
         assert diff["variables"][0]["real_differences"] == 1
         assert diff["variables"][0]["samples"][0]["coordinates"] == [0, 0]
+        close_options=fresh(f"{host}-tolerance.json")
+        close_options.write_text(json.dumps({'atol':0.25,'rtol':0,'equal_nan':True},sort_keys=True)+'\n',encoding='utf-8',newline='\n')
+        close_report=fresh(f"{host}-tolerance-report.json")
+        invoke(host,"diff-tree-close",transformed,changed,close_report,close_options)
+        close=json.loads(close_report.read_bytes())
+        assert close['within_tolerance'] and not close['exact_equal']
         missing = fresh(f"{host}-missing.npy")
         assert invoke(host, "npy", transformed, "missing", missing, exit_code=1)["code"] == "missing-variable"
         assert not missing.exists()
-        record(host, "NumPy to MoonBit transform and difference check", ["NPY to MAT to reshape/permute/slice/gather to NPY", "independent NumPy column-major and raw-byte oracle", "input NaN payload and signed zero preserved", "diff exit 0 equal and exit 2 at coordinate [0,0]", "missing export exit 1 with no partial output"], [mat, transformed, exported, diff_report])
+        record(host, "NumPy to MoonBit transform and difference check", ["NPY to MAT to reshape/permute/slice/gather to NPY", "independent NumPy column-major and raw-byte oracle", "input NaN payload and signed zero preserved", "diff exit 0 equal and exit 2 at coordinate [0,0]", "explicit 0.25 symmetric tolerance accepts the changed value with equal_nan enabled", "missing export exit 1 with no partial output"], [mat, transformed, exported, diff_report, close_options, close_report])
     report = {"status": "passed", "version": VERSION, "producer": f"SciPy {scipy.__version__} / NumPy {np.__version__}",
               "passed": len(checks), "checks": checks,
               "consumer_environment": "MoonBit/Python/module injection variables removed; native PATH contains only Windows System32 or Linux system bins",

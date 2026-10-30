@@ -4,7 +4,7 @@
 
 ## 从公开发行包运行
 
-下载 [v0.1.5 Windows 便携包](https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.1.5)，解压后执行：
+下载 [v0.1.9 Windows 便携包](https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.1.9)，解压后执行：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File examples/workflows/demo.ps1
@@ -12,7 +12,7 @@ powershell -ExecutionPolicy Bypass -File examples/workflows/demo.ps1
 
 脚本新建唯一目录，记录命令的预期/实际退出码、返回值、程序哈希和结果哈希。相同输入结果可由 `diff` 检查；输出路径始终要求新文件。实际执行回执位于结果目录 `demo-receipt.json`，便携包验证的日志由打包脚本保存。
 
-发行页另附 `MoonMatBridge-v0.1.5-workflows.zip`，包含本版 native/JS 的实际输出、原始输入、独立核对报告及逐文件哈希。解压后可用 `examples/workflows/demo.ps1 -Executable 原生程序绝对路径` 在新目录复现。该证据包没有自带 EXE，使用同版 Windows 包中的程序。
+发行页另附 `MoonMatBridge-v0.1.9-workflows.zip`，包含本版 native/JS 的实际输出、原始输入、独立核对报告及逐文件哈希。解压后可用 `examples/workflows/demo.ps1 -Executable 原生程序绝对路径` 在新目录复现。该证据包没有自带 EXE，使用同版 Windows 包中的程序。
 
 ## 场景一：混合实验归档
 
@@ -39,10 +39,12 @@ NumPy 独立计算预期结果，用原始字节核对类型、维度和数据�
 安装 `requirements-dev.txt` 中的 NumPy/SciPy 后运行 `npm run verify`。其中：
 
 - `examples/python/workflow_inputs.py` 独立生成固定输入，验证器检查其与公开样例逐字节一致。
-- `scripts/scientific-workflows.py` 在 native、JS 分别执行三个场景，共 6 组。报告为 `verification/reports/workflows-v0.1.5.json`，附输出哈希。
+- `scripts/scientific-workflows.py` 在 native、JS 分别执行三个场景，共 6 组。报告为 `verification/reports/workflows-v0.1.9.json`，附输出哈希。
 - 全部基本类、全局标记、字符存储、CSC 容量、损坏输入和三目标测试由其他分组继续执行，不被演示替代。
-- GitHub 发布后重新下载全部资产，并使用下载的 EXE、预编译 JS 和输入重跑这 6 组；回执单列为 `workflows-public-v0.1.5.json`。本地成功不自动记为公开复验成功。
+- GitHub 发布后重新下载全部资产，并使用下载的 EXE、预编译 JS 和输入重跑这 6 组；回执单列为 `workflows-public-v0.1.9.json`。本地成功不自动记为公开复验成功。
 
 这些是可复现科研流程，不代表已有真实用户采用、MATLAB 执行、主办方复审或获奖。
 
 混合归档流程同时执行完整树快照、分块恢复写出及精确比较；压缩写出由增量 MoonBit DEFLATE 完成，独立科学工具验证结果。写出原子性及额度见 [SINKS.md](SINKS.md)。
+
+NumPy 流程同时演示精确变化退出码 2 和显式 atol=0.25、equal_nan=true 的容差通过退出码 0。公开 Windows 包只需运行 examples/workflows/demo.ps1，即可执行三个流程、完整混合树快照恢复和比较；新输出目录包含命令、结果与文件哈希。独立 SciPy/NumPy 验证使用源码中的科学流程脚本。

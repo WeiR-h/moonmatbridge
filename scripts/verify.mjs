@@ -56,6 +56,7 @@ try {
   record('Native sink close, size and atomic publish failures', command(process.execPath, ['scripts/sink-native-checks.mjs']));
   record('Actual compiler version guard regression', command(process.execPath, ['scripts/toolchain-checks.mjs']));
   const python = process.env.MOONMAT_PYTHON || join(root, '.venv', process.platform === 'win32' ? 'Scripts/python.exe' : 'bin/python');
+  if (process.platform === 'win32') record('Portable one-command workflow demo', command(python, ['scripts/portable-demo-check.py']));
   record('Resident-tree bounded write example and independent consumption', command(python, ['scripts/write-example-checks.py']));
   record('Independent SciPy/NumPy cross-compatibility', command(python, ['scripts/interop.py']));
   record('All public Level 5 base classes in mixed files', command(python, ['scripts/compatibility.py']));

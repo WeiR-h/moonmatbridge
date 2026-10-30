@@ -107,6 +107,9 @@ def verify_public(version,source):
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('action',choices=['check','package','publish','verify-public']);p.add_argument('--version',required=True);p.add_argument('--source-ref',required=True);p.add_argument('--channel',choices=['github','mooncakes','both'],default='both');p.add_argument('--offline',action='store_true',help='Inspect already downloaded CI receipts; never used to authorize publication')
     a=p.parse_args();source=e.run(['git','rev-parse',a.source_ref+'^{commit}'])
+    if not (a.action=='check' and a.offline):
+        from github_identity import authorize
+        authorize(require_write=a.action=='publish')
     if a.action=='check':check(a.version,source,not a.offline)
     elif a.action=='publish':publish(a.version,source,a.channel)
     else:{'package':package,'verify-public':verify_public}[a.action](a.version,source)

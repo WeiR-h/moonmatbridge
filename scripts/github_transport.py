@@ -16,8 +16,8 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
 
 def api(method,endpoint,body=None,binary=None,retry=True):
     url=endpoint_url(endpoint)
-    credential=subprocess.run(['gh','auth','token','--hostname','github.com'],capture_output=True,text=True,check=True).stdout.strip()
-    assert credential and not any(c.isspace() for c in credential)
+    from github_identity import token
+    credential=token()
     headers={'Authorization':'Bearer '+credential,'User-Agent':'MoonMatBridge-local-release','Accept':'application/vnd.github+json'}
     data=None
     if binary is not None:
@@ -36,5 +36,5 @@ def api(method,endpoint,body=None,binary=None,retry=True):
                 return json.loads(payload) if payload else None
         except Exception as error:
             if attempt+1==(4 if retry and method=='GET' else 1):
-                raise RuntimeError('GitHub '+method+' failed; reconcile remote state before retry ('+type(error).__name__+')') from None
+                raise RuntimeError('GitHub '+method+' failed; reconcile remote state before retry ('+('HTTP '+str(error.code) if isinstance(error,urllib.error.HTTPError) else type(error).__name__)+')') from None
             time.sleep(2**attempt)

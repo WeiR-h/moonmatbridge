@@ -22,3 +22,12 @@ for endpoint in ['https://evil.invalid/repos/WeiR-h/moonmatbridge/releases','htt
     except AssertionError:continue
     raise AssertionError('Foreign endpoint accepted')
 print('Local HTTPS transport endpoint boundaries passed without loading credentials')
+
+from github_identity import selected_user
+assert selected_user({})=='WeiR-h'
+assert selected_user({'MOONMATBRIDGE_GITHUB_USER':'Reviewer-1'})=='Reviewer-1'
+for invalid in ['', 'bad/name', 'bad name', 'https://github.com']:
+    try:selected_user({'MOONMATBRIDGE_GITHUB_USER':invalid})
+    except ValueError:continue
+    raise AssertionError('Invalid project account accepted')
+print('Project account selection boundaries passed without loading credentials')
