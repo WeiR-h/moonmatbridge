@@ -1,0 +1,133 @@
+{
+  "status": "verified",
+  "version": "0.1.6",
+  "reference": "v0.1.5",
+  "scopes": {
+    "runtime": {
+      "files": [
+        "src/axes.mbt",
+        "src/bridge/bridge.mbt",
+        "src/bridge/moon.pkg",
+        "src/bridge/sink.mbt",
+        "src/cmd/moonmat/io.c",
+        "src/cmd/moonmat/main.mbt",
+        "src/cmd/moonmat/moon.pkg",
+        "src/concat.mbt",
+        "src/deflate.mbt",
+        "src/diff.mbt",
+        "src/fixed_writer.mbt",
+        "src/inflate.mbt",
+        "src/interchange/diff.mbt",
+        "src/interchange/document.mbt",
+        "src/interchange/json.mbt",
+        "src/interchange/moon.pkg",
+        "src/interchange/name_options.mbt",
+        "src/interchange/roots.mbt",
+        "src/interchange/snapshot.mbt",
+        "src/interchange/transform.mbt",
+        "src/interchange/tree_close.mbt",
+        "src/interchange/tree_snapshot.mbt",
+        "src/moon.pkg",
+        "src/name_encoding.mbt",
+        "src/npy.mbt",
+        "src/npy_reader.mbt",
+        "src/numeric.mbt",
+        "src/reader.mbt",
+        "src/reshape.mbt",
+        "src/select.mbt",
+        "src/selected.mbt",
+        "src/sink.mbt",
+        "src/sink_deflate.mbt",
+        "src/slice.mbt",
+        "src/source.mbt",
+        "src/source_inflate.mbt",
+        "src/source_stream.mbt",
+        "src/sparse.mbt",
+        "src/sparse_codec.mbt",
+        "src/tree.mbt",
+        "src/tree_close.mbt",
+        "src/tree_diff.mbt",
+        "src/types.mbt",
+        "src/utf8_scan.mbt",
+        "src/writer.mbt"
+      ],
+      "sha256": "832a42f8901cfd6f80504c61961cae6e639d7359b1e3ba0a55b25201b82d2637"
+    },
+    "hosts": {
+      "files": [
+        "scripts/cli.mjs"
+      ],
+      "sha256": "67becff9edc35c4ef862a69a1733edce03c34e1a727586dea1f17f4cbc3e6abe"
+    },
+    "adapters": {
+      "files": [
+        "scripts/bench-js.mjs",
+        "scripts/bench-sink-js.mjs",
+        "scripts/build-bench.mjs",
+        "scripts/file-performance.py",
+        "scripts/performance-revisions.py",
+        "scripts/performance.py",
+        "scripts/write-performance.py",
+        "src/bench_bridge/bench.mbt",
+        "src/bench_bridge/moon.pkg",
+        "src/bench_bridge/pkg.generated.mbti",
+        "src/bench_bridge/sink_bench.mbt",
+        "src/cmd/bench/bench.c",
+        "src/cmd/bench/main.mbt",
+        "src/cmd/bench/moon.pkg",
+        "src/cmd/bench/sink_bench.mbt"
+      ],
+      "sha256": "6049c0c070c43cf8bac959fe3c91dee8dd6f9e81a835846a2522562b97299f9d"
+    },
+    "build": {
+      "files": [
+        "msvc.lock.json",
+        "scripts/build-native.mjs",
+        "scripts/moon.mjs",
+        "scripts/toolchain.mjs",
+        "toolchain.lock.json"
+      ],
+      "sha256": "f5f575775479785ed718ce278d96a6ce3059d59385afa920a4bd124a805e4b53"
+    }
+  },
+  "toolchain": {
+    "compiler": "v0.10.16+b1a0e846e (2026-10-16)",
+    "compiler_version": "0.10.16+b1a0e846e",
+    "standard_library_archive_sha256": "e7db6e3c80a97af953598b374cf14f3e330918b1ca4659b141b9f550c9c0adb0",
+    "standard_library_source_sha256": "31140145ca3db92e94781c7649073922fca6ec669d04b4219119dff611dba5f5",
+    "c_compiler": "Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35229 for x64",
+    "native_backend": "c",
+    "native_environment": {
+      "MOONBIT_NEW_NATIVE": "0"
+    },
+    "node": "v24.13.0",
+    "windows_sdk_version": "10.0.22621.0",
+    "platform": "win32",
+    "architecture": "x64"
+  },
+  "cohorts": [
+    {
+      "file": "performance-vs-85fef84-v0.1.4.json",
+      "rows": 24,
+      "sha256": "c7216d54e8eacc83053acbeb6353c25393baccf1c74d8b485588feb2ba07ab1a",
+      "measured_commit": "e1da545f8764976e73d6d0dc57f9dbc4ee94be81"
+    },
+    {
+      "file": "file-performance-v0.1.4.json",
+      "rows": 6,
+      "sha256": "f414422b20e5e571e4bb38201e2a1666c4ec9b7e96026de126c4ee1b547a7839",
+      "measured_commit": "e1da545f8764976e73d6d0dc57f9dbc4ee94be81"
+    },
+    {
+      "file": "write-performance-v0.1.5.json",
+      "rows": 32,
+      "sha256": "05316f75038d7f7b95335e7a715a67e68abacb2f6a7cf2a9615184877a711845",
+      "measured_commit": "272840f0feedc51ffd7a54a3213e9b4b95111f93"
+    }
+  ],
+  "historical_chain": {
+    "file": "performance-summary-v0.1.5.json",
+    "sha256": "a0e6bfd0971c8e956fc063f04f0610c8dbc36686a5fb3ad42b09e8c968725354"
+  },
+  "scope": "Exact identity with the previously released reference. Retained measured cohorts keep their own commits, adapters, raw samples and original follow-ups; no new timing is claimed."
+}
