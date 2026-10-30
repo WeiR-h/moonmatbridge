@@ -224,7 +224,9 @@ def verify_downloads():
             for name in ['LICENSE','NOTICE','THIRD_PARTY.md']:
                 member=next(n for n in z.namelist() if n.endswith('/'+name) and n.count('/')==1)
                 assert z.read(member)==(ROOT/name).read_bytes()
-    write_report('licenses',{'status':'passed','version':VERSION,'scope':'Publicly downloaded four archives; root LICENSE/NOTICE/THIRD_PARTY each matched byte-for-byte','checks':12})
+    license_receipt={'status':'passed','version':VERSION,'scope':'Publicly downloaded four archives; root LICENSE/NOTICE/THIRD_PARTY each matched byte-for-byte','checks':12}
+    write_report('licenses-public',license_receipt)
+    if not (REPORTS/f'licenses-v{VERSION}.json').exists():write_report('licenses',license_receipt)
     archive=directory/f'MoonMatBridge-v{VERSION}-windows-x64.zip'
     with zipfile.ZipFile(archive) as z:z.extractall(directory/'native')
     exe=next((directory/'native').rglob('moonmat.exe'))

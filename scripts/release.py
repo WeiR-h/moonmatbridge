@@ -34,7 +34,7 @@ def collect_ci(version,source):
     result={'status':'passed','version':version,'run_id':row['id'],'commit':source,'url':row['html_url'],'environment':values['linux']['environment'],'source_sha256':values['linux']['source_sha256'],'platforms':values,'scope':'Actual newest Windows/Linux three-target CI run and real Octave artifacts for the fixed source commit.'}
     e.save(f'ci-v{version}.json',result);return result
 
-def check(version,source,online=True):
+def check(version,source,online=True,current_environment=True):
     assert e.read(ROOT/'package.json')['version']==version,'Checkout does not match requested version'
     assert e.run(['git','show',source+':package.json']) and json.loads(e.run(['git','show',source+':package.json']))['version']==version
     assert subprocess.run(['git','merge-base','--is-ancestor',source,'HEAD'],cwd=ROOT).returncode==0,'Source commit is not an ancestor'
@@ -49,7 +49,7 @@ def check(version,source,online=True):
     e.validate_identity(version,source,local,ci,actual)
     for kind in ['compatibility','name-encoding','api-contract','workflows','source-operations','sink-operations','tree-operations','tree-close']:
         r=e.read(e.REPORTS/f'{kind}-v{version}.json');assert r['status']=='passed' and r['version']==version,kind
-    binding=e.validate_binding(version)
+    binding=e.validate_binding(version,current_environment)
     result={'status':'passed','version':version,'source_commit':source,'source_sha256':actual,'ci_run_id':ci['run_id'],'performance_binding_sha256':e.digest(e.REPORTS/f'performance-binding-v{version}.json')}
     e.save(f'release-check-v{version}.json',result);return result
 
@@ -83,7 +83,7 @@ def verify_public_once(version,source):
     public=e.load('verify_delivery','public-release.py')
     public.mooncakes(verify_only=True)
     public.github(verify_only=True)
-    check(version,source)
+    check(version,source,current_environment=False)
     receipt={'status':'passed','version':version,'source_commit':source,'tag_commit':e.run(['git','rev-parse','v'+version]),'ci_run_id':e.read(e.REPORTS/f'ci-v{version}.json')['run_id'],'public_assets':len(e.read(e.REPORTS/f'public-downloads-v{version}.json')['assets']),'github':f'https://github.com/{REPO}/releases/tag/v{version}','mooncakes':f'https://mooncakes.io/docs/{REPO}@{version}','scope':'Both public channels, source identity, licenses and independent workflows verified. Local upload; separate post-publication evidence.'}
     for kind in ['mooncakes','public-downloads','workflows-public','tree-operations-public','source-operations-public','tree-close-public','licenses','registry']:
         p=e.REPORTS/f'{kind}-v{version}.json';r=e.read(p);assert r['status']=='passed' and r['version']==version

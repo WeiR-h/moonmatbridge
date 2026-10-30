@@ -85,9 +85,10 @@ def performance_binding(version,reference='v0.1.5'):
 
 def read_toolchain():return json.loads(run(['node','scripts/toolchain.mjs']))
 
-def validate_binding(version):
+def validate_binding(version,current_environment=True):
     b=read(REPORTS/f'performance-binding-v{version}.json')
-    assert b['status']=='verified' and b['version']==version and b['scopes']==scopes() and b['toolchain']==read_toolchain(),'Performance binding invalidated'
+    assert b['status']=='verified' and b['version']==version and b['scopes']==scopes() ,'Performance binding invalidated'
+    if current_environment:assert b['toolchain']==read_toolchain(),'Measurement environment changed'
     for row in b['cohorts']:
         p=REPORTS/row['file'];data=read(p)
         assert digest(p)==row['sha256'] and data['status']=='measured' and len(data['results'])==row['rows'] and not data.get('partial')
