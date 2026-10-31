@@ -34,7 +34,7 @@ CSC 保留活动索引顺序、重复项、未用槽位及 nzmax；`is_canonical
 
 内存接口默认输入、输出及累计展开各 64 MiB；文件数据源默认输入、累计展开各 1 GiB，所选规范 MAT 体积 64 MiB，元数据 8 MiB，块 1 MiB。各接口独立执行额度；这些值不等于进程峰值内存。未选变量仍完整校验，详情见 [文件数据源](SOURCES.md)。
 
-MAT v4、HDF5 MAT v7.3、私有 function/opaque/MCOS 与 subsystem workspace 使用其他格式或运行时机制；流式写入、多 GiB 与 NPY object/pickle 分别规划。legacy mxOBJECT 数据支持不执行类方法。
+MAT v4、HDF5 MAT v7.3、私有 function/opaque/MCOS 与 subsystem workspace 使用其他格式或运行时机制；分块写入已经支持，输入数据树仍驻留内存；逐根文件到文件转换、多 GiB 与 NPY object/pickle 分别规划。legacy mxOBJECT 数据支持不执行类方法。
 
 ## 稳定发行门槛
 

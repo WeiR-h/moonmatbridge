@@ -22,3 +22,5 @@ V 使用实际数字版本。当前检出必须与 V 一致。检查会核对每
 Windows GitHub REST 上传使用本机 HTTPS 直连；如环境要求系统代理，可先设置 `$env:MOONMATBRIDGE_GITHUB_ROUTE="system"`。认证由 gh 获取，只驻留进程内存，禁止认证请求跟随重定向。连接中断后先核对草稿中的名称、大小与 SHA-256，再复用原文件续传；正式发布的资产不可替换。
 
 发布工具默认使用已保存的 WeiR-h 登录，并核对身份及仓库写权限。协作者可在命令前设置 `$env:MOONMATBRIDGE_GITHUB_USER="登录名"`。凭据仅驻留本次进程及子进程环境，全局 gh 活动账号保持原有设置；缺少所选账号时明确失败。
+
+新测量可使用 `python scripts/bind-performance.py --baseline-ref REF --candidate-ref S --core-report CORE.json --file-report FILE.json --write-report WRITE.json`，报告路径指向 verification/reports 中保留的原始文件。绑定核对真实提交、固定场景成员、全部批次与内存样本，不依赖旧版本文件名。运行时及测量范围未改变时继续引用原报告，不重新生成计时。

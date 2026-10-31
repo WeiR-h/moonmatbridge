@@ -31,3 +31,18 @@ for invalid in ['', 'bad/name', 'bad name', 'https://github.com']:
     except ValueError:continue
     raise AssertionError('Invalid project account accepted')
 print('Project account selection boundaries passed without loading credentials')
+
+# Validate the matrix independently of filenames and reject case substitution.
+validator=e.load('performance_binding_checks','bind-performance.py')
+base=e.read(e.REPORTS/'performance-vs-70f87e2-v0.1.8.json')
+args=('core',base['baseline_commit'],base['candidate_head_commit'],base['candidate_runtime_source_sha256'],base['environment']['toolchain'])
+validator.validate_report(base,*args)
+for corrupt in ['duplicate','samples','revision']:
+    changed=copy.deepcopy(base)
+    if corrupt=='duplicate':changed['results'][1]=copy.deepcopy(changed['results'][0])
+    elif corrupt=='samples':changed['results'][0]['batches']['candidate'][0]['samples_ms'].pop()
+    else:changed['baseline_commit']='0'*40
+    try:validator.validate_report(changed,*args)
+    except AssertionError:continue
+    raise AssertionError('Malformed performance cohort accepted: '+corrupt)
+print('Performance matrix, sample-count and fixed-reference guards passed')
