@@ -231,13 +231,25 @@ fn make_fixed_trees() -> (Huffman, Huffman) raise MatError {
 }
 
 ///|
+// Keep the shared table on JS. Other targets construct it only for compressed
+// blocks, preserving their allocation behavior for uncompressed workloads.
+#cfg(target="js")
 let cached_fixed_trees : (Huffman, Huffman) = make_fixed_trees() catch {
   _ => abort("Invalid built-in Huffman table")
 }
 
 ///|
+#cfg(target="js")
 fn fixed_trees() -> (Huffman, Huffman) {
   cached_fixed_trees
+}
+
+///|
+#cfg(not(target="js"))
+fn fixed_trees() -> (Huffman, Huffman) {
+  make_fixed_trees() catch {
+    _ => abort("Invalid built-in Huffman table")
+  }
 }
 
 ///|
