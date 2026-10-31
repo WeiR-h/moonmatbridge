@@ -17,7 +17,7 @@ def main():
     for _ in range(8192):h.update(block)
     cases.append({'name':'resident-256m','path':'@large','payload_bytes':268435456,'raw_sha256':h.hexdigest(),'generator':{'seed':20261029,'block_bytes':32768,'repeats':8192,'lcg_multiplier':1664525,'lcg_increment':1013904223}})
     report={'status':'running','version':version,'comparison':'Same MatSink API, paired frozen revisions; historical memory-versus-sink reports remain separate','baseline_commit':commits['baseline'],'candidate_commit':commits['candidate'],'baseline_runtime_source_sha256':prod.snapshot(commits['baseline'])[1],'candidate_runtime_source_sha256':prod.snapshot(commits['candidate'])[1],'source_scopes':{k:e.scopes(c) for k,c in commits.items()},'environment':{'toolchain':e.read_toolchain(),'platform':platform.platform()},'protocol':{'warmup_per_batch':5,'batches':3,'samples_per_batch':10,'memory_processes':3,'paired_order':'baseline then candidate per batch','core':'Resident tree, discard sink; excludes startup/preparation/disk','file':'Resident tree, positional write, close and no-overwrite publication; warm OS cache; startup excluded','memory':'Whole-process high-water RSS, includes resident input and preparation; not encoder-only allocation'},'fixtures':[{k:v for k,v in c.items() if k!='path'} for c in cases],'measurement_adapter_sha256':{n:e.digest(R/'scripts'/n) for n in ['write-regression.py','bench-sink-js.mjs','performance.py']},'partial':bool(a.case),'results':[]}
-    runid=uuid.uuid4().hex
+    runid=uuid.uuid4().hex;report["run_id"]=runid
     def sample(role,host,case,encoding,scope,kind):
         root=roots[role];target=OUT/(uuid.uuid4().hex+'.mat')
         prefix=[root/'_build/native/release/build/cmd/bench'/('bench.exe' if platform.system()=='Windows' else 'bench'),'sink-write'] if host=='native' else ['node','--expose-gc',R/'scripts/bench-sink-js.mjs',root/'_build/js/release/build/bench_bridge/bench_bridge.js']
@@ -46,7 +46,8 @@ def main():
             for encoding in ['plain','compressed']:
                 for scope in ['core','file']:
                     memory={k:[sample(k,host,c,encoding,scope,'memory')] for k in roots};batches={k:[] for k in roots}
-                    for _ in range(3):
+                    for batch in range(3):
+                        print(c['name'],host,encoding,scope,'batch',batch+1,'/3',flush=True)
                         for k in roots:batches[k].append(sample(k,host,c,encoding,scope,'timing'))
                     row={'case':c['name'],'host':host,'encoding':encoding,'scope':scope}
                     for k in roots:
@@ -59,7 +60,7 @@ def main():
                     if scope=='file' and encoding=='plain':assert memory['baseline'][0]['without_creation_description_sha256']==memory['candidate'][0]['without_creation_description_sha256']
                     report['results'].append(row);(OUT/(runid+'.json')).write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8',newline='\n');print(c['name'],host,encoding,scope,round(row['speedup'],3),flush=True)
     report['status']='measured';report['regressions_over_10_percent']=[{k:r[k] for k in ['case','host','encoding','scope','speedup','memory_reduction']} for r in report['results'] if r['speedup']<1/1.1 or r['memory_reduction']<-.1]
-    report['engineering_targets']=[{'case':r['case'],'scope':r['scope'],'time_reduction':1-1/r['speedup'],'goal':.10,'passed':r['speedup']>=1/.9} for r in report['results'] if r['case']=='sparse-100k' and r['host']=='js' and r['encoding']=='plain']
-    e.save(f'write-regression{"-partial-"+runid[:8] if a.case else ""}-v{version}.json',report)
+    report['engineering_targets']=[{'case':r['case'],'host':r['host'],'scope':r['scope'],'goal':.15,'time_reduction':1-1/r['speedup'],'passed':r['speedup']>=1/.85} for r in report['results'] if version=='0.1.12' and r['case'] in ('dense-16m','resident-256m') and r['encoding']=='compressed' and r['scope']=='core']
+    e.save(f'write-regression-vs-{commits["baseline"][:7]}-{"partial" if a.case else "run"}-{runid[:8]}-v{version}.json',report)
 
 if __name__=='__main__':main()

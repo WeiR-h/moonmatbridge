@@ -21,6 +21,7 @@ fn BitReader::fill(self : BitReader, count : Int32) -> Bool {
 }
 
 ///|
+#inline
 fn BitReader::take(self : BitReader, count : Int32) -> Int32 raise MatError {
   if !self.fill(count) {
     fail("invalid-zlib", self.position, "Truncated DEFLATE bit stream")
@@ -98,20 +99,6 @@ fn InflateOutput::matrix_hint(self : InflateOutput) -> Unit {
       }
       self.data = data
     }
-  }
-}
-
-///|
-fn InflateOutput::push(
-  self : InflateOutput,
-  byte : Byte,
-  offset : Int32,
-) -> Unit raise MatError {
-  self.reserve(1, offset)
-  self.data[self.used] = byte
-  self.used = self.used + 1
-  if self.used == 8 {
-    self.matrix_hint()
   }
 }
 
@@ -198,12 +185,15 @@ fn huffman(lengths : Array[Int32], offset : Int32) -> Huffman raise MatError {
 }
 
 ///|
+#inline
 fn Huffman::decode(self : Huffman, reader : BitReader) -> Int32 raise MatError {
   // At stream end, a valid short symbol may have fewer than nine bits left.
   if reader.fill(9) {
     let entry = self.fast[reader.buffer & 511]
     if entry != 0 {
-      ignore(reader.take(entry >> 16))
+      let width = entry >> 16
+      reader.buffer = reader.buffer >> width
+      reader.available = reader.available - width
       return (entry & 65535) - 1
     }
   }
@@ -225,7 +215,7 @@ fn Huffman::decode(self : Huffman, reader : BitReader) -> Int32 raise MatError {
 }
 
 ///|
-fn fixed_trees() -> (Huffman, Huffman) raise MatError {
+fn make_fixed_trees() -> (Huffman, Huffman) raise MatError {
   let literals = Array::makei(288, fn(i) {
     if i <= 143 {
       8
@@ -238,6 +228,16 @@ fn fixed_trees() -> (Huffman, Huffman) raise MatError {
     }
   })
   (huffman(literals, 0), huffman(Array::make(32, 5), 0))
+}
+
+///|
+let cached_fixed_trees : (Huffman, Huffman) = make_fixed_trees() catch {
+  _ => abort("Invalid built-in Huffman table")
+}
+
+///|
+fn fixed_trees() -> (Huffman, Huffman) {
+  cached_fixed_trees
 }
 
 ///|
@@ -321,13 +321,40 @@ fn inflate_codes(
     0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11,
     11, 12, 12, 13, 13,
   ]
+  let mut pending = -1
   while true {
-    let symbol = literals.decode(reader)
+    let symbol = if pending >= 0 {
+      let value = pending
+      pending = -1
+      value
+    } else {
+      literals.decode(reader)
+    }
     if symbol == 256 {
       break
     }
     if symbol < 256 {
-      out.push(symbol.to_byte(), reader.position)
+      out.reserve(1, reader.position)
+      let data = out.data
+      let mut position = out.used
+      let stop = if position < 8 && data.length() > 8 {
+        8
+      } else {
+        data.length()
+      }
+      data[position] = symbol.to_byte()
+      position = position + 1
+      while position < stop {
+        let next = literals.decode(reader)
+        if next >= 256 {
+          pending = next
+          break
+        }
+        data[position] = next.to_byte()
+        position = position + 1
+      }
+      out.used = position
+      out.matrix_hint()
     } else {
       if symbol > 285 {
         fail("invalid-zlib", reader.position, "Reserved length symbol")

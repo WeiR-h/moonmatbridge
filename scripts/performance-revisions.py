@@ -113,7 +113,8 @@ def main():
         for operation in fixture['operations']:
             for host in args.host or ['native','js']:
                 batches={'baseline':[],'candidate':[]}
-                for _ in range(3):
+                for batch in range(3):
+                    print('core batch',batch+1,'/3',flush=True)
                     for label,directory in [('baseline',baseline),('candidate',candidate)]:
                         batches[label].append(measure(directory,host,fixture,operation,'timing'))
                 raw={k:[s for b in v for s in b['samples_ms']] for k,v in batches.items()}
@@ -150,9 +151,10 @@ def main():
             report['targets'].append({'case':row['case'],'host':row['host'],'goal':'native select process peak -10% versus v0.0.9' if base_sha.startswith('4d1e261') else 'native select process peak -40% versus v0.0.5',
                 'passed':row['memory_reduction']>=(.10 if base_sha.startswith('4d1e261') else .40)})
     report['regressions_over_10_percent']=[{'case':r['case'],'operation':r['operation'],'host':r['host'],'speedup':r['speedup'],'memory_reduction':r['memory_reduction']} for r in report['results'] if r['speedup']<1/1.1 or r['memory_reduction']<-.1]
+    report['engineering_targets']=[{'case':r['case'],'host':r['host'],'operation':r['operation'],'goal':(.20 if version=='0.1.11' else .25),'time_reduction':r['time_reduction'],'passed':r['time_reduction']>=(.20 if version=='0.1.11' else .25)} for r in report['results'] if (version=='0.1.11' and r['case']=='compressed-random-16m' and r['operation']=='read') or (version=='0.1.13' and r['case']=='dense-16m' and r['host']=='js' and r['operation'] in ('read','write'))]
     report['scope']='Fixed inputs and same-machine paired revisions. Per-case engineering targets; historical measurements remain independent.'
     write(run_path,report)
-    destination=ROOT/'verification/reports'/f'performance-vs-{base_sha[:7]}{"-partial-"+run_id[:8] if partial else ""}-v{version}.json'
+    destination=ROOT/'verification/reports'/f'performance-vs-{base_sha[:7]}{"-partial-" if partial else "-run-"}{run_id[:8]}-v{version}.json'
     write(destination,report)
     print(str(destination),flush=True)
 

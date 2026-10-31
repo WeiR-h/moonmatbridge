@@ -61,7 +61,9 @@ fn Huffman::decode_source(
   if reader.fill(9) {
     let entry = self.fast[reader.buffer & 511]
     if entry != 0 {
-      ignore(reader.take(entry >> 16))
+      let width = entry >> 16
+      reader.buffer = reader.buffer >> width
+      reader.available = reader.available - width
       return (entry & 65535) - 1
     }
   }
@@ -485,6 +487,29 @@ fn SourceInflater::fill(
       let literals = self.literals.unwrap()
       let mut position = self.produced
       while i < count {
+        // Two short literal codes fit in 18 bits. Peeking leaves all nonliteral
+        // and long-code transitions to the fully validated decoder below.
+        if i + 1 < count && reader.fill(18) {
+          let first = literals.fast[reader.buffer & 511]
+          if first != 0 && (first & 65535) <= 256 {
+            let width = first >> 16
+            let second = literals.fast[(reader.buffer >> width) & 511]
+            if second != 0 && (second & 65535) <= 256 {
+              let one = ((first & 65535) - 1).to_byte()
+              let two = ((second & 65535) - 1).to_byte()
+              let bits = width + (second >> 16)
+              reader.buffer = reader.buffer >> bits
+              reader.available = reader.available - bits
+              output[i] = one
+              output[i + 1] = two
+              history[position & 32767] = one
+              history[(position + 1) & 32767] = two
+              i = i + 2
+              position = position + 2
+              continue
+            }
+          }
+        }
         let symbol = literals.decode_source(reader)
         if symbol < 256 {
           let byte = symbol.to_byte()

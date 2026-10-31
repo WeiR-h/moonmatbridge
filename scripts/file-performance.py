@@ -1,6 +1,6 @@
 """Fixed-revision file pipelines. Builds identical development adapters around old/new APIs."""
 from pathlib import Path
-import argparse,hashlib,importlib.util,json,platform,shutil,statistics,subprocess,zipfile,zlib,struct,time
+import uuid,argparse,hashlib,importlib.util,json,platform,shutil,statistics,subprocess,zipfile,zlib,struct,time
 import numpy as np
 ROOT=Path(__file__).resolve().parents[1]
 LOCAL=ROOT/'verification/local/file-performance'
@@ -191,6 +191,7 @@ def measure(folder,host,case,kind):
 
 def main():
  parser=argparse.ArgumentParser();parser.add_argument('--baseline-ref',default='v0.0.14');parser.add_argument('--candidate-ref',default='HEAD');parser.add_argument('--case',action='append');args=parser.parse_args()
+ run_id=uuid.uuid4().hex
  cases=fixtures();(LOCAL/'driver.mjs').write_text(DRIVER,encoding='utf-8',newline='\n')
  baseline,bsha,bhash,_=prepare(args.baseline_ref);candidate,csha,chash,version=prepare(args.candidate_ref)
  report={'version':version,'status':'running','baseline_commit':bsha,'candidate_commit':csha,'baseline_runtime_source_sha256':bhash,'candidate_runtime_source_sha256':chash,'protocol':{'warmup_per_batch':5,'batches':3,'samples_per_batch':10,'memory_processes':3,'timing':'open, read, validate, select, close and serialize; process startup excluded; generated input excluded; warm OS cache; JS GC outside timing'},'results':[]}
@@ -203,7 +204,8 @@ def main():
   if tuple(map(int,version.split('-')[0].split('.')))<tuple(case['minimum_version']):continue
   for host in ['native','js']:
    batches={'baseline':[],'candidate':[]}
-   for _ in range(3):
+   for batch in range(3):
+    print(case['name'],host,'batch',batch+1,'/3',flush=True)
     for label,folder in [('baseline',baseline),('candidate',candidate)]:batches[label].append(measure(folder,host,case,'timing'))
    samples={k:[t for b in bs for t in b['samples_ms']] for k,bs in batches.items()}
    memory={k:[measure(d,host,case,'memory') for _ in range(3)] for k,d in [('baseline',baseline),('candidate',candidate)]}
@@ -213,8 +215,10 @@ def main():
    report['results'].append(row);write(LOCAL/f'file-performance-v{version}.json',report);print(case['name'],host,round(row['speedup'],3),round(row['memory_reduction'],4),flush=True)
  for folder,ref in [(baseline,bsha),(candidate,csha)]:
   evidence.ROOT=ROOT;expected=evidence.snapshot(ref);evidence.ROOT=folder;assert evidence.snapshot()==expected
+ report['run_id']=run_id;report['partial']=bool(args.case)
  report['status']='measured';report['scope']='File pipeline measurements; independent from preloaded codec benchmarks. Every previous case remains available.'
+ report['engineering_targets']=[{'case':r['case']['name'],'host':r['host'],'goal':.20,'time_reduction':1-1/r['speedup'],'passed':r['speedup']>=1/.8} for r in report['results'] if version=='0.1.11' and r['case']['name']=='large-compressed']
  report['regressions_over_10_percent']=[{'case':r['case']['name'],'host':r['host'],'speedup':r['speedup'],'memory_reduction':r['memory_reduction']} for r in report['results'] if r['speedup']<1/1.1 or r['memory_reduction']<-.1]
- write(ROOT/f'verification/reports/file-performance-v{version}.json',report)
+ write(ROOT/f'verification/reports/file-performance-vs-{bsha[:7]}-{"partial" if args.case else "run"}-{run_id[:8]}-v{version}.json',report)
 
 if __name__=='__main__':main()
