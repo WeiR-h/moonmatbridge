@@ -22,6 +22,16 @@ def validate_report(data,kind,baseline,candidate,runtime,toolchain):
             batches=r[role]['batches'] if kind=='write' else r['batches'][role]
             assert len(batches)==3 and all(len(b['samples_ms'])==10 for b in batches),'Missing timing samples'
             assert all(math.isfinite(t) and t>0 for b in batches for t in b['samples_ms']),'Invalid timing sample'
+            if kind=='core' and 'native_repetitions' in data['protocol']:
+                counts=data['protocol']['native_repetitions']
+                assert set(counts)==set(CORE) and data['protocol']['js_repetitions']==1,'Incomplete repeat policy'
+                repeat=counts[case] if r['host']=='native' else 1
+                assert type(repeat) is int and 1<=repeat<=1024,'Invalid repeat policy'
+                for b in batches:
+                    assert b['operations_per_sample']==repeat,'Different operation counts'
+                    totals=b['samples_total_ms']
+                    assert len(totals)==10 and all(math.isfinite(t) and t>0 for t in totals),'Missing raw totals'
+                    assert all(math.isclose(s,t/repeat,rel_tol=1e-12,abs_tol=1e-9) for s,t in zip(b['samples_ms'],totals)),'Incorrect sample normalization'
             peaks=r[role]['memory_processes'] if kind=='write' else r['memory_processes'][role] if kind=='file' else r['baseline_peak_bytes_samples' if role=='baseline' else 'peak_bytes_samples']
             assert len(peaks)==3,'Missing process memory samples'
     assert len(actual)==len(set(actual)) and set(actual)==expected_rows(kind),'Missing, duplicate or substituted case'

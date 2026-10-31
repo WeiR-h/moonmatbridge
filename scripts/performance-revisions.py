@@ -2,6 +2,7 @@
 from pathlib import Path
 import argparse
 import importlib.util
+import hashlib
 import json
 import platform
 import shutil
@@ -51,6 +52,17 @@ def prepare(ref):
     evidence.ROOT=directory
     assert evidence.snapshot()==expected, 'Frozen revision source differs from its Git commit'
     evidence.ROOT=previous_root
+    # Use the same timing adapter for both frozen production revisions. Older
+    # modules predate the optional sink adapter and strict selection API.
+    core_adapter=(ROOT/'src/cmd/bench/main.mbt').read_text(encoding='utf-8')
+    role_version=tuple(map(int,json.loads((directory/'package.json').read_bytes())['version'].split('-')[0].split('.')))
+    if role_version < (0,1,3):
+        begin=core_adapter.index('  if host_arg_count(0) == 8')
+        end=core_adapter.index('  if host_arg_count(0) != 4',begin)
+        core_adapter=core_adapter[:begin]+core_adapter[end:]
+    if role_version < (0,0,8):
+        core_adapter=core_adapter.replace('@mat.read_selected(bytes, ["v00"]).variables','@mat.read_tree(bytes).select(["v00"])')
+    (directory/'src/cmd/bench/main.mbt').write_text(core_adapter,encoding='utf-8',newline='\n')
     if (ROOT/'.local-toolchain.json').exists():
         shutil.copyfile(ROOT/'.local-toolchain.json',directory/'.local-toolchain.json')
     build(directory)
@@ -61,14 +73,22 @@ def build(directory):
     perf.command(['node',directory/'scripts/build-native.mjs'],cwd=directory)
     perf.command(['node',directory/'scripts/moon.mjs','build','src/bridge','--target','js','--release','--deny-warn'],cwd=directory)
 
+def repetitions(fixture,host):
+    if host!='native':return 1
+    return {'dense-16m':16,'dense-be-16m':2,'complex-16m':16,'nested-4m':64,'sparse-100k':128,'select-1-of-16':128}.get(fixture['name'],1)
+
+
 def measure(directory,host,fixture,operation,kind):
+    repeat=1 if kind=='memory' else repetitions(fixture,host)
     if host=='native':
         executable=directory/'_build/native/release/build/cmd/bench'/('bench.exe' if platform.system()=='Windows' else 'bench')
-        args=[executable,fixture['path'],operation,kind]
+        args=[executable,fixture['path'],operation,kind,str(repeat)]
     else:
-        args=['node','--expose-gc',ROOT/'scripts/bench-js.mjs',directory/'_build/js/release/build/bench_bridge/bench_bridge.js',fixture['path'],operation,kind]
+        args=['node','--expose-gc',ROOT/'scripts/bench-js.mjs',directory/'_build/js/release/build/bench_bridge/bench_bridge.js',fixture['path'],operation,kind,str(repeat)]
     result=json.loads(perf.command(args))
     assert result['checksum']>0 and result['peak_bytes']>0
+    assert result['operations_per_sample']==repeat and len(result['samples_ms'])==len(result['samples_total_ms'])
+    assert all(abs(t/repeat-s)<1e-9 for s,t in zip(result['samples_ms'],result['samples_total_ms']))
     return result
 
 def main():
@@ -99,10 +119,13 @@ def main():
             'toolchain':json.loads(perf.command(['node',ROOT/'scripts/toolchain.mjs'])),'moon':perf.command(['node',ROOT/'scripts/moon.mjs','version']),
             'compiler':json.loads(perf.command(['node',ROOT/'scripts/toolchain.mjs']))['c_compiler'],'build':'same toolchain, --release, one compiler job'},
         'protocol':{'warmup_per_batch':5,'batches':3,'samples_per_batch':10,'paired_order':'baseline then candidate, repeated three times',
+            'sample_unit':'mean per operation within a fixed repeat count; every total and repeat count retained; five single-call warmups; memory remains one operation',
+            'native_repetitions':{f['name']:repetitions(f,'native') for f in fixtures},'js_repetitions':1,
             'core_scope':'input preloaded; write tree prepared; no startup or filesystem timing; JS GC outside samples',
             'memory':'three independent processes per revision, one operation, no warmup; full process peak working set/RSS',
             'cli':'five warmups followed by 30 full process invocations per revision; includes startup and disk I/O'},
         'fixtures':[{k:v for k,v in f.items() if k!='path'} for f in fixtures],'results':[]}
+    report['measurement_adapters']={'native_main_by_revision':{label:hashlib.sha256((folder/'src/cmd/bench/main.mbt').read_bytes()).hexdigest() for label,folder in [('baseline',baseline),('candidate',candidate)]},'driver_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'js_driver_sha256':hashlib.sha256((ROOT/'scripts/bench-js.mjs').read_bytes()).hexdigest()}
     partial=bool(args.case or args.host)
     stem=f'performance-v{version}-vs-{base_sha[:7]}'
     run_id=uuid.uuid4().hex

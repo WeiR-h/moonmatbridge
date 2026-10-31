@@ -46,3 +46,21 @@ for corrupt in ['duplicate','samples','revision']:
     except AssertionError:continue
     raise AssertionError('Malformed performance cohort accepted: '+corrupt)
 print('Performance matrix, sample-count and fixed-reference guards passed')
+
+repeated=copy.deepcopy(base)
+repeated['protocol'].update(native_repetitions={name:2 if name=='dense-16m' else 1 for name in validator.CORE},js_repetitions=1)
+for row in repeated['results']:
+    repeat=repeated['protocol']['native_repetitions'][row['case']] if row['host']=='native' else 1
+    for batches in row['batches'].values():
+        for batch in batches:
+            batch.update(operations_per_sample=repeat,samples_total_ms=[s*repeat for s in batch['samples_ms']])
+validator.validate_report(repeated,*args)
+for corrupt in ['total','repeat','missing-total']:
+    changed=copy.deepcopy(repeated);batch=changed['results'][0]['batches']['candidate'][0]
+    if corrupt=='total':batch['samples_total_ms'][0]*=2
+    elif corrupt=='repeat':batch['operations_per_sample']+=1
+    else:batch['samples_total_ms'].pop()
+    try:validator.validate_report(changed,*args)
+    except AssertionError:continue
+    raise AssertionError('Invalid repeated sample accepted: '+corrupt)
+print('Repeated sample totals, normalization and paired operation-count guards passed')
