@@ -1,4 +1,16 @@
 ///|
+#cfg(target="js")
+fn golden_distance_code(symbol : Int32) -> Int32 {
+  reverse_code(symbol, 5)
+}
+
+///|
+#cfg(not(target="js"))
+fn golden_distance_code(symbol : Int32) -> Int32 {
+  compression_distances[symbol]
+}
+
+///|
 test "fixed code boundary vectors and zlib framing match independent golden bytes" {
   for
     (symbol, code) in [
@@ -11,7 +23,14 @@ test "fixed code boundary vectors and zlib framing match independent golden byte
       (280, 524291),
       (287, 524515),
     ] {
-    assert_eq(compression_literals[symbol], code)
+    let writer : BitWriter = { out: [], pending: 0, count: 0, limit: 16, }
+    writer.literal(symbol)
+    let width = writer.out.length() * 8 + writer.count
+    let low = if writer.out.length() == 0 { 0 } else { writer.out[0].to_int() }
+    let actual = (width << 16) |
+      low |
+      (writer.pending << (writer.out.length() * 8))
+    assert_eq(actual, code)
   }
   for
     (symbol, code) in [
@@ -23,7 +42,7 @@ test "fixed code boundary vectors and zlib framing match independent golden byte
       (29, 23),
       (31, 31),
     ] {
-    assert_eq(compression_distances[symbol], code)
+    assert_eq(golden_distance_code(symbol), code)
   }
   let one = Bytes::from_array(
     [0x78, 0x01, 0x73, 0x04, 0x00, 0x00, 0x42, 0x00, 0x42].map(v => v.to_byte()),

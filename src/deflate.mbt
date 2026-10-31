@@ -43,6 +43,7 @@ fn reverse_code(code : Int32, count : Int32) -> Int32 {
 }
 
 ///|
+#cfg(not(target="js"))
 let compression_literals : FixedArray[Int32] = FixedArray::makei(288, fn(
   symbol,
 ) {
@@ -59,35 +60,56 @@ let compression_literals : FixedArray[Int32] = FixedArray::makei(288, fn(
 })
 
 ///|
+#cfg(not(target="js"))
 let compression_distances : FixedArray[Int32] = FixedArray::makei(32, i => {
   reverse_code(i, 5)
 })
 
 ///|
+#cfg(not(target="js"))
 fn BitWriter::literal(self : BitWriter, symbol : Int32) -> Unit raise MatError {
   let code = compression_literals[symbol]
   self.put(code & 65535, code >> 16)
 }
 
 ///|
+#cfg(target="js")
+fn BitWriter::literal(self : BitWriter, symbol : Int32) -> Unit raise MatError {
+  let (code, count) = if symbol <= 143 {
+    (48 + symbol, 8)
+  } else if symbol <= 255 {
+    (400 + symbol - 144, 9)
+  } else if symbol <= 279 {
+    (symbol - 256, 7)
+  } else {
+    (192 + symbol - 280, 8)
+  }
+  self.put(reverse_code(code, count), count)
+}
+
+///|
+#cfg(not(target="js"))
 let compression_length_base : Array[Int32] = [
   3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31, 35, 43, 51, 59, 67, 83,
   99, 115, 131, 163, 195, 227, 258,
 ]
 
 ///|
+#cfg(not(target="js"))
 let compression_length_extra : Array[Int32] = [
   0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5,
   5, 0,
 ]
 
 ///|
+#cfg(not(target="js"))
 let compression_distance_base : Array[Int32] = [
   1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193, 257, 385, 513, 769,
   1025, 1537, 2049, 3073, 4097, 6145, 8193, 12289, 16385, 24577,
 ]
 
 ///|
+#cfg(not(target="js"))
 let compression_distance_extra : Array[Int32] = [
   0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11,
   12, 12, 13, 13,
@@ -96,6 +118,7 @@ let compression_distance_extra : Array[Int32] = [
 ///|
 
 ///|
+#cfg(not(target="js"))
 fn BitWriter::match_code(
   self : BitWriter,
   length : Int32,
@@ -116,6 +139,43 @@ fn BitWriter::match_code(
     index = index + 1
   }
   self.put(compression_distances[index], 5)
+  self.put(distance - distance_base[index], distance_extra[index])
+}
+
+///|
+#cfg(target="js")
+fn BitWriter::match_code(
+  self : BitWriter,
+  length : Int32,
+  distance : Int32,
+) -> Unit raise MatError {
+  let length_base = [
+    3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31, 35, 43, 51, 59, 67,
+    83, 99, 115, 131, 163, 195, 227, 258,
+  ]
+  let length_extra = [
+    0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5,
+    5, 5, 0,
+  ]
+  let distance_base = [
+    1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193, 257, 385, 513, 769,
+    1025, 1537, 2049, 3073, 4097, 6145, 8193, 12289, 16385, 24577,
+  ]
+  let distance_extra = [
+    0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11,
+    11, 12, 12, 13, 13,
+  ]
+  let mut index = 0
+  while index < 28 && length >= length_base[index + 1] {
+    index = index + 1
+  }
+  self.literal(257 + index)
+  self.put(length - length_base[index], length_extra[index])
+  let mut index = 0
+  while index < 29 && distance >= distance_base[index + 1] {
+    index = index + 1
+  }
+  self.put(reverse_code(index, 5), 5)
   self.put(distance - distance_base[index], distance_extra[index])
 }
 
