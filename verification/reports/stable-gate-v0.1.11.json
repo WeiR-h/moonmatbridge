@@ -1,0 +1,9 @@
+{
+  "status": "ready",
+  "version": "0.1.11",
+  "source_commit": "242f58b4d832d87e6d991426f82ed17e5fa09374",
+  "source_sha256": "17246c34cdc1675c79e5cad23653fb49ec0a1376d9c1b9667ab58cfd3f099610",
+  "blockers": [],
+  "distribution_sha256": "11dfbdf69acfd3214b1afc3ed0ce4f101b9a6326fc79d124651823d9d948bc7a",
+  "performance_binding_sha256": "391d09e69876497d2ef81ada82839c96830e0ea8383d5a007302e140cc90f419"
+}

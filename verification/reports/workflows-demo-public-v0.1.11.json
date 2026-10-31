@@ -1,0 +1,77 @@
+{
+  "status": "passed",
+  "version": "0.1.11",
+  "executable_sha256": "46e64604488c9aabef7222a36b77c96fbd3dee83e83be44a7df41ae61c849193",
+  "commands": 23,
+  "files": [
+    {
+      "file": "all-base-classes.mat",
+      "sha256": "7b52bbe17bd3581a3d7f555a462b874b29608da4c3c00f94e954f0506c7fc106"
+    },
+    {
+      "file": "archive-compressed.mat",
+      "sha256": "7fa01fb4a6143eed4e9cf13a434733f5c68aaca6533342228e3873b5c0e3b897"
+    },
+    {
+      "file": "archive-restored.mat",
+      "sha256": "962fb739ac0ab0b542c019e68c2664b890462d08bea11e11e37ff05d2a5a7b28"
+    },
+    {
+      "file": "changed-report.json",
+      "sha256": "eeb8d6ebf50cf7e46e12aef07280b33237de2fb0a00c6c59eba248a663ce0d39"
+    },
+    {
+      "file": "changed.mat",
+      "sha256": "0ee40e76d8d84817dab609dac5c165fd81de0c453d763e79befd3d23dc3e85c6"
+    },
+    {
+      "file": "close-report.json",
+      "sha256": "a19e45ae9103a0ea7009262845229161fd3ce1d6033c4bca39729bc2bbeb11f4"
+    },
+    {
+      "file": "mixed-tree-diff.json",
+      "sha256": "1b2dc8b82a88bbcab92db03bd432a1ef2c2a124e70ce83460788c947c47b0e09"
+    },
+    {
+      "file": "mixed-tree-restored.mat",
+      "sha256": "962fb739ac0ab0b542c019e68c2664b890462d08bea11e11e37ff05d2a5a7b28"
+    },
+    {
+      "file": "mixed-tree.json",
+      "sha256": "2d702102320a1993706f365e08c3232fcb0b60b1d87f88b4632e4d30bd725900"
+    },
+    {
+      "file": "signal.mat",
+      "sha256": "36e899149b4990960bdd242ab297ce4a8119f96818077bb4026aa75777d0137e"
+    },
+    {
+      "file": "system-restored.mat",
+      "sha256": "b07d8f3af1377de9356360db7aaa3aee8330ecd64b412660aa97f07ef9a2d22f"
+    },
+    {
+      "file": "system-snapshot.json",
+      "sha256": "7c91f2738b8897d3933e77aac636285816bfa7c8dedd6be126366834d0e57b30"
+    },
+    {
+      "file": "system.mat",
+      "sha256": "b07d8f3af1377de9356360db7aaa3aee8330ecd64b412660aa97f07ef9a2d22f"
+    },
+    {
+      "file": "tolerance.json",
+      "sha256": "f6310ac69b9fd3b5059dc03bcbaf12eb7415d4d7017fef632b9510246650957a"
+    },
+    {
+      "file": "transformed-copy.mat",
+      "sha256": "5b58209eb500309015dfe41bd404def583be082f7de464b3a3865f69bcbaff8b"
+    },
+    {
+      "file": "transformed.mat",
+      "sha256": "5b58209eb500309015dfe41bd404def583be082f7de464b3a3865f69bcbaff8b"
+    },
+    {
+      "file": "transformed.npy",
+      "sha256": "71a57179202d5733a95de594c5b709fb32490cd2173da1c5d93f6e7fe5c13bc2"
+    }
+  ],
+  "scope": "Actual publicly downloaded portable PowerShell demo; output directory is new"
+}
