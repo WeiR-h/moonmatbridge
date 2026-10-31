@@ -1,0 +1,619 @@
+{
+  "status": "measured",
+  "version": "0.1.11",
+  "comparison": "Same MatSink API, paired frozen revisions; historical memory-versus-sink reports remain separate",
+  "baseline_commit": "63e23046f362608e1938e5b5cd0a8df689fb23a5",
+  "candidate_commit": "242f58b4d832d87e6d991426f82ed17e5fa09374",
+  "baseline_runtime_source_sha256": "99e07e3a9c6a791468f62110ad7e72e7bf8412c9c810d22c165283c65e7622e7",
+  "candidate_runtime_source_sha256": "c91c917c6496fbe54c5c4b78319b1c8693e6779413af46e4bfbe75f225910d1d",
+  "source_scopes": {
+    "baseline": {
+      "runtime": {
+        "files": [
+          "src/axes.mbt",
+          "src/bridge/bridge.mbt",
+          "src/bridge/moon.pkg",
+          "src/bridge/sink.mbt",
+          "src/cmd/moonmat/io.c",
+          "src/cmd/moonmat/main.mbt",
+          "src/cmd/moonmat/moon.pkg",
+          "src/concat.mbt",
+          "src/deflate.mbt",
+          "src/diff.mbt",
+          "src/fixed_writer.mbt",
+          "src/inflate.mbt",
+          "src/interchange/diff.mbt",
+          "src/interchange/document.mbt",
+          "src/interchange/json.mbt",
+          "src/interchange/moon.pkg",
+          "src/interchange/name_options.mbt",
+          "src/interchange/roots.mbt",
+          "src/interchange/snapshot.mbt",
+          "src/interchange/transform.mbt",
+          "src/interchange/tree_close.mbt",
+          "src/interchange/tree_snapshot.mbt",
+          "src/moon.pkg",
+          "src/name_encoding.mbt",
+          "src/npy.mbt",
+          "src/npy_reader.mbt",
+          "src/numeric.mbt",
+          "src/reader.mbt",
+          "src/reshape.mbt",
+          "src/select.mbt",
+          "src/selected.mbt",
+          "src/sink.mbt",
+          "src/sink_deflate.mbt",
+          "src/slice.mbt",
+          "src/source.mbt",
+          "src/source_inflate.mbt",
+          "src/source_stream.mbt",
+          "src/sparse.mbt",
+          "src/sparse_codec.mbt",
+          "src/tree.mbt",
+          "src/tree_close.mbt",
+          "src/tree_diff.mbt",
+          "src/types.mbt",
+          "src/utf8_scan.mbt",
+          "src/writer.mbt"
+        ],
+        "sha256": "99e07e3a9c6a791468f62110ad7e72e7bf8412c9c810d22c165283c65e7622e7"
+      },
+      "hosts": {
+        "files": [
+          "scripts/cli.mjs"
+        ],
+        "sha256": "67becff9edc35c4ef862a69a1733edce03c34e1a727586dea1f17f4cbc3e6abe"
+      },
+      "adapters": {
+        "files": [
+          "examples/python/mixed_types.py",
+          "scripts/bench-js.mjs",
+          "scripts/bench-sink-js.mjs",
+          "scripts/build-bench.mjs",
+          "scripts/file-performance.py",
+          "scripts/performance-revisions.py",
+          "scripts/performance.py",
+          "scripts/write-performance.py",
+          "scripts/write-regression.py",
+          "src/bench_bridge/bench.mbt",
+          "src/bench_bridge/moon.pkg",
+          "src/bench_bridge/pkg.generated.mbti",
+          "src/bench_bridge/sink_bench.mbt",
+          "src/cmd/bench/bench.c",
+          "src/cmd/bench/main.mbt",
+          "src/cmd/bench/moon.pkg",
+          "src/cmd/bench/sink_bench.mbt"
+        ],
+        "sha256": "8593d2117a9a320d164958c70ecff7e0a7fa84cb8fa4cdd35e21249fe5b7b610"
+      },
+      "build": {
+        "files": [
+          "msvc.lock.json",
+          "scripts/build-native.mjs",
+          "scripts/moon.mjs",
+          "scripts/toolchain.mjs",
+          "toolchain.lock.json"
+        ],
+        "sha256": "f5f575775479785ed718ce278d96a6ce3059d59385afa920a4bd124a805e4b53"
+      }
+    },
+    "candidate": {
+      "runtime": {
+        "files": [
+          "src/axes.mbt",
+          "src/bridge/bridge.mbt",
+          "src/bridge/moon.pkg",
+          "src/bridge/sink.mbt",
+          "src/cmd/moonmat/io.c",
+          "src/cmd/moonmat/main.mbt",
+          "src/cmd/moonmat/moon.pkg",
+          "src/concat.mbt",
+          "src/deflate.mbt",
+          "src/diff.mbt",
+          "src/fixed_writer.mbt",
+          "src/inflate.mbt",
+          "src/interchange/diff.mbt",
+          "src/interchange/document.mbt",
+          "src/interchange/json.mbt",
+          "src/interchange/moon.pkg",
+          "src/interchange/name_options.mbt",
+          "src/interchange/roots.mbt",
+          "src/interchange/snapshot.mbt",
+          "src/interchange/transform.mbt",
+          "src/interchange/tree_close.mbt",
+          "src/interchange/tree_snapshot.mbt",
+          "src/moon.pkg",
+          "src/name_encoding.mbt",
+          "src/npy.mbt",
+          "src/npy_reader.mbt",
+          "src/numeric.mbt",
+          "src/reader.mbt",
+          "src/reshape.mbt",
+          "src/select.mbt",
+          "src/selected.mbt",
+          "src/sink.mbt",
+          "src/sink_deflate.mbt",
+          "src/slice.mbt",
+          "src/source.mbt",
+          "src/source_inflate.mbt",
+          "src/source_stream.mbt",
+          "src/sparse.mbt",
+          "src/sparse_codec.mbt",
+          "src/tree.mbt",
+          "src/tree_close.mbt",
+          "src/tree_diff.mbt",
+          "src/types.mbt",
+          "src/utf8_scan.mbt",
+          "src/writer.mbt"
+        ],
+        "sha256": "c91c917c6496fbe54c5c4b78319b1c8693e6779413af46e4bfbe75f225910d1d"
+      },
+      "hosts": {
+        "files": [
+          "scripts/cli.mjs"
+        ],
+        "sha256": "67becff9edc35c4ef862a69a1733edce03c34e1a727586dea1f17f4cbc3e6abe"
+      },
+      "adapters": {
+        "files": [
+          "examples/python/mixed_types.py",
+          "scripts/bench-js.mjs",
+          "scripts/bench-sink-js.mjs",
+          "scripts/build-bench.mjs",
+          "scripts/file-performance.py",
+          "scripts/performance-revisions.py",
+          "scripts/performance.py",
+          "scripts/write-performance.py",
+          "scripts/write-regression.py",
+          "src/bench_bridge/bench.mbt",
+          "src/bench_bridge/moon.pkg",
+          "src/bench_bridge/pkg.generated.mbti",
+          "src/bench_bridge/sink_bench.mbt",
+          "src/cmd/bench/bench.c",
+          "src/cmd/bench/main.mbt",
+          "src/cmd/bench/moon.pkg",
+          "src/cmd/bench/sink_bench.mbt"
+        ],
+        "sha256": "39ed982ba2d903720ef644078bb40bf18def6520a0f6a48d344f57051dffaf74"
+      },
+      "build": {
+        "files": [
+          "msvc.lock.json",
+          "scripts/build-native.mjs",
+          "scripts/moon.mjs",
+          "scripts/toolchain.mjs",
+          "toolchain.lock.json"
+        ],
+        "sha256": "f5f575775479785ed718ce278d96a6ce3059d59385afa920a4bd124a805e4b53"
+      }
+    }
+  },
+  "environment": {
+    "toolchain": {
+      "compiler": "v0.10.16+b1a0e846e (2026-10-16)",
+      "compiler_version": "0.10.16+b1a0e846e",
+      "standard_library_archive_sha256": "e7db6e3c80a97af953598b374cf14f3e330918b1ca4659b141b9f550c9c0adb0",
+      "standard_library_source_sha256": "31140145ca3db92e94781c7649073922fca6ec669d04b4219119dff611dba5f5",
+      "c_compiler": "Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35229 for x64",
+      "native_backend": "c",
+      "native_environment": {
+        "MOONBIT_NEW_NATIVE": "0"
+      },
+      "node": "v24.13.0",
+      "windows_sdk_version": "10.0.22621.0",
+      "platform": "win32",
+      "architecture": "x64"
+    },
+    "platform": "Windows-11-10.0.22000-SP0",
+    "processor_affinity_receipt": {
+      "file": "measurement-environment-v0.1.11-242f58b.json",
+      "sha256": "745ce8923c44b993ef52fa77f7938cb7d5975488d846ff879756a0777d82fd35",
+      "logical_cpu": 2,
+      "mask": 4,
+      "scope": "Original run and continuations inherit CPU2. Fixed inputs, source, toolchain, build and measurement adapters remain identical."
+    }
+  },
+  "protocol": {
+    "warmup_per_batch": 5,
+    "batches": 3,
+    "samples_per_batch": 10,
+    "memory_processes": 3,
+    "paired_order": "baseline then candidate per batch",
+    "core": "Resident tree, discard sink; excludes startup/preparation/disk",
+    "file": "Resident tree, positional write, close and no-overwrite publication; warm OS cache; startup excluded",
+    "memory": "Whole-process high-water RSS, includes resident input and preparation; not encoder-only allocation"
+  },
+  "fixtures": [
+    {
+      "name": "dense-16m",
+      "bytes": 16777408,
+      "sha256": "ad09c3dc3115137c8052085fc679cd5a4a36e54987075d482847d4f8338e7070",
+      "payload_bytes": 16777216,
+      "operations": [
+        "read",
+        "write"
+      ]
+    },
+    {
+      "name": "nested-4m",
+      "bytes": 4195464,
+      "sha256": "1703ad4a796542810e1f8e218352c68e704abc118a38593826743b7d54644b73",
+      "payload_bytes": 4194304,
+      "operations": [
+        "read",
+        "write"
+      ]
+    },
+    {
+      "name": "sparse-100k",
+      "bytes": 1204216,
+      "sha256": "d4ce25f29c7923f92825556aa23b36d78900abaa5381345f516adf658a48c86a",
+      "payload_bytes": 1204004,
+      "operations": [
+        "read",
+        "write"
+      ]
+    },
+    {
+      "name": "resident-256m",
+      "payload_bytes": 268435456,
+      "raw_sha256": "268c6eb888678b44aee105bf3fe7e98412c72f20f3cce58fe21e74826a3ef17f",
+      "generator": {
+        "seed": 20261029,
+        "block_bytes": 32768,
+        "repeats": 8192,
+        "lcg_multiplier": 1664525,
+        "lcg_increment": 1013904223
+      }
+    }
+  ],
+  "measurement_adapter_sha256": {
+    "write-regression.py": "3c6f5562d1c72415606d22a5709cf4b71a6b4dc26062fa1282810a3f153fc3a2",
+    "bench-sink-js.mjs": "3e26c4067ac5bdb26cd243b5b84866978cc3419b8787da0ba993cb98595dc7be",
+    "performance.py": "5b354c78e6da2bbd3fc6d3f35a583fc35d570db32320fc6b40a0f4b7b3d84e5f"
+  },
+  "partial": true,
+  "results": [
+    {
+      "case": "dense-16m",
+      "host": "js",
+      "encoding": "compressed",
+      "scope": "file",
+      "baseline": {
+        "status": "measured",
+        "batches": [
+          {
+            "status": "ok",
+            "samples_ms": [
+              1158.3072999999995,
+              1187.4128,
+              1171.686600000001,
+              1174.7330000000002,
+              1180.1169999999984,
+              1173.7163,
+              1180.9825999999994,
+              1187.5349999999999,
+              1216.2140999999992,
+              1199.6022000000012
+            ],
+            "peak_bytes": 241819648,
+            "peak_before_bytes": 75476992,
+            "output_bytes": 16778707,
+            "requests": 18,
+            "max_request": 1048576,
+            "written_bytes": 16778711,
+            "process_wall_ms": 18022.48059998965,
+            "output_sha256": "6c1bd9aca3ab90de2ea7af9b8929bebd7da227233c3cfcf28e67b41fc5993025",
+            "without_creation_description_sha256": "1a08e8a5cc142d6bb86656b527f47e812d47f9e981e30c381f1c9698be91131b"
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1350.7545,
+              1439.7858999999999,
+              1290.0421000000006,
+              1254.5550000000003,
+              1193.4749999999985,
+              1199.7898999999998,
+              1179.6709999999985,
+              1179.0196000000014,
+              1175.2541999999994,
+              1163.6719999999987
+            ],
+            "peak_bytes": 241524736,
+            "peak_before_bytes": 75214848,
+            "output_bytes": 16778707,
+            "requests": 18,
+            "max_request": 1048576,
+            "written_bytes": 16778711,
+            "process_wall_ms": 19283.1118000031,
+            "output_sha256": "6c1bd9aca3ab90de2ea7af9b8929bebd7da227233c3cfcf28e67b41fc5993025",
+            "without_creation_description_sha256": "1a08e8a5cc142d6bb86656b527f47e812d47f9e981e30c381f1c9698be91131b"
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1144.9379,
+              1178.659599999999,
+              1218.5275999999994,
+              1183.6640000000007,
+              1173.7109999999993,
+              1185.8763,
+              1211.8091000000004,
+              1193.4360000000015,
+              1169.8870000000006,
+              1313.1951999999983
+            ],
+            "peak_bytes": 241639424,
+            "peak_before_bytes": 75202560,
+            "output_bytes": 16778707,
+            "requests": 18,
+            "max_request": 1048576,
+            "written_bytes": 16778711,
+            "process_wall_ms": 18125.87500002701,
+            "output_sha256": "6c1bd9aca3ab90de2ea7af9b8929bebd7da227233c3cfcf28e67b41fc5993025",
+            "without_creation_description_sha256": "1a08e8a5cc142d6bb86656b527f47e812d47f9e981e30c381f1c9698be91131b"
+          }
+        ],
+        "memory_processes": [
+          {
+            "status": "ok",
+            "samples_ms": [
+              1230.8719
+            ],
+            "peak_bytes": 92786688,
+            "peak_before_bytes": 75223040,
+            "output_bytes": 16778707,
+            "requests": 18,
+            "max_request": 1048576,
+            "written_bytes": 16778711,
+            "process_wall_ms": 1454.8950000025798,
+            "output_sha256": "6c1bd9aca3ab90de2ea7af9b8929bebd7da227233c3cfcf28e67b41fc5993025",
+            "without_creation_description_sha256": "1a08e8a5cc142d6bb86656b527f47e812d47f9e981e30c381f1c9698be91131b",
+            "independent_consumption": "SciPy with exact large raw-byte hash"
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1220.4677000000001
+            ],
+            "peak_bytes": 92774400,
+            "peak_before_bytes": 75304960,
+            "output_bytes": 16778707,
+            "requests": 18,
+            "max_request": 1048576,
+            "written_bytes": 16778711,
+            "process_wall_ms": 1423.9349999988917,
+            "output_sha256": "6c1bd9aca3ab90de2ea7af9b8929bebd7da227233c3cfcf28e67b41fc5993025",
+            "without_creation_description_sha256": "1a08e8a5cc142d6bb86656b527f47e812d47f9e981e30c381f1c9698be91131b",
+            "independent_consumption": "SciPy with exact large raw-byte hash"
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1238.3015999999998
+            ],
+            "peak_bytes": 92778496,
+            "peak_before_bytes": 75309056,
+            "output_bytes": 16778707,
+            "requests": 18,
+            "max_request": 1048576,
+            "written_bytes": 16778711,
+            "process_wall_ms": 1443.260800006101,
+            "output_sha256": "6c1bd9aca3ab90de2ea7af9b8929bebd7da227233c3cfcf28e67b41fc5993025",
+            "without_creation_description_sha256": "1a08e8a5cc142d6bb86656b527f47e812d47f9e981e30c381f1c9698be91131b",
+            "independent_consumption": "SciPy with exact large raw-byte hash"
+          }
+        ],
+        "samples_ms": [
+          1158.3072999999995,
+          1187.4128,
+          1171.686600000001,
+          1174.7330000000002,
+          1180.1169999999984,
+          1173.7163,
+          1180.9825999999994,
+          1187.5349999999999,
+          1216.2140999999992,
+          1199.6022000000012,
+          1350.7545,
+          1439.7858999999999,
+          1290.0421000000006,
+          1254.5550000000003,
+          1193.4749999999985,
+          1199.7898999999998,
+          1179.6709999999985,
+          1179.0196000000014,
+          1175.2541999999994,
+          1163.6719999999987,
+          1144.9379,
+          1178.659599999999,
+          1218.5275999999994,
+          1183.6640000000007,
+          1173.7109999999993,
+          1185.8763,
+          1211.8091000000004,
+          1193.4360000000015,
+          1169.8870000000006,
+          1313.1951999999983
+        ],
+        "median_ms": 1184.7701500000003,
+        "p95_ms": 1350.7545,
+        "peak_bytes": 92778496,
+        "payload_MiB_per_second": 13.504729166243761,
+        "output_bytes": 16778707,
+        "output_sha256": "6c1bd9aca3ab90de2ea7af9b8929bebd7da227233c3cfcf28e67b41fc5993025"
+      },
+      "candidate": {
+        "status": "measured",
+        "batches": [
+          {
+            "status": "ok",
+            "samples_ms": [
+              1239.9309999999996,
+              1335.629399999999,
+              1259.5859,
+              1275.144699999999,
+              1264.6879999999983,
+              1266.9822000000004,
+              1267.4683999999997,
+              1470.3085999999985,
+              1256.5109000000011,
+              1265.1011000000035
+            ],
+            "peak_bytes": 217780224,
+            "peak_before_bytes": 76812288,
+            "output_bytes": 16778707,
+            "requests": 18,
+            "max_request": 1048576,
+            "written_bytes": 16778711,
+            "process_wall_ms": 19460.10599998408,
+            "output_sha256": "9ecc599ffb36054c69d5a4c28f31111e552eeba8537ea5801973a9f467389427",
+            "without_creation_description_sha256": "1a08e8a5cc142d6bb86656b527f47e812d47f9e981e30c381f1c9698be91131b"
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1245.9269000000004,
+              1272.2182000000012,
+              1288.1195000000007,
+              1275.1504999999997,
+              1260.1355999999996,
+              1293.9982,
+              1322.585000000001,
+              1273.2669999999998,
+              1273.9350000000013,
+              1286.7421000000031
+            ],
+            "peak_bytes": 217763840,
+            "peak_before_bytes": 76689408,
+            "output_bytes": 16778707,
+            "requests": 18,
+            "max_request": 1048576,
+            "written_bytes": 16778711,
+            "process_wall_ms": 19367.927799990866,
+            "output_sha256": "9ecc599ffb36054c69d5a4c28f31111e552eeba8537ea5801973a9f467389427",
+            "without_creation_description_sha256": "1a08e8a5cc142d6bb86656b527f47e812d47f9e981e30c381f1c9698be91131b"
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1235.7131,
+              1271.1957000000002,
+              1284.4076999999997,
+              1293.1162000000004,
+              1288.7291999999998,
+              1280.0455000000002,
+              1272.6845999999987,
+              1298.8747000000021,
+              1264.6520000000019,
+              1266.0973999999987
+            ],
+            "peak_bytes": 242606080,
+            "peak_before_bytes": 76685312,
+            "output_bytes": 16778707,
+            "requests": 18,
+            "max_request": 1048576,
+            "written_bytes": 16778711,
+            "process_wall_ms": 19558.682200004114,
+            "output_sha256": "9ecc599ffb36054c69d5a4c28f31111e552eeba8537ea5801973a9f467389427",
+            "without_creation_description_sha256": "1a08e8a5cc142d6bb86656b527f47e812d47f9e981e30c381f1c9698be91131b"
+          }
+        ],
+        "memory_processes": [
+          {
+            "status": "ok",
+            "samples_ms": [
+              1251.0434
+            ],
+            "peak_bytes": 92639232,
+            "peak_before_bytes": 76812288,
+            "output_bytes": 16778707,
+            "requests": 18,
+            "max_request": 1048576,
+            "written_bytes": 16778711,
+            "process_wall_ms": 1466.8020000099204,
+            "output_sha256": "9ecc599ffb36054c69d5a4c28f31111e552eeba8537ea5801973a9f467389427",
+            "without_creation_description_sha256": "1a08e8a5cc142d6bb86656b527f47e812d47f9e981e30c381f1c9698be91131b",
+            "independent_consumption": "SciPy with exact large raw-byte hash"
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1228.0872
+            ],
+            "peak_bytes": 92667904,
+            "peak_before_bytes": 76685312,
+            "output_bytes": 16778707,
+            "requests": 18,
+            "max_request": 1048576,
+            "written_bytes": 16778711,
+            "process_wall_ms": 1433.543000021018,
+            "output_sha256": "9ecc599ffb36054c69d5a4c28f31111e552eeba8537ea5801973a9f467389427",
+            "without_creation_description_sha256": "1a08e8a5cc142d6bb86656b527f47e812d47f9e981e30c381f1c9698be91131b",
+            "independent_consumption": "SciPy with exact large raw-byte hash"
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1234.648
+            ],
+            "peak_bytes": 92680192,
+            "peak_before_bytes": 76652544,
+            "output_bytes": 16778707,
+            "requests": 18,
+            "max_request": 1048576,
+            "written_bytes": 16778711,
+            "process_wall_ms": 1450.2030999865383,
+            "output_sha256": "9ecc599ffb36054c69d5a4c28f31111e552eeba8537ea5801973a9f467389427",
+            "without_creation_description_sha256": "1a08e8a5cc142d6bb86656b527f47e812d47f9e981e30c381f1c9698be91131b",
+            "independent_consumption": "SciPy with exact large raw-byte hash"
+          }
+        ],
+        "samples_ms": [
+          1239.9309999999996,
+          1335.629399999999,
+          1259.5859,
+          1275.144699999999,
+          1264.6879999999983,
+          1266.9822000000004,
+          1267.4683999999997,
+          1470.3085999999985,
+          1256.5109000000011,
+          1265.1011000000035,
+          1245.9269000000004,
+          1272.2182000000012,
+          1288.1195000000007,
+          1275.1504999999997,
+          1260.1355999999996,
+          1293.9982,
+          1322.585000000001,
+          1273.2669999999998,
+          1273.9350000000013,
+          1286.7421000000031,
+          1235.7131,
+          1271.1957000000002,
+          1284.4076999999997,
+          1293.1162000000004,
+          1288.7291999999998,
+          1280.0455000000002,
+          1272.6845999999987,
+          1298.8747000000021,
+          1264.6520000000019,
+          1266.0973999999987
+        ],
+        "median_ms": 1272.9757999999993,
+        "p95_ms": 1335.629399999999,
+        "peak_bytes": 92667904,
+        "payload_MiB_per_second": 12.568974209878938,
+        "output_bytes": 16778707,
+        "output_sha256": "9ecc599ffb36054c69d5a4c28f31111e552eeba8537ea5801973a9f467389427"
+      },
+      "speedup": 0.9307090912490253,
+      "memory_reduction": 0.0011920003531853407
+    }
+  ],
+  "run_id": "4000e8cb0b06413eba043aa3f1feee0d",
+  "regressions_over_10_percent": [],
+  "engineering_targets": []
+}

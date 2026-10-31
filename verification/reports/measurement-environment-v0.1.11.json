@@ -1,0 +1,12 @@
+{
+  "status": "controlled",
+  "version": "0.1.11",
+  "source_commit": "32c811f835a82dda8895bd06a91d838b8d0d791f",
+  "started_utc": "2026-10-31T08:21:31.000487+00:00",
+  "logical_cpu": 2,
+  "prior_mask": 65535,
+  "effective_mask": 4,
+  "system_mask": 65535,
+  "scope": "Only this measurement/release process tree is pinned; source, SDK, input fixtures, 5 warmups, 3 x 10 timings and 3 independent memory processes are unchanged. Earlier unpinned reports remain retained. Both baseline and candidate subprocesses inherit the same affinity.",
+  "reproduction_powershell": "$p=Get-Process -Id $PID; $p.ProcessorAffinity=[IntPtr]4; # then run the documented performance-revisions.py, file-performance.py and write-regression.py commands for the same frozen revisions"
+}

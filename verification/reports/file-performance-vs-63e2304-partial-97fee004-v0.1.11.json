@@ -1,0 +1,498 @@
+{
+  "version": "0.1.11",
+  "status": "measured",
+  "baseline_commit": "63e23046f362608e1938e5b5cd0a8df689fb23a5",
+  "candidate_commit": "5c4d90efb9c722e2fe60d1a946c8bfe523cc3ee5",
+  "baseline_runtime_source_sha256": "99e07e3a9c6a791468f62110ad7e72e7bf8412c9c810d22c165283c65e7622e7",
+  "candidate_runtime_source_sha256": "61f92bb0415074fcbcd4d1ce2c4db44b2290c36a8b1e8d4daba5c6063c27ea8b",
+  "protocol": {
+    "warmup_per_batch": 5,
+    "batches": 3,
+    "samples_per_batch": 10,
+    "memory_processes": 3,
+    "timing": "open, read, validate, select, close and serialize; process startup excluded; generated input excluded; warm OS cache; JS GC outside timing"
+  },
+  "results": [
+    {
+      "case": {
+        "name": "select-1-of-16",
+        "variable": "v00",
+        "payload_bytes": 16777216,
+        "minimum_version": [
+          0,
+          0,
+          16
+        ],
+        "bytes": 16778240,
+        "sha256": "4c628a14a449b85a63ce13107d5b900828bf41aafb3686544a33e1fd0004c5b7"
+      },
+      "host": "native",
+      "batches": {
+        "baseline": [
+          {
+            "samples_ms": [
+              3.439500004053116,
+              3.6071999967098236,
+              4.823199987411499,
+              3.658399999141693,
+              4.423099994659424,
+              4.889400005340576,
+              3.797300010919571,
+              6.26350000500679,
+              6.191599994897842,
+              4.317099988460541
+            ],
+            "checksum": 15731520,
+            "peak_bytes": 8241152,
+            "input_bytes": 16778240,
+            "read_bytes": 16778240,
+            "maximum_read_request": 1048576,
+            "process_wall_ms": 219.31849999236874
+          },
+          {
+            "samples_ms": [
+              4.3167000114917755,
+              6.197699993848801,
+              3.951400011777878,
+              4.467999994754791,
+              3.736400008201599,
+              4.181400001049042,
+              7.031100004911423,
+              8.037999987602234,
+              4.525099992752075,
+              5.099000006914139
+            ],
+            "checksum": 15731520,
+            "peak_bytes": 8232960,
+            "input_bytes": 16778240,
+            "read_bytes": 16778240,
+            "maximum_read_request": 1048576,
+            "process_wall_ms": 112.37349998555146
+          },
+          {
+            "samples_ms": [
+              6.951099991798401,
+              4.795899987220764,
+              4.8438000082969666,
+              3.898699998855591,
+              4.412600010633469,
+              3.8404000103473663,
+              4.795800000429153,
+              3.930299997329712,
+              4.149500012397766,
+              6.162399977445602
+            ],
+            "checksum": 15731520,
+            "peak_bytes": 8237056,
+            "input_bytes": 16778240,
+            "read_bytes": 16778240,
+            "maximum_read_request": 1048576,
+            "process_wall_ms": 132.0789000019431
+          }
+        ],
+        "candidate": [
+          {
+            "samples_ms": [
+              4.8756000101566315,
+              3.982100009918213,
+              4.318599998950958,
+              3.772799998521805,
+              4.491200000047684,
+              4.200100004673004,
+              5.05689999461174,
+              3.8716000020504,
+              4.846499979496002,
+              9.973300009965897
+            ],
+            "checksum": 15731520,
+            "peak_bytes": 8261632,
+            "input_bytes": 16778240,
+            "read_bytes": 16778240,
+            "maximum_read_request": 1048576,
+            "process_wall_ms": 176.57690000487491
+          },
+          {
+            "samples_ms": [
+              4.353899985551834,
+              3.8227999806404114,
+              5.287699997425079,
+              4.345699995756149,
+              4.127600014209747,
+              3.76529997587204,
+              4.689399987459183,
+              10.895400017499924,
+              5.414900004863739,
+              6.2936999797821045
+            ],
+            "checksum": 15731520,
+            "peak_bytes": 8249344,
+            "input_bytes": 16778240,
+            "read_bytes": 16778240,
+            "maximum_read_request": 1048576,
+            "process_wall_ms": 116.4608999970369
+          },
+          {
+            "samples_ms": [
+              3.942300021648407,
+              4.397100001573563,
+              3.5116000175476074,
+              4.686900019645691,
+              4.557099997997284,
+              4.06139999628067,
+              3.66430002450943,
+              4.576299995183945,
+              4.047199994325638,
+              4.421499997377396
+            ],
+            "checksum": 15731520,
+            "peak_bytes": 8249344,
+            "input_bytes": 16778240,
+            "read_bytes": 16778240,
+            "maximum_read_request": 1048576,
+            "process_wall_ms": 99.57469999790192
+          }
+        ]
+      },
+      "memory_processes": {
+        "baseline": [
+          {
+            "samples_ms": [
+              7.414200007915497
+            ],
+            "checksum": 1048768,
+            "peak_bytes": 8232960,
+            "input_bytes": 16778240,
+            "read_bytes": 16778240,
+            "maximum_read_request": 1048576,
+            "process_wall_ms": 51.76760000176728
+          },
+          {
+            "samples_ms": [
+              6.745999991893768
+            ],
+            "checksum": 1048768,
+            "peak_bytes": 8216576,
+            "input_bytes": 16778240,
+            "read_bytes": 16778240,
+            "maximum_read_request": 1048576,
+            "process_wall_ms": 51.065699983155355
+          },
+          {
+            "samples_ms": [
+              14.182699978351593
+            ],
+            "checksum": 1048768,
+            "peak_bytes": 8228864,
+            "input_bytes": 16778240,
+            "read_bytes": 16778240,
+            "maximum_read_request": 1048576,
+            "process_wall_ms": 49.077600007876754
+          }
+        ],
+        "candidate": [
+          {
+            "samples_ms": [
+              5.113600015640259
+            ],
+            "checksum": 1048768,
+            "peak_bytes": 8257536,
+            "input_bytes": 16778240,
+            "read_bytes": 16778240,
+            "maximum_read_request": 1048576,
+            "process_wall_ms": 44.27640000358224
+          },
+          {
+            "samples_ms": [
+              7.63740000128746
+            ],
+            "checksum": 1048768,
+            "peak_bytes": 8257536,
+            "input_bytes": 16778240,
+            "read_bytes": 16778240,
+            "maximum_read_request": 1048576,
+            "process_wall_ms": 50.043399998685345
+          },
+          {
+            "samples_ms": [
+              7.14410001039505
+            ],
+            "checksum": 1048768,
+            "peak_bytes": 8232960,
+            "input_bytes": 16778240,
+            "read_bytes": 16778240,
+            "maximum_read_request": 1048576,
+            "process_wall_ms": 44.13419999764301
+          }
+        ]
+      },
+      "median_ms": 4.375499993562698,
+      "baseline_median_ms": 4.4455499947071075,
+      "p95_ms": 9.973300009965897,
+      "baseline_p95_ms": 7.031100004911423,
+      "speedup": 1.0160095991880855,
+      "peak_bytes": 8257536,
+      "baseline_peak_bytes": 8228864,
+      "memory_reduction": -0.0034843205574912606,
+      "payload_MiB_per_second": 3656.7249511003183,
+      "output_bytes": 1048768.0
+    },
+    {
+      "case": {
+        "name": "select-1-of-16",
+        "variable": "v00",
+        "payload_bytes": 16777216,
+        "minimum_version": [
+          0,
+          0,
+          16
+        ],
+        "bytes": 16778240,
+        "sha256": "4c628a14a449b85a63ce13107d5b900828bf41aafb3686544a33e1fd0004c5b7"
+      },
+      "host": "js",
+      "batches": {
+        "baseline": [
+          {
+            "samples_ms": [
+              12.048900000000003,
+              12.390000000000015,
+              15.185000000000002,
+              19.0865,
+              17.5462,
+              12.866799999999955,
+              12.2534,
+              11.848099999999988,
+              10.95799999999997,
+              13.491800000000012
+            ],
+            "checksum": 15731520,
+            "peak_bytes": 61718528,
+            "input_bytes": 16778240,
+            "read_bytes": 16778240,
+            "maximum_read_request": 1048576,
+            "process_wall_ms": 570.8645000122488
+          },
+          {
+            "samples_ms": [
+              10.661399999999986,
+              10.565499999999986,
+              11.324299999999994,
+              11.356300000000005,
+              10.645999999999987,
+              13.120900000000006,
+              11.150699999999972,
+              10.783000000000015,
+              11.641500000000008,
+              12.271500000000003
+            ],
+            "checksum": 15731520,
+            "peak_bytes": 58695680,
+            "input_bytes": 16778240,
+            "read_bytes": 16778240,
+            "maximum_read_request": 1048576,
+            "process_wall_ms": 384.2716000217479
+          },
+          {
+            "samples_ms": [
+              12.68470000000002,
+              10.844899999999996,
+              10.970500000000015,
+              11.016899999999993,
+              10.132000000000005,
+              9.69599999999997,
+              11.03710000000001,
+              11.596599999999967,
+              12.6918,
+              14.029200000000003
+            ],
+            "checksum": 15731520,
+            "peak_bytes": 58769408,
+            "input_bytes": 16778240,
+            "read_bytes": 16778240,
+            "maximum_read_request": 1048576,
+            "process_wall_ms": 420.8570999908261
+          }
+        ],
+        "candidate": [
+          {
+            "samples_ms": [
+              11.341099999999983,
+              13.059399999999982,
+              11.714799999999997,
+              12.948999999999984,
+              11.3245,
+              26.53140000000002,
+              10.488399999999956,
+              14.182799999999986,
+              10.539999999999964,
+              13.403900000000021
+            ],
+            "checksum": 15731520,
+            "peak_bytes": 55996416,
+            "input_bytes": 16778240,
+            "read_bytes": 16778240,
+            "maximum_read_request": 1048576,
+            "process_wall_ms": 458.2961999985855
+          },
+          {
+            "samples_ms": [
+              10.530000000000001,
+              11.067700000000002,
+              12.354899999999986,
+              12.675400000000025,
+              13.548400000000015,
+              12.0702,
+              14.01619999999997,
+              12.165200000000027,
+              15.602599999999995,
+              11.86869999999999
+            ],
+            "checksum": 15731520,
+            "peak_bytes": 56041472,
+            "input_bytes": 16778240,
+            "read_bytes": 16778240,
+            "maximum_read_request": 1048576,
+            "process_wall_ms": 483.39259999920614
+          },
+          {
+            "samples_ms": [
+              10.84869999999998,
+              9.940800000000024,
+              10.76600000000002,
+              11.331299999999999,
+              10.239499999999992,
+              9.940799999999967,
+              11.622900000000016,
+              12.86650000000003,
+              10.303699999999992,
+              10.462800000000016
+            ],
+            "checksum": 15731520,
+            "peak_bytes": 55975936,
+            "input_bytes": 16778240,
+            "read_bytes": 16778240,
+            "maximum_read_request": 1048576,
+            "process_wall_ms": 412.21589999622665
+          }
+        ]
+      },
+      "memory_processes": {
+        "baseline": [
+          {
+            "samples_ms": [
+              24.2406
+            ],
+            "checksum": 1048768,
+            "peak_bytes": 46039040,
+            "input_bytes": 16778240,
+            "read_bytes": 16778240,
+            "maximum_read_request": 1048576,
+            "process_wall_ms": 191.06710000778548
+          },
+          {
+            "samples_ms": [
+              59.0459
+            ],
+            "checksum": 1048768,
+            "peak_bytes": 46075904,
+            "input_bytes": 16778240,
+            "read_bytes": 16778240,
+            "maximum_read_request": 1048576,
+            "process_wall_ms": 203.92850000644103
+          },
+          {
+            "samples_ms": [
+              24.033500000000004
+            ],
+            "checksum": 1048768,
+            "peak_bytes": 45998080,
+            "input_bytes": 16778240,
+            "read_bytes": 16778240,
+            "maximum_read_request": 1048576,
+            "process_wall_ms": 196.4762999850791
+          }
+        ],
+        "candidate": [
+          {
+            "samples_ms": [
+              23.277
+            ],
+            "checksum": 1048768,
+            "peak_bytes": 46956544,
+            "input_bytes": 16778240,
+            "read_bytes": 16778240,
+            "maximum_read_request": 1048576,
+            "process_wall_ms": 200.22159998188727
+          },
+          {
+            "samples_ms": [
+              26.41109999999999
+            ],
+            "checksum": 1048768,
+            "peak_bytes": 46931968,
+            "input_bytes": 16778240,
+            "read_bytes": 16778240,
+            "maximum_read_request": 1048576,
+            "process_wall_ms": 173.77100000157952
+          },
+          {
+            "samples_ms": [
+              21.277
+            ],
+            "checksum": 1048768,
+            "peak_bytes": 46968832,
+            "input_bytes": 16778240,
+            "read_bytes": 16778240,
+            "maximum_read_request": 1048576,
+            "process_wall_ms": 152.24550000857562
+          }
+        ]
+      },
+      "median_ms": 11.668850000000006,
+      "baseline_median_ms": 11.619049999999987,
+      "p95_ms": 15.602599999999995,
+      "baseline_p95_ms": 17.5462,
+      "speedup": 0.9957322272546122,
+      "peak_bytes": 46956544,
+      "baseline_peak_bytes": 46039040,
+      "memory_reduction": -0.01992882562277587,
+      "payload_MiB_per_second": 1371.1719663891463,
+      "output_bytes": 1048768.0
+    }
+  ],
+  "environment": {
+    "toolchain": {
+      "compiler": "v0.10.16+b1a0e846e (2026-10-16)",
+      "compiler_version": "0.10.16+b1a0e846e",
+      "standard_library_archive_sha256": "e7db6e3c80a97af953598b374cf14f3e330918b1ca4659b141b9f550c9c0adb0",
+      "standard_library_source_sha256": "31140145ca3db92e94781c7649073922fca6ec669d04b4219119dff611dba5f5",
+      "c_compiler": "Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35229 for x64",
+      "native_backend": "c",
+      "native_environment": {
+        "MOONBIT_NEW_NATIVE": "0"
+      },
+      "node": "v24.13.0",
+      "windows_sdk_version": "10.0.22621.0",
+      "platform": "win32",
+      "architecture": "x64"
+    },
+    "platform": "Windows-11-10.0.22000-SP0",
+    "architecture": "AMD64",
+    "node": "v24.13.0",
+    "moon": "moon 0.1.20261020 (2284bd2 2026-10-20)\n\nFeature flags enabled: rr_moon_mod,rr_moon_pkg",
+    "build": "same toolchain, release mode, one compiler job",
+    "compiler": "Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35229 for x64",
+    "processor_affinity_receipt": {
+      "file": "measurement-environment-v0.1.11-5c4d90e.json",
+      "sha256": "14520fac6437649ff761abdca1d4169b012fd343eeb82a64db9dc13652657a24",
+      "logical_cpu": 2,
+      "mask": 4,
+      "scope": "Benchmark subprocesses inherit the same single-CPU affinity; both revisions use identical settings."
+    }
+  },
+  "run_id": "97fee0042f8042d1b281448bc7ed0426",
+  "partial": true,
+  "scope": "File pipeline measurements; independent from preloaded codec benchmarks. Every previous case remains available.",
+  "engineering_targets": [],
+  "regressions_over_10_percent": []
+}

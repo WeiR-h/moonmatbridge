@@ -1,0 +1,275 @@
+{
+  "status": "verified",
+  "version": "0.1.11",
+  "reference": "v0.1.9",
+  "scopes": {
+    "runtime": {
+      "files": [
+        "src/axes.mbt",
+        "src/bridge/bridge.mbt",
+        "src/bridge/moon.pkg",
+        "src/bridge/sink.mbt",
+        "src/cmd/moonmat/io.c",
+        "src/cmd/moonmat/main.mbt",
+        "src/cmd/moonmat/moon.pkg",
+        "src/concat.mbt",
+        "src/deflate.mbt",
+        "src/diff.mbt",
+        "src/fixed_writer.mbt",
+        "src/inflate.mbt",
+        "src/interchange/diff.mbt",
+        "src/interchange/document.mbt",
+        "src/interchange/json.mbt",
+        "src/interchange/moon.pkg",
+        "src/interchange/name_options.mbt",
+        "src/interchange/roots.mbt",
+        "src/interchange/snapshot.mbt",
+        "src/interchange/transform.mbt",
+        "src/interchange/tree_close.mbt",
+        "src/interchange/tree_snapshot.mbt",
+        "src/moon.pkg",
+        "src/name_encoding.mbt",
+        "src/npy.mbt",
+        "src/npy_reader.mbt",
+        "src/numeric.mbt",
+        "src/reader.mbt",
+        "src/reshape.mbt",
+        "src/select.mbt",
+        "src/selected.mbt",
+        "src/sink.mbt",
+        "src/sink_deflate.mbt",
+        "src/slice.mbt",
+        "src/source.mbt",
+        "src/source_inflate.mbt",
+        "src/source_stream.mbt",
+        "src/sparse.mbt",
+        "src/sparse_codec.mbt",
+        "src/tree.mbt",
+        "src/tree_close.mbt",
+        "src/tree_diff.mbt",
+        "src/types.mbt",
+        "src/utf8_scan.mbt",
+        "src/writer.mbt"
+      ],
+      "sha256": "c91c917c6496fbe54c5c4b78319b1c8693e6779413af46e4bfbe75f225910d1d"
+    },
+    "hosts": {
+      "files": [
+        "scripts/cli.mjs"
+      ],
+      "sha256": "67becff9edc35c4ef862a69a1733edce03c34e1a727586dea1f17f4cbc3e6abe"
+    },
+    "adapters": {
+      "files": [
+        "examples/python/mixed_types.py",
+        "scripts/bench-js.mjs",
+        "scripts/bench-sink-js.mjs",
+        "scripts/build-bench.mjs",
+        "scripts/file-performance.py",
+        "scripts/performance-revisions.py",
+        "scripts/performance.py",
+        "scripts/write-performance.py",
+        "scripts/write-regression.py",
+        "src/bench_bridge/bench.mbt",
+        "src/bench_bridge/moon.pkg",
+        "src/bench_bridge/pkg.generated.mbti",
+        "src/bench_bridge/sink_bench.mbt",
+        "src/cmd/bench/bench.c",
+        "src/cmd/bench/main.mbt",
+        "src/cmd/bench/moon.pkg",
+        "src/cmd/bench/sink_bench.mbt"
+      ],
+      "sha256": "39ed982ba2d903720ef644078bb40bf18def6520a0f6a48d344f57051dffaf74"
+    },
+    "build": {
+      "files": [
+        "msvc.lock.json",
+        "scripts/build-native.mjs",
+        "scripts/moon.mjs",
+        "scripts/toolchain.mjs",
+        "toolchain.lock.json"
+      ],
+      "sha256": "f5f575775479785ed718ce278d96a6ce3059d59385afa920a4bd124a805e4b53"
+    }
+  },
+  "toolchain": {
+    "compiler": "v0.10.16+b1a0e846e (2026-10-16)",
+    "compiler_version": "0.10.16+b1a0e846e",
+    "standard_library_archive_sha256": "e7db6e3c80a97af953598b374cf14f3e330918b1ca4659b141b9f550c9c0adb0",
+    "standard_library_source_sha256": "31140145ca3db92e94781c7649073922fca6ec669d04b4219119dff611dba5f5",
+    "c_compiler": "Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35229 for x64",
+    "native_backend": "c",
+    "native_environment": {
+      "MOONBIT_NEW_NATIVE": "0"
+    },
+    "node": "v24.13.0",
+    "windows_sdk_version": "10.0.22621.0",
+    "platform": "win32",
+    "architecture": "x64"
+  },
+  "cohorts": [
+    {
+      "file": "performance-vs-63e2304-run-27265205-v0.1.11.json",
+      "kind": "core",
+      "rows": 24,
+      "sha256": "5051172778d8e13c1a358cbcd9f51e291ca3ddcf80f73bfd6d14c3c4d2d9a132",
+      "measured_commit": "242f58b4d832d87e6d991426f82ed17e5fa09374",
+      "rechecks": [],
+      "regression_review": {
+        "status": "verified",
+        "policy": "Retain the initial cohort and every recheck. Two threshold exceedances for the same case and metric block publication; a single exceedance needs a later matching non-exceedance.",
+        "resolved": [],
+        "pending": [],
+        "confirmed": []
+      }
+    },
+    {
+      "file": "file-performance-vs-63e2304-run-de84d76d-v0.1.11.json",
+      "kind": "file",
+      "rows": 6,
+      "sha256": "0de83fb3064fa5715f4a2871b4f66dd95c3132a5b483442fb0613c2d9ea1464e",
+      "measured_commit": "242f58b4d832d87e6d991426f82ed17e5fa09374",
+      "rechecks": [],
+      "regression_review": {
+        "status": "verified",
+        "policy": "Retain the initial cohort and every recheck. Two threshold exceedances for the same case and metric block publication; a single exceedance needs a later matching non-exceedance.",
+        "resolved": [],
+        "pending": [],
+        "confirmed": []
+      }
+    },
+    {
+      "file": "write-regression-vs-63e2304-run-968be36e-v0.1.11.json",
+      "kind": "write",
+      "rows": 32,
+      "sha256": "7947ca0518ac9cec239a462651862c5ffc0f0b75881a08acbe1b98571fa91097",
+      "measured_commit": "242f58b4d832d87e6d991426f82ed17e5fa09374",
+      "rechecks": [
+        {
+          "file": "write-regression-vs-63e2304-partial-4000e8cb-v0.1.11.json",
+          "sha256": "f6878cbb4492704551f56470378ad82f033b6ac5eda864569bafc9860fc2b227"
+        },
+        {
+          "file": "write-regression-vs-63e2304-partial-88fa81ae-v0.1.11.json",
+          "sha256": "8178136043d675eaf7ddb35741dc39935ea814587a7cdf62cd239b4f0c99602b"
+        },
+        {
+          "file": "write-regression-vs-63e2304-partial-07e8e659-v0.1.11.json",
+          "sha256": "4b200601a1a054238fe421b08086577dc2623c31d8c0538d64e6e3ece0e469a8"
+        },
+        {
+          "file": "write-regression-vs-63e2304-partial-1d4895d2-v0.1.11.json",
+          "sha256": "402b32b18c3f451a43ceafa71d03e3f583e63a4932e31fc28e8817a9ebdd6431"
+        },
+        {
+          "file": "write-regression-vs-63e2304-partial-bb2bf416-v0.1.11.json",
+          "sha256": "78d214cf46f9c24e60598bcbbe7592998e074bb25f16b8373c759dd0c3921edf"
+        }
+      ],
+      "regression_review": {
+        "status": "verified",
+        "policy": "Retain the initial cohort and every recheck. Two threshold exceedances for the same case and metric block publication; a single exceedance needs a later matching non-exceedance.",
+        "resolved": [
+          {
+            "case_key": [
+              "dense-16m",
+              "js",
+              "compressed",
+              "file"
+            ],
+            "metric": "time",
+            "history": [
+              {
+                "report_index": 0,
+                "over_threshold": true
+              },
+              {
+                "report_index": 1,
+                "over_threshold": false
+              }
+            ]
+          },
+          {
+            "case_key": [
+              "nested-4m",
+              "js",
+              "plain",
+              "file"
+            ],
+            "metric": "time",
+            "history": [
+              {
+                "report_index": 0,
+                "over_threshold": true
+              },
+              {
+                "report_index": 2,
+                "over_threshold": false
+              }
+            ]
+          },
+          {
+            "case_key": [
+              "sparse-100k",
+              "js",
+              "plain",
+              "core"
+            ],
+            "metric": "time",
+            "history": [
+              {
+                "report_index": 0,
+                "over_threshold": true
+              },
+              {
+                "report_index": 5,
+                "over_threshold": false
+              }
+            ]
+          },
+          {
+            "case_key": [
+              "resident-256m",
+              "native",
+              "plain",
+              "file"
+            ],
+            "metric": "time",
+            "history": [
+              {
+                "report_index": 0,
+                "over_threshold": true
+              },
+              {
+                "report_index": 4,
+                "over_threshold": false
+              }
+            ]
+          },
+          {
+            "case_key": [
+              "resident-256m",
+              "js",
+              "plain",
+              "file"
+            ],
+            "metric": "time",
+            "history": [
+              {
+                "report_index": 0,
+                "over_threshold": true
+              },
+              {
+                "report_index": 3,
+                "over_threshold": false
+              }
+            ]
+          }
+        ],
+        "pending": [],
+        "confirmed": []
+      }
+    }
+  ],
+  "scope": "Complete fixed-input paired 24 core, 6 file and 32 sink scenarios; all original samples retained."
+}

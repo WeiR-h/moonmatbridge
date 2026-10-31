@@ -1,0 +1,231 @@
+{
+  "status": "blocked",
+  "version": "0.1.11",
+  "kind": "write",
+  "original": {
+    "file": "write-regression-vs-63e2304-run-6e9db112-v0.1.11.json",
+    "sha256": "558986b140da3bb7326c839aef54d6069a26ab379c57ea9657611b820b98ec3a"
+  },
+  "rechecks": [
+    {
+      "file": "write-regression-vs-63e2304-partial-ccccb5b4-v0.1.11.json",
+      "sha256": "917b1c70d588d7f066d988559881312d0372e5ae40253934abd942fd57435e73"
+    }
+  ],
+  "review": {
+    "status": "blocked",
+    "policy": "Retain the initial cohort and every recheck. Two threshold exceedances for the same case and metric block publication; a single exceedance needs a later matching non-exceedance.",
+    "resolved": [
+      {
+        "case_key": [
+          "dense-16m",
+          "native",
+          "plain",
+          "core"
+        ],
+        "metric": "time",
+        "history": [
+          {
+            "report_index": 0,
+            "over_threshold": true
+          },
+          {
+            "report_index": 1,
+            "over_threshold": false
+          }
+        ]
+      },
+      {
+        "case_key": [
+          "nested-4m",
+          "native",
+          "plain",
+          "core"
+        ],
+        "metric": "time",
+        "history": [
+          {
+            "report_index": 0,
+            "over_threshold": true
+          },
+          {
+            "report_index": 1,
+            "over_threshold": false
+          }
+        ]
+      },
+      {
+        "case_key": [
+          "nested-4m",
+          "native",
+          "plain",
+          "file"
+        ],
+        "metric": "time",
+        "history": [
+          {
+            "report_index": 0,
+            "over_threshold": true
+          },
+          {
+            "report_index": 1,
+            "over_threshold": false
+          }
+        ]
+      },
+      {
+        "case_key": [
+          "nested-4m",
+          "native",
+          "compressed",
+          "core"
+        ],
+        "metric": "time",
+        "history": [
+          {
+            "report_index": 0,
+            "over_threshold": true
+          },
+          {
+            "report_index": 1,
+            "over_threshold": false
+          }
+        ]
+      },
+      {
+        "case_key": [
+          "resident-256m",
+          "native",
+          "plain",
+          "file"
+        ],
+        "metric": "time",
+        "history": [
+          {
+            "report_index": 0,
+            "over_threshold": true
+          },
+          {
+            "report_index": 1,
+            "over_threshold": false
+          }
+        ]
+      },
+      {
+        "case_key": [
+          "resident-256m",
+          "js",
+          "plain",
+          "file"
+        ],
+        "metric": "time",
+        "history": [
+          {
+            "report_index": 0,
+            "over_threshold": true
+          },
+          {
+            "report_index": 1,
+            "over_threshold": false
+          }
+        ]
+      }
+    ],
+    "pending": [
+      {
+        "case_key": [
+          "dense-16m",
+          "native",
+          "plain",
+          "file"
+        ],
+        "metric": "time",
+        "history": [
+          {
+            "report_index": 0,
+            "over_threshold": false
+          },
+          {
+            "report_index": 1,
+            "over_threshold": true
+          }
+        ]
+      },
+      {
+        "case_key": [
+          "dense-16m",
+          "js",
+          "compressed",
+          "core"
+        ],
+        "metric": "time",
+        "history": [
+          {
+            "report_index": 0,
+            "over_threshold": false
+          },
+          {
+            "report_index": 1,
+            "over_threshold": true
+          }
+        ]
+      },
+      {
+        "case_key": [
+          "nested-4m",
+          "js",
+          "plain",
+          "file"
+        ],
+        "metric": "time",
+        "history": [
+          {
+            "report_index": 0,
+            "over_threshold": false
+          },
+          {
+            "report_index": 1,
+            "over_threshold": true
+          }
+        ]
+      }
+    ],
+    "confirmed": [
+      {
+        "case_key": [
+          "resident-256m",
+          "js",
+          "compressed",
+          "file"
+        ],
+        "metric": "time",
+        "history": [
+          {
+            "report_index": 0,
+            "over_threshold": true
+          },
+          {
+            "report_index": 1,
+            "over_threshold": true
+          }
+        ]
+      }
+    ]
+  },
+  "reproduction_commands": [
+    [
+      "python",
+      "scripts/write-regression.py",
+      "--baseline-ref",
+      "63e23046f362608e1938e5b5cd0a8df689fb23a5",
+      "--candidate-ref",
+      "5c4d90efb9c722e2fe60d1a946c8bfe523cc3ee5",
+      "--case",
+      "dense-16m",
+      "--case",
+      "nested-4m",
+      "--case",
+      "resident-256m"
+    ]
+  ]
+}

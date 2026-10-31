@@ -1,0 +1,91 @@
+{
+  "status": "blocked",
+  "version": "0.1.11",
+  "kind": "write",
+  "original": {
+    "file": "write-regression-vs-63e2304-run-98b32e55-v0.1.11.json",
+    "sha256": "7d087e79bc3f5c1d6e3cbcecf3fa36c8b8adcfc017a55b2f6725aa9b44c1f0c5"
+  },
+  "rechecks": [
+    {
+      "file": "write-regression-vs-63e2304-partial-16ecd4f6-v0.1.11.json",
+      "sha256": "d44698453fb09768311967bed1b0204feea748eb3527e0184b43dc1b9a588132"
+    }
+  ],
+  "review": {
+    "status": "blocked",
+    "policy": "Retain the initial cohort and every recheck. Two threshold exceedances for the same case and metric block publication; a single exceedance needs a later matching non-exceedance.",
+    "resolved": [],
+    "pending": [
+      {
+        "case_key": [
+          "dense-16m",
+          "native",
+          "plain",
+          "file"
+        ],
+        "metric": "time",
+        "history": [
+          {
+            "report_index": 0,
+            "over_threshold": true
+          }
+        ]
+      },
+      {
+        "case_key": [
+          "dense-16m",
+          "js",
+          "compressed",
+          "file"
+        ],
+        "metric": "peak",
+        "history": [
+          {
+            "report_index": 0,
+            "over_threshold": true
+          }
+        ]
+      }
+    ],
+    "confirmed": [
+      {
+        "case_key": [
+          "dense-16m",
+          "js",
+          "compressed",
+          "core"
+        ],
+        "metric": "peak",
+        "history": [
+          {
+            "report_index": 0,
+            "over_threshold": true
+          },
+          {
+            "report_index": 1,
+            "over_threshold": true
+          }
+        ]
+      }
+    ]
+  },
+  "reproduction_commands": [
+    [
+      "python",
+      "scripts/write-regression.py",
+      "--baseline-ref",
+      "63e23046f362608e1938e5b5cd0a8df689fb23a5",
+      "--candidate-ref",
+      "efca2d6d370ddbed2a32f3a9b8fb2e6390e486ad",
+      "--case",
+      "dense-16m",
+      "--host",
+      "js",
+      "--encoding",
+      "compressed",
+      "--scope",
+      "core"
+    ]
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "status": "verified",
+  "version": "0.1.11",
+  "kind": "core",
+  "original": {
+    "file": "performance-vs-63e2304-run-27265205-v0.1.11.json",
+    "sha256": "5051172778d8e13c1a358cbcd9f51e291ca3ddcf80f73bfd6d14c3c4d2d9a132"
+  },
+  "rechecks": [],
+  "review": {
+    "status": "verified",
+    "policy": "Retain the initial cohort and every recheck. Two threshold exceedances for the same case and metric block publication; a single exceedance needs a later matching non-exceedance.",
+    "resolved": [],
+    "pending": [],
+    "confirmed": []
+  },
+  "reproduction_commands": []
+}

@@ -1,0 +1,598 @@
+{
+  "status": "measured",
+  "version": "0.1.11",
+  "comparison": "Same MatSink API, paired frozen revisions; historical memory-versus-sink reports remain separate",
+  "baseline_commit": "63e23046f362608e1938e5b5cd0a8df689fb23a5",
+  "candidate_commit": "efca2d6d370ddbed2a32f3a9b8fb2e6390e486ad",
+  "baseline_runtime_source_sha256": "99e07e3a9c6a791468f62110ad7e72e7bf8412c9c810d22c165283c65e7622e7",
+  "candidate_runtime_source_sha256": "c4b2f91bd6779b6bdb30dd42ee84f2c64e9df0a69bb6c4f13073a451549da623",
+  "source_scopes": {
+    "baseline": {
+      "runtime": {
+        "files": [
+          "src/axes.mbt",
+          "src/bridge/bridge.mbt",
+          "src/bridge/moon.pkg",
+          "src/bridge/sink.mbt",
+          "src/cmd/moonmat/io.c",
+          "src/cmd/moonmat/main.mbt",
+          "src/cmd/moonmat/moon.pkg",
+          "src/concat.mbt",
+          "src/deflate.mbt",
+          "src/diff.mbt",
+          "src/fixed_writer.mbt",
+          "src/inflate.mbt",
+          "src/interchange/diff.mbt",
+          "src/interchange/document.mbt",
+          "src/interchange/json.mbt",
+          "src/interchange/moon.pkg",
+          "src/interchange/name_options.mbt",
+          "src/interchange/roots.mbt",
+          "src/interchange/snapshot.mbt",
+          "src/interchange/transform.mbt",
+          "src/interchange/tree_close.mbt",
+          "src/interchange/tree_snapshot.mbt",
+          "src/moon.pkg",
+          "src/name_encoding.mbt",
+          "src/npy.mbt",
+          "src/npy_reader.mbt",
+          "src/numeric.mbt",
+          "src/reader.mbt",
+          "src/reshape.mbt",
+          "src/select.mbt",
+          "src/selected.mbt",
+          "src/sink.mbt",
+          "src/sink_deflate.mbt",
+          "src/slice.mbt",
+          "src/source.mbt",
+          "src/source_inflate.mbt",
+          "src/source_stream.mbt",
+          "src/sparse.mbt",
+          "src/sparse_codec.mbt",
+          "src/tree.mbt",
+          "src/tree_close.mbt",
+          "src/tree_diff.mbt",
+          "src/types.mbt",
+          "src/utf8_scan.mbt",
+          "src/writer.mbt"
+        ],
+        "sha256": "99e07e3a9c6a791468f62110ad7e72e7bf8412c9c810d22c165283c65e7622e7"
+      },
+      "hosts": {
+        "files": [
+          "scripts/cli.mjs"
+        ],
+        "sha256": "67becff9edc35c4ef862a69a1733edce03c34e1a727586dea1f17f4cbc3e6abe"
+      },
+      "adapters": {
+        "files": [
+          "examples/python/mixed_types.py",
+          "scripts/bench-js.mjs",
+          "scripts/bench-sink-js.mjs",
+          "scripts/build-bench.mjs",
+          "scripts/file-performance.py",
+          "scripts/performance-revisions.py",
+          "scripts/performance.py",
+          "scripts/write-performance.py",
+          "scripts/write-regression.py",
+          "src/bench_bridge/bench.mbt",
+          "src/bench_bridge/moon.pkg",
+          "src/bench_bridge/pkg.generated.mbti",
+          "src/bench_bridge/sink_bench.mbt",
+          "src/cmd/bench/bench.c",
+          "src/cmd/bench/main.mbt",
+          "src/cmd/bench/moon.pkg",
+          "src/cmd/bench/sink_bench.mbt"
+        ],
+        "sha256": "8593d2117a9a320d164958c70ecff7e0a7fa84cb8fa4cdd35e21249fe5b7b610"
+      },
+      "build": {
+        "files": [
+          "msvc.lock.json",
+          "scripts/build-native.mjs",
+          "scripts/moon.mjs",
+          "scripts/toolchain.mjs",
+          "toolchain.lock.json"
+        ],
+        "sha256": "f5f575775479785ed718ce278d96a6ce3059d59385afa920a4bd124a805e4b53"
+      }
+    },
+    "candidate": {
+      "runtime": {
+        "files": [
+          "src/axes.mbt",
+          "src/bridge/bridge.mbt",
+          "src/bridge/moon.pkg",
+          "src/bridge/sink.mbt",
+          "src/cmd/moonmat/io.c",
+          "src/cmd/moonmat/main.mbt",
+          "src/cmd/moonmat/moon.pkg",
+          "src/concat.mbt",
+          "src/deflate.mbt",
+          "src/diff.mbt",
+          "src/fixed_writer.mbt",
+          "src/inflate.mbt",
+          "src/interchange/diff.mbt",
+          "src/interchange/document.mbt",
+          "src/interchange/json.mbt",
+          "src/interchange/moon.pkg",
+          "src/interchange/name_options.mbt",
+          "src/interchange/roots.mbt",
+          "src/interchange/snapshot.mbt",
+          "src/interchange/transform.mbt",
+          "src/interchange/tree_close.mbt",
+          "src/interchange/tree_snapshot.mbt",
+          "src/moon.pkg",
+          "src/name_encoding.mbt",
+          "src/npy.mbt",
+          "src/npy_reader.mbt",
+          "src/numeric.mbt",
+          "src/reader.mbt",
+          "src/reshape.mbt",
+          "src/select.mbt",
+          "src/selected.mbt",
+          "src/sink.mbt",
+          "src/sink_deflate.mbt",
+          "src/slice.mbt",
+          "src/source.mbt",
+          "src/source_inflate.mbt",
+          "src/source_stream.mbt",
+          "src/sparse.mbt",
+          "src/sparse_codec.mbt",
+          "src/tree.mbt",
+          "src/tree_close.mbt",
+          "src/tree_diff.mbt",
+          "src/types.mbt",
+          "src/utf8_scan.mbt",
+          "src/writer.mbt"
+        ],
+        "sha256": "c4b2f91bd6779b6bdb30dd42ee84f2c64e9df0a69bb6c4f13073a451549da623"
+      },
+      "hosts": {
+        "files": [
+          "scripts/cli.mjs"
+        ],
+        "sha256": "67becff9edc35c4ef862a69a1733edce03c34e1a727586dea1f17f4cbc3e6abe"
+      },
+      "adapters": {
+        "files": [
+          "examples/python/mixed_types.py",
+          "scripts/bench-js.mjs",
+          "scripts/bench-sink-js.mjs",
+          "scripts/build-bench.mjs",
+          "scripts/file-performance.py",
+          "scripts/performance-revisions.py",
+          "scripts/performance.py",
+          "scripts/write-performance.py",
+          "scripts/write-regression.py",
+          "src/bench_bridge/bench.mbt",
+          "src/bench_bridge/moon.pkg",
+          "src/bench_bridge/pkg.generated.mbti",
+          "src/bench_bridge/sink_bench.mbt",
+          "src/cmd/bench/bench.c",
+          "src/cmd/bench/main.mbt",
+          "src/cmd/bench/moon.pkg",
+          "src/cmd/bench/sink_bench.mbt"
+        ],
+        "sha256": "39ed982ba2d903720ef644078bb40bf18def6520a0f6a48d344f57051dffaf74"
+      },
+      "build": {
+        "files": [
+          "msvc.lock.json",
+          "scripts/build-native.mjs",
+          "scripts/moon.mjs",
+          "scripts/toolchain.mjs",
+          "toolchain.lock.json"
+        ],
+        "sha256": "f5f575775479785ed718ce278d96a6ce3059d59385afa920a4bd124a805e4b53"
+      }
+    }
+  },
+  "environment": {
+    "toolchain": {
+      "compiler": "v0.10.16+b1a0e846e (2026-10-16)",
+      "compiler_version": "0.10.16+b1a0e846e",
+      "standard_library_archive_sha256": "e7db6e3c80a97af953598b374cf14f3e330918b1ca4659b141b9f550c9c0adb0",
+      "standard_library_source_sha256": "31140145ca3db92e94781c7649073922fca6ec669d04b4219119dff611dba5f5",
+      "c_compiler": "Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35229 for x64",
+      "native_backend": "c",
+      "native_environment": {
+        "MOONBIT_NEW_NATIVE": "0"
+      },
+      "node": "v24.13.0",
+      "windows_sdk_version": "10.0.22621.0",
+      "platform": "win32",
+      "architecture": "x64"
+    },
+    "platform": "Windows-11-10.0.22000-SP0",
+    "processor_affinity_receipt": {
+      "file": "measurement-environment-v0.1.11-efca2d6.json",
+      "sha256": "db05fa3113f72e76186a43f9cb9be7c94f42885b03367b3c50d1928122bf3839",
+      "logical_cpu": 2,
+      "mask": 4,
+      "scope": "Benchmark subprocesses inherit the same single-CPU affinity; both revisions use identical settings."
+    }
+  },
+  "protocol": {
+    "warmup_per_batch": 5,
+    "batches": 3,
+    "samples_per_batch": 10,
+    "memory_processes": 3,
+    "paired_order": "baseline then candidate per batch",
+    "core": "Resident tree, discard sink; excludes startup/preparation/disk",
+    "file": "Resident tree, positional write, close and no-overwrite publication; warm OS cache; startup excluded",
+    "memory": "Whole-process high-water RSS, includes resident input and preparation; not encoder-only allocation"
+  },
+  "fixtures": [
+    {
+      "name": "dense-16m",
+      "bytes": 16777408,
+      "sha256": "ad09c3dc3115137c8052085fc679cd5a4a36e54987075d482847d4f8338e7070",
+      "payload_bytes": 16777216,
+      "operations": [
+        "read",
+        "write"
+      ]
+    },
+    {
+      "name": "nested-4m",
+      "bytes": 4195464,
+      "sha256": "1703ad4a796542810e1f8e218352c68e704abc118a38593826743b7d54644b73",
+      "payload_bytes": 4194304,
+      "operations": [
+        "read",
+        "write"
+      ]
+    },
+    {
+      "name": "sparse-100k",
+      "bytes": 1204216,
+      "sha256": "d4ce25f29c7923f92825556aa23b36d78900abaa5381345f516adf658a48c86a",
+      "payload_bytes": 1204004,
+      "operations": [
+        "read",
+        "write"
+      ]
+    },
+    {
+      "name": "resident-256m",
+      "payload_bytes": 268435456,
+      "raw_sha256": "268c6eb888678b44aee105bf3fe7e98412c72f20f3cce58fe21e74826a3ef17f",
+      "generator": {
+        "seed": 20261029,
+        "block_bytes": 32768,
+        "repeats": 8192,
+        "lcg_multiplier": 1664525,
+        "lcg_increment": 1013904223
+      }
+    }
+  ],
+  "measurement_adapter_sha256": {
+    "write-regression.py": "3c6f5562d1c72415606d22a5709cf4b71a6b4dc26062fa1282810a3f153fc3a2",
+    "bench-sink-js.mjs": "3e26c4067ac5bdb26cd243b5b84866978cc3419b8787da0ba993cb98595dc7be",
+    "performance.py": "5b354c78e6da2bbd3fc6d3f35a583fc35d570db32320fc6b40a0f4b7b3d84e5f"
+  },
+  "partial": true,
+  "results": [
+    {
+      "case": "dense-16m",
+      "host": "js",
+      "encoding": "compressed",
+      "scope": "core",
+      "baseline": {
+        "status": "measured",
+        "batches": [
+          {
+            "status": "ok",
+            "samples_ms": [
+              1149.7037,
+              1179.5416999999998,
+              1184.7212,
+              1173.8048999999992,
+              1191.598899999999,
+              1151.8949999999986,
+              1165.0126999999993,
+              1175.013499999999,
+              1180.1205999999984,
+              1240.4721000000027
+            ],
+            "peak_bytes": 241606656,
+            "peak_before_bytes": 75247616,
+            "output_bytes": 16778707,
+            "requests": 18,
+            "max_request": 1048576,
+            "written_bytes": 16778711,
+            "process_wall_ms": 18204.18569998583
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1113.4825,
+              1147.9903000000004,
+              1151.0116000000007,
+              1163.7957000000006,
+              1159.6913999999997,
+              1148.7825999999986,
+              1149.9559000000008,
+              1159.3441999999995,
+              1151.8791999999994,
+              1159.7099999999991
+            ],
+            "peak_bytes": 241967104,
+            "peak_before_bytes": 75235328,
+            "output_bytes": 16778707,
+            "requests": 18,
+            "max_request": 1048576,
+            "written_bytes": 16778711,
+            "process_wall_ms": 17483.317299978808
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1119.1221999999998,
+              1166.0239000000001,
+              1150.985099999999,
+              1196.205,
+              1238.2489999999998,
+              1182.2176999999992,
+              1198.3253000000004,
+              1218.6376999999993,
+              1195.0439999999999,
+              1193.2716
+            ],
+            "peak_bytes": 241541120,
+            "peak_before_bytes": 75558912,
+            "output_bytes": 16778707,
+            "requests": 18,
+            "max_request": 1048576,
+            "written_bytes": 16778711,
+            "process_wall_ms": 17881.821099988883
+          }
+        ],
+        "memory_processes": [
+          {
+            "status": "ok",
+            "samples_ms": [
+              1451.64
+            ],
+            "peak_bytes": 92737536,
+            "peak_before_bytes": 75292672,
+            "output_bytes": 16778707,
+            "requests": 18,
+            "max_request": 1048576,
+            "written_bytes": 16778711,
+            "process_wall_ms": 1697.0277999935206
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1260.3547
+            ],
+            "peak_bytes": 92868608,
+            "peak_before_bytes": 75276288,
+            "output_bytes": 16778707,
+            "requests": 18,
+            "max_request": 1048576,
+            "written_bytes": 16778711,
+            "process_wall_ms": 1471.4018999948166
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1242.7443999999998
+            ],
+            "peak_bytes": 92790784,
+            "peak_before_bytes": 75231232,
+            "output_bytes": 16778707,
+            "requests": 18,
+            "max_request": 1048576,
+            "written_bytes": 16778711,
+            "process_wall_ms": 1449.7760999947786
+          }
+        ],
+        "samples_ms": [
+          1149.7037,
+          1179.5416999999998,
+          1184.7212,
+          1173.8048999999992,
+          1191.598899999999,
+          1151.8949999999986,
+          1165.0126999999993,
+          1175.013499999999,
+          1180.1205999999984,
+          1240.4721000000027,
+          1113.4825,
+          1147.9903000000004,
+          1151.0116000000007,
+          1163.7957000000006,
+          1159.6913999999997,
+          1148.7825999999986,
+          1149.9559000000008,
+          1159.3441999999995,
+          1151.8791999999994,
+          1159.7099999999991,
+          1119.1221999999998,
+          1166.0239000000001,
+          1150.985099999999,
+          1196.205,
+          1238.2489999999998,
+          1182.2176999999992,
+          1198.3253000000004,
+          1218.6376999999993,
+          1195.0439999999999,
+          1193.2716
+        ],
+        "median_ms": 1165.5182999999997,
+        "p95_ms": 1238.2489999999998,
+        "peak_bytes": 92790784,
+        "payload_MiB_per_second": 13.727798182147808,
+        "output_bytes": 16778707,
+        "output_sha256": null
+      },
+      "candidate": {
+        "status": "measured",
+        "batches": [
+          {
+            "status": "ok",
+            "samples_ms": [
+              1094.5721999999996,
+              1211.5629,
+              1412.692899999999,
+              1116.6376,
+              1112.5751,
+              1104.062,
+              1114.2533000000003,
+              1115.9110999999994,
+              1129.496799999999,
+              1108.7492000000002
+            ],
+            "peak_bytes": 205008896,
+            "peak_before_bytes": 76648448,
+            "output_bytes": 16778707,
+            "requests": 18,
+            "max_request": 1048576,
+            "written_bytes": 16778711,
+            "process_wall_ms": 17421.395699988352
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1078.2131,
+              1118.8862,
+              1098.5378,
+              1101.3999000000003,
+              1095.9445000000014,
+              1104.0781000000006,
+              1109.2687999999998,
+              1111.0569999999989,
+              1105.3804,
+              1111.2352999999985
+            ],
+            "peak_bytes": 204926976,
+            "peak_before_bytes": 76800000,
+            "output_bytes": 16778707,
+            "requests": 18,
+            "max_request": 1048576,
+            "written_bytes": 16778711,
+            "process_wall_ms": 16780.971000000136
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1155.9713000000002,
+              1178.7691000000004,
+              1133.7178000000004,
+              1112.0005999999994,
+              1123.5334999999995,
+              1105.9073000000008,
+              1105.9555999999993,
+              1121.505299999999,
+              1159.8045999999995,
+              1203.5095000000001
+            ],
+            "peak_bytes": 204840960,
+            "peak_before_bytes": 76410880,
+            "output_bytes": 16778707,
+            "requests": 18,
+            "max_request": 1048576,
+            "written_bytes": 16778711,
+            "process_wall_ms": 17357.61760000605
+          }
+        ],
+        "memory_processes": [
+          {
+            "status": "ok",
+            "samples_ms": [
+              1109.5625
+            ],
+            "peak_bytes": 113614848,
+            "peak_before_bytes": 76693504,
+            "output_bytes": 16778707,
+            "requests": 18,
+            "max_request": 1048576,
+            "written_bytes": 16778711,
+            "process_wall_ms": 1336.719799990533
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1073.8564999999999
+            ],
+            "peak_bytes": 113807360,
+            "peak_before_bytes": 76771328,
+            "output_bytes": 16778707,
+            "requests": 18,
+            "max_request": 1048576,
+            "written_bytes": 16778711,
+            "process_wall_ms": 1288.0645999975968
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1089.3202999999999
+            ],
+            "peak_bytes": 113696768,
+            "peak_before_bytes": 76800000,
+            "output_bytes": 16778707,
+            "requests": 18,
+            "max_request": 1048576,
+            "written_bytes": 16778711,
+            "process_wall_ms": 1325.6605000060517
+          }
+        ],
+        "samples_ms": [
+          1094.5721999999996,
+          1211.5629,
+          1412.692899999999,
+          1116.6376,
+          1112.5751,
+          1104.062,
+          1114.2533000000003,
+          1115.9110999999994,
+          1129.496799999999,
+          1108.7492000000002,
+          1078.2131,
+          1118.8862,
+          1098.5378,
+          1101.3999000000003,
+          1095.9445000000014,
+          1104.0781000000006,
+          1109.2687999999998,
+          1111.0569999999989,
+          1105.3804,
+          1111.2352999999985,
+          1155.9713000000002,
+          1178.7691000000004,
+          1133.7178000000004,
+          1112.0005999999994,
+          1123.5334999999995,
+          1105.9073000000008,
+          1105.9555999999993,
+          1121.505299999999,
+          1159.8045999999995,
+          1203.5095000000001
+        ],
+        "median_ms": 1112.2878499999997,
+        "p95_ms": 1211.5629,
+        "peak_bytes": 113696768,
+        "payload_MiB_per_second": 14.384765598221723,
+        "output_bytes": 16778707,
+        "output_sha256": null
+      },
+      "speedup": 1.0478567216211163,
+      "memory_reduction": -0.22530237485653748
+    }
+  ],
+  "run_id": "16ecd4f66d0e4efd9ef3075b673d78cd",
+  "regressions_over_10_percent": [
+    {
+      "case": "dense-16m",
+      "host": "js",
+      "encoding": "compressed",
+      "scope": "core",
+      "speedup": 1.0478567216211163,
+      "memory_reduction": -0.22530237485653748
+    }
+  ],
+  "engineering_targets": []
+}

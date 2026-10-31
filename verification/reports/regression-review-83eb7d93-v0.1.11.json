@@ -1,0 +1,137 @@
+{
+  "status": "blocked",
+  "version": "0.1.11",
+  "kind": "core",
+  "original": {
+    "file": "performance-vs-63e2304-run-83eb7d93-v0.1.11.json",
+    "sha256": "a7e9e704e46f8f69ad9f7dc666fde77af84254bc64559d50794b3988ac631853"
+  },
+  "rechecks": [
+    {
+      "file": "performance-vs-63e2304-partial-39fa62e5-v0.1.11.json",
+      "sha256": "1f23f4baa52093432776100cf6af4c32bd444a64ac46ec64bed820af49edcc53"
+    }
+  ],
+  "review": {
+    "status": "blocked",
+    "policy": "Retain the initial cohort and every recheck. Two threshold exceedances for the same case and metric block publication; a single exceedance needs a later matching non-exceedance.",
+    "resolved": [
+      {
+        "case_key": [
+          "nested-4m",
+          "native",
+          "write"
+        ],
+        "metric": "time",
+        "history": [
+          {
+            "report_index": 0,
+            "over_threshold": true
+          },
+          {
+            "report_index": 1,
+            "over_threshold": false
+          }
+        ]
+      },
+      {
+        "case_key": [
+          "sparse-100k",
+          "js",
+          "write"
+        ],
+        "metric": "time",
+        "history": [
+          {
+            "report_index": 0,
+            "over_threshold": true
+          },
+          {
+            "report_index": 1,
+            "over_threshold": false
+          }
+        ]
+      },
+      {
+        "case_key": [
+          "select-1-of-16",
+          "native",
+          "select"
+        ],
+        "metric": "time",
+        "history": [
+          {
+            "report_index": 0,
+            "over_threshold": true
+          },
+          {
+            "report_index": 1,
+            "over_threshold": false
+          }
+        ]
+      }
+    ],
+    "pending": [
+      {
+        "case_key": [
+          "dense-be-16m",
+          "js",
+          "read"
+        ],
+        "metric": "time",
+        "history": [
+          {
+            "report_index": 0,
+            "over_threshold": false
+          },
+          {
+            "report_index": 1,
+            "over_threshold": true
+          }
+        ]
+      }
+    ],
+    "confirmed": [
+      {
+        "case_key": [
+          "dense-be-16m",
+          "native",
+          "read"
+        ],
+        "metric": "time",
+        "history": [
+          {
+            "report_index": 0,
+            "over_threshold": true
+          },
+          {
+            "report_index": 1,
+            "over_threshold": true
+          }
+        ]
+      }
+    ]
+  },
+  "reproduction_commands": [
+    [
+      "python",
+      "scripts/performance-revisions.py",
+      "--baseline-ref",
+      "63e23046f362608e1938e5b5cd0a8df689fb23a5",
+      "--candidate-ref",
+      "a46efa70f416004cb3cd5ffbebeb754880d700b9",
+      "--case",
+      "dense-be-16m",
+      "--case",
+      "nested-4m",
+      "--case",
+      "select-1-of-16",
+      "--case",
+      "sparse-100k",
+      "--host",
+      "js",
+      "--host",
+      "native"
+    ]
+  ]
+}

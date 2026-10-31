@@ -1,0 +1,920 @@
+{
+  "status": "measured",
+  "version": "0.1.11",
+  "comparison": "Same MatSink API, paired frozen revisions; historical memory-versus-sink reports remain separate",
+  "baseline_commit": "63e23046f362608e1938e5b5cd0a8df689fb23a5",
+  "candidate_commit": "242f58b4d832d87e6d991426f82ed17e5fa09374",
+  "baseline_runtime_source_sha256": "99e07e3a9c6a791468f62110ad7e72e7bf8412c9c810d22c165283c65e7622e7",
+  "candidate_runtime_source_sha256": "c91c917c6496fbe54c5c4b78319b1c8693e6779413af46e4bfbe75f225910d1d",
+  "source_scopes": {
+    "baseline": {
+      "runtime": {
+        "files": [
+          "src/axes.mbt",
+          "src/bridge/bridge.mbt",
+          "src/bridge/moon.pkg",
+          "src/bridge/sink.mbt",
+          "src/cmd/moonmat/io.c",
+          "src/cmd/moonmat/main.mbt",
+          "src/cmd/moonmat/moon.pkg",
+          "src/concat.mbt",
+          "src/deflate.mbt",
+          "src/diff.mbt",
+          "src/fixed_writer.mbt",
+          "src/inflate.mbt",
+          "src/interchange/diff.mbt",
+          "src/interchange/document.mbt",
+          "src/interchange/json.mbt",
+          "src/interchange/moon.pkg",
+          "src/interchange/name_options.mbt",
+          "src/interchange/roots.mbt",
+          "src/interchange/snapshot.mbt",
+          "src/interchange/transform.mbt",
+          "src/interchange/tree_close.mbt",
+          "src/interchange/tree_snapshot.mbt",
+          "src/moon.pkg",
+          "src/name_encoding.mbt",
+          "src/npy.mbt",
+          "src/npy_reader.mbt",
+          "src/numeric.mbt",
+          "src/reader.mbt",
+          "src/reshape.mbt",
+          "src/select.mbt",
+          "src/selected.mbt",
+          "src/sink.mbt",
+          "src/sink_deflate.mbt",
+          "src/slice.mbt",
+          "src/source.mbt",
+          "src/source_inflate.mbt",
+          "src/source_stream.mbt",
+          "src/sparse.mbt",
+          "src/sparse_codec.mbt",
+          "src/tree.mbt",
+          "src/tree_close.mbt",
+          "src/tree_diff.mbt",
+          "src/types.mbt",
+          "src/utf8_scan.mbt",
+          "src/writer.mbt"
+        ],
+        "sha256": "99e07e3a9c6a791468f62110ad7e72e7bf8412c9c810d22c165283c65e7622e7"
+      },
+      "hosts": {
+        "files": [
+          "scripts/cli.mjs"
+        ],
+        "sha256": "67becff9edc35c4ef862a69a1733edce03c34e1a727586dea1f17f4cbc3e6abe"
+      },
+      "adapters": {
+        "files": [
+          "examples/python/mixed_types.py",
+          "scripts/bench-js.mjs",
+          "scripts/bench-sink-js.mjs",
+          "scripts/build-bench.mjs",
+          "scripts/file-performance.py",
+          "scripts/performance-revisions.py",
+          "scripts/performance.py",
+          "scripts/write-performance.py",
+          "scripts/write-regression.py",
+          "src/bench_bridge/bench.mbt",
+          "src/bench_bridge/moon.pkg",
+          "src/bench_bridge/pkg.generated.mbti",
+          "src/bench_bridge/sink_bench.mbt",
+          "src/cmd/bench/bench.c",
+          "src/cmd/bench/main.mbt",
+          "src/cmd/bench/moon.pkg",
+          "src/cmd/bench/sink_bench.mbt"
+        ],
+        "sha256": "8593d2117a9a320d164958c70ecff7e0a7fa84cb8fa4cdd35e21249fe5b7b610"
+      },
+      "build": {
+        "files": [
+          "msvc.lock.json",
+          "scripts/build-native.mjs",
+          "scripts/moon.mjs",
+          "scripts/toolchain.mjs",
+          "toolchain.lock.json"
+        ],
+        "sha256": "f5f575775479785ed718ce278d96a6ce3059d59385afa920a4bd124a805e4b53"
+      }
+    },
+    "candidate": {
+      "runtime": {
+        "files": [
+          "src/axes.mbt",
+          "src/bridge/bridge.mbt",
+          "src/bridge/moon.pkg",
+          "src/bridge/sink.mbt",
+          "src/cmd/moonmat/io.c",
+          "src/cmd/moonmat/main.mbt",
+          "src/cmd/moonmat/moon.pkg",
+          "src/concat.mbt",
+          "src/deflate.mbt",
+          "src/diff.mbt",
+          "src/fixed_writer.mbt",
+          "src/inflate.mbt",
+          "src/interchange/diff.mbt",
+          "src/interchange/document.mbt",
+          "src/interchange/json.mbt",
+          "src/interchange/moon.pkg",
+          "src/interchange/name_options.mbt",
+          "src/interchange/roots.mbt",
+          "src/interchange/snapshot.mbt",
+          "src/interchange/transform.mbt",
+          "src/interchange/tree_close.mbt",
+          "src/interchange/tree_snapshot.mbt",
+          "src/moon.pkg",
+          "src/name_encoding.mbt",
+          "src/npy.mbt",
+          "src/npy_reader.mbt",
+          "src/numeric.mbt",
+          "src/reader.mbt",
+          "src/reshape.mbt",
+          "src/select.mbt",
+          "src/selected.mbt",
+          "src/sink.mbt",
+          "src/sink_deflate.mbt",
+          "src/slice.mbt",
+          "src/source.mbt",
+          "src/source_inflate.mbt",
+          "src/source_stream.mbt",
+          "src/sparse.mbt",
+          "src/sparse_codec.mbt",
+          "src/tree.mbt",
+          "src/tree_close.mbt",
+          "src/tree_diff.mbt",
+          "src/types.mbt",
+          "src/utf8_scan.mbt",
+          "src/writer.mbt"
+        ],
+        "sha256": "c91c917c6496fbe54c5c4b78319b1c8693e6779413af46e4bfbe75f225910d1d"
+      },
+      "hosts": {
+        "files": [
+          "scripts/cli.mjs"
+        ],
+        "sha256": "67becff9edc35c4ef862a69a1733edce03c34e1a727586dea1f17f4cbc3e6abe"
+      },
+      "adapters": {
+        "files": [
+          "examples/python/mixed_types.py",
+          "scripts/bench-js.mjs",
+          "scripts/bench-sink-js.mjs",
+          "scripts/build-bench.mjs",
+          "scripts/file-performance.py",
+          "scripts/performance-revisions.py",
+          "scripts/performance.py",
+          "scripts/write-performance.py",
+          "scripts/write-regression.py",
+          "src/bench_bridge/bench.mbt",
+          "src/bench_bridge/moon.pkg",
+          "src/bench_bridge/pkg.generated.mbti",
+          "src/bench_bridge/sink_bench.mbt",
+          "src/cmd/bench/bench.c",
+          "src/cmd/bench/main.mbt",
+          "src/cmd/bench/moon.pkg",
+          "src/cmd/bench/sink_bench.mbt"
+        ],
+        "sha256": "39ed982ba2d903720ef644078bb40bf18def6520a0f6a48d344f57051dffaf74"
+      },
+      "build": {
+        "files": [
+          "msvc.lock.json",
+          "scripts/build-native.mjs",
+          "scripts/moon.mjs",
+          "scripts/toolchain.mjs",
+          "toolchain.lock.json"
+        ],
+        "sha256": "f5f575775479785ed718ce278d96a6ce3059d59385afa920a4bd124a805e4b53"
+      }
+    }
+  },
+  "environment": {
+    "toolchain": {
+      "compiler": "v0.10.16+b1a0e846e (2026-10-16)",
+      "compiler_version": "0.10.16+b1a0e846e",
+      "standard_library_archive_sha256": "e7db6e3c80a97af953598b374cf14f3e330918b1ca4659b141b9f550c9c0adb0",
+      "standard_library_source_sha256": "31140145ca3db92e94781c7649073922fca6ec669d04b4219119dff611dba5f5",
+      "c_compiler": "Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35229 for x64",
+      "native_backend": "c",
+      "native_environment": {
+        "MOONBIT_NEW_NATIVE": "0"
+      },
+      "node": "v24.13.0",
+      "windows_sdk_version": "10.0.22621.0",
+      "platform": "win32",
+      "architecture": "x64"
+    },
+    "platform": "Windows-11-10.0.22000-SP0"
+  },
+  "protocol": {
+    "warmup_per_batch": 5,
+    "batches": 3,
+    "samples_per_batch": 10,
+    "memory_processes": 3,
+    "paired_order": "baseline then candidate per batch",
+    "core": "Resident tree, discard sink; excludes startup/preparation/disk",
+    "file": "Resident tree, positional write, close and no-overwrite publication; warm OS cache; startup excluded",
+    "memory": "Whole-process high-water RSS, includes resident input and preparation; not encoder-only allocation"
+  },
+  "fixtures": [
+    {
+      "name": "dense-16m",
+      "bytes": 16777408,
+      "sha256": "ad09c3dc3115137c8052085fc679cd5a4a36e54987075d482847d4f8338e7070",
+      "payload_bytes": 16777216,
+      "operations": [
+        "read",
+        "write"
+      ]
+    },
+    {
+      "name": "nested-4m",
+      "bytes": 4195464,
+      "sha256": "1703ad4a796542810e1f8e218352c68e704abc118a38593826743b7d54644b73",
+      "payload_bytes": 4194304,
+      "operations": [
+        "read",
+        "write"
+      ]
+    },
+    {
+      "name": "sparse-100k",
+      "bytes": 1204216,
+      "sha256": "d4ce25f29c7923f92825556aa23b36d78900abaa5381345f516adf658a48c86a",
+      "payload_bytes": 1204004,
+      "operations": [
+        "read",
+        "write"
+      ]
+    },
+    {
+      "name": "resident-256m",
+      "payload_bytes": 268435456,
+      "raw_sha256": "268c6eb888678b44aee105bf3fe7e98412c72f20f3cce58fe21e74826a3ef17f",
+      "generator": {
+        "seed": 20261029,
+        "block_bytes": 32768,
+        "repeats": 8192,
+        "lcg_multiplier": 1664525,
+        "lcg_increment": 1013904223
+      }
+    }
+  ],
+  "measurement_adapter_sha256": {
+    "write-regression.py": "3c6f5562d1c72415606d22a5709cf4b71a6b4dc26062fa1282810a3f153fc3a2",
+    "bench-sink-js.mjs": "3e26c4067ac5bdb26cd243b5b84866978cc3419b8787da0ba993cb98595dc7be",
+    "performance.py": "5b354c78e6da2bbd3fc6d3f35a583fc35d570db32320fc6b40a0f4b7b3d84e5f"
+  },
+  "partial": true,
+  "results": [
+    {
+      "case": "resident-256m",
+      "host": "native",
+      "encoding": "compressed",
+      "scope": "core",
+      "baseline": {
+        "status": "measured",
+        "batches": [
+          {
+            "status": "ok",
+            "samples_ms": [
+              1864.9726999998093,
+              1877.2272999882698,
+              1976.9632000029087,
+              1891.7466000020504,
+              1864.6787999868393,
+              1906.7444999814034,
+              1872.2362999916077,
+              1860.854299992323,
+              1860.9099999964237,
+              1860.7944999933243
+            ],
+            "peak_bytes": 277102592,
+            "peak_before_bytes": 274444288,
+            "output_bytes": 3433561,
+            "requests": 5,
+            "max_request": 1048576,
+            "written_bytes": 3433565,
+            "process_wall_ms": 28421.616000006907
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1943.1818999946117,
+              1773.084800004959,
+              1861.5702000260353,
+              1736.165700018406,
+              1722.7490000128746,
+              1705.1772000193596,
+              1808.0884999930859,
+              1739.2133000195026,
+              1676.3361999988556,
+              1694.8386999964714
+            ],
+            "peak_bytes": 277098496,
+            "peak_before_bytes": 274440192,
+            "output_bytes": 3433561,
+            "requests": 5,
+            "max_request": 1048576,
+            "written_bytes": 3433565,
+            "process_wall_ms": 26371.43220001599
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1684.842500001192,
+              1690.6313000023365,
+              1686.1064999997616,
+              1729.016999989748,
+              1720.8648999929428,
+              1682.6098999977112,
+              1698.060799986124,
+              1689.7384999990463,
+              1695.734099984169,
+              1767.1759000122547
+            ],
+            "peak_bytes": 277102592,
+            "peak_before_bytes": 274432000,
+            "output_bytes": 3433561,
+            "requests": 5,
+            "max_request": 1048576,
+            "written_bytes": 3433565,
+            "process_wall_ms": 25515.554899990093
+          }
+        ],
+        "memory_processes": [
+          {
+            "status": "ok",
+            "samples_ms": [
+              1758.7039999961853
+            ],
+            "peak_bytes": 277057536,
+            "peak_before_bytes": 274436096,
+            "output_bytes": 3433561,
+            "requests": 5,
+            "max_request": 1048576,
+            "written_bytes": 3433565,
+            "process_wall_ms": 1904.818000009982
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1828.1078000068665
+            ],
+            "peak_bytes": 277020672,
+            "peak_before_bytes": 274436096,
+            "output_bytes": 3433561,
+            "requests": 5,
+            "max_request": 1048576,
+            "written_bytes": 3433565,
+            "process_wall_ms": 1937.5814000086393
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1696.161200016737
+            ],
+            "peak_bytes": 277016576,
+            "peak_before_bytes": 274432000,
+            "output_bytes": 3433561,
+            "requests": 5,
+            "max_request": 1048576,
+            "written_bytes": 3433565,
+            "process_wall_ms": 1788.366099994164
+          }
+        ],
+        "samples_ms": [
+          1864.9726999998093,
+          1877.2272999882698,
+          1976.9632000029087,
+          1891.7466000020504,
+          1864.6787999868393,
+          1906.7444999814034,
+          1872.2362999916077,
+          1860.854299992323,
+          1860.9099999964237,
+          1860.7944999933243,
+          1943.1818999946117,
+          1773.084800004959,
+          1861.5702000260353,
+          1736.165700018406,
+          1722.7490000128746,
+          1705.1772000193596,
+          1808.0884999930859,
+          1739.2133000195026,
+          1676.3361999988556,
+          1694.8386999964714,
+          1684.842500001192,
+          1690.6313000023365,
+          1686.1064999997616,
+          1729.016999989748,
+          1720.8648999929428,
+          1682.6098999977112,
+          1698.060799986124,
+          1689.7384999990463,
+          1695.734099984169,
+          1767.1759000122547
+        ],
+        "median_ms": 1753.1946000158787,
+        "p95_ms": 1943.1818999946117,
+        "peak_bytes": 277020672,
+        "payload_MiB_per_second": 146.01915839672412,
+        "output_bytes": 3433561,
+        "output_sha256": null
+      },
+      "candidate": {
+        "status": "measured",
+        "batches": [
+          {
+            "status": "ok",
+            "samples_ms": [
+              1428.7384999990463,
+              1438.496699988842,
+              1441.804800003767,
+              1433.7639000117779,
+              1424.587599992752,
+              1509.690800011158,
+              1551.288899987936,
+              1448.3478000164032,
+              1448.4746000170708,
+              1429.1997999846935
+            ],
+            "peak_bytes": 277098496,
+            "peak_before_bytes": 274456576,
+            "output_bytes": 3433561,
+            "requests": 5,
+            "max_request": 1048576,
+            "written_bytes": 3433565,
+            "process_wall_ms": 22079.22260000487
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1430.7985999882221,
+              1426.6497000157833,
+              1469.0057000219822,
+              1446.1427000164986,
+              1489.3320000171661,
+              1648.7980999946594,
+              1580.8224999904633,
+              1438.5709999799728,
+              1440.2671999931335,
+              1449.770700007677
+            ],
+            "peak_bytes": 277098496,
+            "peak_before_bytes": 274456576,
+            "output_bytes": 3433561,
+            "requests": 5,
+            "max_request": 1048576,
+            "written_bytes": 3433565,
+            "process_wall_ms": 22152.563400013605
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1421.8903000056744,
+              1429.9336999952793,
+              1421.090600013733,
+              1428.9480000138283,
+              1462.7968000173569,
+              1424.4655000269413,
+              1439.7244000136852,
+              1421.9340000152588,
+              1420.805999994278,
+              1435.804900020361
+            ],
+            "peak_bytes": 277118976,
+            "peak_before_bytes": 274452480,
+            "output_bytes": 3433561,
+            "requests": 5,
+            "max_request": 1048576,
+            "written_bytes": 3433565,
+            "process_wall_ms": 21810.774099983973
+          }
+        ],
+        "memory_processes": [
+          {
+            "status": "ok",
+            "samples_ms": [
+              1529.6811999976635
+            ],
+            "peak_bytes": 277024768,
+            "peak_before_bytes": 274456576,
+            "output_bytes": 3433561,
+            "requests": 5,
+            "max_request": 1048576,
+            "written_bytes": 3433565,
+            "process_wall_ms": 1673.5760000010487
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1460.3396999835968
+            ],
+            "peak_bytes": 277061632,
+            "peak_before_bytes": 274460672,
+            "output_bytes": 3433561,
+            "requests": 5,
+            "max_request": 1048576,
+            "written_bytes": 3433565,
+            "process_wall_ms": 1562.5490999955218
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1445.9022000133991
+            ],
+            "peak_bytes": 277061632,
+            "peak_before_bytes": 274456576,
+            "output_bytes": 3433561,
+            "requests": 5,
+            "max_request": 1048576,
+            "written_bytes": 3433565,
+            "process_wall_ms": 1544.1171000129543
+          }
+        ],
+        "samples_ms": [
+          1428.7384999990463,
+          1438.496699988842,
+          1441.804800003767,
+          1433.7639000117779,
+          1424.587599992752,
+          1509.690800011158,
+          1551.288899987936,
+          1448.3478000164032,
+          1448.4746000170708,
+          1429.1997999846935,
+          1430.7985999882221,
+          1426.6497000157833,
+          1469.0057000219822,
+          1446.1427000164986,
+          1489.3320000171661,
+          1648.7980999946594,
+          1580.8224999904633,
+          1438.5709999799728,
+          1440.2671999931335,
+          1449.770700007677,
+          1421.8903000056744,
+          1429.9336999952793,
+          1421.090600013733,
+          1428.9480000138283,
+          1462.7968000173569,
+          1424.4655000269413,
+          1439.7244000136852,
+          1421.9340000152588,
+          1420.805999994278,
+          1435.804900020361
+        ],
+        "median_ms": 1438.5338499844074,
+        "p95_ms": 1580.8224999904633,
+        "peak_bytes": 277061632,
+        "payload_MiB_per_second": 177.95896843357204,
+        "output_bytes": 3433561,
+        "output_sha256": null
+      },
+      "speedup": 1.2187371190708387,
+      "memory_reduction": -0.00014785900165592558
+    },
+    {
+      "case": "resident-256m",
+      "host": "native",
+      "encoding": "compressed",
+      "scope": "file",
+      "baseline": {
+        "status": "measured",
+        "batches": [
+          {
+            "status": "ok",
+            "samples_ms": [
+              1669.0446999967098,
+              1665.511400014162,
+              1684.0074000060558,
+              1666.1538000106812,
+              1685.1340999901295,
+              1705.982899993658,
+              1673.249599993229,
+              1670.2459999918938,
+              1778.6620999872684,
+              1757.9666000008583
+            ],
+            "peak_bytes": 277168128,
+            "peak_before_bytes": 274436096,
+            "output_bytes": 3433561,
+            "requests": 5,
+            "max_request": 1048576,
+            "written_bytes": 3433565,
+            "process_wall_ms": 26271.614500001306,
+            "output_sha256": "b25e3cc01e962d0a5cfe201105733dcace38986695ecd05243ad041db4b592a5",
+            "without_creation_description_sha256": "1bbdeb19f3a75d490a1fd4cd09a042452bbfd987a781427e4f5e3957d6671f7c"
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1776.013799995184,
+              1674.3199999928474,
+              1664.3240999877453,
+              1667.85640001297,
+              1685.777499973774,
+              1690.1148000061512,
+              1669.0242000222206,
+              1661.0654999911785,
+              1715.611200004816,
+              1679.4259000122547
+            ],
+            "peak_bytes": 277168128,
+            "peak_before_bytes": 274436096,
+            "output_bytes": 3433561,
+            "requests": 5,
+            "max_request": 1048576,
+            "written_bytes": 3433565,
+            "process_wall_ms": 25392.126299993834,
+            "output_sha256": "b25e3cc01e962d0a5cfe201105733dcace38986695ecd05243ad041db4b592a5",
+            "without_creation_description_sha256": "1bbdeb19f3a75d490a1fd4cd09a042452bbfd987a781427e4f5e3957d6671f7c"
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1853.2984999716282,
+              1914.7452999949455,
+              1873.9539999961853,
+              1832.5838000178337,
+              1853.6881999969482,
+              1661.1681999862194,
+              1677.2576000094414,
+              1653.7044000029564,
+              1752.0320000052452,
+              1761.6076999902725
+            ],
+            "peak_bytes": 277168128,
+            "peak_before_bytes": 274436096,
+            "output_bytes": 3433561,
+            "requests": 5,
+            "max_request": 1048576,
+            "written_bytes": 3433565,
+            "process_wall_ms": 27321.93279999774,
+            "output_sha256": "b25e3cc01e962d0a5cfe201105733dcace38986695ecd05243ad041db4b592a5",
+            "without_creation_description_sha256": "1bbdeb19f3a75d490a1fd4cd09a042452bbfd987a781427e4f5e3957d6671f7c"
+          }
+        ],
+        "memory_processes": [
+          {
+            "status": "ok",
+            "samples_ms": [
+              1702.2605000138283
+            ],
+            "peak_bytes": 277053440,
+            "peak_before_bytes": 274436096,
+            "output_bytes": 3433561,
+            "requests": 5,
+            "max_request": 1048576,
+            "written_bytes": 3433565,
+            "process_wall_ms": 1803.8812000013422,
+            "output_sha256": "b25e3cc01e962d0a5cfe201105733dcace38986695ecd05243ad041db4b592a5",
+            "without_creation_description_sha256": "1bbdeb19f3a75d490a1fd4cd09a042452bbfd987a781427e4f5e3957d6671f7c",
+            "independent_consumption": "SciPy with exact large raw-byte hash"
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1660.1263000071049
+            ],
+            "peak_bytes": 277028864,
+            "peak_before_bytes": 274432000,
+            "output_bytes": 3433561,
+            "requests": 5,
+            "max_request": 1048576,
+            "written_bytes": 3433565,
+            "process_wall_ms": 1759.992399980547,
+            "output_sha256": "b25e3cc01e962d0a5cfe201105733dcace38986695ecd05243ad041db4b592a5",
+            "without_creation_description_sha256": "1bbdeb19f3a75d490a1fd4cd09a042452bbfd987a781427e4f5e3957d6671f7c",
+            "independent_consumption": "SciPy with exact large raw-byte hash"
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1856.587700009346
+            ],
+            "peak_bytes": 277057536,
+            "peak_before_bytes": 274440192,
+            "output_bytes": 3433561,
+            "requests": 5,
+            "max_request": 1048576,
+            "written_bytes": 3433565,
+            "process_wall_ms": 1978.2912000082433,
+            "output_sha256": "b25e3cc01e962d0a5cfe201105733dcace38986695ecd05243ad041db4b592a5",
+            "without_creation_description_sha256": "1bbdeb19f3a75d490a1fd4cd09a042452bbfd987a781427e4f5e3957d6671f7c",
+            "independent_consumption": "SciPy with exact large raw-byte hash"
+          }
+        ],
+        "samples_ms": [
+          1669.0446999967098,
+          1665.511400014162,
+          1684.0074000060558,
+          1666.1538000106812,
+          1685.1340999901295,
+          1705.982899993658,
+          1673.249599993229,
+          1670.2459999918938,
+          1778.6620999872684,
+          1757.9666000008583,
+          1776.013799995184,
+          1674.3199999928474,
+          1664.3240999877453,
+          1667.85640001297,
+          1685.777499973774,
+          1690.1148000061512,
+          1669.0242000222206,
+          1661.0654999911785,
+          1715.611200004816,
+          1679.4259000122547,
+          1853.2984999716282,
+          1914.7452999949455,
+          1873.9539999961853,
+          1832.5838000178337,
+          1853.6881999969482,
+          1661.1681999862194,
+          1677.2576000094414,
+          1653.7044000029564,
+          1752.0320000052452,
+          1761.6076999902725
+        ],
+        "median_ms": 1684.5707499980927,
+        "p95_ms": 1873.9539999961853,
+        "peak_bytes": 277053440,
+        "payload_MiB_per_second": 151.9674967645555,
+        "output_bytes": 3433561,
+        "output_sha256": "b25e3cc01e962d0a5cfe201105733dcace38986695ecd05243ad041db4b592a5"
+      },
+      "candidate": {
+        "status": "measured",
+        "batches": [
+          {
+            "status": "ok",
+            "samples_ms": [
+              1450.7305999994278,
+              1445.264099985361,
+              1430.6256000101566,
+              1453.0715999901295,
+              1431.5965000092983,
+              1491.0288999974728,
+              1531.3847999870777,
+              1439.5665000081062,
+              1448.2836000025272,
+              1444.3683000206947
+            ],
+            "peak_bytes": 277184512,
+            "peak_before_bytes": 274460672,
+            "output_bytes": 3433561,
+            "requests": 5,
+            "max_request": 1048576,
+            "written_bytes": 3433565,
+            "process_wall_ms": 21988.965900003677,
+            "output_sha256": "f9a862cd927f3946c5dba2b70c0ea56e1ddb0b9b6a9f58a2a8790dc060d64697",
+            "without_creation_description_sha256": "1bbdeb19f3a75d490a1fd4cd09a042452bbfd987a781427e4f5e3957d6671f7c"
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1434.8604999780655,
+              1444.3055000007153,
+              1473.9098000228405,
+              1499.5460999906063,
+              1455.978200018406,
+              1484.243399977684,
+              1427.5123999714851,
+              1424.0524999797344,
+              1438.2522999942303,
+              1440.7312000095844
+            ],
+            "peak_bytes": 277176320,
+            "peak_before_bytes": 274460672,
+            "output_bytes": 3433561,
+            "requests": 5,
+            "max_request": 1048576,
+            "written_bytes": 3433565,
+            "process_wall_ms": 22434.05320000602,
+            "output_sha256": "f9a862cd927f3946c5dba2b70c0ea56e1ddb0b9b6a9f58a2a8790dc060d64697",
+            "without_creation_description_sha256": "1bbdeb19f3a75d490a1fd4cd09a042452bbfd987a781427e4f5e3957d6671f7c"
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1661.336500018835,
+              1627.6699000000954,
+              1590.7443999946117,
+              1619.5814999938011,
+              1616.4310999810696,
+              1663.718000024557,
+              1440.6635000109673,
+              1443.9242999851704,
+              1431.746699988842,
+              1432.4900000095367
+            ],
+            "peak_bytes": 277172224,
+            "peak_before_bytes": 274456576,
+            "output_bytes": 3433561,
+            "requests": 5,
+            "max_request": 1048576,
+            "written_bytes": 3433565,
+            "process_wall_ms": 23748.475600004895,
+            "output_sha256": "f9a862cd927f3946c5dba2b70c0ea56e1ddb0b9b6a9f58a2a8790dc060d64697",
+            "without_creation_description_sha256": "1bbdeb19f3a75d490a1fd4cd09a042452bbfd987a781427e4f5e3957d6671f7c"
+          }
+        ],
+        "memory_processes": [
+          {
+            "status": "ok",
+            "samples_ms": [
+              1442.3427000045776
+            ],
+            "peak_bytes": 277061632,
+            "peak_before_bytes": 274452480,
+            "output_bytes": 3433561,
+            "requests": 5,
+            "max_request": 1048576,
+            "written_bytes": 3433565,
+            "process_wall_ms": 1542.5248999963515,
+            "output_sha256": "f9a862cd927f3946c5dba2b70c0ea56e1ddb0b9b6a9f58a2a8790dc060d64697",
+            "without_creation_description_sha256": "1bbdeb19f3a75d490a1fd4cd09a042452bbfd987a781427e4f5e3957d6671f7c",
+            "independent_consumption": "SciPy with exact large raw-byte hash"
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1444.8975999951363
+            ],
+            "peak_bytes": 277024768,
+            "peak_before_bytes": 274456576,
+            "output_bytes": 3433561,
+            "requests": 5,
+            "max_request": 1048576,
+            "written_bytes": 3433565,
+            "process_wall_ms": 1548.7481000018306,
+            "output_sha256": "f9a862cd927f3946c5dba2b70c0ea56e1ddb0b9b6a9f58a2a8790dc060d64697",
+            "without_creation_description_sha256": "1bbdeb19f3a75d490a1fd4cd09a042452bbfd987a781427e4f5e3957d6671f7c",
+            "independent_consumption": "SciPy with exact large raw-byte hash"
+          },
+          {
+            "status": "ok",
+            "samples_ms": [
+              1450.4197999835014
+            ],
+            "peak_bytes": 277057536,
+            "peak_before_bytes": 274456576,
+            "output_bytes": 3433561,
+            "requests": 5,
+            "max_request": 1048576,
+            "written_bytes": 3433565,
+            "process_wall_ms": 1557.65549998614,
+            "output_sha256": "f9a862cd927f3946c5dba2b70c0ea56e1ddb0b9b6a9f58a2a8790dc060d64697",
+            "without_creation_description_sha256": "1bbdeb19f3a75d490a1fd4cd09a042452bbfd987a781427e4f5e3957d6671f7c",
+            "independent_consumption": "SciPy with exact large raw-byte hash"
+          }
+        ],
+        "samples_ms": [
+          1450.7305999994278,
+          1445.264099985361,
+          1430.6256000101566,
+          1453.0715999901295,
+          1431.5965000092983,
+          1491.0288999974728,
+          1531.3847999870777,
+          1439.5665000081062,
+          1448.2836000025272,
+          1444.3683000206947,
+          1434.8604999780655,
+          1444.3055000007153,
+          1473.9098000228405,
+          1499.5460999906063,
+          1455.978200018406,
+          1484.243399977684,
+          1427.5123999714851,
+          1424.0524999797344,
+          1438.2522999942303,
+          1440.7312000095844,
+          1661.336500018835,
+          1627.6699000000954,
+          1590.7443999946117,
+          1619.5814999938011,
+          1616.4310999810696,
+          1663.718000024557,
+          1440.6635000109673,
+          1443.9242999851704,
+          1431.746699988842,
+          1432.4900000095367
+        ],
+        "median_ms": 1446.7738499939442,
+        "p95_ms": 1661.336500018835,
+        "peak_bytes": 277057536,
+        "payload_MiB_per_second": 176.94541548499203,
+        "output_bytes": 3433561,
+        "output_sha256": "f9a862cd927f3946c5dba2b70c0ea56e1ddb0b9b6a9f58a2a8790dc060d64697"
+      },
+      "speedup": 1.1643635596573327,
+      "memory_reduction": -1.478415138977951e-05
+    }
+  ],
+  "run_id": "5ff6367ddcbb4d69bf6d1be122d8e68e",
+  "regressions_over_10_percent": [],
+  "engineering_targets": []
+}

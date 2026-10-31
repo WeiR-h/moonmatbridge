@@ -1,0 +1,52 @@
+{
+  "status": "verified",
+  "version": "0.1.11",
+  "kind": "file",
+  "original": {
+    "file": "file-performance-vs-63e2304-run-a96b8d2a-v0.1.11.json",
+    "sha256": "fd4289c350fee94bdef22c258f31c85228fe778361b5327e60e80b49846d6c98"
+  },
+  "rechecks": [
+    {
+      "file": "file-performance-vs-63e2304-partial-97fee004-v0.1.11.json",
+      "sha256": "11baa599d1ce45cf473f0c2b5dff35b3a5058d9454cdb7cd36dc6ba1fa2b672d"
+    }
+  ],
+  "review": {
+    "status": "verified",
+    "policy": "Retain the initial cohort and every recheck. Two threshold exceedances for the same case and metric block publication; a single exceedance needs a later matching non-exceedance.",
+    "resolved": [
+      {
+        "case_key": [
+          "select-1-of-16",
+          "native"
+        ],
+        "metric": "time",
+        "history": [
+          {
+            "report_index": 0,
+            "over_threshold": true
+          },
+          {
+            "report_index": 1,
+            "over_threshold": false
+          }
+        ]
+      }
+    ],
+    "pending": [],
+    "confirmed": []
+  },
+  "reproduction_commands": [
+    [
+      "python",
+      "scripts/file-performance.py",
+      "--baseline-ref",
+      "63e23046f362608e1938e5b5cd0a8df689fb23a5",
+      "--candidate-ref",
+      "5c4d90efb9c722e2fe60d1a946c8bfe523cc3ee5",
+      "--case",
+      "select-1-of-16"
+    ]
+  ]
+}
