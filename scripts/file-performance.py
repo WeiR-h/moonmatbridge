@@ -190,7 +190,7 @@ def measure(folder,host,case,kind):
  start=time.perf_counter();r=json.loads(perf.command(args));r['process_wall_ms']=(time.perf_counter()-start)*1000;assert r['checksum']>0 and r['peak_bytes']>0;return r
 
 def main():
- parser=argparse.ArgumentParser();parser.add_argument('--baseline-ref',default='v0.0.14');parser.add_argument('--candidate-ref',default='HEAD');parser.add_argument('--case',action='append');args=parser.parse_args()
+ parser=argparse.ArgumentParser();parser.add_argument('--baseline-ref',default='v0.0.14');parser.add_argument('--candidate-ref',default='HEAD');parser.add_argument('--case',action='append');parser.add_argument('--host',action='append',choices=['native','js']);args=parser.parse_args()
  run_id=uuid.uuid4().hex
  cases=fixtures();(LOCAL/'driver.mjs').write_text(DRIVER,encoding='utf-8',newline='\n')
  baseline,bsha,bhash,_=prepare(args.baseline_ref);candidate,csha,chash,version=prepare(args.candidate_ref)
@@ -202,7 +202,7 @@ def main():
  for case in cases:
   if args.case and case['name'] not in args.case:continue
   if tuple(map(int,version.split('-')[0].split('.')))<tuple(case['minimum_version']):continue
-  for host in ['native','js']:
+  for host in args.host or ['native','js']:
    batches={'baseline':[],'candidate':[]}
    for batch in range(3):
     print(case['name'],host,'batch',batch+1,'/3',flush=True)
@@ -215,10 +215,11 @@ def main():
    report['results'].append(row);write(LOCAL/f'file-performance-v{version}.json',report);print(case['name'],host,round(row['speedup'],3),round(row['memory_reduction'],4),flush=True)
  for folder,ref in [(baseline,bsha),(candidate,csha)]:
   evidence.ROOT=ROOT;expected=evidence.snapshot(ref);evidence.ROOT=folder;assert evidence.snapshot()==expected
- report['run_id']=run_id;report['partial']=bool(args.case)
+ assert report['results'],'No matching file measurements'
+ report['run_id']=run_id;report['partial']=bool(args.case or args.host)
  report['status']='measured';report['scope']='File pipeline measurements; independent from preloaded codec benchmarks. Every previous case remains available.'
  report['engineering_targets']=[{'case':r['case']['name'],'host':r['host'],'goal':.20,'time_reduction':1-1/r['speedup'],'passed':r['speedup']>=1/.8} for r in report['results'] if version=='0.1.11' and r['case']['name']=='large-compressed']
  report['regressions_over_10_percent']=[{'case':r['case']['name'],'host':r['host'],'speedup':r['speedup'],'memory_reduction':r['memory_reduction']} for r in report['results'] if r['speedup']<1/1.1 or r['memory_reduction']<-.1]
- write(ROOT/f'verification/reports/file-performance-vs-{bsha[:7]}-{"partial" if args.case else "run"}-{run_id[:8]}-v{version}.json',report)
+ write(ROOT/f'verification/reports/file-performance-vs-{bsha[:7]}-{"partial" if (args.case or args.host) else "run"}-{run_id[:8]}-v{version}.json',report)
 
 if __name__=='__main__':main()

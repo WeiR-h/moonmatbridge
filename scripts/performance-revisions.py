@@ -97,6 +97,7 @@ def main():
     parser.add_argument('--candidate-ref',help='Frozen Git revision; omit to measure the current source tree')
     parser.add_argument('--case',action='append')
     parser.add_argument('--host',action='append',choices=['native','js'])
+    parser.add_argument('--operation',action='append',choices=['read','write','compress','select'])
     args=parser.parse_args()
     fixtures=perf.fixtures()
     if args.case: assert set(args.case)<=set(f['name'] for f in fixtures)
@@ -126,7 +127,7 @@ def main():
             'cli':'five warmups followed by 30 full process invocations per revision; includes startup and disk I/O'},
         'fixtures':[{k:v for k,v in f.items() if k!='path'} for f in fixtures],'results':[]}
     report['measurement_adapters']={'native_main_by_revision':{label:hashlib.sha256((folder/'src/cmd/bench/main.mbt').read_bytes()).hexdigest() for label,folder in [('baseline',baseline),('candidate',candidate)]},'driver_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'js_driver_sha256':hashlib.sha256((ROOT/'scripts/bench-js.mjs').read_bytes()).hexdigest()}
-    partial=bool(args.case or args.host)
+    partial=bool(args.case or args.host or args.operation)
     stem=f'performance-v{version}-vs-{base_sha[:7]}'
     run_id=uuid.uuid4().hex
     report['run_id']=run_id
@@ -134,6 +135,7 @@ def main():
     for fixture in fixtures:
         if args.case and fixture['name'] not in args.case: continue
         for operation in fixture['operations']:
+            if args.operation and operation not in args.operation:continue
             for host in args.host or ['native','js']:
                 batches={'baseline':[],'candidate':[]}
                 for batch in range(3):
@@ -160,6 +162,7 @@ def main():
                 report['results'].append(row)
                 write(run_path,report)
                 print(f"{fixture['name']}:{operation}:{host}: {row['speedup']:.3f}x; peak reduction {row['memory_reduction']:.1%}",flush=True)
+    assert report['results'],'No matching core measurements'
     assert evidence.snapshot()==runtime_before, 'Runtime changed while measurements were running'
     evidence.ROOT=baseline
     assert evidence.snapshot()==baseline_before, 'Baseline runtime changed during measurement'
