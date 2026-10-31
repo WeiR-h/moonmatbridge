@@ -14,6 +14,8 @@ def main():
         before=f"{old['median_ms']:.2f}" if ok else '限额';peak=f"{old['peak_bytes']/1048576:.1f}" if ok else '—';speed=f"{r['speedup']:.3f}" if ok else '—'
         lines.append(f"| {r['case']} | {r['host']} | {r['encoding']} | {r['scope']} | {before} / {new['median_ms']:.2f} | {speed} | {peak} / {new['peak_bytes']/1048576:.1f} |")
     lines+=['','输入树驻留内存；进程峰值包括准备过程高水位。原始测量采用每批预热 5 次、3 批各 10 次及 3 个独立进程峰值。比较口径见原始报告：固定版本 MatSink 对照与历史同版两接口对照分别保存。','']
+    if item.get('rechecks'):
+        lines+=['首次观测保留在上表；对应复测原件：'+', '.join(f"[{r['file']}]({r['file']})" for r in item['rechecks'])+'。复测判定和全部原件哈希见来源绑定。','']
     (e.REPORTS/f'WRITE_PERFORMANCE-v{a.version}.md').write_text('\n'.join(lines),encoding='utf-8',newline='\n')
 
 if __name__=='__main__':main()

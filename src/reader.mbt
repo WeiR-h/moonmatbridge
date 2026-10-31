@@ -55,6 +55,43 @@ fn payload(bytes : Bytes, element : Element) -> Bytes {
 }
 
 ///|
+// The caller has validated the storage width and complete payload length.
+// Copy whole storage units without numeric conversion or per-byte division.
+fn payload_swap_units(bytes : Bytes, element : Element, width : Int32) -> Bytes {
+  let buffer = FixedArray::make(element.size, b'\x00')
+  for at = 0; at < element.size; at = at + width {
+    let start = element.start + at
+    match width {
+      2 => {
+        buffer[at] = bytes[start + 1]
+        buffer[at + 1] = bytes[start]
+      }
+      4 => {
+        buffer[at] = bytes[start + 3]
+        buffer[at + 1] = bytes[start + 2]
+        buffer[at + 2] = bytes[start + 1]
+        buffer[at + 3] = bytes[start]
+      }
+      8 => {
+        buffer[at] = bytes[start + 7]
+        buffer[at + 1] = bytes[start + 6]
+        buffer[at + 2] = bytes[start + 5]
+        buffer[at + 3] = bytes[start + 4]
+        buffer[at + 4] = bytes[start + 3]
+        buffer[at + 5] = bytes[start + 2]
+        buffer[at + 6] = bytes[start + 1]
+        buffer[at + 7] = bytes[start]
+      }
+      _ =>
+        for i = 0; i < width; i = i + 1 {
+          buffer[at + i] = bytes[start + width - 1 - i]
+        }
+    }
+  }
+  finish_owned_buffer(buffer)
+}
+
+///|
 fn numeric_payload(
   bytes : Bytes,
   element : Element,
@@ -79,10 +116,7 @@ fn numeric_payload(
     if little || storage.width() == 1 {
       return payload(bytes, element)
     }
-    return Bytes::makei(element.size, fn(i) {
-      let width = storage.width()
-      bytes[element.start + i / width * width + width - 1 - i % width]
-    })
+    return payload_swap_units(bytes, element, storage.width())
   }
   if !keep && dtype == Logical {
     return b""

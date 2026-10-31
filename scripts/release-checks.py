@@ -64,3 +64,23 @@ for corrupt in ['total','repeat','missing-total']:
     except AssertionError:continue
     raise AssertionError('Invalid repeated sample accepted: '+corrupt)
 print('Repeated sample totals, normalization and paired operation-count guards passed')
+
+# First observations remain unchanged; a retained matching recheck can resolve
+# an isolated observation, while recurrence or a changed setup must fail.
+suspect=copy.deepcopy(base);first=suspect['results'][0]
+for b,c in zip(first['batches']['baseline'],first['batches']['candidate']):
+    c['samples_ms']=[v*2 for v in b['samples_ms']]
+first['speedup']=.5;first['median_ms']=first['baseline_median_ms']*2
+suspect['regressions_over_10_percent']=[{k:first[k] for k in ['case','host','operation','speedup','memory_reduction']}]
+healthy=copy.deepcopy(base);healthy['partial']=True;healthy['results']=[copy.deepcopy(base['results'][0])]
+review=validator.validate_report(suspect,*args,[healthy])
+assert review['status']=='verified' and len(review['resolved'])==1
+recurring=copy.deepcopy(suspect);recurring['partial']=True;recurring['results']=[copy.deepcopy(first)]
+wrong=copy.deepcopy(healthy);wrong['candidate_head_commit']='0'*40
+protocol=copy.deepcopy(healthy);protocol['protocol']['warmup_per_batch']=6
+missing=copy.deepcopy(healthy);missing['results']=[copy.deepcopy(base['results'][1])]
+for checks in [[],[recurring],[wrong],[protocol],[missing]]:
+    try:validator.validate_report(suspect,*args,checks)
+    except AssertionError:continue
+    raise AssertionError('Unresolved, recurring or mismatched recheck accepted')
+print('Retained rechecks: isolated observations, recurrence, missing cases and setup changes passed')

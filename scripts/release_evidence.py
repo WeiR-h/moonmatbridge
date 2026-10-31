@@ -75,7 +75,7 @@ def performance_binding(version,reference='v0.1.5'):
         assert data['status']=='measured' and len(data['results'])==row['rows'] and not data.get('partial'),'Incomplete cohort'
         if 'sha256' in row:assert row['sha256']==digest(p),'Historical report changed'
         assert data['environment']['toolchain']==actual,'Measured toolchain differs'
-        records.append({'file':p.name,'rows':row['rows'],'sha256':digest(p),'measured_commit':data.get('candidate_commit',data.get('candidate_head_commit'))})
+        records.append({**row,'file':p.name,'rows':row['rows'],'sha256':digest(p),'measured_commit':data.get('candidate_commit',data.get('candidate_head_commit'))})
     # The v0.1.5 release already bound its retained reading cohorts to v0.1.4.
     # Preserve that historical chain, including its original adapters and repeats.
     chain=base.get('historical_chain') if previous.exists() else {'file':'performance-summary-v0.1.5.json','sha256':digest(REPORTS/'performance-summary-v0.1.5.json')}
@@ -94,4 +94,16 @@ def validate_binding(version,current_environment=True):
     for row in b['cohorts']:
         p=REPORTS/row['file'];data=read(p)
         assert digest(p)==row['sha256'] and data['status']=='measured' and len(data['results'])==row['rows'] and not data.get('partial')
+        if 'kind' in row:
+            rechecks=[]
+            for retained in row.get('rechecks',[]):
+                path=(REPORTS/retained['file']).resolve();assert path.parent==REPORTS.resolve() and digest(path)==retained['sha256'],'Recheck changed'
+                rechecks.append(read(path))
+            validator=load('retained_regression_review','bind-performance.py')
+            review=validator.validate_report(data,row['kind'],data['baseline_commit'],row['measured_commit'],b['scopes']['runtime']['sha256'],b['toolchain'],rechecks)
+            assert review==row['regression_review'],'Regression review differs'
+        context=data['environment'].get('processor_affinity_receipt')
+        if context:
+            path=(REPORTS/context['file']).resolve()
+            assert path.parent==REPORTS.resolve() and digest(path)==context['sha256'] and read(path)['effective_mask']==context['mask'],'Processor context changed'
     return b
