@@ -141,8 +141,13 @@ def cli_measure(root, host, fixture, operation):
         source = loadmat(fixture["path"], chars_as_strings=False)
         assert [k for k in actual if not k.startswith("__")] == ["v00"]
         mixed.assert_tree_equal(actual["v00"], source["v00"])
-    return {"samples_ms": samples, "median_ms": statistics.median(samples), "p95_ms": sorted(samples)[28], "output_bytes": output.stat().st_size if output.exists() else None,
+    result = {"samples_ms": samples, "median_ms": statistics.median(samples), "p95_ms": sorted(samples)[28], "output_bytes": output.stat().st_size if output.exists() else None,
             "scope": "end to end: process startup, disk I/O, codec and response; includes five warmups"}
+
+    if output.exists():
+        result["output_sha256"] = hashlib.sha256(output.read_bytes()).hexdigest()
+        output.unlink()
+    return result
 
 
 def main():
