@@ -1,0 +1,142 @@
+{
+  "status": "passed",
+  "version": "0.1.10",
+  "checks": [
+    {
+      "host": "native",
+      "case": "all-classes-big-compressed.mat",
+      "status": "passed",
+      "sha256": "7aa3e22692d683c2e4c6a48d88957512cac32b6f4a0384657da37e5154e6e5b1"
+    },
+    {
+      "host": "js",
+      "case": "all-classes-big-compressed.mat",
+      "status": "passed",
+      "sha256": "7aa3e22692d683c2e4c6a48d88957512cac32b6f4a0384657da37e5154e6e5b1"
+    },
+    {
+      "host": "native",
+      "case": "all-classes-big-plain.mat",
+      "status": "passed",
+      "sha256": "ea3c70629af0f44058156d65dfd7a56060cbb5baaa0c62737ef1e72ef7abbafa"
+    },
+    {
+      "host": "js",
+      "case": "all-classes-big-plain.mat",
+      "status": "passed",
+      "sha256": "ea3c70629af0f44058156d65dfd7a56060cbb5baaa0c62737ef1e72ef7abbafa"
+    },
+    {
+      "host": "native",
+      "case": "all-classes-global-big-compressed.mat",
+      "status": "passed",
+      "sha256": "6065debf9e7bb2d729a5fa19e974ec571b8709267e70bbb6bff9d4949918e9cf"
+    },
+    {
+      "host": "js",
+      "case": "all-classes-global-big-compressed.mat",
+      "status": "passed",
+      "sha256": "6065debf9e7bb2d729a5fa19e974ec571b8709267e70bbb6bff9d4949918e9cf"
+    },
+    {
+      "host": "native",
+      "case": "all-classes-global-big-plain.mat",
+      "status": "passed",
+      "sha256": "985b25ca1a503d20330260f68605c2b661f944b8544ad654535dcfe1029b48e1"
+    },
+    {
+      "host": "js",
+      "case": "all-classes-global-big-plain.mat",
+      "status": "passed",
+      "sha256": "985b25ca1a503d20330260f68605c2b661f944b8544ad654535dcfe1029b48e1"
+    },
+    {
+      "host": "native",
+      "case": "all-classes-global-little-compressed.mat",
+      "status": "passed",
+      "sha256": "13c541f513c4ceb0c4c844d1cab18e10cdc45781009897066beea5feb72a0b4b"
+    },
+    {
+      "host": "js",
+      "case": "all-classes-global-little-compressed.mat",
+      "status": "passed",
+      "sha256": "13c541f513c4ceb0c4c844d1cab18e10cdc45781009897066beea5feb72a0b4b"
+    },
+    {
+      "host": "native",
+      "case": "all-classes-global-little-plain.mat",
+      "status": "passed",
+      "sha256": "0484b7425b6365a5b3e543ce52efeb7c02cf24c259e5ef241f292cc550633003"
+    },
+    {
+      "host": "js",
+      "case": "all-classes-global-little-plain.mat",
+      "status": "passed",
+      "sha256": "0484b7425b6365a5b3e543ce52efeb7c02cf24c259e5ef241f292cc550633003"
+    },
+    {
+      "host": "native",
+      "case": "all-classes-little-compressed.mat",
+      "status": "passed",
+      "sha256": "b5c936580d36620a6dbee0fcc56a1951486b0e76762cdc2681c13ce634d8fafd"
+    },
+    {
+      "host": "js",
+      "case": "all-classes-little-compressed.mat",
+      "status": "passed",
+      "sha256": "b5c936580d36620a6dbee0fcc56a1951486b0e76762cdc2681c13ce634d8fafd"
+    },
+    {
+      "host": "native",
+      "case": "all-classes-little-plain.mat",
+      "status": "passed",
+      "sha256": "7bc63d1232b4d25a36c31bd3d879c00f15257ebfb25370c3afcada75528c2e6e"
+    },
+    {
+      "host": "js",
+      "case": "all-classes-little-plain.mat",
+      "status": "passed",
+      "sha256": "7bc63d1232b4d25a36c31bd3d879c00f15257ebfb25370c3afcada75528c2e6e"
+    },
+    {
+      "host": "native",
+      "case": "unselected-invalid-conversion.mat",
+      "status": "passed",
+      "expected_error": "value-range",
+      "no_partial_output": true
+    },
+    {
+      "host": "native",
+      "case": "unselected-bad-checksum.mat",
+      "status": "passed",
+      "expected_error": "invalid-zlib",
+      "no_partial_output": true
+    },
+    {
+      "host": "js",
+      "case": "unselected-invalid-conversion.mat",
+      "status": "passed",
+      "expected_error": "value-range",
+      "no_partial_output": true
+    },
+    {
+      "host": "js",
+      "case": "unselected-bad-checksum.mat",
+      "status": "passed",
+      "expected_error": "invalid-zlib",
+      "no_partial_output": true
+    },
+    {
+      "host": "native",
+      "case": "large sparse shape without densification",
+      "status": "passed"
+    },
+    {
+      "host": "js",
+      "case": "large sparse shape without densification",
+      "status": "passed"
+    }
+  ],
+  "passed": 22,
+  "scope": "Independent SciPy subset oracle, metadata classes, malformed unselected data, checksum validation and atomic CLI errors; both hosts"
+}

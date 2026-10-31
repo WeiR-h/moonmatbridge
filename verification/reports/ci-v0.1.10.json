@@ -1,0 +1,70 @@
+{
+  "status": "passed",
+  "version": "0.1.10",
+  "run_id": 41177075270,
+  "commit": "14890e41d053e36b9a0d4d21b204b8d458ac24d3",
+  "url": "https://github.com/WeiR-h/moonmatbridge/actions/runs/41177075270",
+  "environment": {
+    "moon": "moon 0.1.20261020 (2284bd2 2026-10-20)\n\nFeature flags enabled: rr_moon_mod,rr_moon_pkg",
+    "compiler": "v0.10.16+b1a0e846e (2026-10-16)",
+    "compiler_version": "0.10.16+b1a0e846e",
+    "standard_library_archive_sha256": "e7db6e3c80a97af953598b374cf14f3e330918b1ca4659b141b9f550c9c0adb0",
+    "standard_library_source_sha256": "4eea0c094e9a38bb4ba555e1c7c4e5f9f9abd362e22057e0f93f3ff04f8e609a",
+    "c_compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+    "native_backend": "c",
+    "native_environment": {
+      "MOONBIT_NEW_NATIVE": "0"
+    },
+    "node": "v24.22.1",
+    "platform": "linux",
+    "architecture": "x64",
+    "arch": "x64"
+  },
+  "source_sha256": "881e6b773e2bb8b7eb8366f3f257b2871ad723539ebc8f2fe166a170633f821a",
+  "platforms": {
+    "linux": {
+      "environment": {
+        "moon": "moon 0.1.20261020 (2284bd2 2026-10-20)\n\nFeature flags enabled: rr_moon_mod,rr_moon_pkg",
+        "compiler": "v0.10.16+b1a0e846e (2026-10-16)",
+        "compiler_version": "0.10.16+b1a0e846e",
+        "standard_library_archive_sha256": "e7db6e3c80a97af953598b374cf14f3e330918b1ca4659b141b9f550c9c0adb0",
+        "standard_library_source_sha256": "4eea0c094e9a38bb4ba555e1c7c4e5f9f9abd362e22057e0f93f3ff04f8e609a",
+        "c_compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "native_backend": "c",
+        "native_environment": {
+          "MOONBIT_NEW_NATIVE": "0"
+        },
+        "node": "v24.22.1",
+        "platform": "linux",
+        "architecture": "x64",
+        "arch": "x64"
+      },
+      "source_sha256": "881e6b773e2bb8b7eb8366f3f257b2871ad723539ebc8f2fe166a170633f821a",
+      "verification_groups": 31,
+      "coverage_sha256": "11955312e2b56033105ed754bbe889edd41f32907cce26ac973efb7f4af6a93d"
+    },
+    "windows": {
+      "environment": {
+        "moon": "moon 0.1.20261020 (2284bd2 2026-10-20)\n\nFeature flags enabled: rr_moon_mod,rr_moon_pkg",
+        "compiler": "v0.10.16+b1a0e846e (2026-10-16)",
+        "compiler_version": "0.10.16+b1a0e846e",
+        "standard_library_archive_sha256": "e7db6e3c80a97af953598b374cf14f3e330918b1ca4659b141b9f550c9c0adb0",
+        "standard_library_source_sha256": "31140145ca3db92e94781c7649073922fca6ec669d04b4219119dff611dba5f5",
+        "c_compiler": "Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35229 for x64",
+        "native_backend": "c",
+        "native_environment": {
+          "MOONBIT_NEW_NATIVE": "0"
+        },
+        "node": "v24.22.1",
+        "windows_sdk_version": "10.0.26100.0",
+        "platform": "win32",
+        "architecture": "x64",
+        "arch": "x64"
+      },
+      "source_sha256": "881e6b773e2bb8b7eb8366f3f257b2871ad723539ebc8f2fe166a170633f821a",
+      "verification_groups": 32,
+      "coverage_sha256": "ba181e0638bd0d68648e1186c50e9d6823ba712e5c39f708e7fbac8516417750"
+    }
+  },
+  "scope": "Actual newest Windows/Linux three-target CI run and real Octave artifacts for the fixed source commit."
+}

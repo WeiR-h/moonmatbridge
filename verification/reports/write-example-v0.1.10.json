@@ -1,0 +1,49 @@
+{
+  "status": "passed",
+  "version": "0.1.10",
+  "checks": [
+    {
+      "compressed": false,
+      "command": [
+        "node",
+        "scripts/moon.mjs",
+        "run",
+        "src/examples/write_large",
+        "--target",
+        "native",
+        "--",
+        "C:\\Users\\\u4f55\u6d69\u7136\\Desktop\\Competition\\MoonBit \u9ed1\u5ba2\u677e\\MoonMatBridge\\verification\\local\\write-example-utkhs2tj\\plain.mat",
+        "--small"
+      ],
+      "bytes": 1048776,
+      "sha256": "80e4481e14d2798919f3308cca4a52c40ca21689ea7db222cba67d0a815b4bdc",
+      "shape": [
+        131072,
+        1
+      ],
+      "oracle": "scipy.io.loadmat"
+    },
+    {
+      "compressed": true,
+      "command": [
+        "node",
+        "scripts/moon.mjs",
+        "run",
+        "src/examples/write_large",
+        "--target",
+        "native",
+        "--",
+        "C:\\Users\\\u4f55\u6d69\u7136\\Desktop\\Competition\\MoonBit \u9ed1\u5ba2\u677e\\MoonMatBridge\\verification\\local\\write-example-utkhs2tj\\compressed.mat",
+        "--small",
+        "--compressed"
+      ],
+      "bytes": 6840,
+      "sha256": "d25d5985fa15c3830db55c62f4194bfb8d93ed047a0e7b212408264153910d77",
+      "shape": [
+        131072,
+        1
+      ],
+      "oracle": "scipy.io.loadmat"
+    }
+  ]
+}

@@ -1,0 +1,540 @@
+{
+  "status": "characterized",
+  "version": "0.1.10",
+  "producer": "SciPy 1.15.3; independent Level 5 unit fixture encoder",
+  "reference": "https://www.mathworks.com/help/pdf_doc/matlab/matfile_format.pdf",
+  "cases": [
+    {
+      "file": "utf16-surrogate-units.mat",
+      "sha256": "be4989ddfe8ee501552dcdc6092edd5ba91cac10e58d221e7a88859bae037a0a",
+      "bytes": 264,
+      "expected_error": null,
+      "compatibility_state": "verified_storage_units",
+      "note": "UTF16 surrogate units preserved; does not prove every producer dimension convention",
+      "scipy": "TypeError: buffer is too small for requested array"
+    },
+    {
+      "file": "utf16-empty.mat",
+      "sha256": "ca1c1db013e4f717c52f6433a431a002a740ce43b09f20e11a8bee3eb4c1f1fc",
+      "bytes": 264,
+      "expected_error": null,
+      "compatibility_state": "verified",
+      "note": "Empty multidimensional UTF16",
+      "scipy": "readable"
+    },
+    {
+      "file": "csc-sorted.mat",
+      "sha256": "991b16def9b6ac510859ca358922ddb432e738bcd22b5a614d6b7b42256ee75f",
+      "bytes": 296,
+      "expected_error": null,
+      "compatibility_state": "verified",
+      "note": "Canonical CSC",
+      "scipy": "readable"
+    },
+    {
+      "file": "csc-unsorted.mat",
+      "sha256": "1b952f81aece74e7f9e8fdd60357874be343bcb9f01417f8cf999dc4eb528656",
+      "bytes": 296,
+      "expected_error": null,
+      "compatibility_state": "verified_storage",
+      "note": "Original row order and duplicate slots retained; densification uses mathematical values",
+      "scipy": "readable"
+    },
+    {
+      "file": "csc-duplicate.mat",
+      "sha256": "3cd1e07be6008a980ded3ebf717b8b7d59295208ea0c68cfb8dcaec3c6630452",
+      "bytes": 296,
+      "expected_error": null,
+      "compatibility_state": "verified_storage",
+      "note": "Original row order and duplicate slots retained; densification uses mathematical values",
+      "scipy": "readable"
+    },
+    {
+      "file": "legacy-object-data.mat",
+      "sha256": "a2a3961dffa2f3af7f6d734db51f09bdb0a3ca4c59e564f60817aebda55024d5",
+      "bytes": 960,
+      "expected_error": null,
+      "compatibility_state": "verified_data_only",
+      "note": "Legacy class name and fields; MATLAB runtime behavior unverified",
+      "scipy": "readable"
+    },
+    {
+      "file": "legacy-latin1-name.mat",
+      "sha256": "6de75380f35d3905348e912fb0033817927065c8413dbd8e13119ebe752d3b6c",
+      "bytes": 264,
+      "expected_error": "invalid-name",
+      "compatibility_state": "verified_explicit_codec",
+      "note": "UTF8 default rejects; explicit Latin1 read/write verified separately; no guessed decoding",
+      "scipy": "readable"
+    },
+    {
+      "file": "../octave/variants/producer-small_char_matrix-v6.mat",
+      "sha256": "d23d83890f497af58962c53a7061a0fd322b8f933656a2fc9d35a020f072f68a",
+      "compatibility_state": "unresolved_producer_variant",
+      "note": "Current execution is recorded separately by real Octave CI"
+    },
+    {
+      "file": "../octave/variants/producer-small_char_matrix-v7.mat",
+      "sha256": "3bb116fec5e28f4c4d6f6ba2823dcc98ee1864d412e0ef82e26760176fc41ecb",
+      "compatibility_state": "unresolved_producer_variant",
+      "note": "Current execution is recorded separately by real Octave CI"
+    },
+    {
+      "file": "../octave/variants/producer-sparse_logical-v6.mat",
+      "sha256": "5c760b3fa57eb59e28dbf9b000dbd055bc15d12d84b66b3bdc9d5429dfab1209",
+      "compatibility_state": "unresolved_producer_variant",
+      "note": "Current execution is recorded separately by real Octave CI"
+    },
+    {
+      "file": "../octave/variants/producer-sparse_logical-v7.mat",
+      "sha256": "9da49c15b4629c7edee4f41261195ce4f77130be3af4fc26e7d6b2ff1c60b543",
+      "compatibility_state": "unresolved_producer_variant",
+      "note": "Current execution is recorded separately by real Octave CI"
+    }
+  ],
+  "checks": [
+    {
+      "case": "utf16-surrogate-units.mat",
+      "host": "native",
+      "operation": "info",
+      "actual": "accepted",
+      "compatibility_state": "verified_storage_units"
+    },
+    {
+      "case": "utf16-surrogate-units.mat",
+      "host": "native",
+      "operation": "roots",
+      "actual": "accepted",
+      "compatibility_state": "verified_storage_units"
+    },
+    {
+      "case": "utf16-surrogate-units.mat",
+      "host": "native",
+      "operation": "select",
+      "actual": "accepted",
+      "compatibility_state": "verified_storage_units"
+    },
+    {
+      "case": "utf16-surrogate-units.mat",
+      "host": "native",
+      "operation": "roundtrip",
+      "actual": "storage_verified",
+      "compatibility_state": "verified_storage_units"
+    },
+    {
+      "case": "utf16-surrogate-units.mat",
+      "host": "js",
+      "operation": "info",
+      "actual": "accepted",
+      "compatibility_state": "verified_storage_units"
+    },
+    {
+      "case": "utf16-surrogate-units.mat",
+      "host": "js",
+      "operation": "roots",
+      "actual": "accepted",
+      "compatibility_state": "verified_storage_units"
+    },
+    {
+      "case": "utf16-surrogate-units.mat",
+      "host": "js",
+      "operation": "select",
+      "actual": "accepted",
+      "compatibility_state": "verified_storage_units"
+    },
+    {
+      "case": "utf16-surrogate-units.mat",
+      "host": "js",
+      "operation": "roundtrip",
+      "actual": "storage_verified",
+      "compatibility_state": "verified_storage_units"
+    },
+    {
+      "case": "utf16-empty.mat",
+      "host": "native",
+      "operation": "info",
+      "actual": "accepted",
+      "compatibility_state": "verified"
+    },
+    {
+      "case": "utf16-empty.mat",
+      "host": "native",
+      "operation": "roots",
+      "actual": "accepted",
+      "compatibility_state": "verified"
+    },
+    {
+      "case": "utf16-empty.mat",
+      "host": "native",
+      "operation": "select",
+      "actual": "accepted",
+      "compatibility_state": "verified"
+    },
+    {
+      "case": "utf16-empty.mat",
+      "host": "native",
+      "operation": "roundtrip",
+      "actual": "storage_verified",
+      "compatibility_state": "verified"
+    },
+    {
+      "case": "utf16-empty.mat",
+      "host": "js",
+      "operation": "info",
+      "actual": "accepted",
+      "compatibility_state": "verified"
+    },
+    {
+      "case": "utf16-empty.mat",
+      "host": "js",
+      "operation": "roots",
+      "actual": "accepted",
+      "compatibility_state": "verified"
+    },
+    {
+      "case": "utf16-empty.mat",
+      "host": "js",
+      "operation": "select",
+      "actual": "accepted",
+      "compatibility_state": "verified"
+    },
+    {
+      "case": "utf16-empty.mat",
+      "host": "js",
+      "operation": "roundtrip",
+      "actual": "storage_verified",
+      "compatibility_state": "verified"
+    },
+    {
+      "case": "csc-sorted.mat",
+      "host": "native",
+      "operation": "info",
+      "actual": "accepted",
+      "compatibility_state": "verified"
+    },
+    {
+      "case": "csc-sorted.mat",
+      "host": "native",
+      "operation": "roots",
+      "actual": "accepted",
+      "compatibility_state": "verified"
+    },
+    {
+      "case": "csc-sorted.mat",
+      "host": "native",
+      "operation": "select",
+      "actual": "accepted",
+      "compatibility_state": "verified"
+    },
+    {
+      "case": "csc-sorted.mat",
+      "host": "native",
+      "operation": "roundtrip",
+      "actual": "storage_verified",
+      "compatibility_state": "verified"
+    },
+    {
+      "case": "csc-sorted.mat",
+      "host": "js",
+      "operation": "info",
+      "actual": "accepted",
+      "compatibility_state": "verified"
+    },
+    {
+      "case": "csc-sorted.mat",
+      "host": "js",
+      "operation": "roots",
+      "actual": "accepted",
+      "compatibility_state": "verified"
+    },
+    {
+      "case": "csc-sorted.mat",
+      "host": "js",
+      "operation": "select",
+      "actual": "accepted",
+      "compatibility_state": "verified"
+    },
+    {
+      "case": "csc-sorted.mat",
+      "host": "js",
+      "operation": "roundtrip",
+      "actual": "storage_verified",
+      "compatibility_state": "verified"
+    },
+    {
+      "case": "csc-unsorted.mat",
+      "host": "native",
+      "operation": "info",
+      "actual": "accepted",
+      "compatibility_state": "verified_storage"
+    },
+    {
+      "case": "csc-unsorted.mat",
+      "host": "native",
+      "operation": "roots",
+      "actual": "accepted",
+      "compatibility_state": "verified_storage"
+    },
+    {
+      "case": "csc-unsorted.mat",
+      "host": "native",
+      "operation": "select",
+      "actual": "accepted",
+      "compatibility_state": "verified_storage"
+    },
+    {
+      "case": "csc-unsorted.mat",
+      "host": "native",
+      "operation": "roundtrip",
+      "actual": "storage_verified",
+      "compatibility_state": "verified_storage"
+    },
+    {
+      "case": "csc-unsorted.mat",
+      "host": "js",
+      "operation": "info",
+      "actual": "accepted",
+      "compatibility_state": "verified_storage"
+    },
+    {
+      "case": "csc-unsorted.mat",
+      "host": "js",
+      "operation": "roots",
+      "actual": "accepted",
+      "compatibility_state": "verified_storage"
+    },
+    {
+      "case": "csc-unsorted.mat",
+      "host": "js",
+      "operation": "select",
+      "actual": "accepted",
+      "compatibility_state": "verified_storage"
+    },
+    {
+      "case": "csc-unsorted.mat",
+      "host": "js",
+      "operation": "roundtrip",
+      "actual": "storage_verified",
+      "compatibility_state": "verified_storage"
+    },
+    {
+      "case": "csc-duplicate.mat",
+      "host": "native",
+      "operation": "info",
+      "actual": "accepted",
+      "compatibility_state": "verified_storage"
+    },
+    {
+      "case": "csc-duplicate.mat",
+      "host": "native",
+      "operation": "roots",
+      "actual": "accepted",
+      "compatibility_state": "verified_storage"
+    },
+    {
+      "case": "csc-duplicate.mat",
+      "host": "native",
+      "operation": "select",
+      "actual": "accepted",
+      "compatibility_state": "verified_storage"
+    },
+    {
+      "case": "csc-duplicate.mat",
+      "host": "native",
+      "operation": "roundtrip",
+      "actual": "storage_verified",
+      "compatibility_state": "verified_storage"
+    },
+    {
+      "case": "csc-duplicate.mat",
+      "host": "js",
+      "operation": "info",
+      "actual": "accepted",
+      "compatibility_state": "verified_storage"
+    },
+    {
+      "case": "csc-duplicate.mat",
+      "host": "js",
+      "operation": "roots",
+      "actual": "accepted",
+      "compatibility_state": "verified_storage"
+    },
+    {
+      "case": "csc-duplicate.mat",
+      "host": "js",
+      "operation": "select",
+      "actual": "accepted",
+      "compatibility_state": "verified_storage"
+    },
+    {
+      "case": "csc-duplicate.mat",
+      "host": "js",
+      "operation": "roundtrip",
+      "actual": "storage_verified",
+      "compatibility_state": "verified_storage"
+    },
+    {
+      "case": "legacy-object-data.mat",
+      "host": "native",
+      "operation": "info",
+      "actual": "accepted",
+      "compatibility_state": "verified_data_only"
+    },
+    {
+      "case": "legacy-object-data.mat",
+      "host": "native",
+      "operation": "roots",
+      "actual": "accepted",
+      "compatibility_state": "verified_data_only"
+    },
+    {
+      "case": "legacy-object-data.mat",
+      "host": "native",
+      "operation": "select",
+      "actual": "accepted",
+      "compatibility_state": "verified_data_only"
+    },
+    {
+      "case": "legacy-object-data.mat",
+      "host": "native",
+      "operation": "roundtrip",
+      "actual": "storage_verified",
+      "compatibility_state": "verified_data_only"
+    },
+    {
+      "case": "legacy-object-data.mat",
+      "host": "js",
+      "operation": "info",
+      "actual": "accepted",
+      "compatibility_state": "verified_data_only"
+    },
+    {
+      "case": "legacy-object-data.mat",
+      "host": "js",
+      "operation": "roots",
+      "actual": "accepted",
+      "compatibility_state": "verified_data_only"
+    },
+    {
+      "case": "legacy-object-data.mat",
+      "host": "js",
+      "operation": "select",
+      "actual": "accepted",
+      "compatibility_state": "verified_data_only"
+    },
+    {
+      "case": "legacy-object-data.mat",
+      "host": "js",
+      "operation": "roundtrip",
+      "actual": "storage_verified",
+      "compatibility_state": "verified_data_only"
+    },
+    {
+      "case": "legacy-latin1-name.mat",
+      "host": "native",
+      "operation": "info",
+      "actual": "invalid-name",
+      "compatibility_state": "verified_explicit_codec"
+    },
+    {
+      "case": "legacy-latin1-name.mat",
+      "host": "native",
+      "operation": "roots",
+      "actual": "invalid-name",
+      "compatibility_state": "verified_explicit_codec"
+    },
+    {
+      "case": "legacy-latin1-name.mat",
+      "host": "native",
+      "operation": "select",
+      "actual": "invalid-name",
+      "compatibility_state": "verified_explicit_codec"
+    },
+    {
+      "case": "legacy-latin1-name.mat",
+      "host": "native",
+      "operation": "info",
+      "name_encoding": "latin1",
+      "actual": "accepted",
+      "compatibility_state": "verified_explicit_codec"
+    },
+    {
+      "case": "legacy-latin1-name.mat",
+      "host": "native",
+      "operation": "roots",
+      "name_encoding": "latin1",
+      "actual": "accepted",
+      "compatibility_state": "verified_explicit_codec"
+    },
+    {
+      "case": "legacy-latin1-name.mat",
+      "host": "native",
+      "operation": "select",
+      "name_encoding": "latin1",
+      "actual": "accepted",
+      "compatibility_state": "verified_explicit_codec"
+    },
+    {
+      "case": "legacy-latin1-name.mat",
+      "host": "native",
+      "operation": "roundtrip",
+      "name_encoding": "latin1",
+      "actual": "accepted",
+      "compatibility_state": "verified_explicit_codec"
+    },
+    {
+      "case": "legacy-latin1-name.mat",
+      "host": "js",
+      "operation": "info",
+      "actual": "invalid-name",
+      "compatibility_state": "verified_explicit_codec"
+    },
+    {
+      "case": "legacy-latin1-name.mat",
+      "host": "js",
+      "operation": "roots",
+      "actual": "invalid-name",
+      "compatibility_state": "verified_explicit_codec"
+    },
+    {
+      "case": "legacy-latin1-name.mat",
+      "host": "js",
+      "operation": "select",
+      "actual": "invalid-name",
+      "compatibility_state": "verified_explicit_codec"
+    },
+    {
+      "case": "legacy-latin1-name.mat",
+      "host": "js",
+      "operation": "info",
+      "name_encoding": "latin1",
+      "actual": "accepted",
+      "compatibility_state": "verified_explicit_codec"
+    },
+    {
+      "case": "legacy-latin1-name.mat",
+      "host": "js",
+      "operation": "roots",
+      "name_encoding": "latin1",
+      "actual": "accepted",
+      "compatibility_state": "verified_explicit_codec"
+    },
+    {
+      "case": "legacy-latin1-name.mat",
+      "host": "js",
+      "operation": "select",
+      "name_encoding": "latin1",
+      "actual": "accepted",
+      "compatibility_state": "verified_explicit_codec"
+    },
+    {
+      "case": "legacy-latin1-name.mat",
+      "host": "js",
+      "operation": "roundtrip",
+      "name_encoding": "latin1",
+      "actual": "accepted",
+      "compatibility_state": "verified_explicit_codec"
+    }
+  ],
+  "scope": "Assertions check observed supported/rejected behavior; unresolved cases are NOT compatibility passes. MATLAB execution not claimed."
+}

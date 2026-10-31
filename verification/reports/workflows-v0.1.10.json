@@ -1,0 +1,249 @@
+{
+  "status": "passed",
+  "version": "0.1.10",
+  "producer": "SciPy 1.15.3 / NumPy 2.2.6",
+  "passed": 6,
+  "checks": [
+    {
+      "host": "native",
+      "workflow": "mixed experimental archive",
+      "status": "passed",
+      "assertions": [
+        "13 roots and recursive containers",
+        "additional downloadable file covers every base class 1 through 15",
+        "independent SciPy deep type/shape/field and raw numeric byte equality",
+        "UTF8 labels and exact uint64",
+        "compressed roots decoded then rewritten",
+        "mixed tree snapshot restored via bounded output and exact comparison"
+      ],
+      "outputs": [
+        {
+          "file": "native-archive-compressed.mat",
+          "bytes": 1652,
+          "sha256": "09d76db1adacd8b378d4082b9f95741145bcb868fba518855715e4f48d6f3102"
+        },
+        {
+          "file": "native-archive-restored.mat",
+          "bytes": 3688,
+          "sha256": "805ff952f5cb54cc1eab638e6052ba563da1ae1530f6e5731305337fff2a9cd5"
+        },
+        {
+          "file": "native-all-base-classes.mat",
+          "bytes": 7864,
+          "sha256": "87d810e54ba9a88c5c3349bd42a2938bb87a50dfdcdf599677f5b3c43cfa1160"
+        },
+        {
+          "file": "native-archive-tree.json",
+          "bytes": 5826,
+          "sha256": "2d702102320a1993706f365e08c3232fcb0b60b1d87f88b4632e4d30bd725900"
+        },
+        {
+          "file": "native-archive-tree-restored.mat",
+          "bytes": 3688,
+          "sha256": "805ff952f5cb54cc1eab638e6052ba563da1ae1530f6e5731305337fff2a9cd5"
+        },
+        {
+          "file": "native-archive-tree-diff.json",
+          "bytes": 172,
+          "sha256": "1b2dc8b82a88bbcab92db03bd432a1ef2c2a124e70ce83460788c947c47b0e09"
+        }
+      ]
+    },
+    {
+      "host": "native",
+      "workflow": "large sparse simulation exchange",
+      "status": "passed",
+      "assertions": [
+        "1,000,000 by 1,000 with three stored slots",
+        "configuration and Chinese label alongside CSC",
+        "selected CSC snapshot/restore and exact diff",
+        "independent pointers/rows/negative zero and capacity",
+        "explicit densify rejects element limit without partial output"
+      ],
+      "outputs": [
+        {
+          "file": "native-system-only.mat",
+          "bytes": 4256,
+          "sha256": "96b3c7aa2a823c8cb70af3da8cee192421dfcadeb6ca5a4c4611eb75416fb622"
+        },
+        {
+          "file": "native-system-snapshot.json",
+          "bytes": 2317,
+          "sha256": "7c91f2738b8897d3933e77aac636285816bfa7c8dedd6be126366834d0e57b30"
+        },
+        {
+          "file": "native-system-restored.mat",
+          "bytes": 4256,
+          "sha256": "96b3c7aa2a823c8cb70af3da8cee192421dfcadeb6ca5a4c4611eb75416fb622"
+        }
+      ]
+    },
+    {
+      "host": "native",
+      "workflow": "NumPy to MoonBit transform and difference check",
+      "status": "passed",
+      "assertions": [
+        "NPY to MAT to reshape/permute/slice/gather to NPY",
+        "independent NumPy column-major and raw-byte oracle",
+        "input NaN payload and signed zero preserved",
+        "diff exit 0 equal and exit 2 at coordinate [0,0]",
+        "explicit 0.25 symmetric tolerance accepts the changed value with equal_nan enabled",
+        "missing export exit 1 with no partial output"
+      ],
+      "outputs": [
+        {
+          "file": "native-signal.mat",
+          "bytes": 584,
+          "sha256": "2d8edee8579cef418f1e820059237173c59f740a1aa584cb123f731377c1f5da"
+        },
+        {
+          "file": "native-transformed.mat",
+          "bytes": 288,
+          "sha256": "e10c088fd2a1ef4bd1066a594d910abb4bb8175e6c21bc1a01dfa69e24d73c7a"
+        },
+        {
+          "file": "native-transformed.npy",
+          "bytes": 224,
+          "sha256": "71a57179202d5733a95de594c5b709fb32490cd2173da1c5d93f6e7fe5c13bc2"
+        },
+        {
+          "file": "native-changed-report.json",
+          "bytes": 422,
+          "sha256": "f3161247024b8b5d6952105b9bac10da3c0c3a4db073b24c46a8438bf595ca28"
+        },
+        {
+          "file": "native-tolerance.json",
+          "bytes": 45,
+          "sha256": "901828740aadb6e9284be9e645c8a5e297889bdf8e1ed3c1968c5718a9d714ef"
+        },
+        {
+          "file": "native-tolerance-report.json",
+          "bytes": 234,
+          "sha256": "a19e45ae9103a0ea7009262845229161fd3ce1d6033c4bca39729bc2bbeb11f4"
+        }
+      ]
+    },
+    {
+      "host": "js",
+      "workflow": "mixed experimental archive",
+      "status": "passed",
+      "assertions": [
+        "13 roots and recursive containers",
+        "additional downloadable file covers every base class 1 through 15",
+        "independent SciPy deep type/shape/field and raw numeric byte equality",
+        "UTF8 labels and exact uint64",
+        "compressed roots decoded then rewritten",
+        "mixed tree snapshot restored via bounded output and exact comparison"
+      ],
+      "outputs": [
+        {
+          "file": "js-archive-compressed.mat",
+          "bytes": 1652,
+          "sha256": "09d76db1adacd8b378d4082b9f95741145bcb868fba518855715e4f48d6f3102"
+        },
+        {
+          "file": "js-archive-restored.mat",
+          "bytes": 3688,
+          "sha256": "805ff952f5cb54cc1eab638e6052ba563da1ae1530f6e5731305337fff2a9cd5"
+        },
+        {
+          "file": "js-all-base-classes.mat",
+          "bytes": 7864,
+          "sha256": "87d810e54ba9a88c5c3349bd42a2938bb87a50dfdcdf599677f5b3c43cfa1160"
+        },
+        {
+          "file": "js-archive-tree.json",
+          "bytes": 5826,
+          "sha256": "2d702102320a1993706f365e08c3232fcb0b60b1d87f88b4632e4d30bd725900"
+        },
+        {
+          "file": "js-archive-tree-restored.mat",
+          "bytes": 3688,
+          "sha256": "805ff952f5cb54cc1eab638e6052ba563da1ae1530f6e5731305337fff2a9cd5"
+        },
+        {
+          "file": "js-archive-tree-diff.json",
+          "bytes": 172,
+          "sha256": "1b2dc8b82a88bbcab92db03bd432a1ef2c2a124e70ce83460788c947c47b0e09"
+        }
+      ]
+    },
+    {
+      "host": "js",
+      "workflow": "large sparse simulation exchange",
+      "status": "passed",
+      "assertions": [
+        "1,000,000 by 1,000 with three stored slots",
+        "configuration and Chinese label alongside CSC",
+        "selected CSC snapshot/restore and exact diff",
+        "independent pointers/rows/negative zero and capacity",
+        "explicit densify rejects element limit without partial output"
+      ],
+      "outputs": [
+        {
+          "file": "js-system-only.mat",
+          "bytes": 4256,
+          "sha256": "96b3c7aa2a823c8cb70af3da8cee192421dfcadeb6ca5a4c4611eb75416fb622"
+        },
+        {
+          "file": "js-system-snapshot.json",
+          "bytes": 2317,
+          "sha256": "7c91f2738b8897d3933e77aac636285816bfa7c8dedd6be126366834d0e57b30"
+        },
+        {
+          "file": "js-system-restored.mat",
+          "bytes": 4256,
+          "sha256": "96b3c7aa2a823c8cb70af3da8cee192421dfcadeb6ca5a4c4611eb75416fb622"
+        }
+      ]
+    },
+    {
+      "host": "js",
+      "workflow": "NumPy to MoonBit transform and difference check",
+      "status": "passed",
+      "assertions": [
+        "NPY to MAT to reshape/permute/slice/gather to NPY",
+        "independent NumPy column-major and raw-byte oracle",
+        "input NaN payload and signed zero preserved",
+        "diff exit 0 equal and exit 2 at coordinate [0,0]",
+        "explicit 0.25 symmetric tolerance accepts the changed value with equal_nan enabled",
+        "missing export exit 1 with no partial output"
+      ],
+      "outputs": [
+        {
+          "file": "js-signal.mat",
+          "bytes": 584,
+          "sha256": "2d8edee8579cef418f1e820059237173c59f740a1aa584cb123f731377c1f5da"
+        },
+        {
+          "file": "js-transformed.mat",
+          "bytes": 288,
+          "sha256": "e10c088fd2a1ef4bd1066a594d910abb4bb8175e6c21bc1a01dfa69e24d73c7a"
+        },
+        {
+          "file": "js-transformed.npy",
+          "bytes": 224,
+          "sha256": "71a57179202d5733a95de594c5b709fb32490cd2173da1c5d93f6e7fe5c13bc2"
+        },
+        {
+          "file": "js-changed-report.json",
+          "bytes": 422,
+          "sha256": "f3161247024b8b5d6952105b9bac10da3c0c3a4db073b24c46a8438bf595ca28"
+        },
+        {
+          "file": "js-tolerance.json",
+          "bytes": 45,
+          "sha256": "901828740aadb6e9284be9e645c8a5e297889bdf8e1ed3c1968c5718a9d714ef"
+        },
+        {
+          "file": "js-tolerance-report.json",
+          "bytes": 234,
+          "sha256": "a19e45ae9103a0ea7009262845229161fd3ce1d6033c4bca39729bc2bbeb11f4"
+        }
+      ]
+    }
+  ],
+  "consumer_environment": "MoonBit/Python/module injection variables removed; native PATH contains only Windows System32 or Linux system bins",
+  "scope": "Actual native and JS commands plus independent Python oracles; examples demonstrate reproducible workflows, not external adoption or organizer acceptance.",
+  "reproduction_repetitions": 2
+}
