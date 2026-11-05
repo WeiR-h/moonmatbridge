@@ -1,18 +1,19 @@
-# 科研流程的复现与验收
+# 科研流程复现
 
-本轮提供三个从输入到独立核对的完整场景。输入、生成器、命令和结果报告均在仓库中；原生程序无需 Python 或 MATLAB 运行时。独立核对工具属于开发依赖。
+三个科研流程都提供输入、命令、预期结果和独立核对方法。Windows 便携演示使用包内程序和样例。独立核对使用 Python、NumPy 和 SciPy。
 
 ## 从公开发行包运行
 
-下载 [v0.1.9 Windows 便携包](https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.1.9)，解压后执行：
+从 [v0.1.11 发行页](https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.1.11) 下载 `MoonMatBridge-v0.1.11-windows-x64.zip`，解压到路径较短的目录，然后在含 `moonmat.exe` 的目录执行以下命令。
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File examples/workflows/demo.ps1
+$results = Join-Path $env:TEMP ('moonmat-demo-' + [guid]::NewGuid().ToString('N'))
+powershell -NoProfile -ExecutionPolicy Bypass -File .\examples\workflows\demo.ps1 -OutputDirectory $results
 ```
 
-脚本新建唯一目录，记录命令的预期/实际退出码、返回值、程序哈希和结果哈希。相同输入结果可由 `diff` 检查；输出路径始终要求新文件。实际执行回执位于结果目录 `demo-receipt.json`，便携包验证的日志由打包脚本保存。
+终端末行显示新建的结果目录。目录中的 `demo-receipt.json` 记录预期及实际退出码、返回值、程序哈希和结果哈希。Windows 上解压位置层级较深时，默认生成的结果路径可能过长。以上命令显式将结果写到临时目录。[公开便携演示回执](../verification/reports/workflows-demo-public-v0.1.11.json)
 
-发行页另附 `MoonMatBridge-v0.1.9-workflows.zip`，包含本版 native/JS 的实际输出、原始输入、独立核对报告及逐文件哈希。解压后可用 `examples/workflows/demo.ps1 -Executable 原生程序绝对路径` 在新目录复现。该证据包没有自带 EXE，使用同版 Windows 包中的程序。
+发行页另附 `MoonMatBridge-v0.1.11-workflows.zip`，包含 native/JS 的实际输出、原始输入、独立核对报告及逐文件哈希。可在该包中运行同一个脚本，加上 `-Executable` 和同版 Windows 包中 `moonmat.exe` 的绝对路径。
 
 ## 场景一：混合实验归档
 
@@ -20,7 +21,7 @@ powershell -ExecutionPolicy Bypass -File examples/workflows/demo.ps1
 
 另附 `examples/workflows/all-base-classes.mat`，将全部 15 个公开基本类、数值多维/空多维和交叉嵌套集中到一个可下载文件中。根目录检查确认类集合 1—15，再由两宿主写回并接受独立核对；原件同时作为发行页单独附件提供。
 
-SciPy 独立读入原件与两份输出，递归比较字段顺序、形状、字符、数值类型和小端原始数值字节。MAT 头部说明和压缩布局可以变化。完整混合树 diff/快照不属于本轮，归档验收采用独立深比较。
+使用 `snapshot-tree`、`restore-tree` 完成完整混合树归档与恢复，再用 `diff-tree` 确认数据与存储元数据一致，预期退出码为 0。SciPy 独立读取原件和 MAT 往返结果，递归核对字段顺序、形状、字符、数值类型和原始数值字节。
 
 ## 场景二：大型稀疏仿真交换
 
@@ -32,19 +33,13 @@ SciPy 独立读入原件与两份输出，递归比较字段顺序、形状、�
 
 输入是 4×6×2、列优先 float64 NPY，原始位包含 `0x7ff8000000000042` NaN 和负零。转换为 MAT 后按固定 JSON 计划整形为 8×6、置换轴、切片，再按轴取样；结果导出为 3×4 NPY。
 
-NumPy 独立计算预期结果，用原始字节核对类型、维度和数据。相同结果比较退出 0；预制参考文件只将 `[0,0]` 增加 0.25，比较退出 2，报告定位该坐标和一个差异；遗漏变量导出退出 1，不留下文件。
+NumPy 独立计算预期结果，用原始字节核对类型、维度和数据。相同结果比较退出 0。预制参考文件将 `[0,0]` 增加 0.25，精确比较退出 2，报告定位该坐标。`diff-tree-close` 使用 `atol=0.25`、`rtol=0` 和 `equal_nan=true` 时退出 0，报告记录 `within_tolerance: true`、`exact_equal: false`。遗漏变量导出退出 1，目标文件保持不存在。
 
 ## 开发者的独立验证
 
-安装 `requirements-dev.txt` 中的 NumPy/SciPy 后运行 `npm run verify`。其中：
+按 [版本交付说明](RELEASING.md) 配置工具链及 `requirements-dev.txt` 中的依赖，再运行 `npm run verify`。
 
 - `examples/python/workflow_inputs.py` 独立生成固定输入，验证器检查其与公开样例逐字节一致。
-- `scripts/scientific-workflows.py` 在 native、JS 分别执行三个场景，共 6 组。报告为 `verification/reports/workflows-v0.1.9.json`，附输出哈希。
+- `scripts/scientific-workflows.py` 在 native、JS 分别执行三个场景。报告记录实际执行次数、断言和输出哈希。[v0.1.11 源码验证](../verification/reports/workflows-v0.1.11.json)
 - 全部基本类、全局标记、字符存储、CSC 容量、损坏输入和三目标测试由其他分组继续执行，不被演示替代。
-- GitHub 发布后重新下载全部资产，并使用下载的 EXE、预编译 JS 和输入重跑这 6 组；回执单列为 `workflows-public-v0.1.9.json`。本地成功不自动记为公开复验成功。
-
-这些是可复现科研流程，不代表已有真实用户采用、MATLAB 执行、主办方复审或获奖。
-
-混合归档流程同时执行完整树快照、分块恢复写出及精确比较；压缩写出由增量 MoonBit DEFLATE 完成，独立科学工具验证结果。写出原子性及额度见 [SINKS.md](SINKS.md)。
-
-NumPy 流程同时演示精确变化退出码 2 和显式 atol=0.25、equal_nan=true 的容差通过退出码 0。公开 Windows 包只需运行 examples/workflows/demo.ps1，即可执行三个流程、完整混合树快照恢复和比较；新输出目录包含命令、结果与文件哈希。独立 SciPy/NumPy 验证使用源码中的科学流程脚本。
+- 公开复验使用下载的 EXE、预编译 JS 和样例，独立核对结果及输出哈希。[v0.1.11 公开复验](../verification/reports/workflows-public-v0.1.11.json)

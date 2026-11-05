@@ -16,7 +16,20 @@
 
 ## 完整流程
 
-从 [v0.1.11 发行页](https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.1.11) 获取 Windows、JS、源码或科研流程包。运行 Windows 包内的 `examples/workflows/demo.ps1`，或按 [科研流程说明](SCIENTIFIC_WORKFLOWS.md) 重现混合实验归档、稀疏仿真交换及 NumPy 转换与比较。
+从 [v0.1.11 发行页](https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.1.11) 下载 `MoonMatBridge-v0.1.11-windows-x64.zip`。解压到路径较短的目录，在含 `moonmat.exe` 的目录中执行以下命令。
+
+```powershell
+$results = Join-Path $env:TEMP ('moonmat-demo-' + [guid]::NewGuid().ToString('N'))
+powershell -NoProfile -ExecutionPolicy Bypass -File .\examples\workflows\demo.ps1 -OutputDirectory $results
+```
+
+终端会显示结果目录，其中的 `demo-receipt.json` 保存三个科研流程的命令、退出码和文件哈希。需要使用 MoonBit API 时，按 [README 的公开包消费者步骤](../README.md#moonbit-api) 在独立目录运行最小示例。完整输入、预期结果和独立核对方法见 [科研流程说明](SCIENTIFIC_WORKFLOWS.md)。
+
+## v0.1.11 验证证据
+
+- 固定源码 `242f58b`，发行标签 `da564f4`。Windows/Linux CI 覆盖 JS、wasm-gc、native 的检查、构建和测试，Linux 执行真实 GNU Octave 验证。[CI 执行](https://github.com/WeiR-h/moonmatbridge/actions/runs/41206292702) · [测试报告](../verification/reports/v0.1.11.json) · [Octave 报告](../verification/reports/octave-v0.1.11.json)
+- 从公开 Mooncakes 包安装精确版本并运行三目标消费者。公开安装包内的 182 个文件与 GitHub 发行标签逐字节一致。GitHub 另提供工具、运行资产和报告。[安装回执](../verification/reports/registry-v0.1.11.json) · [包文件及 SHA-256](../verification/reports/mooncake-audit-v0.1.11.json) · [固定标签](https://github.com/WeiR-h/moonmatbridge/tree/v0.1.11)
+- 使用公开下载的 Windows 程序和 JS 模块重跑三个科研流程，核对结果哈希及四种发行包中的许可材料。[三流程回执](../verification/reports/workflows-public-v0.1.11.json) · [便携演示回执](../verification/reports/workflows-demo-public-v0.1.11.json) · [许可核对](../verification/reports/licenses-public-v0.1.11.json)
 
 `verification/reports` 按版本保存实际验证结果。`v*.json` 包含检查分组、工具版本、源码指纹和 native 哈希；`ci-*` 记录真实执行地址；`octave-*` 记录双向互操作；`mooncakes-*`、`public-downloads-*`、`workflows-public-*` 记录公开消费；`licenses-*` 校验发行包许可。测试数量与覆盖率取自实际报告，不在此固定维护。
 
