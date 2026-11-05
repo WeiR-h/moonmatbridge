@@ -4,16 +4,21 @@ import {copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirS
 import {dirname, join, relative} from 'node:path';
 import {tmpdir} from 'node:os';
 import {createHash} from 'node:crypto';
-import {root, toolchain, version} from './moon.mjs';
+import {root, toolchain, version as checkoutVersion} from './moon.mjs';
 import {nativeEnv} from './build-native.mjs';
 import {sourceFingerprint} from './verify.mjs';
 
 const moduleName = 'WeiR-h/moonmatbridge';
+const args = process.argv.slice(2);
+const published = args[0] === '--published' && args.length === 2 && /^\d+\.\d+\.\d+$/.test(args[1]);
+if (args.length && !published) throw new Error('Usage: registry-verify.mjs [--published VERSION]');
+const version = published ? args[1] : checkoutVersion;
 const directory = mkdtempSync(join(tmpdir(), 'moonmatbridge-registry-'));
 const report = {status: 'running', version, module: moduleName,
-  source: sourceFingerprint(), platform: process.platform,
-  method: 'Exact Mooncakes dependency in a fresh project; no moon.work, no path override; all installed src bytes compared.',
-  steps: [], installed_files: 0};
+  ...(published ? {} : {source: sourceFingerprint(), installed_files: 0}), platform: process.platform,
+  method: published ? 'Exact public dependency and unmodified example in a fresh project.' :
+    'Exact Mooncakes dependency in a fresh project; no moon.work, no path override; all installed src bytes compared.',
+  steps: []};
 const t = toolchain();
 function run(args, extraEnv = {}) {
   if (['check', 'test'].includes(args[0])) args = [...args, '--jobs', '1'];
@@ -34,11 +39,6 @@ try {
   for (const name of ['moon.mod', 'moon.pkg', 'consumer_wbtest.mbt', 'main.mbt']) {
     copyFileSync(join(root, 'examples/registry_consumer', name), join(directory, name));
   }
-  // Ordinary source exercises both imports during non-test `moon check` too.
-  writeFileSync(join(directory, 'consumer.mbt'),
-    '///|\npub fn installed_version() -> String { @mat.version() }\n' +
-    '///|\npub fn snapshot(bytes : Bytes) -> String raise @mat.MatError {\n' +
-    '  @wire.to_snapshot(@mat.read_document(bytes).variables)\n}\n');
   run(['add', moduleName + '@' + version]);
   const consumerManifest = readFileSync(join(directory, 'moon.mod'), 'utf8');
   if (existsSync(join(directory, 'moon.work')) || /\bpath\s*=/.test(consumerManifest)) {
@@ -65,12 +65,12 @@ try {
       }
     }
   }
-  compareSources(join(root, 'src'));
-  run(['check', '--target', 'js', '--deny-warn']);
+  if (!published) compareSources(join(root, 'src'));
+  const expected = (readFileSync(join(directory, 'consumer_wbtest.mbt'), 'utf8').match(/^test /gm) || []).length;
   for (const target of ['js', 'wasm-gc', 'native']) {
     const extra = target === 'native' ? nativeEnv() : {};
+    run(['check', '--target', target, '--deny-warn'], extra);
     const output = run(['test', '--target', target, '--deny-warn'], extra);
-    const expected = (readFileSync(join(root, 'examples/registry_consumer/consumer_wbtest.mbt'), 'utf8').match(/^test /gm) || []).length;
     if (!output.includes(`Total tests: ${expected}, passed: ${expected}, failed: 0`)) throw new Error('Consumer tests did not execute for ' + target);
     const demonstration=run(['run', '.', '--target', target], extra);
     if (!demonstration.includes(`MoonMatBridge ${version}: signal has 2 values`)) throw new Error('Published executable consumer did not run');
@@ -79,6 +79,8 @@ try {
 } catch (error) {
   report.status = 'failed'; report.error = error.message; process.exitCode = 1;
 }
-mkdirSync(join(root, 'verification/reports'), {recursive: true});
-writeFileSync(join(root, `verification/reports/registry-v${version}.json`), JSON.stringify(report, null, 2) + '\n');
+if (!published) {
+  mkdirSync(join(root, 'verification/reports'), {recursive: true});
+  writeFileSync(join(root, `verification/reports/registry-v${version}.json`), JSON.stringify(report, null, 2) + '\n');
+}
 console.log(JSON.stringify({status: report.status, version, installed_files: report.installed_files, error: report.error}));

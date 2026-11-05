@@ -4,6 +4,8 @@
 
 ## 从公开发行包运行
 
+固定验收基线 v0.1.10 的下载、演示命令和输出回执见 [项目检查索引](ACCEPTANCE.md)。以下是 v0.1.11 的操作步骤。
+
 从 [v0.1.11 发行页](https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.1.11) 下载 `MoonMatBridge-v0.1.11-windows-x64.zip`，解压到路径较短的目录，然后在含 `moonmat.exe` 的目录执行以下命令。
 
 ```powershell
@@ -11,7 +13,7 @@ $results = Join-Path $env:TEMP ('moonmat-demo-' + [guid]::NewGuid().ToString('N'
 powershell -NoProfile -ExecutionPolicy Bypass -File .\examples\workflows\demo.ps1 -OutputDirectory $results
 ```
 
-终端末行显示新建的结果目录。目录中的 `demo-receipt.json` 记录预期及实际退出码、返回值、程序哈希和结果哈希。Windows 上解压位置层级较深时，默认生成的结果路径可能过长。以上命令显式将结果写到临时目录。[公开便携演示回执](../verification/reports/workflows-demo-public-v0.1.11.json)
+终端末行显示新建的结果目录。目录中的 `demo-receipt.json` 记录预期及实际退出码、返回值、程序哈希和结果哈希。Windows 上解压位置层级较深时，默认生成的结果路径可能过长。以上命令显式将结果写到临时目录。[公开便携演示回执](https://github.com/WeiR-h/moonmatbridge/blob/3e6cd73cf2fc397f40e753fd7f5ef9866e480bf7/verification/reports/workflows-demo-public-v0.1.11.json)
 
 发行页另附 `MoonMatBridge-v0.1.11-workflows.zip`，包含 native/JS 的实际输出、原始输入、独立核对报告及逐文件哈希。可在该包中运行同一个脚本，加上 `-Executable` 和同版 Windows 包中 `moonmat.exe` 的绝对路径。
 
@@ -40,6 +42,6 @@ NumPy 独立计算预期结果，用原始字节核对类型、维度和数据�
 按 [版本交付说明](RELEASING.md) 配置工具链及 `requirements-dev.txt` 中的依赖，再运行 `npm run verify`。
 
 - `examples/python/workflow_inputs.py` 独立生成固定输入，验证器检查其与公开样例逐字节一致。
-- `scripts/scientific-workflows.py` 在 native、JS 分别执行三个场景。报告记录实际执行次数、断言和输出哈希。[v0.1.11 源码验证](../verification/reports/workflows-v0.1.11.json)
+- `scripts/scientific-workflows.py` 在 native、JS 分别执行三个场景。报告记录实际执行次数、断言和输出哈希。[v0.1.11 源码验证](https://github.com/WeiR-h/moonmatbridge/blob/v0.1.11/verification/reports/workflows-v0.1.11.json)
 - 全部基本类、全局标记、字符存储、CSC 容量、损坏输入和三目标测试由其他分组继续执行，不被演示替代。
-- 公开复验使用下载的 EXE、预编译 JS 和样例，独立核对结果及输出哈希。[v0.1.11 公开复验](../verification/reports/workflows-public-v0.1.11.json)
+- 公开复验使用下载的 EXE、预编译 JS 和样例，独立核对结果及输出哈希。[v0.1.11 公开复验](https://github.com/WeiR-h/moonmatbridge/blob/3e6cd73cf2fc397f40e753fd7f5ef9866e480bf7/verification/reports/workflows-public-v0.1.11.json)

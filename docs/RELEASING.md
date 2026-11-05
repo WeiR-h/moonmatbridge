@@ -1,5 +1,7 @@
 # 版本交付
 
+已发布版本的用户复验见 [项目检查索引](ACCEPTANCE.md)。`scripts/verify-published.py` 使用公开接口和固定回执，可从当前仓库直接运行。下方的维护流程校验受测源码指纹，执行历史版本的 `release.py verify-public` 时应从对应发行标签检出并使用维护者环境。
+
 每版在独立分支提交源代码并推送。先执行 `npm run verify`、`npm run coverage`，记录受测源码提交 S；等待该提交最新的 Windows/Linux CI 及真实 Octave 验证成功。
 
 ```powershell

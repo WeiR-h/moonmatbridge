@@ -1,8 +1,12 @@
 # MoonMatBridge v0.1.11
 
-支持显式 UTF-8 / Latin1 名称编解码，覆盖变量名、字段名和 legacy 类名。两个命令行宿主使用前置 `--name-encoding=latin1`；默认调用保持 UTF-8。[名称编码说明](docs/NAME_ENCODING.md)。
-
 **MoonBit 原生 MAT Level 5 读写与科研数据互操作库。**
+
+固定验收基线为 **v0.1.10**。[Windows 便携包](https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.10/MoonMatBridge-v0.1.10-windows-x64.zip) · [Mooncakes 包](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.1.10) · [运行命令、预期结果及免登录复验](docs/ACCEPTANCE.md)
+
+当前公开发行是 **v0.1.11**。[GitHub 发行](https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.1.11) · [Mooncakes 包](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.1.11)
+
+支持显式 UTF-8 / Latin1 名称编解码，覆盖变量名、字段名和 legacy 类名。两个命令行宿主使用前置 `--name-encoding=latin1`；默认调用保持 UTF-8。[名称编码说明](docs/NAME_ENCODING.md)。
 
 MAT 递归 cell/struct/char/legacy object、密集/CSC 稀疏读写、数值编码、zlib/DEFLATE 解压与压缩、JSON/无损快照、NPY 互通和精确、容差差异检查都由 MoonBit 实现。运行核心库和 Windows 命令行程序不需要 MATLAB、Python、SciPy、Node.js 或第三方压缩库。Node.js 仅用于开发脚本与可选 JS 命令行；SciPy/NumPy 仅用作独立兼容性验证。
 
@@ -96,18 +100,19 @@ moon add WeiR-h/moonmatbridge@0.1.11
 
 ```powershell
 moon add WeiR-h/moonmatbridge@0.1.11
+moon check --target js --deny-warn
 moon run . --target js
-moon test --target js
+moon test --target js --deny-warn
 ```
 
-该消费者包含可执行入口和测试，支持 js、wasm-gc、native；不能位于另一个 `moon.work` 的控制范围内。`npm run verify:registry` 会在新目录安装精确公开版本，核对源码字节并执行三个目标。
+该消费者包含可执行入口和测试，支持 JS、wasm-gc、native。请使用独立目录，以免上级 `moon.work` 覆盖依赖。命令成功时输出所安装的版本和 `signal has 2 values`。
 
 源码开发者克隆仓库、安装项目内工具链后，在仓库目录运行：
 
 ```powershell
-moon run src/examples/main --target js
-moon run src/examples/main --target wasm-gc
-moon run src/examples/main --target native
+node scripts/moon.mjs run src/examples/main --target js
+node scripts/moon.mjs run src/examples/main --target wasm-gc
+node scripts/moon.mjs run src/examples/main --target native
 ```
 
 消费者的 `moon.pkg` 导入：
@@ -174,12 +179,12 @@ npm run build
 npm run build:native
 npm run verify
 npm run package
- npm run verify:registry
+npm run verify:registry -- --published 0.1.11
 ```
 
 项目工具链通过 `python scripts/setup-toolchain.py --configure` 安装并校验官方归档；Windows 通过 `python scripts/setup-msvc.py --configure` 安装项目内 MSVC，复用 Windows SDK。独立验证 Python 可通过 `MOONMAT_PYTHON` 指定。项目配置保存在忽略提交的 `.local-toolchain.json`，不更改其他项目或系统 PATH。
 
-`npm run verify:registry` 创建独立项目，使用固定版本的 `moon add` 下载依赖；禁止本地 workspace/path 替代，核对已下载源码，并在 JS、wasm-gc、native 上验证六个完整消费者场景。示例位于 [examples/registry_consumer](examples/registry_consumer/)。发布时使用 `.moonignore` 的明确文件范围，并通过 `moon package --list` 核对；开发工具、构建输出、个人报名材料及验证工作目录不进入 Mooncakes 包。
+`npm run verify:registry -- --published 0.1.11` 创建独立项目，安装精确的公开包，并在 JS、wasm-gc、native 上按原样严格检查、测试和运行 [消费者示例](examples/registry_consumer/)。维护者的版本交付流程还核对发布源码字节和 `.moonignore` 文件范围。[版本交付](docs/RELEASING.md)
 
 当前工具链固定于 `toolchain.lock.json`，通过 `python scripts/setup-toolchain.py --configure` 安装；验证入口检查实际 moonc 版本。历史性能环境记录为 MoonBit `0.1.30260920 (914d7da)`、Node `v24.13.0`、GCC `16.2.0`、Python `3.12.5`、SciPy `1.15.3`、NumPy `2.2.6`。`scripts/verify.mjs` 执行三目标测试、直接示例、构建、压缩差分测试和真实文件互通，并记录源文件指纹。
 
@@ -194,5 +199,3 @@ Apache-2.0，详见 [LICENSE](LICENSE)、[NOTICE](NOTICE)、[第三方与参考�
 已提供文件分块读取和驻留数据树的分块写出；逐根文件转换作为后续独立能力评估。当前无损快照保存数组内容和存储元数据，不承诺恢复原始 MAT 头部或压缩字节；精确比较与浮点容差比较分别提供独立报告。各版本的实现范围与验证证据见 [CHANGELOG](CHANGELOG.md)。
 
 写入性能的固定场景、复现命令与完整样本说明见 [分块写入测量](docs/WRITE_PERFORMANCE.md)。
-
-公开 Windows 包的一条完整演示命令：`./examples/workflows/demo.ps1`。输出必须使用新目录；完整依赖、输入和期望结果见 [科研流程](docs/SCIENTIFIC_WORKFLOWS.md)。
