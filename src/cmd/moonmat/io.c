@@ -61,7 +61,7 @@ moonbit_string_t moonmat_arg(int32_t index, moonbit_string_t fallback) {
   return fallback;
 }
 #ifdef _WIN32
-static wchar_t *wide_path(const char *path) {
+static wchar_t *decode_windows_path(const char *path) {
   int count = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, path, -1, NULL, 0);
   wchar_t *result = count ? malloc((size_t)count * sizeof(wchar_t)) : NULL;
   if (result && !MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, path, -1, result, count)) {
@@ -69,12 +69,36 @@ static wchar_t *wide_path(const char *path) {
   }
   return result;
 }
+
+/* Keep ordinary short paths for CRT calls. The sink also extends its temporary names. */
+static wchar_t *windows_path(const char *path, int always_extend) {
+  wchar_t *wide = decode_windows_path(path);
+  if (!wide) return NULL;
+  if (!wcsncmp(wide, L"\\\\?\\", 4)) return wide;
+  DWORD size = GetFullPathNameW(wide, 0, NULL, NULL);
+  if (!size || size > 32700) { free(wide); return NULL; }
+  if (!always_extend && size <= MAX_PATH && wcslen(wide) < MAX_PATH) return wide;
+  wchar_t *absolute = malloc(((size_t)size + 1) * sizeof(wchar_t));
+  if (!absolute) { free(wide); return NULL; }
+  DWORD actual = GetFullPathNameW(wide, size + 1, absolute, NULL);
+  free(wide);
+  if (!actual || actual > size) { free(absolute); return NULL; }
+  for (DWORD i = 0; i < actual; ++i) if (absolute[i] == L'/') absolute[i] = L'\\';
+  int unc = !wcsncmp(absolute, L"\\\\", 2);
+  size_t prefix = unc ? 8 : 4, skip = unc ? 2 : 0;
+  wchar_t *result = malloc((prefix + actual - skip + 1) * sizeof(wchar_t));
+  if (result) {
+    memcpy(result, unc ? L"\\\\?\\UNC\\" : L"\\\\?\\", prefix * sizeof(wchar_t));
+    memcpy(result + prefix, absolute + skip, (actual - skip + 1) * sizeof(wchar_t));
+  }
+  free(absolute); return result;
+}
 #endif
 moonbit_bytes_t moonmat_read(moonbit_bytes_t path, int32_t limit) {
   io_error = 0;
   FILE *file = NULL;
 #ifdef _WIN32
-  wchar_t *wide = wide_path((const char *)path);
+  wchar_t *wide = windows_path((const char *)path, 0);
   if (wide) file = _wfopen(wide, L"rb");
   free(wide);
 #else
@@ -103,7 +127,7 @@ moonbit_bytes_t moonmat_read(moonbit_bytes_t path, int32_t limit) {
 int32_t moonmat_save(moonbit_bytes_t path, moonbit_bytes_t bytes, int32_t size) {
   int fd;
 #ifdef _WIN32
-  wchar_t *wide = wide_path((const char *)path);
+  wchar_t *wide = windows_path((const char *)path, 0);
   if (!wide) return 1;
   fd = _wopen(wide, _O_WRONLY | _O_CREAT | _O_EXCL | _O_BINARY, _S_IREAD | _S_IWRITE);
 #else
@@ -149,7 +173,7 @@ int32_t moonmat_source_open(moonbit_bytes_t path, int32_t limit) {
   int slot = 0; while (slot < 16 && source_slots[slot].active) ++slot;
   if (slot == 16) return -1;
 #ifdef _WIN32
-  wchar_t *wide = wide_path((const char *)path);
+  wchar_t *wide = windows_path((const char *)path, 0);
   int fd = wide ? _wopen(wide, _O_RDONLY | _O_BINARY) : -1;
   free(wide);
 #else
@@ -199,30 +223,6 @@ int32_t moonmat_source_close(int32_t slot) {
 typedef struct { int active, fd, created, error; char *target, *temp; } SinkSlot;
 static SinkSlot sink_slots[16];
 static unsigned int sink_serial;
-#ifdef _WIN32
-/* Extended absolute paths also keep temporary suffixes within Win32 semantics. */
-static wchar_t *sink_wide_path(const char *path) {
-  wchar_t *wide = wide_path(path);
-  if (!wide) return NULL;
-  if (!wcsncmp(wide, L"\\\\?\\", 4)) return wide;
-  DWORD size = GetFullPathNameW(wide, 0, NULL, NULL);
-  if (!size || size > 32700) { free(wide); return NULL; }
-  wchar_t *absolute = malloc(((size_t)size + 1) * sizeof(wchar_t));
-  if (!absolute) { free(wide); return NULL; }
-  DWORD actual = GetFullPathNameW(wide, size + 1, absolute, NULL);
-  free(wide);
-  if (!actual || actual > size) { free(absolute); return NULL; }
-  for (DWORD i = 0; i < actual; ++i) if (absolute[i] == L'/') absolute[i] = L'\\';
-  int unc = !wcsncmp(absolute, L"\\\\", 2);
-  size_t prefix = unc ? 8 : 4, skip = unc ? 2 : 0;
-  wchar_t *result = malloc((prefix + actual - skip + 1) * sizeof(wchar_t));
-  if (result) {
-    memcpy(result, unc ? L"\\\\?\\UNC\\" : L"\\\\?\\", prefix * sizeof(wchar_t));
-    memcpy(result + prefix, absolute + skip, (actual - skip + 1) * sizeof(wchar_t));
-  }
-  free(absolute); return result;
-}
-#endif
 
 int32_t moonmat_sink_begin(moonbit_bytes_t path) {
   int slot = 0; while (slot < 16 && sink_slots[slot].active) ++slot;
@@ -239,7 +239,7 @@ int32_t moonmat_sink_begin(moonbit_bytes_t path) {
 
 static int sink_lazy_open(SinkSlot *s) {
 #ifdef _WIN32
-  wchar_t *target = sink_wide_path(s->target);
+  wchar_t *target = windows_path(s->target, 1);
   if (!target) { s->error = 1; return -1; }
   DWORD attributes = GetFileAttributesW(target); free(target);
   if (attributes != INVALID_FILE_ATTRIBUTES) { s->error = 3; return -1; }
@@ -261,7 +261,7 @@ static int sink_lazy_open(SinkSlot *s) {
 #endif
     snprintf(s->temp, strlen(s->target) + 128, "%.*s.mmb-%lu-%llu-%u.tmp", (int)prefix, s->target, pid, (unsigned long long)time(NULL), ++sink_serial);
 #ifdef _WIN32
-    wchar_t *temp = sink_wide_path(s->temp);
+    wchar_t *temp = windows_path(s->temp, 1);
     int fd = temp ? _wopen(temp, _O_RDWR | _O_CREAT | _O_EXCL | _O_BINARY | _O_NOINHERIT, _S_IREAD | _S_IWRITE) : -1;
     free(temp);
 #else
@@ -304,7 +304,7 @@ int32_t moonmat_sink_finish(int32_t slot, int32_t commit, int32_t expected_size)
   } else if (commit && !s->error) s->error = 1;
   if (commit && !s->error) {
 #ifdef _WIN32
-    wchar_t *temp = sink_wide_path(s->temp), *target = sink_wide_path(s->target);
+    wchar_t *temp = windows_path(s->temp, 1), *target = windows_path(s->target, 1);
     if (temp && target && MoveFileW(temp, target)) s->created = 0;
     else { DWORD code = temp && target ? GetLastError() : ERROR_INVALID_NAME; s->error = code == ERROR_ALREADY_EXISTS || code == ERROR_FILE_EXISTS ? 3 : 1; }
     free(temp); free(target);
@@ -315,7 +315,7 @@ int32_t moonmat_sink_finish(int32_t slot, int32_t commit, int32_t expected_size)
   }
   if (s->created) {
 #ifdef _WIN32
-    wchar_t *temp = sink_wide_path(s->temp); if (temp) { DeleteFileW(temp); free(temp); }
+    wchar_t *temp = windows_path(s->temp, 1); if (temp) { DeleteFileW(temp); free(temp); }
 #else
     unlink(s->temp);
 #endif
