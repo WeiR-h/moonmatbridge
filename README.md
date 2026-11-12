@@ -193,7 +193,7 @@ npm run verify:registry -- --published 0.1.11
 
 三目标检查、构建、测试与示例由同一验证入口执行；Windows/Linux 的实际 CI 地址及当前测试数量见对应版本报告。`npm run coverage` 生成核心源码覆盖报告、未覆盖行清单和本地 HTML；该指标是编译器插桩的源码行覆盖，不代表分支覆盖。
 
-日常兼容性复查可运行 `python scripts/maintenance-check.py --published 0.1.11`，一次执行完整验证、覆盖报告和公开包消费者，结果保存到新的运行目录并保留历史报告原件。Linux 安装 GNU Octave 后加 `--octave` 可执行真实双向互操作；CI 在两个平台使用同一入口。
+日常兼容性复查可运行 `python scripts/maintenance-check.py --published 0.1.11`，一次执行完整验证、覆盖报告和公开包消费者，结果保存到新的运行目录并保留历史报告原件。Linux 安装 GNU Octave 后加 `--octave` 可执行真实双向互操作；CI 在两个平台分别执行相同的底层验证命令。
 
 独立验证覆盖 SciPy/NumPy、真实 GNU Octave、递归混合类型、压缩、NPY、快照、精确/容差比较、文件分块读取和失败原子性。[项目检查索引](docs/ACCEPTANCE.md) 汇总源码、CI、公开包、示例和许可入口。[当前路线](docs/NEXT_RELEASES.md) 与 [历史记录](docs/HISTORY.md) 分开维护。
 

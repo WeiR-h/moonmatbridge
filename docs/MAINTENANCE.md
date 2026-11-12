@@ -36,6 +36,6 @@ python scripts/maintenance-check.py --published 0.1.11 --octave
 
 维护入口顺序执行三目标检查、测试、构建、核心示例、SciPy/NumPy、宿主异常路径、三个科研流程、源码行覆盖及独立公开消费者。`--octave` 必须找到并真实执行 GNU Octave。未安装 Octave 的 Windows 本机结果与 Linux 实际执行回执分别记录。
 
-每次运行保存在 `verification/local/maintenance/<运行编号>/`，包含 `maintenance.json`、各命令完整日志和新生成报告。退出码非零表示本轮未通过。入口会恢复原有报告字节；CI 上传每次运行的新日志及报告，原性能数据继续对应原工具链。本次维护不重新标注历史性能测量。
+每次运行保存在 `verification/local/maintenance/<运行编号>/`，包含 `maintenance.json`、各命令完整日志和新生成报告。退出码非零表示本轮未通过。入口会恢复原有报告字节。CI 分别执行相同的底层命令，并上传当前检出的新报告，保留原有发行核验入口所需的构件结构。原性能数据继续对应原工具链，本次维护不重新标注历史性能测量。
 
 持续验证入口：[Windows/Linux CI](../.github/workflows/ci.yml)。实际执行结果见对应提交的 Actions 日志和同名构件。
