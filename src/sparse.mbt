@@ -1,5 +1,6 @@
 ///|
 /// CSC sparse double/logical matrix, preserving stored order and duplicate slots. Payload includes all stored slots, including unused capacity.
+#derive(@debug.Debug)
 pub(all) struct SparseArray {
   name : String
   dtype : DType
@@ -10,26 +11,28 @@ pub(all) struct SparseArray {
   imag : Bytes?
   nzmax : Int32
   is_global : Bool
-} derive(@debug.Debug)
+}
 
 ///|
 pub extend SparseArray with @debug.Debug::{to_repr}
 
 ///|
+#derive(@debug.Debug)
 pub(all) enum MatVariable {
   Dense(NumericArray)
   Sparse(SparseArray)
-} derive(@debug.Debug)
+}
 
 ///|
 pub extend MatVariable with @debug.Debug::{to_repr}
 
 ///|
+#derive(@debug.Debug)
 pub(all) struct MatDocument {
   description : String
   little_endian : Bool
   variables : Array[MatVariable]
-} derive(@debug.Debug)
+}
 
 ///|
 pub extend MatDocument with @debug.Debug::{to_repr}

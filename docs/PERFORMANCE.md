@@ -30,7 +30,7 @@ python scripts/write-regression.py --baseline-ref v0.1.5 --candidate-ref v0.1.8
 
 ## v0.1.1 工具链基线
 
-固定源码提交 `85fef84de68b69b7e762c3c6317266bb6674ff84`，采用 moonc `0.10.16+b1a0e846e`、配套标准库、Windows x64 MSVC `19.44.35229` C 后端、Windows SDK `10.0.22621.0` 和 Node `24.13.0`。工具链归档及标准库校验值见 `toolchain.lock.json`，构建工具包校验值见 `msvc.lock.json`。
+固定源码提交 `85fef84de68b69b7e762c3c6317266bb6674ff84`，采用 moonc `0.10.16+b1a0e846e`、配套标准库、Windows x64 MSVC `19.44.35229` C 后端、Windows SDK `10.0.22621.0` 和 Node `24.13.0`。该测量工具链归档及标准库校验值见 [v0.1.11 工具链锁](https://github.com/WeiR-h/moonmatbridge/blob/v0.1.11/toolchain.lock.json)，构建工具包校验值见 `msvc.lock.json`。当前源码的工具链兼容性另见[维护记录](MAINTENANCE.md)。
 
 保留原有 24 组核心及 6 组文件场景，分别报告 native 和 JS。预热5次、三批各10次，进程峰值使用三个独立进程；全部样本、中位数、p95、吞吐和请求块记录在 [核心报告](../verification/reports/performance-vs-85fef84-v0.1.1.json) 与 [文件报告](../verification/reports/file-performance-v0.1.1.json)。
 

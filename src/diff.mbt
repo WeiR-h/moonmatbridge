@@ -1,16 +1,18 @@
 ///|
+#derive(@debug.Debug)
 pub(all) struct DifferenceSample {
   plane : String
   index : Int32
   coordinates : Array[Int32]
   before : Bytes
   after : Bytes
-} derive(@debug.Debug)
+}
 
 ///|
 pub extend DifferenceSample with @debug.Debug::{to_repr}
 
 ///|
+#derive(@debug.Debug)
 pub(all) struct VariableDifference {
   name : String
   status : String
@@ -19,18 +21,19 @@ pub(all) struct VariableDifference {
   imag_differences : Int32
   samples : Array[DifferenceSample]
   truncated : Bool
-} derive(@debug.Debug)
+}
 
 ///|
 pub extend VariableDifference with @debug.Debug::{to_repr}
 
 ///|
+#derive(@debug.Debug)
 pub(all) struct DocumentDifference {
   content_equal : Bool
   variable_order_changed : Bool
   changed_variables : Int32
   variables : Array[VariableDifference]
-} derive(@debug.Debug)
+}
 
 ///|
 pub extend DocumentDifference with @debug.Debug::{to_repr}

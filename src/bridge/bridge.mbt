@@ -99,7 +99,6 @@ pub fn inflate_zlib(bytes : Bytes, limit : Int32) -> BinaryResult {
 }
 
 ///|
-#export_name("select_mat")
 pub fn select_mat(bytes : Bytes, names : Array[String]) -> BinaryResult {
   binary(() => @mat.write_tree(@mat.read_selected(bytes, names).variables))
 }
@@ -218,7 +217,6 @@ pub fn inspect_roots_source(source : @mat.MatSource) -> String {
 }
 
 ///|
-#export_name("select_source_mat")
 pub fn select_source_mat(
   source : @mat.MatSource,
   names : Array[String],
@@ -348,7 +346,6 @@ pub fn sample_mat_with_options(name_options : String) -> BinaryResult {
 }
 
 ///|
-#export_name("select_mat_with_options")
 pub fn select_mat_with_options(
   bytes : Bytes,
   names : Array[String],
@@ -544,7 +541,6 @@ pub fn inspect_roots_source_with_options(
 }
 
 ///|
-#export_name("select_source_mat_with_options")
 pub fn select_source_mat_with_options(
   source : @mat.MatSource,
   names : Array[String],

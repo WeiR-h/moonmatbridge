@@ -7,6 +7,7 @@ pub(all) struct MatSource {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct SourceLimits {
   max_source_bytes : Int32
   max_expanded_bytes : Int32
@@ -18,7 +19,7 @@ pub(all) struct SourceLimits {
   max_variables : Int32
   max_dimensions : Int32
   max_name_bytes : Int32
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn default_source_limits() -> SourceLimits {

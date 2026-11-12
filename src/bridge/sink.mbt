@@ -58,7 +58,6 @@ pub fn roundtrip_mat_to(bytes : Bytes, sink : @mat.MatSink) -> String {
 }
 
 ///|
-#export_name("select_source_mat_to_with_options")
 pub fn select_source_mat_to_with_options(
   source : @mat.MatSource,
   names : Array[String],
@@ -77,7 +76,6 @@ pub fn select_source_mat_to_with_options(
 }
 
 ///|
-#export_name("select_source_mat_to")
 pub fn select_source_mat_to(
   source : @mat.MatSource,
   names : Array[String],

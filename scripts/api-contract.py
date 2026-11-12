@@ -5,8 +5,13 @@ ROOT=Path(__file__).resolve().parents[1]
 VERSION=json.loads((ROOT/'package.json').read_bytes())['version']
 checks=[]
 def aliases(text):
-    # moonc 0.10.16 prints the existing 32-bit integer aliases explicitly.
-    return re.sub(r'\bUInt\b','UInt32',re.sub(r'\bInt\b','Int32',text))
+    # Compiler renderings of the same types; do not normalize actual API changes.
+    text=re.sub(r'\bUInt\b','UInt32',re.sub(r'\bInt\b','Int32',text))
+    if '@json.Json' in text:
+        assert '"moonbitlang/core/json"' in text,'Unexpected Json package alias'
+        text=text.replace('@json.Json','Json')
+    return re.sub(r'^(pub\(all\) (?:struct|enum|suberror) [^\n]+\{\n[^{}]*^\}) derive\(([^\n]+)\)',
+                  lambda m:'#derive('+m[2]+')\n'+m[1],text,flags=re.M)
 for baseline_version in ['v0.0.19','v0.1.0']:
     baseline=ROOT/'verification/contracts'/baseline_version
     manifest=json.loads((baseline/'manifest.json').read_text(encoding='utf-8'))
@@ -25,7 +30,7 @@ for baseline_version in ['v0.0.19','v0.1.0']:
         for line in old.splitlines():
             if line.startswith('pub fn ') or line.startswith('pub type '):
                 assert line in lines,(file,line)
-        for match in re.finditer(r'pub(?:\(all\))? (?:struct|enum) \w+[^\n]*\{.*?^\}',old,re.M|re.S):
+        for match in re.finditer(r'(?:^#derive\([^\n]*\)\n)?^pub(?:\(all\))? (?:struct|enum|suberror) \w+[^\n]*\{.*?^\}',old,re.M|re.S):
             assert match[0] in new,(file,match[0])
         checks.append(file)
 report={'status':'passed','version':VERSION,'baselines':['v0.0.19','v0.1.0'],'checks':checks,'scope':'Existing generated functions and public struct/enum definitions; additive optional codec arguments and new declarations allowed.'}

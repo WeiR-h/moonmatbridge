@@ -1,11 +1,12 @@
 ///|
 /// Unambiguous, zero-based paths. Field punctuation is data, never path syntax.
+#derive(Eq, @debug.Debug)
 pub(all) enum TreePathSegment {
   Root(String)
   CellElement(Int32)
   StructElement(Int32)
   Field(String)
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub extend TreePathSegment with Eq::{equal, not_equal}
@@ -14,6 +15,7 @@ pub extend TreePathSegment with Eq::{equal, not_equal}
 pub extend TreePathSegment with @debug.Debug::{to_repr}
 
 ///|
+#derive(@debug.Debug)
 pub(all) struct TreeDifferenceSample {
   path : Array[TreePathSegment]
   kind : String
@@ -21,19 +23,20 @@ pub(all) struct TreeDifferenceSample {
   coordinates : Array[Int32]
   before : Bytes
   after : Bytes
-} derive(@debug.Debug)
+}
 
 ///|
 pub extend TreeDifferenceSample with @debug.Debug::{to_repr}
 
 ///|
+#derive(@debug.Debug)
 pub(all) struct TreeDifference {
   content_equal : Bool
   variable_order_changed : Bool
   differences : Int32
   samples : Array[TreeDifferenceSample]
   truncated : Bool
-} derive(@debug.Debug)
+}
 
 ///|
 pub extend TreeDifference with @debug.Debug::{to_repr}

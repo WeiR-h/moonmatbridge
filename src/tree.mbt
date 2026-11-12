@@ -1,5 +1,6 @@
 ///|
 /// Character payloads retain their storage encoding; multi-byte units are canonical little-endian.
+#derive(Eq, @debug.Debug)
 pub(all) enum CharEncoding {
   Int8Text
   UInt8Text
@@ -7,7 +8,7 @@ pub(all) enum CharEncoding {
   Utf8
   Utf16
   Utf32
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub extend CharEncoding with Eq::{equal, not_equal}
@@ -49,25 +50,27 @@ fn CharEncoding::width(self : CharEncoding) -> Int32 {
 }
 
 ///|
+#derive(@debug.Debug)
 pub(all) struct CharArray {
   name : String
   shape : Array[Int32]
   encoding : CharEncoding
   data : Bytes
   is_global : Bool
-} derive(@debug.Debug)
+}
 
 ///|
 pub extend CharArray with @debug.Debug::{to_repr}
 
 ///|
 /// Children are in column-major order. Nested matrices may have an empty name.
+#derive(@debug.Debug)
 pub(all) struct CellArray {
   name : String
   shape : Array[Int32]
   values : Array[MatNode]
   is_global : Bool
-} derive(@debug.Debug)
+}
 
 ///|
 pub extend CellArray with @debug.Debug::{to_repr}
@@ -75,6 +78,7 @@ pub extend CellArray with @debug.Debug::{to_repr}
 ///|
 /// Values are element-major, then field order: values[element * fields.length() + field].
 /// Some(class_name) represents the documented legacy mxOBJECT class, as data only.
+#derive(@debug.Debug)
 pub(all) struct StructArray {
   name : String
   shape : Array[Int32]
@@ -82,39 +86,42 @@ pub(all) struct StructArray {
   values : Array[MatNode]
   class_name : String?
   is_global : Bool
-} derive(@debug.Debug)
+}
 
 ///|
 pub extend StructArray with @debug.Debug::{to_repr}
 
 ///|
+#derive(@debug.Debug)
 pub(all) enum MatNode {
   Numeric(NumericArray)
   Csc(SparseArray)
   Character(CharArray)
   Cell(CellArray)
   Structure(StructArray)
-} derive(@debug.Debug)
+}
 
 ///|
 pub extend MatNode with @debug.Debug::{to_repr}
 
 ///|
+#derive(@debug.Debug)
 pub(all) struct MatTree {
   description : String
   little_endian : Bool
   variables : Array[MatNode]
-} derive(@debug.Debug)
+}
 
 ///|
 pub extend MatTree with @debug.Debug::{to_repr}
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct TreeLimits {
   max_depth : Int32
   max_nodes : Int32
   max_fields : Int32
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub extend TreeLimits with Eq::{equal, not_equal}

@@ -44,6 +44,7 @@ function source(bytes) {
 for (const input of corpus) {
   const plainMatrix=matrix(input);
   const expected=checked(api.select_mat(Buffer.concat([header,plainMatrix]),['x']));
+  assert.deepEqual(JSON.parse(api.inspect_roots(expected)).roots.map(root => root.name), ['x']);
   for (const level of [0, 1, 6, 9]) {
     for (const strategy of strategies) {
       const encoded = deflateSync(input, {level, strategy});
@@ -104,6 +105,43 @@ assert.equal(info.arrays[2].dtype, 'uint64');
 assert.deepEqual(checked(api.roundtrip_mat(sample)), sample);
 assert.deepEqual(checked(api.json_to_mat(api.mat_to_json(sample))), sample);
 record('browser-compatible JS exports', {sample_sha256: hash(sample), deterministic_roundtrip: true, data_schema: 'moonmatbridge/1'});
+
+// A successful empty MAT is not a successful nonempty selection. Exercise the
+// actual JS array ABI, all exported entry points, order and retained raw values.
+const selectedNames = [info.arrays.at(-1).name, info.arrays[0].name];
+const sampleArrays = JSON.parse(api.mat_to_json(sample)).arrays;
+for (const name of ['select_mat', 'select_mat_with_options', 'select_source_mat',
+                    'select_source_mat_with_options', 'select_source_mat_to', 'select_source_mat_to_with_options']) {
+  function select(names) {
+    const input = name.startsWith('select_source') ? source(sample) : sample;
+    const options = name.endsWith('_with_options') ? ['{}'] : [];
+    if (!name.includes('_mat_to')) return api[name](input, names, ...options);
+    const output = Buffer.alloc(sample.length * 2);
+    let end = 0;
+    const sink = api.make_sink((offset, buffer, start, length) => {
+      output.set(buffer.subarray(start, start + length), offset);
+      end = Math.max(end, offset + length);
+      return length;
+    });
+    const result = JSON.parse(api[name](input, names, sink, ...options));
+    return result.status === 'ok' ? output.subarray(0, end) : result;
+  }
+  const result = select(selectedNames);
+  const selected = Buffer.isBuffer(result) ? result : checked(result);
+  assert.deepEqual(JSON.parse(api.inspect_roots(selected)).roots.map(root => root.name), selectedNames, name);
+  assert.deepEqual(JSON.parse(api.mat_to_json(selected)).arrays,
+    selectedNames.map(name => sampleArrays.find(array => array.name === name)), name);
+  const duplicate = select([selectedNames[0], selectedNames[0]]);
+  const missing = select(['absent']);
+  assert.equal(duplicate.code || status(duplicate).code, 'duplicate-name', name);
+  assert.equal(missing.code || status(missing).code, 'missing-variable', name);
+  const emptyResult = select([]);
+  const empty = Buffer.isBuffer(emptyResult) ? emptyResult : checked(emptyResult);
+  assert.deepEqual(JSON.parse(api.inspect_roots(empty)).roots, [], name);
+}
+assert.deepEqual(selectedNames, [info.arrays.at(-1).name, info.arrays[0].name]);
+record('Stable JS string-array ABI across six selection exports', {exports: 6, requested_roots: 2,
+  checks: ['order', 'data', 'duplicate', 'missing', 'empty', 'caller array unchanged']});
 
 const invalid = [];
 function mutate(offset, data) { const out = Buffer.from(sample); Buffer.from(data).copy(out, offset); return out; }

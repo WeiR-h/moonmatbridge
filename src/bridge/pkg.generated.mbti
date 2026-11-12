@@ -32,6 +32,18 @@ pub fn convert_storage_with_options(Bytes, String, Bool, String) -> BinaryResult
 
 pub fn deflate_zlib(Bytes, Int32) -> BinaryResult
 
+pub fn export_select_mat(Bytes, FixedArray[String]) -> BinaryResult
+
+pub fn export_select_mat_with_options(Bytes, FixedArray[String], String) -> BinaryResult
+
+pub fn export_select_source_mat(@moonmatbridge.MatSource, FixedArray[String]) -> BinaryResult
+
+pub fn export_select_source_mat_to(@moonmatbridge.MatSource, FixedArray[String], @moonmatbridge.MatSink) -> String
+
+pub fn export_select_source_mat_to_with_options(@moonmatbridge.MatSource, FixedArray[String], @moonmatbridge.MatSink, String) -> String
+
+pub fn export_select_source_mat_with_options(@moonmatbridge.MatSource, FixedArray[String], String) -> BinaryResult
+
 pub fn inflate_zlib(Bytes, Int32) -> BinaryResult
 
 pub fn inspect_mat(Bytes) -> String

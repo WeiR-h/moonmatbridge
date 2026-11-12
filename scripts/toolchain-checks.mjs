@@ -6,4 +6,8 @@ for (const value of ['v0.10.14+old', 'v0.10.15', 'v0.9.99', 'moon 0.1.20261028',
 assert.equal(parseCompiler('v0.10.16+b1a0e846e (2026-10-16)'), '0.10.16+b1a0e846e');
 assert.equal(parseCompiler('v0.11.0'), '0.11.0');
 assert.equal(parseCompiler('v1.0.0'), '1.0.0');
+for (const value of ['v0.10.16+b1a0e846e', 'v0.10.19', 'v0.9.99']) {
+  assert.throws(() => parseCompiler(value, '0.10.20'));
+}
+assert.equal(parseCompiler('v0.10.20+65efd5b93', '0.10.20'), '0.10.20+65efd5b93');
 console.log('Actual compiler minimum/version parsing: passed');

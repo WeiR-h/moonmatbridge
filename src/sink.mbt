@@ -5,6 +5,7 @@ pub(all) struct MatSink {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct WriteLimits {
   max_output_bytes : Int32
   max_uncompressed_bytes : Int32
@@ -14,7 +15,7 @@ pub(all) struct WriteLimits {
   max_variables : Int32
   max_dimensions : Int32
   max_name_bytes : Int32
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn default_write_limits() -> WriteLimits {

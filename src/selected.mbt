@@ -1,5 +1,6 @@
 ///|
 /// Validated root metadata; offsets are intentionally not exposed or cached.
+#derive(@debug.Debug)
 pub(all) struct MatRootInfo {
   name : String
   class_id : Int32
@@ -8,7 +9,7 @@ pub(all) struct MatRootInfo {
   is_complex : Bool
   is_logical : Bool
   compressed : Bool
-} derive(@debug.Debug)
+}
 
 ///|
 pub extend MatRootInfo with @debug.Debug::{to_repr}

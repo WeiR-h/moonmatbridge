@@ -1,5 +1,6 @@
 ///|
 /// Supported dense array classes. All payloads use little-endian, column-major order.
+#derive(Eq, @debug.Debug)
 pub(all) enum DType {
   Float64
   Float32
@@ -12,22 +13,24 @@ pub(all) enum DType {
   Int64
   UInt64
   Logical
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 /// Exact scalar representation; integer values never pass through Double.
+#derive(@debug.Debug)
 pub(all) enum Value {
   Signed(Int64)
   Unsigned(UInt64)
   Floating(Double)
   Boolean(Bool)
-} derive(@debug.Debug)
+}
 
 ///|
 /// Error offsets refer to the current MAT stream, or the expanded stream for compressed data.
+#derive(Eq, @debug.Debug)
 pub(all) suberror MatError {
   MatError(String, Int32, String)
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn MatError::code(self : MatError) -> String {
@@ -49,6 +52,7 @@ pub fn MatError::message(self : MatError) -> String {
 
 ///|
 /// Limits are validated before reading or allocating according to file-controlled lengths.
+#derive(Eq, @debug.Debug)
 pub(all) struct Limits {
   max_file_bytes : Int32
   max_expanded_bytes : Int32
@@ -56,7 +60,7 @@ pub(all) struct Limits {
   max_variables : Int32
   max_dimensions : Int32
   max_name_bytes : Int32
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn default_limits() -> Limits {
@@ -72,6 +76,7 @@ pub fn default_limits() -> Limits {
 
 ///|
 /// Arrays own their canonical payload. Writers revalidate public fields before serialization.
+#derive(@debug.Debug)
 pub(all) struct NumericArray {
   name : String
   dtype : DType
@@ -79,15 +84,16 @@ pub(all) struct NumericArray {
   real : Bytes
   imag : Bytes?
   is_global : Bool
-} derive(@debug.Debug)
+}
 
 ///|
 /// Original file byte order is reported; arrays are normalized to little-endian.
+#derive(@debug.Debug)
 pub(all) struct MatFile {
   description : String
   little_endian : Bool
   arrays : Array[NumericArray]
-} derive(@debug.Debug)
+}
 
 ///|
 fn fail(code : String, offset : Int32, message : String) -> Unit raise MatError {

@@ -2,6 +2,8 @@
 
 **固定验收基线为 v0.1.10。当前公开发行是 v0.1.11。** 两个版本的源码、发行资产和验证回执分别记录。
 
+当前主分支的工具链适配、`moon version --all` 与兼容性复查入口见[持续维护记录](MAINTENANCE.md)；本页表格保留各发行版本的固定证据。
+
 | 版本 | 源码 | GitHub 发行 | Mooncakes | 验证结果 |
 | --- | --- | --- | --- | --- |
 | v0.1.10 · 固定基线 | [标签 163d65b](https://github.com/WeiR-h/moonmatbridge/tree/v0.1.10) | [发行页](https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.1.10) | [公开包](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.1.10) | [Windows/Linux CI](https://github.com/WeiR-h/moonmatbridge/actions/runs/41177075270) · [公开交付回执](https://github.com/WeiR-h/moonmatbridge/blob/858eb7acfe2c4c1aae0d902085a750ce3b7732b6/verification/reports/distribution-v0.1.10.json) |

@@ -6,6 +6,7 @@ priv struct TreeTolerance {
 }
 
 ///|
+#derive(@debug.Debug)
 pub(all) struct TreeCloseDifference {
   exact_equal : Bool
   within_tolerance : Bool
@@ -16,7 +17,7 @@ pub(all) struct TreeCloseDifference {
   atol : Double
   rtol : Double
   equal_nan : Bool
-} derive(@debug.Debug)
+}
 
 ///|
 pub extend TreeCloseDifference with @debug.Debug::{to_repr}

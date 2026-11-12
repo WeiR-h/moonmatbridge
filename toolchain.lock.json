@@ -1,22 +1,22 @@
 {
-  "compiler": "0.10.16+b1a0e846e",
-  "minimum_compiler": "0.10.16",
+  "compiler": "0.10.20+65efd5b93",
+  "minimum_compiler": "0.10.20",
   "native_backend": "c",
   "archives": {
     "windows-x86_64": {
-      "url": "https://cli.moonbitlang.com/binaries/0.10.16%2Bb1a0e846e/moonbit-windows-x86_64.zip",
-      "filename": "moonbit-0.10.16-windows.zip",
-      "sha256": "50183a36dacdfb47919dffa5f06b9340b343506236940832215604e277d3f001"
+      "url": "https://cli.moonbitlang.com/binaries/0.10.20%2B65efd5b93/moonbit-windows-x86_64.zip",
+      "filename": "moonbit-0.10.20-windows.zip",
+      "sha256": "bdff9a3b2d7c61a3adae2fe09221d3de63effc6cab28bfa0cbeb94fb0d529d79"
     },
     "linux-x86_64": {
-      "url": "https://cli.moonbitlang.com/binaries/0.10.16%2Bb1a0e846e/moonbit-linux-x86_64.tar.gz",
-      "filename": "moonbit-0.10.16-linux.tar.gz",
-      "sha256": "84ae424cd31bc485d2cf4d3736534e52f2f265ceafb562a187b9ab26d9566212"
+      "url": "https://cli.moonbitlang.com/binaries/0.10.20%2B65efd5b93/moonbit-linux-x86_64.tar.gz",
+      "filename": "moonbit-0.10.20-linux.tar.gz",
+      "sha256": "80d987523308fa490eba9f1baf98df996a5a7891e118357553b7c2608c0597c5"
     }
   },
   "core": {
-    "url": "https://cli.moonbitlang.com/cores/core-0.10.16%2Bb1a0e846e.tar.gz",
-    "filename": "core-0.10.16.tar.gz",
-    "sha256": "e7db6e3c80a97af953598b374cf14f3e330918b1ca4659b141b9f550c9c0adb0"
+    "url": "https://cli.moonbitlang.com/cores/core-0.10.20%2B65efd5b93.tar.gz",
+    "filename": "core-0.10.20.tar.gz",
+    "sha256": "8ec2a2c01335501d703867bb4eef5f92d3cd7e1ae1ee5f7f14d54d16d2c7c2b5"
   }
 }

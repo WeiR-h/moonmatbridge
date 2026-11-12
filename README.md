@@ -6,6 +6,8 @@
 
 当前公开发行是 **v0.1.11**。[GitHub 发行](https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.1.11) · [Mooncakes 包](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.1.11)
 
+当前主分支适配官方 moonc **0.10.20+65efd5b93**，包括新派生语法和稳定的 JS 名称数组边界；完整工具链、复现入口与持续检查见[兼容性维护](docs/MAINTENANCE.md)。
+
 支持显式 UTF-8 / Latin1 名称编解码，覆盖变量名、字段名和 legacy 类名。两个命令行宿主使用前置 `--name-encoding=latin1`；默认调用保持 UTF-8。[名称编码说明](docs/NAME_ENCODING.md)。
 
 MAT 递归 cell/struct/char/legacy object、密集/CSC 稀疏读写、数值编码、zlib/DEFLATE 解压与压缩、JSON/无损快照、NPY 互通和精确、容差差异检查都由 MoonBit 实现。运行核心库和 Windows 命令行程序不需要 MATLAB、Python、SciPy、Node.js 或第三方压缩库。Node.js 仅用于开发脚本与可选 JS 命令行；SciPy/NumPy 仅用作独立兼容性验证。
@@ -167,10 +169,11 @@ savemat("python.mat", {"signal": np.arange(12).reshape(3, 4)}, do_compression=Tr
 
 ## 构建与验证
 
-使用 moonc 0.10.16 或更高版本、Node.js 22+，native 目标在 Windows 使用 MSVC 与 Windows SDK，Linux 使用 C 编译器。Windows 可先运行 `python scripts/setup-msvc.py --configure` 将固定 MSVC 安装到项目目录，复用已有 Windows SDK。开发验证另外需要 Python 3.12+：
+当前主分支使用 moonc 0.10.20 或更高版本、Node.js 22+，实测版本固定于 `toolchain.lock.json`。native 目标在 Windows 使用 MSVC 与 Windows SDK，Linux 使用 C 编译器。Windows 可先运行 `python scripts/setup-msvc.py --configure` 将固定 MSVC 安装到项目目录，复用已有 Windows SDK。开发验证另外需要 Python 3.12+：
 
 ```powershell
 python scripts/setup-toolchain.py --configure
+node scripts/moon.mjs version --all
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
 npm run check
@@ -189,6 +192,8 @@ npm run verify:registry -- --published 0.1.11
 当前工具链固定于 `toolchain.lock.json`，通过 `python scripts/setup-toolchain.py --configure` 安装；验证入口检查实际 moonc 版本。历史性能环境记录为 MoonBit `0.1.30260920 (914d7da)`、Node `v24.13.0`、GCC `16.2.0`、Python `3.12.5`、SciPy `1.15.3`、NumPy `2.2.6`。`scripts/verify.mjs` 执行三目标测试、直接示例、构建、压缩差分测试和真实文件互通，并记录源文件指纹。
 
 三目标检查、构建、测试与示例由同一验证入口执行；Windows/Linux 的实际 CI 地址及当前测试数量见对应版本报告。`npm run coverage` 生成核心源码覆盖报告、未覆盖行清单和本地 HTML；该指标是编译器插桩的源码行覆盖，不代表分支覆盖。
+
+日常兼容性复查可运行 `python scripts/maintenance-check.py --published 0.1.11`，一次执行完整验证、覆盖报告和公开包消费者，结果保存到新的运行目录并保留历史报告原件。Linux 安装 GNU Octave 后加 `--octave` 可执行真实双向互操作；CI 在两个平台使用同一入口。
 
 独立验证覆盖 SciPy/NumPy、真实 GNU Octave、递归混合类型、压缩、NPY、快照、精确/容差比较、文件分块读取和失败原子性。[项目检查索引](docs/ACCEPTANCE.md) 汇总源码、CI、公开包、示例和许可入口。[当前路线](docs/NEXT_RELEASES.md) 与 [历史记录](docs/HISTORY.md) 分开维护。
 

@@ -1,9 +1,10 @@
 ///|
 /// Explicit codec for miINT8 variable, field and legacy class names.
+#derive(Eq, @debug.Debug)
 pub(all) enum NameEncoding {
   Utf8
   Latin1
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub extend NameEncoding with Eq::{equal, not_equal}
