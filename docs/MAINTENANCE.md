@@ -14,7 +14,7 @@ Feature flags enabled: rr_moon_mod,rr_moon_pkg
 - 将 27 处类型派生声明迁移为 `#derive(...)`，保持原有类型、派生能力和公共调用。
 - JS 导出边界用 `FixedArray[String]` 接收普通 JavaScript 数组，转换后调用原有 `Array[String]` 接口。六个选择导出的名称、顺序、数值、重复名称和缺失名称行为均有直接宿主回归。实现不依赖 MoonBit Array 的私有布局。
 - 接口对照识别编译器对整数和标准 Json 的等价打印形式，并继续核对函数、结构、枚举、错误及派生声明。
-- 当前源码最低编译器为 moonc 0.10.20。v0.1.10、v0.1.11 的发行标签、归档和历史报告保持发布时内容；公开 Mooncakes v0.1.11 的核心与 interchange 消费样例使用新工具链复查。
+- 当前源码最低编译器为 moonc 0.10.20。v0.1.10、v0.1.11 的发行标签、归档和历史报告保持发布时内容；v0.1.12 交付当前工具链适配；v0.1.11 的核心与 interchange 消费样例保留新工具链兼容回归。
 
 ## 从干净检出复现
 
@@ -25,13 +25,13 @@ python scripts/setup-toolchain.py --configure
 # Windows 另外执行 python scripts/setup-msvc.py --configure
 python -m pip install -r requirements-dev.txt
 node scripts/moon.mjs version --all
-python scripts/maintenance-check.py --published 0.1.11
+python scripts/maintenance-check.py --published 0.1.12
 ```
 
 Linux 安装 GNU Octave 后执行：
 
 ```sh
-python scripts/maintenance-check.py --published 0.1.11 --octave
+python scripts/maintenance-check.py --published 0.1.12 --octave
 ```
 
 维护入口顺序执行三目标检查、测试、构建、核心示例、SciPy/NumPy、宿主异常路径、三个科研流程、源码行覆盖及独立公开消费者。`--octave` 必须找到并真实执行 GNU Octave。未安装 Octave 的 Windows 本机结果与 Linux 实际执行回执分别记录。

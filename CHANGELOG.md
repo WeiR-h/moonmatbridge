@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased — toolchain compatibility
+## v0.1.12
 
 适配 moonc 0.10.20+65efd5b93 及配套标准库，迁移派生语法。六个 JS 选择导出通过 FixedArray 边界接收普通 JavaScript 名称数组，保留原有 MoonBit 调用及 JS 导出名称。兼容性复查单独保存完整工具链、日志和新报告，持续检查覆盖 Windows/Linux、三个目标、公开包消费者与真实 Octave。
 

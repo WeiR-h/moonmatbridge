@@ -1,13 +1,13 @@
 # MoonMatBridge 项目检查索引
 
-**固定验收基线为 v0.1.10。当前公开发行是 v0.1.11。** 两个版本的源码、发行资产和验证回执分别记录。
+**固定验收基线为 v0.1.10。当前维护版本是 v0.1.12。** 各版本的源码、发行资产和验证回执分别记录。v0.1.12 的完整验证、双渠道发布及公开复验见 [交付回执](../verification/reports/distribution-v0.1.12.json)。
 
 当前主分支的工具链适配、`moon version --all` 与兼容性复查入口见[持续维护记录](MAINTENANCE.md)；本页表格保留各发行版本的固定证据。
 
 | 版本 | 源码 | GitHub 发行 | Mooncakes | 验证结果 |
 | --- | --- | --- | --- | --- |
 | v0.1.10 · 固定基线 | [标签 163d65b](https://github.com/WeiR-h/moonmatbridge/tree/v0.1.10) | [发行页](https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.1.10) | [公开包](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.1.10) | [Windows/Linux CI](https://github.com/WeiR-h/moonmatbridge/actions/runs/41177075270) · [公开交付回执](https://github.com/WeiR-h/moonmatbridge/blob/858eb7acfe2c4c1aae0d902085a750ce3b7732b6/verification/reports/distribution-v0.1.10.json) |
-| v0.1.11 · 当前发行 | [标签 da564f4](https://github.com/WeiR-h/moonmatbridge/tree/v0.1.11) | [发行页](https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.1.11) | [公开包](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.1.11) | [Windows/Linux CI](https://github.com/WeiR-h/moonmatbridge/actions/runs/41206292702) · [公开交付回执](https://github.com/WeiR-h/moonmatbridge/blob/3e6cd73cf2fc397f40e753fd7f5ef9866e480bf7/verification/reports/distribution-v0.1.11.json) |
+| v0.1.11 · 历史发行 | [标签 da564f4](https://github.com/WeiR-h/moonmatbridge/tree/v0.1.11) | [发行页](https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.1.11) | [公开包](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.1.11) | [Windows/Linux CI](https://github.com/WeiR-h/moonmatbridge/actions/runs/41206292702) · [公开交付回执](https://github.com/WeiR-h/moonmatbridge/blob/3e6cd73cf2fc397f40e753fd7f5ef9866e480bf7/verification/reports/distribution-v0.1.11.json) |
 
 ## 运行固定基线的示例
 
@@ -28,7 +28,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\examples\workflows\demo.ps
 python scripts/verify-published.py --version 0.1.10
 ```
 
-脚本核对 GitHub 标签、发行资产清单和 Mooncakes 包的构建状态及登记校验值，下载四种发行 ZIP 和混合样例并计算 SHA-256。成功时输出 `"status": "passed"`。加 `--windows-demo` 可在 Windows 上执行便携演示，并比对实际输出哈希。安装 Node.js 22+ 后可加 `--node-demo`，用公开 JS 模块核对混合样例中的基本类 1—15。将版本改为 `0.1.11` 可复验当前发行。
+脚本核对 GitHub 标签、发行资产清单和 Mooncakes 包的构建状态及登记校验值，下载四种发行 ZIP 和混合样例并计算 SHA-256。成功时输出 `"status": "passed"`。加 `--windows-demo` 可在 Windows 上执行便携演示，并比对实际输出哈希。安装 Node.js 22+ 后可加 `--node-demo`，用公开 JS 模块核对混合样例中的基本类 1—15。将版本改为 `0.1.11` 可复验历史发行。
 
 只有 Node.js 时，可从固定版发行页下载 [JS ZIP](https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.10/MoonMatBridge-v0.1.10-js.zip) 和 [混合样例](https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.10/all-base-classes.mat)，解压 JS ZIP 后执行以下命令。
 

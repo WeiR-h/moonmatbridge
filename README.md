@@ -1,10 +1,10 @@
-# MoonMatBridge v0.1.11
+# MoonMatBridge v0.1.12
 
 **MoonBit 原生 MAT Level 5 读写与科研数据互操作库。**
 
 固定验收基线为 **v0.1.10**。[Windows 便携包](https://github.com/WeiR-h/moonmatbridge/releases/download/v0.1.10/MoonMatBridge-v0.1.10-windows-x64.zip) · [Mooncakes 包](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.1.10) · [运行命令、预期结果及免登录复验](docs/ACCEPTANCE.md)
 
-当前公开发行是 **v0.1.11**。[GitHub 发行](https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.1.11) · [Mooncakes 包](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.1.11)
+当前版本是 **v0.1.12**。[GitHub 发行](https://github.com/WeiR-h/moonmatbridge/releases/tag/v0.1.12) · [Mooncakes 包](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.1.12)
 
 当前主分支适配官方 moonc **0.10.20+65efd5b93**，包括新派生语法和稳定的 JS 名称数组边界；完整工具链、复现入口与持续检查见[兼容性维护](docs/MAINTENANCE.md)。
 
@@ -16,7 +16,7 @@ MAT 递归 cell/struct/char/legacy object、密集/CSC 稀疏读写、数值编�
 
 未压缩和压缩文件均支持分块读取 256 MiB 未选变量并提取所选结果；压缩读取保留 32 KiB 历史窗口，无需完整展开缓冲。详情见 [文件数据源](docs/SOURCES.md)。
 
-当前源码版本为 v0.1.11，GitHub 与 Mooncakes 使用统一版本号；发布模块名为 `WeiR-h/moonmatbridge`。
+当前源码版本为 v0.1.12，GitHub 与 Mooncakes 使用统一版本号；发布模块名为 `WeiR-h/moonmatbridge`。
 
 - 压缩读取采用位缓冲、Huffman 短码表与有界输入窗口，减少临时复制和展开缓冲扩容。
 - 完整递归混合数据读写；预检尺寸后写入固定缓冲，保留字符单位、精确整数、复数和 CSC 容量。
@@ -31,7 +31,7 @@ MAT 递归 cell/struct/char/legacy object、密集/CSC 稀疏读写、数值编�
 
 ## 支持范围
 
-| 能力 | v0.1.11 |
+| 能力 | v0.1.12 |
 | --- | --- |
 | MAT Level 5 读取 | 小端、大端；标准标签与小数据标签；多变量 |
 | 压缩读取 | `miCOMPRESSED`；MoonBit 解码 stored/fixed/dynamic DEFLATE，验证 Adler-32 |
@@ -92,16 +92,16 @@ JS 适配器只读写文件；格式处理使用编译后的 MoonBit。
 
 ## MoonBit API
 
-发布模块名为 [`WeiR-h/moonmatbridge`](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.1.11)。在已有 MoonBit 项目中安装：
+发布模块名为 [`WeiR-h/moonmatbridge`](https://mooncakes.io/docs/WeiR-h/moonmatbridge@0.1.12)。在已有 MoonBit 项目中安装：
 
 ```powershell
-moon add WeiR-h/moonmatbridge@0.1.11
+moon add WeiR-h/moonmatbridge@0.1.12
 ```
 
 核心代码在 `src/`，公开接口在 `src/pkg.generated.mbti`。库用户可复制仓库的 `examples/registry_consumer` 为独立目录，进入该目录后执行：
 
 ```powershell
-moon add WeiR-h/moonmatbridge@0.1.11
+moon add WeiR-h/moonmatbridge@0.1.12
 moon check --target js --deny-warn
 moon run . --target js
 moon test --target js --deny-warn

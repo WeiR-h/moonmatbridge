@@ -35,7 +35,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y --no-install-recommends octave
       - name: Verify three MoonBit targets and both command line hosts
         run: npm run verify
-      - name: Run the documented public package consumer
+      - name: Verify the v0.1.11 public compatibility consumer
         run: npm run verify:registry -- --published 0.1.11
       - name: Real Octave v6 and v7 mixed-file producer and consumer
         run: python scripts/octave-interop.py
@@ -79,7 +79,7 @@ jobs:
         run: python -m pip install -r requirements-dev.txt
       - name: Verify checks, builds, tests, hosts and scientific examples
         run: npm run verify
-      - name: Run the documented public package consumer
+      - name: Verify the v0.1.11 public compatibility consumer
         run: npm run verify:registry -- --published 0.1.11
       - name: Core source coverage
         run: npm run coverage

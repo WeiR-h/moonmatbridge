@@ -61,7 +61,7 @@ def main():
                     report['results'].append(row);(OUT/(runid+'.json')).write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8',newline='\n');print(c['name'],host,encoding,scope,round(row['speedup'],3),flush=True)
     assert report['results'],'No matching write measurements'
     report['status']='measured';report['regressions_over_10_percent']=[{k:r[k] for k in ['case','host','encoding','scope','speedup','memory_reduction']} for r in report['results'] if r['speedup']<1/1.1 or r['memory_reduction']<-.1]
-    report['engineering_targets']=[{'case':r['case'],'host':r['host'],'scope':r['scope'],'goal':.15,'time_reduction':1-1/r['speedup'],'passed':r['speedup']>=1/.85} for r in report['results'] if version=='0.1.12' and r['case'] in ('dense-16m','resident-256m') and r['encoding']=='compressed' and r['scope']=='core']
+    report['engineering_targets']=[]  # Compatibility baselines carry no unmeasured speedup target.
     e.save(f'write-regression-vs-{commits["baseline"][:7]}-{"partial" if (a.case or a.host or a.encoding or a.scope) else "run"}-{runid[:8]}-v{version}.json',report)
 
 if __name__=='__main__':main()

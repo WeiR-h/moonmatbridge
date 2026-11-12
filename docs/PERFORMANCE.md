@@ -1,5 +1,7 @@
 # 性能测量
 
+v0.1.12 随 moonc 0.10.20 重新建立固定场景基线，对照维护提交 `07b16ae`。这组结果记录同工具链的兼容维护回归，历史工具链的提速数据保持原始版本与环境。
+
 从 v0.1.11 起，快速原生核心操作使用固定数量的重复调用形成一个计时样本，报告每次操作的平均耗时，并保存原始总耗时和重复数。每批仍先执行 5 次单调用预热，再测量 10 个样本，共 3 批；峰值内存继续使用 3 个独立进程的单次操作。重复数按固定场景制定，基线和候选使用相同设置；JS、耗时较长的压缩场景和 CLI 保持单调用。历史单调用数据保持原样，新口径独立记录。
 
 首次超过 10% 的耗时或峰值观测保留原始报告，并按同一提交、输入、环境和采样协议复测。`scripts/bind-performance.py` 可通过 `--core-recheck`、`--file-recheck`、`--write-recheck` 绑定复测原件；每项允许重复指定。首次异常必须有后续对应的正常观测，同一场景及同一指标两次超限会阻止发布。绑定文件记录完整观测顺序、原件哈希和复测结论，公开复验重新检查这些记录。
@@ -24,7 +26,7 @@ python scripts/write-regression.py --baseline-ref v0.1.5 --candidate-ref v0.1.8
 
 
 
-当前工具链的核心与文件读取对照保留在 [24 组核心测量](../verification/reports/performance-vs-85fef84-v0.1.4.json) 和 [6 组文件测量](../verification/reports/file-performance-v0.1.4.json)。v0.1.5 的生产源码、工具链及构建参数一致性由[独立摘要](../verification/reports/performance-summary-v0.1.5.json)记录，原始数据保留原版本。
+旧工具链的核心与文件读取对照保留在 [24 组核心测量](../verification/reports/performance-vs-85fef84-v0.1.4.json) 和 [6 组文件测量](../verification/reports/file-performance-v0.1.4.json)。v0.1.5 的生产源码、工具链及构建参数一致性由[独立摘要](../verification/reports/performance-summary-v0.1.5.json)记录，原始数据保留原版本。
 
 新增驻留树写入使用单独的 [测量方法与结果入口](WRITE_PERFORMANCE.md)，覆盖两种编码、核心与文件流程。旧内存路径的完整字节缓冲直接交给同一宿主写入器。下面保留历史测量及其环境边界。
 
