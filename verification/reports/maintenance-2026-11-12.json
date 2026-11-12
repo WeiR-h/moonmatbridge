@@ -1,0 +1,238 @@
+{
+  "schema": "moonmatbridge/toolchain-maintenance/1",
+  "status": "passed",
+  "checked_at": "2026-11-12T08:03:27.158305+00:00",
+  "source_commit": "5dab56539d7175dd8f51d0382b727abef76e780b",
+  "source_sha256": "7b3f7c0d814b0624edbd2974751cf57ca1919bb6215a2d2c5baf6c29efb6e2e9",
+  "source_files": 289,
+  "published_version": "0.1.11",
+  "ci_run_id": 43177248609,
+  "ci_url": "https://github.com/WeiR-h/moonmatbridge/actions/runs/43177248609",
+  "platforms": {
+    "linux": {
+      "status": "passed",
+      "job_id": 131044380053,
+      "verification_groups": 31,
+      "unit_tests_per_target": 147,
+      "targets": [
+        "js",
+        "wasm-gc",
+        "native"
+      ],
+      "published_consumer": "0.1.11",
+      "environment": {
+        "moon": "moon 0.1.20261104 (940aa18 2026-11-04)\n\nFeature flags enabled: rr_moon_mod,rr_moon_pkg",
+        "compiler": "v0.10.20+65efd5b93 (2026-11-05)",
+        "compiler_version": "0.10.20+65efd5b93",
+        "moon_version_all": "moon 0.1.20261104 (940aa18 2026-11-04) ~/work/moonmatbridge/moonmatbridge/.local-tools/moon-0.10.20+65efd5b93/bin/moon\nmoonc v0.10.20+65efd5b93 (2026-11-05) ~/work/moonmatbridge/moonmatbridge/.local-tools/moon-0.10.20+65efd5b93/bin/moonc\nmoonrun 0.1.20261104 (940aa18 2026-11-04) ~/work/moonmatbridge/moonmatbridge/.local-tools/moon-0.10.20+65efd5b93/bin/moonrun\n\nFeature flags enabled: rr_moon_mod,rr_moon_pkg",
+        "standard_library_archive_sha256": "8ec2a2c01335501d703867bb4eef5f92d3cd7e1ae1ee5f7f14d54d16d2c7c2b5",
+        "standard_library_source_sha256": "20c4fe08388a4f4c00d74e9e19a93fc05b760f43dba0a57b246bb89d0ecc5530",
+        "c_compiler": "cc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+        "native_backend": "c",
+        "native_environment": {
+          "MOONBIT_NEW_NATIVE": "0"
+        },
+        "node": "v24.22.2",
+        "platform": "linux",
+        "architecture": "x64",
+        "arch": "x64"
+      },
+      "reports": [
+        {
+          "file": "linux/v0.1.11.json",
+          "sha256": "277036f84de450ea79459a9d7228a9a5f97ac550e5e25a67132694e14c389cba"
+        },
+        {
+          "file": "linux/coverage-v0.1.11.json",
+          "sha256": "8edfa91bd986e34a3c9242e367e254d65717cbacf29ff255823aaa48e5a84a59"
+        },
+        {
+          "file": "linux/api-contract-v0.1.11.json",
+          "sha256": "a076e088d00953303945c750174dcb862c51b96c5358749ee82fc4260ccd1bff"
+        },
+        {
+          "file": "linux/compatibility-v0.1.11.json",
+          "sha256": "c8d672d14629c09a7df64c6d804f80a633389d10b60b24c032a228d7a77bbbfd"
+        },
+        {
+          "file": "linux/interop-v0.1.11.json",
+          "sha256": "f159cda0a2b67fb7f813a8c45cd086dea4cd6ac27c75cea533b16fce152ad6e8"
+        },
+        {
+          "file": "linux/js-v0.1.11.json",
+          "sha256": "4766c10f6b18e6063694ef6f91d7345cf04904546675be56da36cc082cc8c079"
+        },
+        {
+          "file": "linux/workflows-v0.1.11.json",
+          "sha256": "cbb924fdba4fae8bf02af1cedc967823ae0dab92e8d29038cc6815e39478d61e"
+        },
+        {
+          "file": "linux/name-encoding-v0.1.11.json",
+          "sha256": "e5092c20ec58d912b5c4fbfaa4a112502aff559497300542372ad68e349b927d"
+        },
+        {
+          "file": "linux/source-operations-v0.1.11.json",
+          "sha256": "ef7fdad7e98a73c3be506d62bcabf3d9e0579d2f01fe11a4b5cf0e5521eac86f"
+        },
+        {
+          "file": "linux/tree-operations-v0.1.11.json",
+          "sha256": "c67defa7ca74c0992023457d8a2d74fb7d7a981e0b1782321f9abfc6db045890"
+        },
+        {
+          "file": "linux/tree-close-v0.1.11.json",
+          "sha256": "e0e201f74ac5c9f61ac1059d02df7e2e0ff1d00e5327bd2f326880acd2aa0067"
+        },
+        {
+          "file": "linux/compressed-sink-v0.1.11.json",
+          "sha256": "685c35b64a8586444c47cf23a69b79fe2c430bd1f68a8df89b0419841a09c11d"
+        },
+        {
+          "file": "linux/octave-v0.1.11.json",
+          "sha256": "1912db60441d67d0c2688a6ec734ef3eb1ace8a2b0b06fd297d2677d5c06ab83"
+        }
+      ]
+    },
+    "windows": {
+      "status": "passed",
+      "job_id": 131044379845,
+      "verification_groups": 32,
+      "unit_tests_per_target": 147,
+      "targets": [
+        "js",
+        "wasm-gc",
+        "native"
+      ],
+      "published_consumer": "0.1.11",
+      "environment": {
+        "moon": "moon 0.1.20261104 (940aa18 2026-11-04)\n\nFeature flags enabled: rr_moon_mod,rr_moon_pkg",
+        "compiler": "v0.10.20+65efd5b93 (2026-11-05)",
+        "compiler_version": "0.10.20+65efd5b93",
+        "moon_version_all": "moon 0.1.20261104 (940aa18 2026-11-04) D:\\a\\moonmatbridge\\moonmatbridge\\.local-tools\\moon-0.10.20+65efd5b93\\bin\\moon.exe\nmoonc v0.10.20+65efd5b93 (2026-11-05) D:\\a\\moonmatbridge\\moonmatbridge\\.local-tools\\moon-0.10.20+65efd5b93\\bin\\moonc.exe\nmoonrun 0.1.20261104 (940aa18 2026-11-04) D:\\a\\moonmatbridge\\moonmatbridge\\.local-tools\\moon-0.10.20+65efd5b93\\bin\\moonrun.exe\n\nFeature flags enabled: rr_moon_mod,rr_moon_pkg",
+        "standard_library_archive_sha256": "8ec2a2c01335501d703867bb4eef5f92d3cd7e1ae1ee5f7f14d54d16d2c7c2b5",
+        "standard_library_source_sha256": "25389406fc893778dbd958064d61b1c6319152f76699e1226c56a756fc9b6575",
+        "c_compiler": "Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35229 for x64",
+        "native_backend": "c",
+        "native_environment": {
+          "MOONBIT_NEW_NATIVE": "0"
+        },
+        "node": "v24.22.2",
+        "windows_sdk_version": "10.0.26100.0",
+        "platform": "win32",
+        "architecture": "x64",
+        "arch": "x64"
+      },
+      "reports": [
+        {
+          "file": "windows/v0.1.11.json",
+          "sha256": "8e5700191a5b2c8ea94fe8e83497da20e1d638d30b12da2ad311677c5ad4d022"
+        },
+        {
+          "file": "windows/coverage-v0.1.11.json",
+          "sha256": "f82b3a299d4d60007a7175bc169856883ab0eb5159af85e5aa8ba56b91eec946"
+        },
+        {
+          "file": "windows/api-contract-v0.1.11.json",
+          "sha256": "7a9a9d4472f3b5c563b2cdc0ef7726831c4294d38ce79e7615d640eacf195351"
+        },
+        {
+          "file": "windows/compatibility-v0.1.11.json",
+          "sha256": "ff2b1f645a0d1bfcec4a753b1b0d177dffa32957c0a8caf0492852bc32c7690a"
+        },
+        {
+          "file": "windows/interop-v0.1.11.json",
+          "sha256": "898f9b1ec707886a44d577005142b9a579833078c83fa0985ebdc3bfba98c64d"
+        },
+        {
+          "file": "windows/js-v0.1.11.json",
+          "sha256": "22253dfd456c9a795061f6f0a7dd67faae80eb8b277f3f5362fc4d9e3d83a8ef"
+        },
+        {
+          "file": "windows/workflows-v0.1.11.json",
+          "sha256": "cbb924fdba4fae8bf02af1cedc967823ae0dab92e8d29038cc6815e39478d61e"
+        },
+        {
+          "file": "windows/name-encoding-v0.1.11.json",
+          "sha256": "0a64933f4676196e9a035e630cba6f194bb023d661a44a21b2bcfbf711c7275b"
+        },
+        {
+          "file": "windows/source-operations-v0.1.11.json",
+          "sha256": "b17413faa3025880a505a91eae0a1048c5865913789274cc74bf4bdfad0286d4"
+        },
+        {
+          "file": "windows/tree-operations-v0.1.11.json",
+          "sha256": "c67defa7ca74c0992023457d8a2d74fb7d7a981e0b1782321f9abfc6db045890"
+        },
+        {
+          "file": "windows/tree-close-v0.1.11.json",
+          "sha256": "e0e201f74ac5c9f61ac1059d02df7e2e0ff1d00e5327bd2f326880acd2aa0067"
+        },
+        {
+          "file": "windows/compressed-sink-v0.1.11.json",
+          "sha256": "685c35b64a8586444c47cf23a69b79fe2c430bd1f68a8df89b0419841a09c11d"
+        }
+      ]
+    }
+  },
+  "local": {
+    "status": "passed",
+    "source_commit": "b94e13036c276ab9307b9273743d73a64efda670",
+    "source_sha256": "526e4caa1bc12bc7922f8604721983ffe7b84d1471af576f54b293c0a4e399c2",
+    "verification_groups": 32,
+    "runtime_tools_and_sdk_equal_to_final_source": true,
+    "historical_reports_unchanged": true,
+    "finished_at": "2026-11-12T07:40:47.086275+00:00"
+  },
+  "public_release": {
+    "status": "passed",
+    "version": "0.1.11",
+    "observed_at": "2026-11-12T07:44:34.781061+00:00",
+    "command": [
+      "python",
+      "scripts/verify-published.py",
+      "--version",
+      "0.1.11",
+      "--node-demo",
+      "--windows-demo"
+    ],
+    "tag_commit": "da564f47a0189cdfd8bb23ff37736dd0a5ede9c5",
+    "assets_checked_against_receipt": 60,
+    "downloads_hashed": 5,
+    "mooncakes_manifest_sha256": "8bee669d69ec6be521bb14338046d57e6f428e42fcb7467f7b70a1bf3b332189",
+    "node_demo": {
+      "status": "passed",
+      "roots": 36,
+      "class_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    "windows_demo_commands": 23,
+    "scope": "Results from the completed local public verifier execution in this maintenance session; exact release metadata, five downloaded bodies, Node mixed-file consumption and portable workflow output hashes."
+  },
+  "licenses": {
+    "LICENSE": "aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe",
+    "NOTICE": "c5635fb9ef8885d72fc3b332c6405ccb3539bc985db6a8fad777158cdf908026",
+    "THIRD_PARTY.md": "3f3d4640726f6cb442be9eabfee614cd25e419cbfebb6f629d5bdae2c6e3d1a7"
+  },
+  "changes": [
+    "Official compiler/core lock updated to 0.10.20+65efd5b93",
+    "27 derive declarations migrated with the same public types and traits",
+    "Six JavaScript selection exports accept native string arrays through a stable FixedArray boundary",
+    "Existing MoonBit calls and JS export names retained; exact selected data/order and error paths checked",
+    "Full moon version --all recorded; maintenance runs preserve historical report bytes"
+  ],
+  "scope": "Current source and the existing public 0.1.11 consumer verified with the recorded toolchain. Published tags and assets retain their original content. Historical performance measurements retain their original environments."
+}
