@@ -1,0 +1,519 @@
+{
+  "status": "measured",
+  "version": "0.1.12",
+  "baseline_ref": "07b16ae995eb4b3932f655a718e04626a357daa9",
+  "baseline_commit": "07b16ae995eb4b3932f655a718e04626a357daa9",
+  "baseline_version": "0.1.11",
+  "baseline_runtime_source_sha256": "cc9dd574de525d5102a92a00e6e3ab84b5a4aa3fa32b6e6d05dd4e3d7291e443",
+  "candidate_ref": "734b80adb306085374d730865a95e2fa51650617",
+  "candidate_head_commit": "734b80adb306085374d730865a95e2fa51650617",
+  "candidate_runtime_source_sha256": "cc9dd574de525d5102a92a00e6e3ab84b5a4aa3fa32b6e6d05dd4e3d7291e443",
+  "candidate_source_mode": "fixed Git revision",
+  "environment": {
+    "platform": "Windows-11-10.0.22000-SP0",
+    "architecture": "AMD64",
+    "node": "v24.13.0",
+    "toolchain": {
+      "compiler": "v0.10.20+65efd5b93 (2026-11-05)",
+      "compiler_version": "0.10.20+65efd5b93",
+      "moon_version_all": "moon 0.1.20261104 (940aa18 2026-11-04) ~\\Desktop\\Competition\\MoonBit \u9ed1\u5ba2\u677e\\MoonMatBridge\\.local-tools\\moon-0.10.20+65efd5b93\\bin\\moon.exe\nmoonc v0.10.20+65efd5b93 (2026-11-05) ~\\Desktop\\Competition\\MoonBit \u9ed1\u5ba2\u677e\\MoonMatBridge\\.local-tools\\moon-0.10.20+65efd5b93\\bin\\moonc.exe\nmoonrun 0.1.20261104 (940aa18 2026-11-04) ~\\Desktop\\Competition\\MoonBit \u9ed1\u5ba2\u677e\\MoonMatBridge\\.local-tools\\moon-0.10.20+65efd5b93\\bin\\moonrun.exe\n\nFeature flags enabled: rr_moon_mod,rr_moon_pkg",
+      "standard_library_archive_sha256": "8ec2a2c01335501d703867bb4eef5f92d3cd7e1ae1ee5f7f14d54d16d2c7c2b5",
+      "standard_library_source_sha256": "25389406fc893778dbd958064d61b1c6319152f76699e1226c56a756fc9b6575",
+      "c_compiler": "Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35229 for x64",
+      "native_backend": "c",
+      "native_environment": {
+        "MOONBIT_NEW_NATIVE": "0"
+      },
+      "node": "v24.13.0",
+      "windows_sdk_version": "10.0.22621.0",
+      "platform": "win32",
+      "architecture": "x64"
+    },
+    "moon": "moon 0.1.20261104 (940aa18 2026-11-04)\n\nFeature flags enabled: rr_moon_mod,rr_moon_pkg",
+    "compiler": "Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35229 for x64",
+    "build": "same toolchain, --release, one compiler job",
+    "processor_affinity_receipt": {
+      "file": "measurement-environment-v0.1.12-734b80a.json",
+      "sha256": "ea88d9b32ae102f5c8e70a12c4c9cbcdcd550a30646a7f5b6ed36145d05cf584",
+      "logical_cpu": 2,
+      "mask": 4,
+      "scope": "Both frozen revisions inherit the same single-CPU affinity."
+    }
+  },
+  "protocol": {
+    "warmup_per_batch": 5,
+    "batches": 3,
+    "samples_per_batch": 10,
+    "paired_order": "baseline then candidate, repeated three times",
+    "sample_unit": "mean per operation within a fixed repeat count; every total and repeat count retained; five single-call warmups; memory remains one operation",
+    "native_repetitions": {
+      "dense-16m": 16,
+      "dense-be-16m": 2,
+      "complex-16m": 16,
+      "nested-4m": 64,
+      "sparse-100k": 128,
+      "compressed-random-16m": 1,
+      "zeros-16m": 1,
+      "select-1-of-16": 128
+    },
+    "js_repetitions": 1,
+    "core_scope": "input preloaded; write tree prepared; no startup or filesystem timing; JS GC outside samples",
+    "memory": "three independent processes per revision, one operation, no warmup; full process peak working set/RSS",
+    "cli": "five warmups followed by 30 full process invocations per revision; includes startup and disk I/O"
+  },
+  "fixtures": [
+    {
+      "name": "dense-16m",
+      "bytes": 16777408,
+      "sha256": "ad09c3dc3115137c8052085fc679cd5a4a36e54987075d482847d4f8338e7070",
+      "payload_bytes": 16777216,
+      "operations": [
+        "read",
+        "write"
+      ]
+    },
+    {
+      "name": "dense-be-16m",
+      "bytes": 16777408,
+      "sha256": "91a75306784b57cbb039e7e2c6e8685076869a5d57c0938be410532830625f9d",
+      "payload_bytes": 16777216,
+      "operations": [
+        "read"
+      ]
+    },
+    {
+      "name": "complex-16m",
+      "bytes": 16777408,
+      "sha256": "1e4ece7cb54cc2aff435aa7afba9ef2bf9e74dd95e242374b7dfc2ec6c326ceb",
+      "payload_bytes": 16777216,
+      "operations": [
+        "read",
+        "write"
+      ]
+    },
+    {
+      "name": "nested-4m",
+      "bytes": 4195464,
+      "sha256": "1703ad4a796542810e1f8e218352c68e704abc118a38593826743b7d54644b73",
+      "payload_bytes": 4194304,
+      "operations": [
+        "read",
+        "write"
+      ]
+    },
+    {
+      "name": "sparse-100k",
+      "bytes": 1204216,
+      "sha256": "d4ce25f29c7923f92825556aa23b36d78900abaa5381345f516adf658a48c86a",
+      "payload_bytes": 1204004,
+      "operations": [
+        "read",
+        "write"
+      ]
+    },
+    {
+      "name": "compressed-random-16m",
+      "bytes": 16117281,
+      "sha256": "d64ed30c235d9f362f95cc3e57dbf5f81263e58753ee04a22805d391e2b580e5",
+      "payload_bytes": 16777216,
+      "operations": [
+        "read"
+      ]
+    },
+    {
+      "name": "zeros-16m",
+      "bytes": 16777408,
+      "sha256": "0573cf7e69ec7e3a221f44aa7209a35d8fad277e8e94391daf60e6339806f8ed",
+      "payload_bytes": 16777216,
+      "operations": [
+        "compress"
+      ]
+    },
+    {
+      "name": "select-1-of-16",
+      "bytes": 16778240,
+      "sha256": "4c628a14a449b85a63ce13107d5b900828bf41aafb3686544a33e1fd0004c5b7",
+      "payload_bytes": 16777216,
+      "operations": [
+        "select"
+      ]
+    }
+  ],
+  "results": [
+    {
+      "case": "dense-16m",
+      "operation": "read",
+      "host": "js",
+      "batches": {
+        "baseline": [
+          {
+            "samples_ms": [
+              65.88369999999998,
+              67.78359999999998,
+              61.57709999999997,
+              67.59140000000002,
+              61.48689999999999,
+              61.9905,
+              61.336400000000026,
+              61.12479999999994,
+              61.378900000000044,
+              61.127300000000105
+            ],
+            "peak_bytes": 110632960,
+            "samples_total_ms": [
+              65.88369999999998,
+              67.78359999999998,
+              61.57709999999997,
+              67.59140000000002,
+              61.48689999999999,
+              61.9905,
+              61.336400000000026,
+              61.12479999999994,
+              61.378900000000044,
+              61.127300000000105
+            ],
+            "operations_per_sample": 1,
+            "checksum": 15,
+            "input_bytes": 16777408,
+            "gc_between_samples": true
+          },
+          {
+            "samples_ms": [
+              66.49380000000002,
+              66.34409999999997,
+              60.94659999999999,
+              68.74250000000006,
+              62.09230000000002,
+              61.25489999999991,
+              61.01789999999994,
+              60.5,
+              60.68589999999995,
+              61.031099999999924
+            ],
+            "peak_bytes": 110649344,
+            "samples_total_ms": [
+              66.49380000000002,
+              66.34409999999997,
+              60.94659999999999,
+              68.74250000000006,
+              62.09230000000002,
+              61.25489999999991,
+              61.01789999999994,
+              60.5,
+              60.68589999999995,
+              61.031099999999924
+            ],
+            "operations_per_sample": 1,
+            "checksum": 15,
+            "input_bytes": 16777408,
+            "gc_between_samples": true
+          },
+          {
+            "samples_ms": [
+              69.9015,
+              68.7586,
+              62.550500000000056,
+              69.24480000000005,
+              69.3632,
+              64.59550000000002,
+              74.4724,
+              64.98279999999988,
+              71.03160000000003,
+              63.22799999999984
+            ],
+            "peak_bytes": 110718976,
+            "samples_total_ms": [
+              69.9015,
+              68.7586,
+              62.550500000000056,
+              69.24480000000005,
+              69.3632,
+              64.59550000000002,
+              74.4724,
+              64.98279999999988,
+              71.03160000000003,
+              63.22799999999984
+            ],
+            "operations_per_sample": 1,
+            "checksum": 15,
+            "input_bytes": 16777408,
+            "gc_between_samples": true
+          }
+        ],
+        "candidate": [
+          {
+            "samples_ms": [
+              65.8089,
+              66.3417,
+              60.77089999999998,
+              67.35900000000004,
+              61.26350000000002,
+              61.24249999999995,
+              61.560299999999984,
+              61.62479999999994,
+              61.5788,
+              61.40899999999988
+            ],
+            "peak_bytes": 110637056,
+            "samples_total_ms": [
+              65.8089,
+              66.3417,
+              60.77089999999998,
+              67.35900000000004,
+              61.26350000000002,
+              61.24249999999995,
+              61.560299999999984,
+              61.62479999999994,
+              61.5788,
+              61.40899999999988
+            ],
+            "operations_per_sample": 1,
+            "checksum": 15,
+            "input_bytes": 16777408,
+            "gc_between_samples": true
+          },
+          {
+            "samples_ms": [
+              82.29560000000004,
+              70.279,
+              63.043499999999995,
+              72.24720000000002,
+              63.629800000000046,
+              68.49530000000004,
+              70.9316,
+              94.399,
+              69.97469999999998,
+              78.10019999999986
+            ],
+            "peak_bytes": 110690304,
+            "samples_total_ms": [
+              82.29560000000004,
+              70.279,
+              63.043499999999995,
+              72.24720000000002,
+              63.629800000000046,
+              68.49530000000004,
+              70.9316,
+              94.399,
+              69.97469999999998,
+              78.10019999999986
+            ],
+            "operations_per_sample": 1,
+            "checksum": 15,
+            "input_bytes": 16777408,
+            "gc_between_samples": true
+          },
+          {
+            "samples_ms": [
+              66.46690000000001,
+              70.19720000000007,
+              60.80160000000001,
+              67.37560000000008,
+              61.30539999999996,
+              61.3614,
+              61.51520000000005,
+              61.248699999999985,
+              61.32950000000005,
+              61.219299999999976
+            ],
+            "peak_bytes": 110645248,
+            "samples_total_ms": [
+              66.46690000000001,
+              70.19720000000007,
+              60.80160000000001,
+              67.37560000000008,
+              61.30539999999996,
+              61.3614,
+              61.51520000000005,
+              61.248699999999985,
+              61.32950000000005,
+              61.219299999999976
+            ],
+            "operations_per_sample": 1,
+            "checksum": 15,
+            "input_bytes": 16777408,
+            "gc_between_samples": true
+          }
+        ]
+      },
+      "samples_ms": [
+        65.8089,
+        66.3417,
+        60.77089999999998,
+        67.35900000000004,
+        61.26350000000002,
+        61.24249999999995,
+        61.560299999999984,
+        61.62479999999994,
+        61.5788,
+        61.40899999999988,
+        82.29560000000004,
+        70.279,
+        63.043499999999995,
+        72.24720000000002,
+        63.629800000000046,
+        68.49530000000004,
+        70.9316,
+        94.399,
+        69.97469999999998,
+        78.10019999999986,
+        66.46690000000001,
+        70.19720000000007,
+        60.80160000000001,
+        67.37560000000008,
+        61.30539999999996,
+        61.3614,
+        61.51520000000005,
+        61.248699999999985,
+        61.32950000000005,
+        61.219299999999976
+      ],
+      "baseline_samples_ms": [
+        65.88369999999998,
+        67.78359999999998,
+        61.57709999999997,
+        67.59140000000002,
+        61.48689999999999,
+        61.9905,
+        61.336400000000026,
+        61.12479999999994,
+        61.378900000000044,
+        61.127300000000105,
+        66.49380000000002,
+        66.34409999999997,
+        60.94659999999999,
+        68.74250000000006,
+        62.09230000000002,
+        61.25489999999991,
+        61.01789999999994,
+        60.5,
+        60.68589999999995,
+        61.031099999999924,
+        69.9015,
+        68.7586,
+        62.550500000000056,
+        69.24480000000005,
+        69.3632,
+        64.59550000000002,
+        74.4724,
+        64.98279999999988,
+        71.03160000000003,
+        63.22799999999984
+      ],
+      "median_ms": 63.33665000000002,
+      "baseline_median_ms": 62.88924999999995,
+      "p95_ms": 82.29560000000004,
+      "baseline_p95_ms": 71.03160000000003,
+      "speedup": 0.9929361593958621,
+      "time_reduction": -0.007114093426143109,
+      "peak_bytes_samples": [
+        76718080,
+        76709888,
+        76746752
+      ],
+      "baseline_peak_bytes_samples": [
+        76722176,
+        76738560,
+        76660736
+      ],
+      "peak_bytes": 76718080,
+      "baseline_peak_bytes": 76722176,
+      "memory_reduction": 5.3387432598417384e-05,
+      "payload_MiB_per_second": 252.6183497232644,
+      "baseline_cli": {
+        "samples_ms": [
+          187.43619999440853,
+          186.52869999641553,
+          214.31180000217864,
+          190.80140000005485,
+          192.56590000441065,
+          187.72750000061933,
+          191.08180000330321,
+          198.72849999956088,
+          203.73569999355823,
+          188.32660000043688,
+          190.79270000656834,
+          196.18800000171177,
+          209.712000003492,
+          207.81290000013541,
+          194.71039999916684,
+          189.04659999680007,
+          191.5824999960023,
+          196.8032000004314,
+          219.31980000226758,
+          205.34899999620393,
+          194.96130000334233,
+          201.40600000013364,
+          187.325899998541,
+          197.07819999894127,
+          198.69090000429424,
+          189.16010000248207,
+          196.91009999951348,
+          191.8353000000934,
+          222.76119999878574,
+          194.7063000043272
+        ],
+        "median_ms": 194.83585000125458,
+        "p95_ms": 219.31980000226758,
+        "output_bytes": null,
+        "scope": "end to end: process startup, disk I/O, codec and response; includes five warmups"
+      },
+      "cli": {
+        "samples_ms": [
+          189.38599999819417,
+          195.84870000107912,
+          191.9348000010359,
+          193.60130000131903,
+          199.71190000069328,
+          195.70769999700133,
+          194.08640000619926,
+          195.93370000075083,
+          192.85719999606954,
+          187.35190000006696,
+          187.97489999997197,
+          194.2242000004626,
+          194.38309999532066,
+          201.8504000006942,
+          188.92390000110026,
+          199.95520000520628,
+          187.4104000016814,
+          239.8116000040318,
+          196.5970000019297,
+          196.80979999975534,
+          202.65739999740617,
+          187.55919999966864,
+          197.34299999981886,
+          195.95790000312263,
+          191.30199999926845,
+          192.09880000562407,
+          187.74439999833703,
+          203.78340000024764,
+          186.5170000019134,
+          193.89249999949243
+        ],
+        "median_ms": 194.15530000333092,
+        "p95_ms": 203.78340000024764,
+        "output_bytes": null,
+        "scope": "end to end: process startup, disk I/O, codec and response; includes five warmups"
+      },
+      "output_bytes": null,
+      "baseline_output_bytes": null,
+      "cli_speedup": 1.003505183726182
+    }
+  ],
+  "measurement_adapters": {
+    "native_main_by_revision": {
+      "baseline": "f701462af5c9b655ef799b473c504ad439d5a33c040904f80c48e28ea8255414",
+      "candidate": "f701462af5c9b655ef799b473c504ad439d5a33c040904f80c48e28ea8255414"
+    },
+    "driver_sha256": "2517e878f0ec61f2c30eea96a8df7cca5c4b6f3beba704032623fb375b049342",
+    "js_driver_sha256": "7d5d11e243094e886cbc6ed625490f902314cc5af68378076daf751aaa9282bb"
+  },
+  "run_id": "3d3ed381919d451eb0bd9aebe2841ee0",
+  "partial": true,
+  "runtime_unchanged": true,
+  "targets": [],
+  "regressions_over_10_percent": [],
+  "engineering_targets": [],
+  "scope": "Fixed inputs and same-machine paired revisions. Per-case engineering targets; historical measurements remain independent."
+}

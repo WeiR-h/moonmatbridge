@@ -1,0 +1,11 @@
+{
+  "status": "controlled",
+  "version": "0.1.12",
+  "source_commit": "734b80adb306085374d730865a95e2fa51650617",
+  "started_utc": "2026-11-12T09:32:45.123434+00:00",
+  "logical_cpu": 2,
+  "prior_mask": 65535,
+  "effective_mask": 4,
+  "system_mask": 65535,
+  "scope": "Only this process tree is pinned. Both frozen revisions inherit identical affinity, toolchain and build settings. All original fixed inputs, warmups, batches and independent peak samples retained."
+}

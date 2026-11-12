@@ -1,0 +1,232 @@
+{
+  "status": "verified",
+  "version": "0.1.12",
+  "reference": "07b16ae995eb4b3932f655a718e04626a357daa9",
+  "scopes": {
+    "runtime": {
+      "files": [
+        "src/axes.mbt",
+        "src/bridge/bridge.mbt",
+        "src/bridge/js_names.mbt",
+        "src/bridge/moon.pkg",
+        "src/bridge/sink.mbt",
+        "src/cmd/moonmat/io.c",
+        "src/cmd/moonmat/main.mbt",
+        "src/cmd/moonmat/moon.pkg",
+        "src/concat.mbt",
+        "src/deflate.mbt",
+        "src/diff.mbt",
+        "src/fixed_writer.mbt",
+        "src/inflate.mbt",
+        "src/interchange/diff.mbt",
+        "src/interchange/document.mbt",
+        "src/interchange/json.mbt",
+        "src/interchange/moon.pkg",
+        "src/interchange/name_options.mbt",
+        "src/interchange/roots.mbt",
+        "src/interchange/snapshot.mbt",
+        "src/interchange/transform.mbt",
+        "src/interchange/tree_close.mbt",
+        "src/interchange/tree_snapshot.mbt",
+        "src/moon.pkg",
+        "src/name_encoding.mbt",
+        "src/npy.mbt",
+        "src/npy_reader.mbt",
+        "src/numeric.mbt",
+        "src/reader.mbt",
+        "src/reshape.mbt",
+        "src/select.mbt",
+        "src/selected.mbt",
+        "src/sink.mbt",
+        "src/sink_deflate.mbt",
+        "src/slice.mbt",
+        "src/source.mbt",
+        "src/source_inflate.mbt",
+        "src/source_stream.mbt",
+        "src/sparse.mbt",
+        "src/sparse_codec.mbt",
+        "src/tree.mbt",
+        "src/tree_close.mbt",
+        "src/tree_diff.mbt",
+        "src/types.mbt",
+        "src/utf8_scan.mbt",
+        "src/writer.mbt"
+      ],
+      "sha256": "cc9dd574de525d5102a92a00e6e3ab84b5a4aa3fa32b6e6d05dd4e3d7291e443"
+    },
+    "hosts": {
+      "files": [
+        "scripts/cli.mjs"
+      ],
+      "sha256": "67becff9edc35c4ef862a69a1733edce03c34e1a727586dea1f17f4cbc3e6abe"
+    },
+    "adapters": {
+      "files": [
+        "examples/python/mixed_types.py",
+        "scripts/bench-js.mjs",
+        "scripts/bench-sink-js.mjs",
+        "scripts/build-bench.mjs",
+        "scripts/file-performance.py",
+        "scripts/performance-revisions.py",
+        "scripts/performance.py",
+        "scripts/write-performance.py",
+        "scripts/write-regression.py",
+        "src/bench_bridge/bench.mbt",
+        "src/bench_bridge/moon.pkg",
+        "src/bench_bridge/pkg.generated.mbti",
+        "src/bench_bridge/sink_bench.mbt",
+        "src/cmd/bench/bench.c",
+        "src/cmd/bench/main.mbt",
+        "src/cmd/bench/moon.pkg",
+        "src/cmd/bench/sink_bench.mbt"
+      ],
+      "sha256": "3319e68fba48929bc38ef3d25f69c795ccfd709cf56eb8113988ded5f748bdae"
+    },
+    "build": {
+      "files": [
+        "msvc.lock.json",
+        "scripts/build-native.mjs",
+        "scripts/moon.mjs",
+        "scripts/toolchain.mjs",
+        "toolchain.lock.json"
+      ],
+      "sha256": "0c8a39c2edab289a3d44625cf721029941e28dca3066ca8199a59bbc235b4f4c"
+    }
+  },
+  "toolchain": {
+    "compiler": "v0.10.20+65efd5b93 (2026-11-05)",
+    "compiler_version": "0.10.20+65efd5b93",
+    "moon_version_all": "moon 0.1.20261104 (940aa18 2026-11-04) ~\\Desktop\\Competition\\MoonBit 黑客松\\MoonMatBridge\\.local-tools\\moon-0.10.20+65efd5b93\\bin\\moon.exe\nmoonc v0.10.20+65efd5b93 (2026-11-05) ~\\Desktop\\Competition\\MoonBit 黑客松\\MoonMatBridge\\.local-tools\\moon-0.10.20+65efd5b93\\bin\\moonc.exe\nmoonrun 0.1.20261104 (940aa18 2026-11-04) ~\\Desktop\\Competition\\MoonBit 黑客松\\MoonMatBridge\\.local-tools\\moon-0.10.20+65efd5b93\\bin\\moonrun.exe\n\nFeature flags enabled: rr_moon_mod,rr_moon_pkg",
+    "standard_library_archive_sha256": "8ec2a2c01335501d703867bb4eef5f92d3cd7e1ae1ee5f7f14d54d16d2c7c2b5",
+    "standard_library_source_sha256": "25389406fc893778dbd958064d61b1c6319152f76699e1226c56a756fc9b6575",
+    "c_compiler": "Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35229 for x64",
+    "native_backend": "c",
+    "native_environment": {
+      "MOONBIT_NEW_NATIVE": "0"
+    },
+    "node": "v24.13.0",
+    "windows_sdk_version": "10.0.22621.0",
+    "platform": "win32",
+    "architecture": "x64"
+  },
+  "cohorts": [
+    {
+      "file": "performance-vs-07b16ae-run-7eb8d5e1-v0.1.12.json",
+      "kind": "core",
+      "rows": 24,
+      "sha256": "c11b0a0b328a61f687725023097a5790978b3fc29557a385b4adc3bfba928f4a",
+      "measured_commit": "734b80adb306085374d730865a95e2fa51650617",
+      "rechecks": [
+        {
+          "file": "performance-vs-07b16ae-partial-3d3ed381-v0.1.12.json",
+          "sha256": "7dca08e4adc3b889b06fe62f8922addf61a4eb14676589d1c943a51361be2e06"
+        }
+      ],
+      "regression_review": {
+        "status": "verified",
+        "policy": "Retain the initial cohort and every recheck. Two threshold exceedances for the same case and metric block publication; a single exceedance needs a later matching non-exceedance.",
+        "resolved": [
+          {
+            "case_key": [
+              "dense-16m",
+              "js",
+              "read"
+            ],
+            "metric": "time",
+            "history": [
+              {
+                "report_index": 0,
+                "over_threshold": true
+              },
+              {
+                "report_index": 1,
+                "over_threshold": false
+              }
+            ]
+          }
+        ],
+        "pending": [],
+        "confirmed": []
+      }
+    },
+    {
+      "file": "file-performance-vs-07b16ae-run-9cf8c159-v0.1.12.json",
+      "kind": "file",
+      "rows": 6,
+      "sha256": "15f5e0aeb3ce523a43be94762a5cac74c5cb708a820560fbb4c57f340131b7c4",
+      "measured_commit": "734b80adb306085374d730865a95e2fa51650617",
+      "rechecks": [],
+      "regression_review": {
+        "status": "verified",
+        "policy": "Retain the initial cohort and every recheck. Two threshold exceedances for the same case and metric block publication; a single exceedance needs a later matching non-exceedance.",
+        "resolved": [],
+        "pending": [],
+        "confirmed": []
+      }
+    },
+    {
+      "file": "write-regression-vs-07b16ae-run-cff6b69e-v0.1.12.json",
+      "kind": "write",
+      "rows": 32,
+      "sha256": "27c0d787c0aa34f2582fea89efafcce51b40bbc80e1ab7f344f6233c498b5280",
+      "measured_commit": "734b80adb306085374d730865a95e2fa51650617",
+      "rechecks": [
+        {
+          "file": "write-regression-vs-07b16ae-partial-451bff1b-v0.1.12.json",
+          "sha256": "54cd44092c959d6b54293102ce4ecd442e89552f00bd0f12426c26f7aea12348"
+        },
+        {
+          "file": "write-regression-vs-07b16ae-partial-dd50ea00-v0.1.12.json",
+          "sha256": "61ebd461fdad5f28a64336166f6f0cc98631a62f319647f748db796842386005"
+        }
+      ],
+      "regression_review": {
+        "status": "verified",
+        "policy": "Retain the initial cohort and every recheck. Two threshold exceedances for the same case and metric block publication; a single exceedance needs a later matching non-exceedance.",
+        "resolved": [
+          {
+            "case_key": [
+              "sparse-100k",
+              "js",
+              "plain",
+              "core"
+            ],
+            "metric": "time",
+            "history": [
+              {
+                "report_index": 0,
+                "over_threshold": true
+              },
+              {
+                "report_index": 1,
+                "over_threshold": false
+              }
+            ]
+          },
+          {
+            "case_key": [
+              "resident-256m",
+              "native",
+              "plain",
+              "file"
+            ],
+            "metric": "time",
+            "history": [
+              {
+                "report_index": 0,
+                "over_threshold": true
+              },
+              {
+                "report_index": 2,
+                "over_threshold": false
+              }
+            ]
+          }
+        ],
+        "pending": [],
+        "confirmed": []
+      }
+    }
+  ],
+  "scope": "Complete fixed-input paired 24 core, 6 file and 32 sink scenarios; all original samples retained."
+}
